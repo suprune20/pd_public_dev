@@ -2,10 +2,10 @@
 
 ## Используемые технологии
 
-* [AngularJS (~1.2.6)] (http://angularjs.org)
-* [Grunt (~0.4.1)] (http://gruntjs.com)
-* [Bower] (http://bower.io/)
-* [Sass] (http://sass-lang.com/) + [Compass] (http://compass-style.org/)
+* [AngularJS (~1.2.6)](http://angularjs.org)
+* [Grunt (~0.4.1)](http://gruntjs.com)
+* [Bower](http://bower.io/)
+* [Sass](http://sass-lang.com/) + [Compass] (http://compass-style.org/)
 
 ## Requirements
 
