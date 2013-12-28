@@ -8,6 +8,8 @@
 
 module.exports = function (grunt) {
 
+  var util = require('util');
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -49,7 +51,7 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          '<%= yeoman.app %>/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -145,7 +147,8 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/',
         exclude: [
           'bower_components/sass-bootstrap/dist/css/bootstrap.css',
-          'bower_components/respond/dest/respond.src.js'
+          'bower_components/respond/dest/respond.src.js',
+          'bower_components/angular-ui-router/release/angular-ui-router.js'
         ]
       }
     },
@@ -299,15 +302,18 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'compass:server'
+        'compass:server',
+        'html2js'
       ],
       test: [
-        'compass'
+        'compass',
+        'html2js'
       ],
       dist: [
         'compass:dist',
         'imagemin',
-        'svgmin'
+        'svgmin',
+        'html2js'
       ]
     },
 
@@ -328,6 +334,61 @@ module.exports = function (grunt) {
 //        }
 //      }
 //    },
+
+    html2js: {
+      options: {
+        base: '.'
+      },
+      uiBootstrap: {
+        options: {
+          module: 'ui.bootstrap.templates',
+          rename: function (modulePath) {
+            var moduleName = modulePath.replace('app/bower_components/bootstrap/template/', '').replace('.html', '');
+
+            return 'template' + '/' + moduleName + '.html';
+          }
+        },
+        src: ['app/bower_components/bootstrap/template/modal/*.html'],
+        dest: '.tmp/scripts/ui.bootstrap.templates.js'
+      }
+    },
+
+    concat: {
+      options: {
+        process: function (content, filepath) {
+          // Replace path to images in vendors css files
+          var cssFileMatched = /^app\/bower_components(\/.*\/).*\.css$/.exec(filepath);
+
+          if (cssFileMatched) {
+            return content.replace(/url(?:\s+)?\(([^\)]+)\)/igm, function (match, url) {
+              url = url.replace(/'|"/g, '');
+
+              if (/^\//.test(url)) {
+                grunt.log.writeln(' - Absolute urls are not supported, url ignored => ' + url);
+                return url;
+              }
+
+              if (/^(\s+)?$/.test(url)) {
+                grunt.log.writeln(' - Empty urls are not supported, url ignored => ' + url);
+                return url;
+              }
+
+              if (/#/.test(url) && !/\?#iefix|svg#/.test(url)) {
+                grunt.log.writeln(' - Anchors not allowed, url ignored => ' + url);
+                return url;
+              }
+
+              var newUrl = util.format('/bower_components%s%s', cssFileMatched[1], url);
+              grunt.log.writeln(util.format('* (%s): %s -> %s', cssFileMatched[0], match, newUrl));
+
+              return util.format('url(%s)', newUrl);
+            });
+          }
+
+          return content;
+        }
+      }
+    },
 
     // Test settings
     karma: {
