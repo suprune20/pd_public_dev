@@ -343,12 +343,12 @@ module.exports = function (grunt) {
         options: {
           module: 'ui.bootstrap.templates',
           rename: function (modulePath) {
-            var moduleName = modulePath.replace('app/bower_components/bootstrap/template/', '').replace('.html', '');
+            var moduleName = modulePath.replace('app/bower_components/ui.bootstrap/template/', '').replace('.html', '');
 
             return 'template' + '/' + moduleName + '.html';
           }
         },
-        src: ['app/bower_components/bootstrap/template/modal/*.html'],
+        src: ['app/bower_components/ui.bootstrap/template/modal/*.html'],
         dest: '.tmp/scripts/ui.bootstrap.templates.js'
       }
     },
