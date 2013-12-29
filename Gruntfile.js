@@ -147,8 +147,7 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/',
         exclude: [
           'bower_components/sass-bootstrap/dist/css/bootstrap.css',
-          'bower_components/respond/dest/respond.src.js',
-          'bower_components/angular-ui-router/release/angular-ui-router.js'
+          'bower_components/respond/dest/respond.src.js'
         ]
       }
     },
@@ -390,6 +389,14 @@ module.exports = function (grunt) {
       }
     },
 
+    uglify: {
+      options: {
+        compress: false,
+        beautify: false,
+        mangle: false
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -435,7 +442,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+//    'ngmin',
     'copy:dist',
     'cdnify',
     'cssmin',

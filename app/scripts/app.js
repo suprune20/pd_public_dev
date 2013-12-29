@@ -1,22 +1,39 @@
 'use strict';
 
 angular.module('pdApp', [
-    'ngRoute'
+    'ngRoute',
+    'ui.bootstrap.modal',
+    'ui.bootstrap.templates',
+    'ui.select2',
+    'infinite-scroll'
   ])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
         controller: 'MainCtrl',
-        title: 'Главная страница'
+        templateUrl: 'views/main.html',
+        title: 'Главная'
       })
-      .otherwise({
-        redirectTo: '/'
-      });
+      .when('/contacts', {
+        templateUrl: 'views/contacts.html',
+        title: 'Контакты'
+      })
+      .when('/about-us', {
+        templateUrl: 'views/about_us.html',
+        title: 'О нас'
+      })
+      .when('/catalog', {
+        controller: 'CatalogCtrl',
+        templateUrl: 'views/catalog/main.html',
+        reloadOnSearch: false,
+        title: 'Каталог'
+      })
+      .otherwise('/')
+    ;
   })
-  .run(function ($rootScope, $route) {
-    $rootScope.$on('$routeChangeSuccess', function () {
-      $rootScope.title = $route.current.title;
+  .run(function ($rootScope) {
+    $rootScope.$on('$routeChangeSuccess', function (currentRoute) {
+      $rootScope.title = currentRoute.title;
     });
   })
 ;

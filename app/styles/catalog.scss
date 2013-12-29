@@ -1,0 +1,27 @@
+.catalog-filters-panel {
+  &.pb-sticky-block {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+
+    .panel-heading {
+      display: none;
+    }
+  }
+}
+
+.catalog-product-item {
+  width: 275px;
+  margin: 5px;
+  padding: 10px;
+  display: inline-block;
+  border: solid 1px shade(#fff, 30%);
+  border-radius: 5px;
+  vertical-align: top;
+
+  .product-photo {
+    float: left;
+    margin-right: 10px;
+  }
+}
