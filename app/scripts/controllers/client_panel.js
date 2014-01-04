@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdApp')
-  .controller('ClientPanelCtrl', function ($scope, User, GEOMETRY_TYPES) {
+  .controller('ClientPanelCtrl', function ($scope, User) {
     var user = new User();
 
     user.getProfile().then(function (userData) {
@@ -9,7 +9,7 @@ angular.module('pdApp')
       $scope.yaPlacesPoints = userData.places.map(function (placeData) {
         return {
           geometry: {
-            type: GEOMETRY_TYPES.POINT,
+            type: 'Point',
             coordinates: [placeData.location.longitude, placeData.location.latitude]
           }
         };

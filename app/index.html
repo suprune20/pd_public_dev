@@ -53,8 +53,11 @@
         </div>
         <![endif]-->
 
-        <!--<ui-view></ui-view>-->
         <ng-view></ng-view>
+
+        <div class="alert alert-info" loading-widget>
+          <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
+        </div>
       </div>
     </div>
 
@@ -95,6 +98,7 @@
     <script src="scripts/services/catalog.js"></script>
     <script src="scripts/controllers/client_panel.js"></script>
     <script src="scripts/services/user.js"></script>
+    <script src="scripts/modules/loading_spinner_widget.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/templates.js -->

@@ -7,7 +7,8 @@ angular.module('pdApp', [
     'ui.bootstrap.templates',
     'ui.select2',
     'infinite-scroll',
-    'yaMap'
+    'yaMap',
+    'corrupt.loadingSpinnerWidget'
   ])
   .config(function ($routeProvider) {
     $routeProvider
