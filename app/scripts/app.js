@@ -3,9 +3,11 @@
 angular.module('pdApp', [
     'ngRoute',
     'ui.bootstrap.modal',
+    'ui.bootstrap.carousel',
     'ui.bootstrap.templates',
     'ui.select2',
-    'infinite-scroll'
+    'infinite-scroll',
+    'yaMap'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -28,11 +30,16 @@ angular.module('pdApp', [
         reloadOnSearch: false,
         title: 'Каталог'
       })
+      .when('/client-panel', {
+        controller: 'ClientPanelCtrl',
+        templateUrl: 'views/client/panel.html',
+        title: 'Панель клиента'
+      })
       .otherwise('/')
     ;
   })
   .run(function ($rootScope) {
-    $rootScope.$on('$routeChangeSuccess', function (currentRoute) {
+    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       $rootScope.title = currentRoute.title;
     });
   })

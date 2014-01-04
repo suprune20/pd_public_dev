@@ -349,7 +349,10 @@ module.exports = function (grunt) {
             return 'template' + '/' + moduleName + '.html';
           }
         },
-        src: ['app/bower_components/ui.bootstrap/template/modal/*.html'],
+        src: [
+          'app/bower_components/ui.bootstrap/template/modal/*.html',
+          'app/bower_components/ui.bootstrap/template/carousel/*.html'
+        ],
         dest: '.tmp/scripts/ui.bootstrap.templates.js'
       }
     },

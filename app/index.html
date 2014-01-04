@@ -36,6 +36,7 @@
             <ul class="nav navbar-nav">
               <li><a ng-href="#/">Главная</a></li>
               <li><a ng-href="#/catalog">Каталог</a></li>
+              <li><a ng-href="#/client-panel">Панель клиента</a></li>
               <li><a ng-href="#/about-us">О нас</a></li>
               <li><a ng-href="#/contacts">Контакты</a></li>
             </ul>
@@ -80,7 +81,10 @@
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <!-- endbower -->
     <script src="bower_components/ui.bootstrap/src/modal/modal.js"></script>
+    <script src="bower_components/ui.bootstrap/src/transition/transition.js"></script>
+    <script src="bower_components/ui.bootstrap/src/carousel/carousel.js"></script>
     <script src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
+    <script src="bower_components/angular-yandex-map/example/ya-map.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -89,6 +93,8 @@
     <script src="scripts/controllers/catalog.js"></script>
     <script src="scripts/directives/sticky_block.js"></script>
     <script src="scripts/services/catalog.js"></script>
+    <script src="scripts/controllers/client_panel.js"></script>
+    <script src="scripts/services/user.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/templates.js -->

@@ -5,7 +5,7 @@
 <div class="panel panel-default catalog-filters-panel" pb-sticky-block top-position="50">
   <div class="panel-heading">Фильтры</div>
   <div class="panel-body">
-    <form class="form-inline" role="form" ng-class="row">
+    <form class="form-inline row" role="form">
       <div class="form-group col-xs-6 col-sm-2">
         <select class="form-control" ui-select2 ng-model="filters.place" multiple data-placeholder="Место">
           <option ng-repeat="f in placesFilter" value="{{f.id}}">{{f.title}}</option>

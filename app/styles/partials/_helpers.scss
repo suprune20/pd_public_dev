@@ -1,0 +1,14 @@
+@each $marginPosition in bottom, top, left, right {
+  .no-#{$marginPosition}-margin {
+    margin-#{$marginPosition}: 0;
+  }
+}
+
+@each $paddingPosition in bottom, top, left, right {
+  .no-#{$paddingPosition}-padding {
+    padding-#{$paddingPosition}: 0;
+  }
+}
+.reset-padding {
+  padding: 0;
+}
