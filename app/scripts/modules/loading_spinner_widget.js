@@ -40,7 +40,7 @@ angular.module('corrupt.loadingSpinnerWidget', [])
           // send a notification requests are complete
           notificationChannel.requestStarted();
           return promise.then(success, error);
-        }
+        };
       }];
 
     $httpProvider.responseInterceptors.push(interceptor);
