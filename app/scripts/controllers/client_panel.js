@@ -6,7 +6,9 @@ angular.module('pdApp')
 
     user.getProfile().then(function (userData) {
       $scope.userData = userData;
-      $scope.yaPlacesPoints = userData.places.map(function (placeData) {
+      $scope.yaPlacesPoints = userData.places.filter(function (placeData) {
+        return placeData.location;
+      }).map(function (placeData) {
         return {
           geometry: {
             type: 'Point',
@@ -17,7 +19,10 @@ angular.module('pdApp')
     });
     $scope.selectPlace = function (placeData) {
       $scope.selectedPlace = placeData;
-      $scope.placesMapCenter = [placeData.location.longitude, placeData.location.latitude];
+
+      if (placeData.location) {
+        $scope.placesMapCenter = [placeData.location.longitude, placeData.location.latitude];
+      }
     };
   })
 ;
