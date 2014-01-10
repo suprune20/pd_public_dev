@@ -19,6 +19,7 @@ angular.module('pdApp')
     });
     $scope.selectPlace = function (placeData) {
       $scope.selectedPlace = placeData;
+      $scope.placesMapCenter = null;
 
       if (placeData.location) {
         $scope.placesMapCenter = [placeData.location.longitude, placeData.location.latitude];

@@ -1,24 +1,22 @@
 'use strict';
 
 angular.module('pdApp')
-  .factory('User', function ($http) {
+  .factory('User', function ($http, apiEndpoint) {
     return function () {
       var getProfile = function () {
-        return $http.get('http://pd2cat.bsuir.by/api/cabinet', {
-            withCredentials: true
-          }).then(function (resp) {
-            var userProfileData = resp.data;
+        return $http.get(apiEndpoint + 'cabinet').then(function (resp) {
+          var userProfileData = resp.data;
 
-            userProfileData.places.map(function (placeData) {
-              if (!placeData.location.longitude || !placeData.location.latitude) {
-                placeData.location = null;
-              }
+          userProfileData.places.map(function (placeData) {
+            if (placeData.location && (!placeData.location.longitude || !placeData.location.latitude)) {
+              placeData.location = null;
+            }
 
-              return placeData;
-            });
-
-            return userProfileData;
+            return placeData;
           });
+
+          return userProfileData;
+        });
       };
 
       return {
