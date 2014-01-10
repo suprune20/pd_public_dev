@@ -1,19 +1,16 @@
 'use strict';
 
 angular.module('pdApp')
-  .factory('Catalog', function ($timeout) {
+  .factory('Catalog', function ($http, apiEndpoint) {
     return function (productsCountPerRequest) {
       // Products data provider class
       var ProductsDataProvider = function (productsCountPerRequest) {
         var isBusy = false,
           isNoProducts = false,
-          products = [];
+          products = [],
+          filtersData = {};
 
         productsCountPerRequest = productsCountPerRequest || 15;
-
-        function getProducts() {
-          return products;
-        }
 
         function getNextProducts() {
           if (isBusy || isNoProducts) {
@@ -21,65 +18,62 @@ angular.module('pdApp')
           }
 
           isBusy = true;
-          $timeout(function () {
-            for (var i = 0; i < productsCountPerRequest; i++) {
-              products.push({
-                id: i,
-                photo: Math.floor(Math.random() * 10) % 2 ? 'http://placehold.it/100x100' : null,
-                title: 'Product ' + i,
-                sku: 'sku ' + i,
-                description: 'Description of product ' + i,
-                supplier: 'Supplier ' + i,
-                price: i
-              });
-            }
-            isBusy = false;
-          }, 2000);
+          $http.get(apiEndpoint + 'products', {
+              params: _.merge(filtersData || {}, {
+                limit: productsCountPerRequest,
+                offset: products.length
+              })
+            }).then(function (resp) {
+              isBusy = false;
+              isNoProducts = resp.data.results.length < productsCountPerRequest;
+              products = products.concat(resp.data.results);
+            }, function () { isBusy = false; });
         }
 
         return {
+          getNextProducts: getNextProducts,
           isBusy: function () { return isBusy; },
           isNoMoreProducts: function () { return isNoProducts; },
-          getProducts: getProducts,
-          getNextProducts: getNextProducts
+          getProducts: function () {
+            return products;
+          },
+          // Clear previous filters/products and apply new filters data
+          applyFilters: function (_filtersData_) {
+            isNoProducts = false;
+            filtersData = {};
+            _.forEach(_filtersData_, function (value, key) {
+              filtersData['filter[' + key + ']'] = value;
+            });
+            products = [];
+            getNextProducts();
+          }
         };
       };
       // Create instance of products data provider class
       var productsDataProvider = new ProductsDataProvider(productsCountPerRequest);
 
       function getFilters() {
-        return {
-          places: [
-            {id: 1, title: 'Место 1'},
-            {id: 2, title: 'Место 2'},
-            {id: 3, title: 'Место 3'}
-          ],
-          suppliers: [
-            {id: 1, title: 'Поставщик 1'},
-            {id: 2, title: 'Поставщик 2'},
-            {id: 3, title: 'Поставщик 3'}
-          ]
-        };
+        return $http.get(apiEndpoint + 'catalog_filters')
+          .then(function (resp) {
+            return resp.data;
+          });
       }
 
       function getCategories() {
-        return [
-          {id: 1, title: 'Категория 1'},
-          {id: 2, title: 'Категория 2'},
-          {id: 3, title: 'Категория 3'}
-        ];
+        return $http.get(apiEndpoint + 'product_category')
+          .then(function (resp) {
+            return resp.data.results;
+          });
       }
 
       function getProduct(productId) {
-        return {
-          id: productId,
-          photo: Math.floor(Math.random() * 10) % 2 ? 'http://placehold.it/100x100' : null,
-          title: 'Product ' + productId,
-          sku: 'sku ' + productId,
-          description: 'Description of product ' + productId,
-          supplier: 'Supplier ' + productId,
-          price: productId * 100
-        };
+        return $http.get(apiEndpoint + 'product', {
+          params: {
+            id: productId
+          }
+        }).then(function (resp) {
+          return resp.data.results[0];
+        });
       }
 
       return {

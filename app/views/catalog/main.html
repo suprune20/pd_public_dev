@@ -8,12 +8,12 @@
     <form class="form-inline row" role="form">
       <div class="form-group col-xs-6 col-sm-2">
         <select class="form-control" ui-select2 ng-model="filters.place" multiple data-placeholder="Место">
-          <option ng-repeat="f in placesFilter" value="{{f.id}}">{{f.title}}</option>
+          <option ng-repeat="f in placesFilter" value="{{f.id}}">{{f.place}}</option>
         </select>
       </div>
       <div class="form-group col-xs-6 col-sm-2">
         <select class="form-control" ng-model="filters.supplier" ui-select2 multiple data-placeholder="Поставщик">
-          <option ng-repeat="f in suppliersFilter" value="{{f.id}}">{{f.title}}</option>
+          <option ng-repeat="f in suppliersFilter" value="{{f.id}}">{{f.name}}</option>
         </select>
       </div>
 
@@ -29,7 +29,7 @@
       <div class="clearfix visible-xs"></div>
 
       <div class="form-group col-xs-12 col-sm-2">
-        <select class="form-control" ng-model="filters.category" ng-options="c.id as c.title for c in categoriesFilter">
+        <select class="form-control" ng-model="filters.category" ng-options="c.id as c.name for c in categoriesFilter">
           <option value="">Категория</option>
         </select>
       </div>
@@ -37,7 +37,7 @@
       <div class="clearfix hidden-lg"></div>
 
       <div class="col-xs-12 col-lg-2 btn-group">
-        <button type="submit" class="btn btn-primary" ng-click="applyFilters()">
+        <button type="submit" class="btn btn-primary" ng-click="applyFilters(applyFilters)">
           Применить
         </button>
         <button class="btn btn-warning" ng-click="clearFilters()">
@@ -56,18 +56,31 @@
        class="catalog-product-item"
        ng-click="openProductDetailsModal(product.id)">
 
-    <h4 ng-bind="product.title"></h4>
-    <img class="img-thumbnail product-photo" ng-show="product.photo" ng-src="{{product.photo}}" />
-    <dl>
-      <dt>Артикул</dt>
-      <dd ng-bind="product.sku"></dd>
-      <dt>Описание</dt>
-      <dd ng-bind="product.description"></dd>
-      <dt>Поставщик</dt>
-      <dd ng-bind="product.supplier"></dd>
-      <dt>Цена</dt>
-      <dd ng-bind="product.price"></dd>
-    </dl>
+    <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
+
+    <div class="media">
+      <div class="pull-left">
+        <img class="img-thumbnail media-object product-photo"
+             ng-src="{{product.photo}}"
+             default-image="http://placehold.it/100x100" />
+      </div>
+      <div class="media-body">
+        <dl>
+          <dt ng-show="product.sku">Артикул</dt>
+          <dd ng-show="product.sku">{{product.sku}}</dd>
+          <dt ng-show="product.description">Описание</dt>
+          <dd ng-show="product.description">{{product.description}}</dd>
+          <dt>Поставщик</dt>
+          <dd>{{product.supplier}}</dd>
+          <dt>Цена</dt>
+          <dd>{{product.price}}</dd>
+          <dt>Валюта</dt>
+          <dd>{{product.currency}}</dd>
+          <dt ng-show="product.measure">Оплата за</dt>
+          <dd ng-show="product.measure">{{product.measure}}</dd>
+        </dl>
+      </div>
+    </div>
 
   </div>
 

@@ -2,14 +2,7 @@
 
 angular.module('pdApp')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog) {
-    $scope.filters = {};
-    $scope.catalog = new Catalog();
-    // Get filters data
-    $scope.categoriesFilter = $scope.catalog.getCategories();
-    $scope.suppliersFilter = $scope.catalog.getFilters().suppliers;
-    $scope.placesFilter = $scope.catalog.getFilters().places;
-
-    function openProductDetailsModal(productId) {
+    var openProductDetailsModal = function (productId) {
       $location.search('productId', productId);
       var productData = $scope.catalog.getProduct(productId);
 
@@ -30,7 +23,18 @@ angular.module('pdApp')
         .result.catch(function () {
           $location.search('productId', null);
         });
-    }
+    };
+
+    $scope.filters = {};
+    $scope.catalog = new Catalog();
+    // Get filters data
+    $scope.catalog.getCategories().then(function (categories) {
+      $scope.categoriesFilter = categories;
+    });
+    $scope.catalog.getFilters().then(function (filtersData) {
+      $scope.suppliersFilter = filtersData.supplier;
+      $scope.placesFilter = filtersData.place;
+    });
 
     // Restore product modal details from query params
     if (_.has($routeParams, 'productId')) {
@@ -42,18 +46,21 @@ angular.module('pdApp')
         $scope.filters[key.replace(/^filter_/, '')] = !isNaN(value) ? parseInt(value, 10) : value;
       }
     });
+    $scope.catalog.productsDataProvider.applyFilters($scope.filters);
 
     $scope.openProductDetailsModal = openProductDetailsModal;
     $scope.applyFilters = function () {
       _.forEach($scope.filters, function (value, filterName) {
         $location.search('filter_' + filterName, value);
       });
+      $scope.catalog.productsDataProvider.applyFilters($scope.filters);
     };
     $scope.clearFilters = function () {
       _.forEach($scope.filters, function (value, filterName) {
         $location.search('filter_' + filterName, null);
       });
       $scope.filters = {};
+      $scope.catalog.productsDataProvider.applyFilters($scope.filters);
     };
   })
 ;

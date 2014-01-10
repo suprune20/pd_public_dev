@@ -1,10 +1,54 @@
 <div class="modal-header">
   <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
-  <h4 class="modal-title">{{productData.title}}</h4>
+  <h4 class="modal-title">{{productData.name}}</h4>
 </div>
 
 <div class="modal-body">
-  <p>{{productData.description}}</p>
+  <div class="media">
+    <div class="pull-left">
+      <img class="img-thumbnail media-object"
+           ng-src="{{productData.photo}}"
+           default-image="http://placehold.it/100x100" />
+    </div>
+    <div class="media-body">
+      <dl>
+        <dt ng-show="productData.category">Категория</dt>
+        <dd ng-show="productData.category">{{productData.category}}</dd>
+        <dt ng-show="productData.sku">Артикул</dt>
+        <dd ng-show="productData.sku">{{productData.sku}}</dd>
+        <dt>Цена</dt>
+        <dd>{{productData.price}}</dd>
+        <dt>Валюта</dt>
+        <dd>{{productData.currency}}</dd>
+        <dt ng-show="productData.measure">Оплата за</dt>
+        <dd ng-show="productData.measure">{{productData.measure}}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel panel-default" ng-if="productData.description">
+    <div class="panel-body">
+      {{productData.description}}
+    </div>
+  </div>
+
+  <div class="panel panel-default reset-margin" ng-if="productData.supplier">
+    <div class="panel-heading">Поставщик</div>
+    <div class="panel-body">
+      <dl>
+        <dt>Название</dt>
+        <dd>{{productData.supplier.name}}</dd>
+        <dt>Адрес</dt>
+        <dd>{{productData.supplier.address}}</dd>
+        <dt>Телефон</dt>
+        <dd>{{productData.supplier.phone|default:'-'}}</dd>
+        <dt>Время работы</dt>
+        <dd>{{productData.supplier.worktime|default:'-'}}</dd>
+        <dt>Сайт производителя</dt>
+        <dd>{{productData.supplier.site|default:'-'}}</dd>
+      </dl>
+    </div>
+  </div>
 </div>
 
 <div class="modal-footer">

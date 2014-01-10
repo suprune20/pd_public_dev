@@ -16,6 +16,7 @@ module.exports = function(config) {
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/jquery/jquery.js',
+      'app/bower_components/lodash/dist/lodash.js',
       'app/bower_components/ui.bootstrap/src/modal/modal.js',
       'app/bower_components/ui.bootstrap/src/transition/transition.js',
       'app/bower_components/ui.bootstrap/src/carousel/carousel.js',
