@@ -8,6 +8,7 @@ angular.module('pdApp')
 
       $modal.open({
         templateUrl: 'views/catalog/product.details.modal.html',
+        windowClass: 'catalog-product-modal',
         resolve: {
           productData: function () {
             return productData;

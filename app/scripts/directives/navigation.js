@@ -15,7 +15,7 @@ angular.module('pdApp')
             url = url.substring(1);
           }
 
-          if (path == url) {
+          if (path === url) {
             iElement.addClass(activeClass);
           } else {
             iElement.removeClass(activeClass);
