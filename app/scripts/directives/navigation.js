@@ -1,6 +1,28 @@
 'use strict';
 
 angular.module('pdApp')
+  .directive('pdMenu', function (security) {
+    return {
+      restrict: 'EA',
+      template: '<li active-link ng-repeat="item in getMenuItems()"><a ng-href="#{{item.link}}">{{item.title}}</a></li>',
+      link: function (scope, iElement, iAttrs) {
+        var menuItems;
+
+        if (!_.has(iAttrs, 'pdMenu')) {
+          return;
+        }
+
+        scope.$watch(iAttrs.pdMenu, function (menuItemsData) {
+          menuItems = menuItemsData;
+        });
+        scope.getMenuItems = function () {
+          return _.filter(menuItems, function (item) {
+            return security.isAvailableUrl(item.link);
+          });
+        };
+      }
+    };
+  })
   .directive('activeLink', function ($location) {
     return {
       restrict: 'AC',

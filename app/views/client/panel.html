@@ -5,7 +5,11 @@
 <div class="panel panel-default" ng-if="userData">
   <div class="panel-body media">
     <div class="pull-left">
-      <img ng-src="{{userData.photo}}" class="img-thumbnail" default-image="http://placehold.it/150x150" />
+      <img ng-src="{{userData.photo}}"
+           class="img-thumbnail"
+           pd-thumb
+           pd-thumb-size="150x150"
+           default-image="http://placehold.it/150x150" />
     </div>
     <div class="media-body">
       <h3 class="media-heading"
@@ -38,6 +42,8 @@
            ng-click="selectPlace(place)">
           <div class="pull-left">
             <img ng-src="{{place.photoUrl}}"
+                 pd-thumb
+                 pd-thumb-size="50x50"
                  default-image="http://placehold.it/50x50"
                  class="img-thumbnail media-object" />
           </div>
@@ -95,6 +101,8 @@
               <a class="pull-left" href="#">
                 <img class="media-object img-thumbnail"
                      ng-src="{{burial.photo}}"
+                     pd-thumb
+                     pd-thumb-size="50x50"
                      default-image="http://placehold.it/50x50" />
               </a>
               <div class="media-body">
