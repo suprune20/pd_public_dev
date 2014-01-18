@@ -11,7 +11,8 @@ angular.module('pdApp', [
     'angularLocalStorage',
     'corrupt.loadingSpinnerWidget'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $httpProvider) {
+    $httpProvider.interceptors.push('authApiInterceptor');
     $routeProvider
       .when('/', {
         controller: 'MainCtrl',

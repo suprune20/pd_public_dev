@@ -42,4 +42,18 @@ angular.module('pdApp')
       getAuthToken: getAuthToken
     };
   })
+  .factory('authApiInterceptor', function ($q, $location, pdConfig) {
+    return {
+      responseError: function (rejection) {
+        var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);
+
+        // If access forbidden response from api then redirect to signin page
+        if (apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
+          $location.path('/signin');
+        }
+
+        return $q.reject(rejection);
+      }
+    };
+  })
 ;
