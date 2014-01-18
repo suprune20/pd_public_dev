@@ -24,6 +24,8 @@ module.exports = function(config) {
       'app/bower_components/angular-yandex-map/example/ya-map.js',
       'app/bower_components/select2/select2.js',
       'app/bower_components/angular-ui-select2/src/select2.js',
+      'app/bower_components/angular-cookies/angular-cookies.js',
+      'app/bower_components/angularLocalStorage/src/angularLocalStorage.js',
       '.tmp/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
