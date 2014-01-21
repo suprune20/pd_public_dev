@@ -42,3 +42,4 @@ describe('Service: Security', function () {
     expect(securityService.isAvailableUrl('unsecured/url')).toBeTruthy();
   });
 });
+
