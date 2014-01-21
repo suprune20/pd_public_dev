@@ -2,16 +2,15 @@
 
 angular.module('pdApp')
   .service('auth', function ($http, pdConfig, storage, $q) {
-    var AUTH_TOKEN_KEY = 'auth.token',
-      signin = function (username, password) {
-        return $http.post(pdConfig.apiEndpoint + 'signin', {
+    var signin = function (username, password) {
+        return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
             password: password
           }).then(function (response) {
             var responseData = response.data;
 
             if (_.has(responseData, 'token')) {
-              storage.set(AUTH_TOKEN_KEY, responseData.token);
+              storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
             }
 
             return responseData;
@@ -26,13 +25,13 @@ angular.module('pdApp')
           });
       },
       signout = function () {
-        storage.remove(AUTH_TOKEN_KEY);
+        storage.remove(pdConfig.AUTH_TOKEN_KEY);
       },
       isAuthenticated = function () {
-        return !!storage.get(AUTH_TOKEN_KEY);
+        return !!storage.get(pdConfig.AUTH_TOKEN_KEY);
       },
       getAuthToken = function () {
-        return storage.get(AUTH_TOKEN_KEY);
+        return storage.get(pdConfig.AUTH_TOKEN_KEY);
       };
 
     return {
@@ -42,11 +41,20 @@ angular.module('pdApp')
       getAuthToken: getAuthToken
     };
   })
-  .factory('authApiInterceptor', function ($q, $location, pdConfig) {
-    return {
-      responseError: function (rejection) {
-        var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);
+  .factory('authApiInterceptor', function ($q, $location, pdConfig, storage) {
+    var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);
 
+    return {
+      request: function (config) {
+        // If access forbidden response from api then redirect to signin page
+        // ToDo: circular reference if use auth or security services
+        if (apiUrlRegexp.test(config.url) && !!storage.get(pdConfig.AUTH_TOKEN_KEY)) {
+          config.headers.Authorization = 'Token ' + storage.get(pdConfig.AUTH_TOKEN_KEY);
+        }
+
+        return config;
+      },
+      responseError: function (rejection) {
         // If access forbidden response from api then redirect to signin page
         if (apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
           $location.path('/signin');

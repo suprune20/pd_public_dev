@@ -1,11 +1,12 @@
 'use strict';
 
 (function (angular) {
-  var serverHost = 'http://pd2cat.bsuir.by/';
+  var serverHost = 'http://pd2cat.pohoronnoedelo.ru/';
 
   angular.module('pdApp')
     .constant('pdConfig', {
       apiEndpoint: serverHost + 'api/',
+      AUTH_TOKEN_KEY: 'pd.auth.token',
       imageThumbnailerConfig: {
         baseUrl: serverHost + 'media',
         thumbnailBaseUrl: serverHost + 'thumb'
