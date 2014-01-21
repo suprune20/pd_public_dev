@@ -108,6 +108,24 @@ module.exports = function (grunt) {
           jshintrc: 'test/.jshintrc'
         },
         src: ['test/spec/**/*.js']
+      },
+      'ci_src': {
+        options: {
+          reporter: 'checkstyle',
+          reporterOutput: 'build/jshint_src.xml'
+        },
+        src: [
+          'Gruntfile.js',
+          '<%= yeoman.app %>/scripts/**/*.js'
+        ]
+      },
+      'ci_tests': {
+        options: {
+          reporter: 'checkstyle',
+          reporterOutput: 'build/jshint_tests.xml',
+          jshintrc: 'test/.jshintrc'
+        },
+        src: ['test/spec/**/*.js']
       }
     },
 
@@ -407,6 +425,14 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'karma.conf.js',
         singleRun: true
+      },
+      'unit_ci': {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        reporters: ['dots', 'junit'],
+        junitReporter: {
+          outputFile: 'build/karma.xml'
+        }
       }
     }
   });
@@ -432,12 +458,27 @@ module.exports = function (grunt) {
     grunt.task.run(['serve']);
   });
 
-  grunt.registerTask('test', [
+  grunt.registerTask('prepare_test', [
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test',
-    'karma'
+    'connect:test'
+  ]);
+
+  grunt.registerTask('test', [
+    'prepare_test',
+    'karma:unit'
+  ]);
+
+  grunt.registerTask('ci:jshint', [
+    'jshint:ci_src',
+    'jshint:ci_tests'
+  ]);
+
+  grunt.registerTask('ci', [
+    'ci:jshint',
+    'prepare_test',
+    'karma:unit_ci'
   ]);
 
   grunt.registerTask('build', [

@@ -56,7 +56,7 @@ angular.module('pdApp')
       },
       responseError: function (rejection) {
         // If access forbidden response from api then redirect to signin page
-        if (apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
+        if (_.has(rejection.config, 'url') && apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
           $location.path('/signin');
         }
 

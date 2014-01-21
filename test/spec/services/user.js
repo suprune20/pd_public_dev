@@ -6,6 +6,7 @@ describe('Service: User', function () {
     userService;
 
   beforeEach(module('pdApp'));
+  beforeEach(module('views/main.html'));
   beforeEach(inject(function (_$httpBackend_, apiEndpoint, User) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = apiEndpoint;

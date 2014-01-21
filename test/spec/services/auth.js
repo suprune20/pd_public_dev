@@ -16,6 +16,7 @@ describe('Service: Auth', function () {
   beforeEach(module('pdApp', function($provide) {
     $provide.value('storage', storageMock);
   }));
+  beforeEach(module('views/main.html'));
   beforeEach(inject(function (_$httpBackend_, pdConfig, auth) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = pdConfig.apiEndpoint;
@@ -31,7 +32,7 @@ describe('Service: Auth', function () {
       var successCallback = jasmine.createSpy('success callback'),
         errorCallback = jasmine.createSpy('error callback');
 
-      $httpBackend.expectPOST(serverEndpointUrl + 'signin', {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
         username: 'username',
         password: 'password'
       }).respond(200, {token: 'qwee123dsczx3rq'});
@@ -43,7 +44,7 @@ describe('Service: Auth', function () {
     });
 
     it('should save user token into localstorage if success', function () {
-      $httpBackend.expectPOST(serverEndpointUrl + 'signin', {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
         username: 'username',
         password: 'password'
       }).respond(200, {token: 'qwee123dsczx3rq'});
@@ -55,12 +56,12 @@ describe('Service: Auth', function () {
     });
 
     it('should return error message text if bad credentials', function () {
-      $httpBackend.expectPOST(serverEndpointUrl + 'signin', {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
         username: 'bad',
         password: 'credentials'
       }).respond(400, {status: 'error', message: 'message text'});
       authService.signin('bad', 'credentials').then(angular.noop, function (errorMessage) {
-        expect(errorMessage).toEqual('message text');
+        expect(errorMessage).toEqual('Неверный номер телефона или пароль');
       });
       $httpBackend.flush();
     });
