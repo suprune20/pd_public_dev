@@ -5,7 +5,8 @@ describe('Directive decorators', function () {
   var $rootScope;
 
   beforeEach(module('pdApp'));
-  beforeEach(module('views/main.html'));
+  beforeEach(module('views/client/panel.html'));
+  beforeEach(module('views/auth/signin.html'));
 
   describe('ngSrc directive', function () {
     beforeEach(function () {

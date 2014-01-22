@@ -7,6 +7,7 @@ describe('Service: Catalog', function () {
 
   beforeEach(module('pdApp'));
   beforeEach(module('views/client/panel.html'));
+  beforeEach(module('views/auth/signin.html'));
   beforeEach(inject(function (_$httpBackend_, apiEndpoint, Catalog) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = apiEndpoint;

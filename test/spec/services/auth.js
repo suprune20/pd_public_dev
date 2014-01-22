@@ -17,6 +17,7 @@ describe('Service: Auth', function () {
     $provide.value('storage', storageMock);
   }));
   beforeEach(module('views/client/panel.html'));
+  beforeEach(module('views/auth/signin.html'));
   beforeEach(inject(function (_$httpBackend_, pdConfig, auth) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = pdConfig.apiEndpoint;

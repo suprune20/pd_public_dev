@@ -3,13 +3,24 @@
 describe('Service: User', function () {
   var $httpBackend,
     serverEndpointUrl,
+    $rootScope,
+    pdYandexMock,
     userService;
 
-  beforeEach(module('pdApp'));
+  beforeEach(function () {
+    pdYandexMock = {
+      geocode: jasmine.createSpy('pdYandexMock mock for "geocode" method')
+    };
+  });
+  beforeEach(module('pdApp', function($provide) {
+    $provide.value('pdYandex', pdYandexMock);
+  }));
   beforeEach(module('views/client/panel.html'));
-  beforeEach(inject(function (_$httpBackend_, apiEndpoint, User) {
+  beforeEach(module('views/auth/signin.html'));
+  beforeEach(inject(function (_$httpBackend_, apiEndpoint, _$rootScope_, User) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = apiEndpoint;
+    $rootScope = _$rootScope_;
     userService = new User();
   }));
   afterEach(function () {
@@ -62,9 +73,44 @@ describe('Service: User', function () {
 
       userService.getPlaceCoordinates({location: {latitude: 43, longitude: 12}})
         .then(successCallback, errorCallback);
+      $rootScope.$apply();
 
-      expect(successCallback).toHaveBeenCalled();//With([12, 43]);
+      expect(successCallback).toHaveBeenCalledWith([12, 43]);
       expect(errorCallback).not.toHaveBeenCalled();
+    });
+
+    it('should return place coordinates from yandex geocode service', function () {
+      var successCallback = jasmine.createSpy('success callback'),
+        errorCallback = jasmine.createSpy('error callback');
+
+      pdYandexMock.geocode.andCallFake(function () {
+        return {
+          then: jasmine.createSpy().andCallFake(function (cb) {
+            cb([53, 12]);
+          })
+        };
+      });
+
+      userService.getPlaceCoordinates({location: null, address: 'any address'})
+        .then(successCallback, errorCallback);
+      $rootScope.$apply();
+
+      expect(pdYandexMock.geocode).toHaveBeenCalledWith('any address');
+      expect(successCallback).toHaveBeenCalledWith([53, 12]);
+      expect(errorCallback).not.toHaveBeenCalled();
+    });
+
+
+    it('should return rejected promise if no location and address attributes', function () {
+      var successCallback = jasmine.createSpy('success callback'),
+        errorCallback = jasmine.createSpy('error callback');
+
+      userService.getPlaceCoordinates({})
+        .then(successCallback, errorCallback);
+      $rootScope.$apply();
+
+      expect(successCallback).not.toHaveBeenCalled();
+      expect(errorCallback).toHaveBeenCalled();
     });
   });
 });
