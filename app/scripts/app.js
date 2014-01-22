@@ -15,22 +15,12 @@ angular.module('pdApp', [
     $httpProvider.interceptors.push('authApiInterceptor');
     $routeProvider
       .when('/', {
-        controller: 'MainCtrl',
-        templateUrl: 'views/main.html',
-        title: 'Главная'
+        redirectTo: '/client-panel'
       })
       .when('/signin', {
         controller: 'AuthSigninCtrl',
         templateUrl: 'views/auth/signin.html',
         title: 'Вход'
-      })
-      .when('/contacts', {
-        templateUrl: 'views/contacts.html',
-        title: 'Контакты'
-      })
-      .when('/about-us', {
-        templateUrl: 'views/about_us.html',
-        title: 'О нас'
       })
       .when('/catalog', {
         controller: 'CatalogCtrl',

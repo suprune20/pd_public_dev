@@ -4,26 +4,26 @@ angular.module('pdApp')
   .controller('ClientPanelCtrl', function ($scope, User) {
     var user = new User();
 
-    user.getProfile().then(function (userData) {
-      $scope.userData = userData;
-      $scope.yaPlacesPoints = userData.places.filter(function (placeData) {
-        return placeData.location;
-      }).map(function (placeData) {
-        return {
+    $scope.selectPlace = function (placeData) {
+      $scope.selectedPlace = placeData;
+      $scope.yaPlacePoint = null;
+
+      user.getPlaceCoordinates(placeData).then(function (coordinates) {
+        $scope.yaPlacePoint = {
           geometry: {
             type: 'Point',
-            coordinates: [placeData.location.longitude, placeData.location.latitude]
+            coordinates: coordinates
           }
         };
       });
-    });
-    $scope.selectPlace = function (placeData) {
-      $scope.selectedPlace = placeData;
-      $scope.placesMapCenter = null;
-
-      if (placeData.location) {
-        $scope.placesMapCenter = [placeData.location.longitude, placeData.location.latitude];
-      }
     };
+    user.getProfile().then(function (userData) {
+      $scope.userData = userData;
+
+      // Select first place by default
+      if (userData.places.length) {
+        $scope.selectPlace(userData.places[0]);
+      }
+    });
   })
 ;

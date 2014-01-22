@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: CatalogCtrl', function () {
+describe('Controller: ClientPanelCtrl', function () {
   var scope,
     userMock;
 
@@ -19,6 +19,14 @@ describe('Controller: CatalogCtrl', function () {
                     {location: null}
                   ]
                 });
+              })
+            };
+          }),
+        getPlaceCoordinates: jasmine.createSpy('user getPlaceCoordinates() mock')
+          .andCallFake(function () {
+            return {
+              then: jasmine.createSpy().andCallFake(function (cb) {
+                cb([23, 12]);
               })
             };
           })
@@ -42,25 +50,14 @@ describe('Controller: CatalogCtrl', function () {
     });
   });
 
-  it('should get places points for yandex map from user profile data', function () {
-    expect(scope.yaPlacesPoints).toEqual([
-      {
-        geometry: {
-          type: 'Point',
-          coordinates: [31, 43]
-        }
-      }
-    ]);
-  });
-
-  it('should select point and calculate center point for yandex map', function () {
+  it('should select point and set yaPlacePoint object', function () {
     scope.selectPlace({location: {longitude: 31, latitude: 43}});
     expect(scope.selectedPlace).toEqual({location: {longitude: 31, latitude: 43}});
-    expect(scope.placesMapCenter).toEqual([31, 43]);
-  });
-
-  it('should not set center point for yandex map if no location data', function () {
-    scope.selectPlace({location: null});
-    expect(scope.placesMapCenter).toBeNull();
+    expect(scope.yaPlacePoint).toEqual({
+      geometry: {
+        type: 'Point',
+        coordinates: [23, 12] // from getPlaceCoordinates mock
+      }
+    });
   });
 });

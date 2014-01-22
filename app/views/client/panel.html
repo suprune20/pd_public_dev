@@ -8,8 +8,8 @@
       <img ng-src="{{userData.photo}}"
            class="img-thumbnail"
            pd-thumb
-           pd-thumb-size="150x150"
-           default-image="http://placehold.it/150x150" />
+           pd-thumb-size="75x75"
+           default-image="http://placehold.it/75x75" />
     </div>
     <div class="media-body">
       <h3 class="media-heading"
@@ -22,7 +22,7 @@
             <li ng-repeat="phone in userData.phones">{{phone}}</li>
           </ul>
         </li>
-        <li>Основной телефон: {{userData.loginPhone}}</li>
+        <li>Телефон для входа: {{userData.loginPhone}}</li>
       </ul>
     </div>
   </div>
@@ -33,7 +33,7 @@
     <h4 class="panel-title">Места захоронений</h4>
   </div>
   <div class="panel-body row">
-    <div class="col-xs-12" ng-class="{'col-sm-6': yaPlacesPoints.length}">
+    <div class="col-xs-12" ng-class="{'col-sm-6': yaPlacePoint}">
       <div class="list-group media-list no-bottom-margin">
         <a href="javascript: void(0);"
            class="list-group-item media"
@@ -43,8 +43,8 @@
           <div class="pull-left">
             <img ng-src="{{place.photoUrl}}"
                  pd-thumb
-                 pd-thumb-size="50x50"
-                 default-image="http://placehold.it/50x50"
+                 pd-thumb-size="150x150"
+                 default-image="http://placehold.it/150x150"
                  class="img-thumbnail media-object" />
           </div>
           <div class="media-body list-group-item-text">
@@ -57,14 +57,12 @@
     <div class="clearfix visible-xs" ng-if="yaPlacesPoints.length"></div>
 
     <ya-map class="col-xs-12 col-sm-6 client-panel-place-map"
-            ng-if="yaPlacesPoints.length"
-            ya-center="{{placesMapCenter}}"
+            ng-if="yaPlacePoint"
+            ya-center="{{yaPlacePoint.geometry.coordinates}}"
             ya-zoom="10"
             ya-options="{maxZoom: 18}">
       <ya-toolbar ya-name="zoomControl"></ya-toolbar>
-      <ya-collection show-all="true">
-        <ya-geo-object ng-repeat="yaPoint in yaPlacesPoints" ya-source="yaPoint"></ya-geo-object>
-      </ya-collection>
+      <ya-geo-object ya-source="yaPlacePoint"></ya-geo-object>
     </ya-map>
   </div>
 </div>

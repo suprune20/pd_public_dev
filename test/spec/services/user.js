@@ -6,7 +6,7 @@ describe('Service: User', function () {
     userService;
 
   beforeEach(module('pdApp'));
-  beforeEach(module('views/main.html'));
+  beforeEach(module('views/client/panel.html'));
   beforeEach(inject(function (_$httpBackend_, apiEndpoint, User) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = apiEndpoint;
@@ -53,5 +53,18 @@ describe('Service: User', function () {
       ]
     });
     expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  describe('getPlaceCoordinates()', function () {
+    it('should return place coordinates from place location data', function () {
+      var successCallback = jasmine.createSpy('success callback'),
+        errorCallback = jasmine.createSpy('error callback');
+
+      userService.getPlaceCoordinates({location: {latitude: 43, longitude: 12}})
+        .then(successCallback, errorCallback);
+
+      expect(successCallback).toHaveBeenCalled();//With([12, 43]);
+      expect(errorCallback).not.toHaveBeenCalled();
+    });
   });
 });

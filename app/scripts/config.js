@@ -12,11 +12,8 @@
         thumbnailBaseUrl: serverHost + 'thumb'
       },
       mainMenu: [
-        {link: '/', title: 'Главная'},
-        {link: '/catalog', title: 'Каталог'},
         {link: '/client-panel', title: 'Панель пользователя'},
-        {link: '/about-us', title: 'О нас'},
-        {link: '/contacts', title: 'Контакты'}
+        {link: '/catalog', title: 'Каталог'}
       ]
     })
     // Deprecated single constants, move into psConfig
