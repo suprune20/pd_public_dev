@@ -14,7 +14,7 @@
     "nginfinitescroll": "~1.0.0",
     "ui.bootstrap": "~0.9.0",
     "lodash": "~2.4.1",
-    "angular-yandex-map": "git@github.com:c0rrupt/angular-yandex-map.git#ed1b040e50cb31c67e5574a66fa12a5d73385a47",
+    "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#ed1b040e50cb31c67e5574a66fa12a5d73385a47",
     "angularLocalStorage": "~0.1.7"
   },
   "devDependencies": {
