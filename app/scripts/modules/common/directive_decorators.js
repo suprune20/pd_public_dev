@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .config(function ($provide) {
     // Use api server thumbnailer for resize images in ngSrc directive
     $provide.decorator('ngSrcDirective', function ($delegate, imageThumbnailerConfig) {

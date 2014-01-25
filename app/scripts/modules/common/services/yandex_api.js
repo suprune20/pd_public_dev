@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .service('pdYandex', function (mapApiLoad, $q) {
     return {
       geocode: function (address) {

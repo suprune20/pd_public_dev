@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .service('security', function ($route, auth) {
     var securedUrls = _($route.routes)
         .filter(function (routeData) {

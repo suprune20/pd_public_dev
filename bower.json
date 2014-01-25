@@ -15,7 +15,8 @@
     "angular-bootstrap": "~0.10.0",
     "lodash": "~2.4.1",
     "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#ed1b040e50cb31c67e5574a66fa12a5d73385a47",
-    "angularLocalStorage": "~0.1.7"
+    "angularLocalStorage": "~0.1.7",
+    "ocLazyLoad": "https://github.com/ocombe/ocLazyLoad.git#master"
   },
   "devDependencies": {
     "angular-mocks": "1.2.9",

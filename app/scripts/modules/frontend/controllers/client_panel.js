@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdFrontend')
   .controller('ClientPanelCtrl', function ($scope, User) {
     var user = new User();
 

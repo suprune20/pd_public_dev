@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .service('auth', function ($http, pdConfig, storage, $q) {
     var signin = function (username, password) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {

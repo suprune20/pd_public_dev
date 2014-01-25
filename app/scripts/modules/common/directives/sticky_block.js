@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .directive('pbStickyBlock', function ($window, $log) {
     return {
       restrict: 'AE',

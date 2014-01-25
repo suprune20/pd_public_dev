@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .filter('default', function () {
     return function (inputVal, defaultVal) {
       if (inputVal !== null && typeof inputVal !== 'undefined' && inputVal !== '') {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdFrontend')
   .factory('User', function ($http, apiEndpoint, pdYandex, $q) {
     return function () {
       var getProfile = function () {

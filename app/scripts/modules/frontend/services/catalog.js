@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdFrontend')
   .factory('Catalog', function ($http, apiEndpoint) {
     return function (productsCountPerRequest) {
       // Products data provider class

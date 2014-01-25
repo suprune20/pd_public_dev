@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdCommon')
   .directive('pdMenu', function (security) {
     return {
       restrict: 'EA',

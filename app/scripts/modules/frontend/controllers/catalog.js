@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdApp')
+angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog) {
     var openProductDetailsModal = function (productId) {
       $location.search('productId', productId);
