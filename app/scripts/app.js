@@ -2,9 +2,7 @@
 
 angular.module('pdApp', [
     'ngRoute',
-    'ui.bootstrap.modal',
-    'ui.bootstrap.carousel',
-    'ui.bootstrap.templates',
+    'ui.bootstrap',
     'ui.select2',
     'infinite-scroll',
     'yaMap',
@@ -35,7 +33,10 @@ angular.module('pdApp', [
         title: 'Панель клиента',
         secured: true
       })
-      .otherwise('/')
+      .otherwise({
+        templateUrl: 'views/404.html',
+        title: 404
+      })
     ;
   })
   .run(function ($rootScope, $location, security, pdConfig) {
