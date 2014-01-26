@@ -1,25 +1,20 @@
 'use strict';
 
 angular.module('pdCommon')
-  .directive('pdMenu', function (security) {
+  .directive('pdMainMenu', function (mainMenuManager, security) {
     return {
       restrict: 'EA',
-      template: '<li active-link ng-repeat="item in getMenuItems()"><a ng-href="#{{item.link}}">{{item.title}}</a></li>',
-      link: function (scope, iElement, iAttrs) {
-        var menuItems;
-
-        if (!_.has(iAttrs, 'pdMenu')) {
-          return;
-        }
-
-        scope.$watch(iAttrs.pdMenu, function (menuItemsData) {
-          menuItems = menuItemsData;
-        });
-        scope.getMenuItems = function () {
-          return _.filter(menuItems, function (item) {
+      replace: true,
+      templateUrl: 'views/modules/common/directives/main_menu.html',
+      link: function (scope) {
+        scope.menuManager = mainMenuManager;
+        scope.$watch(function () {
+          return mainMenuManager.getMenuItems();
+        }, function (menuItems) {
+          scope.menuItems = _.filter(menuItems, function (item) {
             return security.isAvailableUrl(item.link);
           });
-        };
+        });
       }
     };
   })

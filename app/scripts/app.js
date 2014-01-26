@@ -10,7 +10,9 @@ angular.module('pdApp', [
     $httpProvider.interceptors.push('authApiInterceptor');
     $routeProvider
       .when('/', {
-        redirectTo: '/client-panel'
+        controller: 'LandingPageCtrl',
+        templateUrl: 'views/landing_page.html',
+        hideMainMenu: true
       })
       .when('/signin', {
         controller: 'AuthSigninCtrl',
@@ -23,17 +25,19 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, security, pdConfig) {
+  .run(function ($rootScope, $location, security, pdConfig, mainMenuManager) {
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Check for secured url and available for current logged in user
       if (!security.isAvailableUrl(currentRoute.originalPath)) {
-        $location.path('/signin');
+        $location.path('/');
         return;
       }
       // Set title for current page from routeProvider data
       $rootScope.title = currentRoute.title;
       // Set main menu items
-      $rootScope.mainMenuItems = pdConfig.mainMenu;
+      mainMenuManager.setMenuItems(pdConfig.mainMenu);
+      // Hide/Show main menu by route param
+      mainMenuManager.hide(currentRoute.hideMainMenu);
     });
   })
 ;

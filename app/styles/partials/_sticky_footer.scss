@@ -12,6 +12,15 @@ body {
   > .container {
     padding: 60px 15px 0;
   }
+
+  // Remove container top padding when navbar is hidden
+  .navbar {
+    &.ng-hide {
+      +.container {
+        padding-top: 0;
+      }
+    }
+  }
 }
 
 .footer {

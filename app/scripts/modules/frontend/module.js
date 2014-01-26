@@ -3,7 +3,6 @@
 angular.module('pdFrontend', [
     'ngRoute',
     'pdCommon',
-    'pdConfig',
     'ui.select2',
     'infinite-scroll',
     'yaMap'
