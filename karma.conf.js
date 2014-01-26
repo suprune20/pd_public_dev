@@ -13,7 +13,6 @@ module.exports = function(config) {
     files: [
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/jquery/jquery.js',
       'app/bower_components/lodash/dist/lodash.js',
@@ -24,6 +23,8 @@ module.exports = function(config) {
       'app/bower_components/angular-ui-select2/src/select2.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angularLocalStorage/src/angularLocalStorage.js',
+      'app/scripts/modules/frontend/module.js',
+      'app/scripts/modules/common/module.js',
       '.tmp/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',

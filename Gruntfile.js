@@ -162,7 +162,7 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     'bower-install': {
       app: {
-        html: '<%= yeoman.app %>/index.html',
+        src: '<%= yeoman.app %>/index.html',
         ignorePath: '<%= yeoman.app %>/',
         exclude: [
           'bower_components/sass-bootstrap/dist/css/bootstrap.css',
@@ -304,7 +304,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/{,*/}*.html',
+            'views/**/*.html',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
@@ -412,13 +412,11 @@ module.exports = function (grunt) {
       }
     },
 
-    uglify: {
-      options: {
-        compress: false,
-        beautify: false,
-        mangle: false
-      }
-    },
+//    uglify: {
+//      options: {
+//        mangle: false
+//      }
+//    },
 
     // Test settings
     karma: {
@@ -488,7 +486,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-//    'ngmin',
+    'ngmin',
     'copy:dist',
     'cdnify',
     'cssmin',

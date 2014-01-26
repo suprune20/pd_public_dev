@@ -2,12 +2,9 @@
 
 angular.module('pdApp', [
     'ngRoute',
-    'ui.bootstrap',
-    'ui.select2',
-    'infinite-scroll',
-    'yaMap',
-    'angularLocalStorage',
-    'corrupt.loadingSpinnerWidget'
+    'pdCommon',
+    'pdFrontend',
+    'pdConfig'
   ])
   .config(function ($routeProvider, $httpProvider) {
     $httpProvider.interceptors.push('authApiInterceptor');
@@ -19,19 +16,6 @@ angular.module('pdApp', [
         controller: 'AuthSigninCtrl',
         templateUrl: 'views/auth/signin.html',
         title: 'Вход'
-      })
-      .when('/catalog', {
-        controller: 'CatalogCtrl',
-        templateUrl: 'views/catalog/main.html',
-        reloadOnSearch: false,
-        title: 'Каталог',
-        secured: true
-      })
-      .when('/client-panel', {
-        controller: 'ClientPanelCtrl',
-        templateUrl: 'views/client/panel.html',
-        title: 'Панель клиента',
-        secured: true
       })
       .otherwise({
         templateUrl: 'views/404.html',

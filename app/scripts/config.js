@@ -3,7 +3,7 @@
 (function (angular) {
   var serverHost = 'http://pd2cat.pohoronnoedelo.ru/';
 
-  angular.module('pdApp')
+  angular.module('pdConfig', [])
     .constant('pdConfig', {
       apiEndpoint: serverHost + 'api/',
       AUTH_TOKEN_KEY: 'pd.auth.token',
