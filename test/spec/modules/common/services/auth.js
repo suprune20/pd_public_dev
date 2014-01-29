@@ -16,8 +16,6 @@ describe('Service: Auth', function () {
   beforeEach(module('pdCommon', function($provide) {
     $provide.value('storage', storageMock);
   }));
-//  beforeEach(module('views/client/panel.html'));
-//  beforeEach(module('views/auth/signin.html'));
   beforeEach(inject(function (_$httpBackend_, pdConfig, auth) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = pdConfig.apiEndpoint;
@@ -61,10 +59,76 @@ describe('Service: Auth', function () {
         username: 'bad',
         password: 'credentials'
       }).respond(400, {status: 'error', message: 'message text'});
-      authService.signin('bad', 'credentials').then(angular.noop, function (errorMessage) {
-        expect(errorMessage).toEqual('Неверный номер телефона или пароль');
+      authService.signin('bad', 'credentials').then(angular.noop, function (errorData) {
+        expect(errorData).toEqual({
+          message: 'message text',
+          errorCode: null
+        });
       });
       $httpBackend.flush();
+    });
+
+    it('should convert roles into array if getting string', function () {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
+        username: 'username',
+        password: 'password'
+      }).respond(200, {token: 'token_ololo', role: 'role'});
+      authService.signin('username', 'password').then(function (respData) {
+        expect(respData).toEqual({
+          token: 'token_ololo',
+          role: ['role']
+        });
+      });
+      $httpBackend.flush();
+    });
+
+    it('should save user roles into localstorage if success', function () {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
+        username: 'username',
+        password: 'password'
+      }).respond(200, {token: 'qwee123dsczx3rq', role: ['ROLE_CLIENT']});
+      authService.signin('username', 'password');
+      $httpBackend.flush();
+
+      expect(storageMock.set).toHaveBeenCalled();
+      expect(storageMock.set.mostRecentCall.args[1]).toEqual(['ROLE_CLIENT']);
+    });
+  });
+
+  describe('get password by SMS method', function () {
+    it('should send post request into api and call success callback if has been send right data', function () {
+      var successCallback = jasmine.createSpy('success callback'),
+        errorCallback = jasmine.createSpy('error callback');
+
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/get_password_by_sms', {
+        phoneNumber: 'username',
+        recaptchaData: {
+          response: 'response',
+          challenge: 'challenge'
+        }
+      }).respond(200, {message: 'success'});
+      authService.getPasswordBySMS('username', {response: 'response',challenge: 'challenge'})
+        .then(successCallback, errorCallback);
+      $httpBackend.flush();
+
+      expect(successCallback).toHaveBeenCalled();
+      expect(errorCallback).not.toHaveBeenCalled();
+    });
+
+    it('should return error message text if bad credentials', function () {
+      var successCallback = jasmine.createSpy('success callback'),
+        errorCallback = jasmine.createSpy('error callback');
+
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/get_password_by_sms', {
+        phoneNumber: 'bad',
+        recaptchaData: {response: 'response',challenge: 'challenge'}
+      }).respond(400, {status: 'error', message: 'message text'});
+      authService.getPasswordBySMS('bad', {response: 'response',challenge: 'challenge'})
+        .then(successCallback, errorCallback);
+      $httpBackend.flush();
+
+      expect(successCallback).not.toHaveBeenCalled();
+      expect(errorCallback).toHaveBeenCalled();
     });
   });
 
@@ -95,6 +159,40 @@ describe('Service: Auth', function () {
       storageMock.get.andReturn('token');
 
       expect(authService.getAuthToken()).toEqual('token');
+    });
+  });
+
+  describe('getRoles method', function () {
+    it('should return roles for current user from localstorage', function () {
+      storageMock.get.andReturn(['ROLE_CLIENT']);
+
+      expect(authService.getRoles()).toEqual(['ROLE_CLIENT']);
+    });
+  });
+
+  describe('get role methods', function () {
+    it('should false if current logged user has not client role', function () {
+      storageMock.get.andReturn(null);
+
+      expect(authService.isCurrentHasClientRole()).toBeFalsy();
+    });
+
+    it('should true if current logged user has client role', function () {
+      storageMock.get.andReturn(['ROLE_CLIENT']);
+
+      expect(authService.isCurrentHasClientRole()).toBeTruthy();
+    });
+
+    it('should true if current logged user has loru role', function () {
+      storageMock.get.andReturn(['ROLE_CLIENT', 'ROLE_LORU']);
+
+      expect(authService.isCurrentHasLoruRole()).toBeTruthy();
+    });
+
+    it('should true if current logged user has client role', function () {
+      storageMock.get.andReturn(['ROLE_OMS']);
+
+      expect(authService.isCurrentHasOmsRole()).toBeTruthy();
     });
   });
 });

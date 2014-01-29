@@ -7,6 +7,7 @@
     .constant('pdConfig', {
       apiEndpoint: serverHost + 'api/',
       AUTH_TOKEN_KEY: 'pd.auth.token',
+      AUTH_ROLES_KEY: 'pd.auth.roles',
       imageThumbnailerConfig: {
         baseUrl: serverHost + 'media',
         thumbnailBaseUrl: serverHost + 'thumb'

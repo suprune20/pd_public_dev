@@ -13,32 +13,77 @@ angular.module('pdCommon')
               storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
             }
 
-            return responseData;
-          }, function (errorResponse) {
-            var respData = errorResponse.data;
-
-            if (400 === errorResponse.status && 'error' === respData.status) {
-              return $q.reject('Неверный номер телефона или пароль');
+            if (_.has(responseData, 'role')) {
+              responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
+              storage.set(pdConfig.AUTH_ROLES_KEY, responseData.role);
             }
 
-            return $q.reject('Неизвестная ошибка');
+            return responseData;
+          }, function (errorResponse) {
+            var respData = errorResponse.data,
+              defaultReturnData = {
+                errorCode: null,
+                message: 'Неизвестная ошибка'
+              };
+
+            if (400 === errorResponse.status && 'error' === respData.status) {
+              respData = _(respData)
+                .pick(['errorCode', 'message'])
+                .defaults(defaultReturnData)
+                .value();
+
+              return $q.reject(respData);
+            }
+
+            return $q.reject(defaultReturnData);
           });
       },
       signout = function () {
         storage.remove(pdConfig.AUTH_TOKEN_KEY);
+        storage.remove(pdConfig.AUTH_ROLES_KEY);
       },
       isAuthenticated = function () {
         return !!storage.get(pdConfig.AUTH_TOKEN_KEY);
       },
       getAuthToken = function () {
         return storage.get(pdConfig.AUTH_TOKEN_KEY);
+      },
+      getRoles = function () {
+        return storage.get(pdConfig.AUTH_ROLES_KEY);
+      },
+      getPasswordBySMS = function (username, captchaData) {
+        return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
+          phoneNumber: username,
+          recaptchaData: captchaData
+        }).then(function (responseData) {
+          return responseData.data;
+        }, function (responseData) {
+          return $q.reject(responseData.data);
+        });
+      },
+      isContainsRole = function (role) {
+        return _.contains(getRoles(), role);
+      },
+      isCurrentHasClientRole = function () {
+        return isContainsRole('ROLE_CLIENT');
+      },
+      isCurrentHasLoruRole = function () {
+        return isContainsRole('ROLE_LORU');
+      },
+      isCurrentHasOmsRole = function () {
+        return isContainsRole('ROLE_OMS');
       };
 
     return {
       signin: signin,
       signout: signout,
       isAuthenticated: isAuthenticated,
-      getAuthToken: getAuthToken
+      getAuthToken: getAuthToken,
+      getRoles: getRoles,
+      getPasswordBySMS: getPasswordBySMS,
+      isCurrentHasClientRole: isCurrentHasClientRole,
+      isCurrentHasLoruRole: isCurrentHasLoruRole,
+      isCurrentHasOmsRole: isCurrentHasOmsRole
     };
   })
   .factory('authApiInterceptor', function ($q, $location, pdConfig, storage) {
@@ -57,7 +102,7 @@ angular.module('pdCommon')
       responseError: function (rejection) {
         // If access forbidden response from api then redirect to signin page
         if (_.has(rejection.config, 'url') && apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
-          $location.path('/signin');
+          $location.path('/');
         }
 
         return $q.reject(rejection);

@@ -8,6 +8,7 @@ angular.module('pdCommon')
       templateUrl: 'views/modules/common/directives/auth.html',
       link: function (scope) {
         scope.isAuthenticated = auth.isAuthenticated;
+        scope.signout = auth.signout;
       }
     };
   })

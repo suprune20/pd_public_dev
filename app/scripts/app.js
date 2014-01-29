@@ -4,7 +4,9 @@ angular.module('pdApp', [
     'ngRoute',
     'pdCommon',
     'pdFrontend',
-    'pdConfig'
+    'pdConfig',
+    'vcRecaptcha',
+    'ivpusic.cookie'
   ])
   .config(function ($routeProvider, $httpProvider) {
     $httpProvider.interceptors.push('authApiInterceptor');
@@ -14,10 +16,10 @@ angular.module('pdApp', [
         templateUrl: 'views/landing_page.html',
         hideMainMenu: true
       })
-      .when('/signin', {
-        controller: 'AuthSigninCtrl',
-        templateUrl: 'views/auth/signin.html',
-        title: 'Вход'
+      .when('/loru', {
+        template: 'Лору',
+        title: 'Лору панель',
+        secured: true
       })
       .otherwise({
         templateUrl: 'views/404.html',
@@ -25,7 +27,7 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, security, pdConfig, mainMenuManager) {
+  .run(function ($rootScope, $location, security, pdConfig, mainMenuManager, auth) {
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Check for secured url and available for current logged in user
       if (!security.isAvailableUrl(currentRoute.originalPath)) {
@@ -38,6 +40,18 @@ angular.module('pdApp', [
       mainMenuManager.setMenuItems(pdConfig.mainMenu);
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
+
+      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
+        $location.path($rootScope.getBaseUrlByCurrentRole());
+      }
     });
+
+    $rootScope.getBaseUrlByCurrentRole = function () {
+      if (auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()) {
+        return '/loru';
+      }
+
+      return '/client-panel';
+    };
   })
 ;
