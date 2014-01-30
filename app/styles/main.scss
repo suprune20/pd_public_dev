@@ -1,8 +1,8 @@
 // Only set variables and import another files here
 
-$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
-@import "sass-bootstrap/lib/bootstrap";
+@import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
 @import "partials/reset";
 @import "partials/sticky_footer";
 @import "partials/animations";
