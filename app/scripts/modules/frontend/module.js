@@ -14,14 +14,19 @@ angular.module('pdFrontend', [
         templateUrl: 'views/modules/frontend/catalog/main.html',
         reloadOnSearch: false,
         title: 'Каталог',
-        secured: true
+        secured: true,
+        menuConfig: 'cabinetMenu'
       })
       .when('/client-panel', {
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
-        secured: true
+        secured: true,
+        menuConfig: 'cabinetMenu'
       })
     ;
+  })
+  .run(function ($rootScope, mainMenuManager, pdConfig) {
+    mainMenuManager.addMenuConfig('cabinetMenu', pdConfig.menuConfigs.cabinetMenu);
   })
 ;

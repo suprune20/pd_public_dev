@@ -5,6 +5,7 @@ angular.module('pdCommon')
     var hidden = false,
       menuItems,
       menuBlockClasses,
+      menuConfigs = [],
       hideMenu = function (isHidden) {
         hidden = !!isHidden;
       },
@@ -22,6 +23,18 @@ angular.module('pdCommon')
       },
       getClasses = function () {
         return menuBlockClasses;
+      },
+      addMenuConfig = function (configName, menuConfig) {
+        menuConfigs[configName] = menuConfig;
+      },
+      setCurrentMenuConfig = function (configName) {
+        if (!menuConfigs[configName]) {
+          return;
+        }
+
+        var menuConfig = menuConfigs[configName];
+        menuItems = menuConfig.items;
+        menuBlockClasses = menuConfig.navbarClasses ? menuConfig.navbarClasses : [];
       };
 
     return {
@@ -30,7 +43,9 @@ angular.module('pdCommon')
       setMenuItems: setMenuItems,
       getMenuItems: getMenuItems,
       setClasses: setClasses,
-      getClasses: getClasses
+      getClasses: getClasses,
+      addMenuConfig: addMenuConfig,
+      setCurrentMenuConfig: setCurrentMenuConfig
     };
   })
 ;

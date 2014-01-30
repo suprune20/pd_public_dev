@@ -3,6 +3,7 @@
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 
 @import "sass-bootstrap/lib/bootstrap";
+@import "partials/reset";
 @import "partials/sticky_footer";
 @import "partials/animations";
 @import "partials/bootstrap-pd";

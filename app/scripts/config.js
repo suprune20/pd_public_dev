@@ -8,14 +8,25 @@
       apiEndpoint: serverHost + 'api/',
       AUTH_TOKEN_KEY: 'pd.auth.token',
       AUTH_ROLES_KEY: 'pd.auth.roles',
+      AUTH_COOKIE_DOMAIN: '.pohoronnoedelo.ru',
       imageThumbnailerConfig: {
         baseUrl: serverHost + 'media',
         thumbnailBaseUrl: serverHost + 'thumb'
       },
-      mainMenu: [
-        {link: '/client-panel', title: 'Панель пользователя'},
-        {link: '/catalog', title: 'Каталог'}
-      ]
+      menuConfigs: {
+        cabinetMenu: {
+          items:[
+            {link: '#/client-panel', title: 'Панель пользователя'},
+            {link: '#/catalog', title: 'Каталог'}
+          ]
+        },
+        adminMenu: {
+          navbarClasses: 'navbar-inverse',
+          items: [
+            {link: serverHost, title: 'Django панель'}
+          ]
+        }
+      }
     })
     // Deprecated single constants, move into psConfig
     .constant('apiEndpoint', serverHost + 'api/')

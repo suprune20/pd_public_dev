@@ -1,16 +1,22 @@
 'use strict';
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, $q) {
-    var signin = function (username, password) {
+  .service('auth', function ($http, pdConfig, storage, ipCookie, $q) {
+    var signin = function (username, password, acceptTC) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
-            password: password
+            password: password,
+            acceptTC: acceptTC
           }).then(function (response) {
             var responseData = response.data;
 
             if (_.has(responseData, 'token')) {
               storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
+            }
+
+            // Set session cookie for "old" django backend
+            if (_.has(responseData, 'sessionId')) {
+              ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
             }
 
             if (_.has(responseData, 'role')) {

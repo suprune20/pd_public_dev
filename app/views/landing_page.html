@@ -6,9 +6,7 @@
   <div class="col-sm-6">
     <button class="btn btn-primary center-block"
             ng-click="loadedLoginForm = 'employee'"
-            ng-show="loadedLoginForm !== 'employee'">
-      Вход для сотрудников
-    </button>
+            ng-show="loadedLoginForm !== 'employee'">Вход для сотрудников</button>
 
     <form name="employeeLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'employee'">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
@@ -19,18 +17,14 @@
              required />
       <button class="btn btn-lg btn-primary btn-block"
               ng-disabled="!employeeLoginForm.$valid"
-              ng-click="signin(signinModel, employeeLoginForm)">
-        Войти
-      </button>
+              ng-click="signin(signinModel, employeeLoginForm)">Войти</button>
     </form>
   </div>
 
   <div class="col-sm-6">
     <button class="btn btn-primary center-block"
             ng-click="loadedLoginForm = 'client'"
-            ng-show="loadedLoginForm !== 'client'">
-      Вход для клиентов
-    </button>
+            ng-show="loadedLoginForm !== 'client'">Вход для клиентов</button>
 
     <form name="clientLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'client'">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
@@ -42,16 +36,14 @@
              placeholder="Пароль" required />
       <button class="btn btn-lg btn-primary btn-block"
               ng-click="signin(signinModel, clientLoginForm)"
-              ng-disabled="!clientLoginForm.$valid">
-        Войти
-      </button>
+              ng-disabled="!clientLoginForm.$valid">Войти</button>
 
       <h5 class="text-center text-muted">или</h5>
       <div vc-recaptcha
            ng-model="captchaData"
            theme="white"
            lang="ru"
-           key="6LcZ5ucSAAAAAE118VGTsppT8_PfKAeZBzKp-x3i"></div>
+           key="6Lei0O0SAAAAAOdE7TBoo_swYvho9uGz7hadCL0O"></div>
       <button class="btn btn-lg btn-info btn-block"
               ng-click="getPasswordBySms(signinModel.username, captchaData)"
               ng-disabled="!clientLoginForm.username.$valid || !captchaData.response">

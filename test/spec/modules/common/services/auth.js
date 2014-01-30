@@ -4,7 +4,8 @@ describe('Service: Auth', function () {
   var $httpBackend,
     serverEndpointUrl,
     authService,
-    storageMock;
+    storageMock,
+    ipCookieMock;
 
   beforeEach(function () {
     storageMock = {
@@ -12,9 +13,11 @@ describe('Service: Auth', function () {
       remove: jasmine.createSpy('storage mock for "remove" method'),
       get: jasmine.createSpy('storage mock for "get" method')
     };
+    ipCookieMock = jasmine.createSpy('ipCookie service mock');
   });
   beforeEach(module('pdCommon', function($provide) {
     $provide.value('storage', storageMock);
+    $provide.value('ipCookie', ipCookieMock);
   }));
   beforeEach(inject(function (_$httpBackend_, pdConfig, auth) {
     $httpBackend = _$httpBackend_;
@@ -52,6 +55,17 @@ describe('Service: Auth', function () {
 
       expect(storageMock.set).toHaveBeenCalled();
       expect(storageMock.set.mostRecentCall.args[1]).toEqual('qwee123dsczx3rq');
+    });
+
+    it('should save user sessionId into cookies if success', function () {
+      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signin', {
+        username: 'username',
+        password: 'password'
+      }).respond(200, {token: 'qwee123dsczx3rq', sessionId: 'session id value'});
+      authService.signin('username', 'password');
+      $httpBackend.flush();
+
+      expect(ipCookieMock).toHaveBeenCalledWith('pdsession', 'session id value', jasmine.any(Object));
     });
 
     it('should return error message text if bad credentials', function () {

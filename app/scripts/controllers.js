@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdApp')
-  .controller('LandingPageCtrl', function ($scope, auth, $location, ipCookie) {
+  .controller('LandingPageCtrl', function ($scope, auth, $location, $modal) {
     var resetMessages = function () {
       $scope.formErrorMessage = null;
       $scope.formSuccessMessage = null;
@@ -13,14 +13,21 @@ angular.module('pdApp')
     });
     $scope.signin = function (signinModel, form) {
       resetMessages();
-      auth.signin(signinModel.username, signinModel.password)
-        .then(function (a) {
-          console.log('auth success', a);
-          ipCookie('pdsession', a.sessionId, {domain: '.pohoronnoedelo.ru'});
+      auth.signin(signinModel.username, signinModel.password, signinModel.acceptTC)
+        .then(function () {
           $location.path($scope.getBaseUrlByCurrentRole());
         }, function (errorData) {
           if ('not_accepted_tc' === errorData.errorCode) {
-            console.log('show T&C modal');
+            // Show Terms&Conditions modal window
+            $modal.open({
+                templateUrl: 'views/terms_and_conditions.modal.html'
+              })
+              .result.then(function () {
+                signinModel.acceptTC = true;
+                // Resend signin data with acceptTC flag
+                $scope.signin(signinModel, form);
+              });
+
             return;
           }
 

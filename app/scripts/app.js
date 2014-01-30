@@ -4,6 +4,7 @@ angular.module('pdApp', [
     'ngRoute',
     'pdCommon',
     'pdFrontend',
+    'pdAdmin',
     'pdConfig',
     'vcRecaptcha',
     'ivpusic.cookie'
@@ -19,7 +20,8 @@ angular.module('pdApp', [
       .when('/loru', {
         template: 'Лору',
         title: 'Лору панель',
-        secured: true
+        secured: true,
+        menuConfig: 'adminMenu'
       })
       .otherwise({
         templateUrl: 'views/404.html',
@@ -37,7 +39,7 @@ angular.module('pdApp', [
       // Set title for current page from routeProvider data
       $rootScope.title = currentRoute.title;
       // Set main menu items
-      mainMenuManager.setMenuItems(pdConfig.mainMenu);
+      mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
 
