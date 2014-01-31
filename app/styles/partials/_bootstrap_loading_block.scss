@@ -1,0 +1,12 @@
+.common-loading-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  margin-left: -100px;
+  padding: 10px 20px;
+  width: 200px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+  z-index: $zindex-navbar-fixed + 1;
+}

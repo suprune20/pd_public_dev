@@ -4,7 +4,9 @@ angular.module('pdFrontend')
   .factory('User', function ($http, apiEndpoint, pdYandex, $q) {
     return function () {
       var getProfile = function () {
-          return $http.get(apiEndpoint + 'cabinet').then(function (resp) {
+          return $http.get(apiEndpoint + 'cabinet', {
+            tracker: 'commonLoadingTracker'
+          }).then(function (resp) {
             var userProfileData = resp.data;
 
             userProfileData.places.map(function (placeData) {

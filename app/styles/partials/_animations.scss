@@ -15,6 +15,40 @@
   }
 }
 
+@mixin slideTop($duration: .1s, $timingFunction: easy-in-out) {
+  animation-duration: $duration;
+  animation-timing-function: $timingFunction;
+  animation-fill-mode: backwards;
+  animation-name: slideFromTop;
+
+  &.ng-hide-add,
+  &.ng-hide-remove {
+    display:block!important;
+  }
+  &.ng-hide {
+    animation-name: slideToTop;
+  }
+}
+
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slideToTop {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+/**
+ * Create selector classes for predefined mixins
+ */
 .animated-rotate {
   @include animatedRotate(rotate);
+}
+
+.animated-slide-top {
+  @include slideTop();
 }

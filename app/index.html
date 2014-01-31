@@ -22,6 +22,11 @@
     <div class="wrap">
       <pd-main-menu></pd-main-menu>
 
+      <div class="alert alert-info common-loading-container animated-slide-top"
+           ng-show="commonLoadingTracker.active()">
+        <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
+      </div>
+
       <div class="container">
         <!--[if lt IE 7]>
         <div class="alert alert-danger">
@@ -32,10 +37,6 @@
         <![endif]-->
 
         <ng-view></ng-view>
-
-        <div class="alert alert-info" loading-widget>
-          <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
-        </div>
       </div>
     </div>
 
@@ -67,6 +68,8 @@
     <script src="bower_components/angularLocalStorage/src/angularLocalStorage.js"></script>
     <script src="bower_components/angular-recaptcha/release/angular-recaptcha.js"></script>
     <script src="bower_components/angular-cookie/angular-cookie.js"></script>
+    <script src="bower_components/angular-promise-tracker/promise-tracker.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <!-- endbower -->
     <script src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-yandex-map/example/ya-map.js"></script>
@@ -93,7 +96,7 @@
     <script src="scripts/modules/frontend/controllers/client_panel.js"></script>
     <script src="scripts/modules/frontend/services/user.js"></script>
     <script src="scripts/modules/admin/module.js"></script>
-    <script src="scripts/modules/loading_spinner_widget.js"></script>
+    <!--<script src="scripts/modules/loading_spinner_widget.js"></script>-->
     <!-- endbuild -->
   </body>
 </html>

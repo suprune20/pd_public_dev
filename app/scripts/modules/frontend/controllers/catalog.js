@@ -22,8 +22,7 @@ angular.module('pdFrontend')
             };
           }
         ]
-      })
-        .result.catch(function () {
+      }).result.catch(function () {
           $location.search('productId', null);
         });
     };

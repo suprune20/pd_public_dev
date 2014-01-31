@@ -16,7 +16,9 @@
     "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#ed1b040e50cb31c67e5574a66fa12a5d73385a47",
     "angularLocalStorage": "~0.1.7",
     "angular-recaptcha": "~0.0.7",
-    "angular-cookie": "92292c9815e4ec7230a705b5f1d0212a2badd557"
+    "angular-cookie": "92292c9815e4ec7230a705b5f1d0212a2badd557",
+    "angular-promise-tracker": "~1.5.1",
+    "angular-animate": "~1.2.10"
   },
   "devDependencies": {
     "angular-mocks": "1.2.10",

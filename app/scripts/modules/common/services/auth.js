@@ -8,7 +8,7 @@ angular.module('pdCommon')
             password: password,
             // Temporary send acceptTC flag
             acceptTC: true
-          }).then(function (response) {
+          }, {tracker: 'commonLoadingTracker'}).then(function (response) {
             var responseData = response.data;
 
             if (_.has(responseData, 'token')) {
@@ -54,7 +54,7 @@ angular.module('pdCommon')
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
           recaptchaData: captchaData
-        }).then(function (responseData) {
+        }, {tracker: 'commonLoadingTracker'}).then(function (responseData) {
           return responseData.data;
         }, function (responseData) {
           return $q.reject(responseData.data);

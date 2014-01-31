@@ -2,6 +2,7 @@
 
 angular.module('pdApp', [
     'ngRoute',
+    'ngAnimate',
     'pdCommon',
     'pdFrontend',
     'pdAdmin',

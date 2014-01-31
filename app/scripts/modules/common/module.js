@@ -4,6 +4,9 @@ angular.module('pdCommon', [
     'pdConfig',
     'ui.bootstrap',
     'angularLocalStorage',
-    'corrupt.loadingSpinnerWidget'
+    'ajoslin.promise-tracker'
   ])
+  .run(function ($rootScope, promiseTracker) {
+    $rootScope.commonLoadingTracker = promiseTracker('commonLoadingTracker');
+  })
 ;

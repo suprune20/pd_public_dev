@@ -22,7 +22,8 @@ angular.module('pdFrontend')
               params: _.merge(filtersData || {}, {
                 limit: productsCountPerRequest,
                 offset: products.length
-              })
+              }),
+              tracker: 'commonLoadingTracker'
             }).then(function (resp) {
               isBusy = false;
               isNoProducts = resp.data.results.length < productsCountPerRequest;
@@ -53,14 +54,14 @@ angular.module('pdFrontend')
       var productsDataProvider = new ProductsDataProvider(productsCountPerRequest);
 
       function getFilters() {
-        return $http.get(apiEndpoint + 'catalog_filters')
+        return $http.get(apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
           .then(function (resp) {
             return resp.data;
           });
       }
 
       function getCategories() {
-        return $http.get(apiEndpoint + 'product_category')
+        return $http.get(apiEndpoint + 'product_category', {tracker: 'commonLoadingTracker'})
           .then(function (resp) {
             return resp.data.results;
           });
@@ -70,7 +71,8 @@ angular.module('pdFrontend')
         return $http.get(apiEndpoint + 'product', {
           params: {
             id: productId
-          }
+          },
+          tracker: 'commonLoadingTracker'
         }).then(function (resp) {
           return resp.data.results[0];
         });
