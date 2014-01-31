@@ -11,28 +11,23 @@ angular.module('pdApp')
       resetMessages();
       $scope.signinModel = {};
     });
+    $scope.showTCModal = function () {
+      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'});
+    };
     $scope.signin = function (signinModel, form) {
       resetMessages();
-      auth.signin(signinModel.username, signinModel.password, signinModel.acceptTC)
+      auth.signin(signinModel.username, signinModel.password)
         .then(function () {
           $location.path($scope.getBaseUrlByCurrentRole());
         }, function (errorData) {
-          if ('not_accepted_tc' === errorData.errorCode) {
-            // Show Terms&Conditions modal window
-            $modal.open({
-                templateUrl: 'views/terms_and_conditions.modal.html'
-              })
-              .result.then(function () {
-                signinModel.acceptTC = true;
-                // Resend signin data with acceptTC flag
-                $scope.signin(signinModel, form);
-              });
+          if ('wrong_credentials' === errorData.errorCode) {
+            $scope.formErrorMessage = 'Неверный {type} или пароль'
+              .replace('{type}', 'clientLoginForm' === form.$name ? 'номер телефона' : 'логин');
 
             return;
           }
 
-          $scope.formErrorMessage = 'Неверный {type} или пароль'
-            .replace('{type}', 'clientLoginForm' === form.$name ? 'номер телефона' : 'логин');
+          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Обратитесь к администрации сайта';
         });
     };
     $scope.getPasswordBySms = function (username, captchaData) {

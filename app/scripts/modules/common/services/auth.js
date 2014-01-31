@@ -2,11 +2,12 @@
 
 angular.module('pdCommon')
   .service('auth', function ($http, pdConfig, storage, ipCookie, $q) {
-    var signin = function (username, password, acceptTC) {
+    var signin = function (username, password) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
             password: password,
-            acceptTC: acceptTC
+            // Temporary send acceptTC flag
+            acceptTC: true
           }).then(function (response) {
             var responseData = response.data;
 
@@ -26,22 +27,14 @@ angular.module('pdCommon')
 
             return responseData;
           }, function (errorResponse) {
-            var respData = errorResponse.data,
-              defaultReturnData = {
-                errorCode: null,
-                message: 'Неизвестная ошибка'
-              };
+            var respData = errorResponse.data;
+            respData.errorCode = 'undefined_error';
 
-            if (400 === errorResponse.status && 'error' === respData.status) {
-              respData = _(respData)
-                .pick(['errorCode', 'message'])
-                .defaults(defaultReturnData)
-                .value();
-
-              return $q.reject(respData);
+            if (400 === errorResponse.status) {
+              respData.errorCode = 'wrong_credentials';
             }
 
-            return $q.reject(defaultReturnData);
+            return $q.reject(respData);
           });
       },
       signout = function () {
