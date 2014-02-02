@@ -5,9 +5,7 @@ angular.module('pdCommon')
     var signin = function (username, password) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
-            password: password,
-            // Temporary send acceptTC flag
-            acceptTC: true
+            password: password
           }, {tracker: 'commonLoadingTracker'}).then(function (response) {
             var responseData = response.data;
 
