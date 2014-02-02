@@ -75,8 +75,9 @@ describe('Service: Auth', function () {
       }).respond(400, {status: 'error', message: 'message text'});
       authService.signin('bad', 'credentials').then(angular.noop, function (errorData) {
         expect(errorData).toEqual({
+          status: 'error',
           message: 'message text',
-          errorCode: null
+          errorCode: 'wrong_credentials'
         });
       });
       $httpBackend.flush();
