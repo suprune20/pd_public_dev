@@ -8,7 +8,8 @@
             ng-click="loadedLoginForm = 'employee'"
             ng-show="loadedLoginForm !== 'employee'">Вход для сотрудников</button>
 
-    <form name="employeeLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'employee'">
+    <form name="employeeLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'employee'"
+          fix-autofill="{{ loadedLoginForm === 'employee' }}">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
 
       <input name="username" ng-model="signinModel.username" type="text" class="form-control" placeholder="Логин"
@@ -26,7 +27,8 @@
             ng-click="loadedLoginForm = 'client'"
             ng-show="loadedLoginForm !== 'client'">Вход для клиентов</button>
 
-    <form name="clientLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'client'">
+    <form name="clientLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'client'"
+          fix-autofill="{{ loadedLoginForm === 'client' }}">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
       <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
 

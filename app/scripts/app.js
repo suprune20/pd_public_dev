@@ -44,7 +44,7 @@ angular.module('pdApp', [
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
 
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
+      if ('/' === currentRoute.originalPath && auth.isAuthenticated() && auth.isCurrentHasClientRole()) {
         $rootScope.redirectToBasePage();
       }
     });
