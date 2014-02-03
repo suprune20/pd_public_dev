@@ -30,7 +30,7 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, security, pdConfig, mainMenuManager, auth) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Check for secured url and available for current logged in user
       if (!security.isAvailableUrl(currentRoute.originalPath)) {
@@ -45,16 +45,17 @@ angular.module('pdApp', [
       mainMenuManager.hide(currentRoute.hideMainMenu);
 
       if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
-        $location.path($rootScope.getBaseUrlByCurrentRole());
+        $rootScope.redirectToBasePage();
       }
     });
 
-    $rootScope.getBaseUrlByCurrentRole = function () {
+    $rootScope.redirectToBasePage = function () {
       if (auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()) {
-        return '/loru';
+        $window.location.href = pdConfig.backendUrl;
+        return;
       }
 
-      return '/client-panel';
+      $location.path('/client-panel');
     };
   })
 ;

@@ -6,6 +6,7 @@
   angular.module('pdConfig', [])
     .constant('pdConfig', {
       apiEndpoint: serverHost + 'api/',
+      backendUrl: serverHost,
       AUTH_TOKEN_KEY: 'pd.auth.token',
       AUTH_ROLES_KEY: 'pd.auth.roles',
       AUTH_COOKIE_DOMAIN: '.pohoronnoedelo.ru',
