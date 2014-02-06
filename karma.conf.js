@@ -27,6 +27,7 @@ module.exports = function(config) {
       'app/bower_components/angular-animate/angular-animate.js',
       'app/scripts/modules/admin/module.js',
       'app/scripts/modules/frontend/module.js',
+      'app/scripts/modules/loru/module.js',
       'app/scripts/modules/common/module.js',
       '.tmp/scripts/*.js',
       'app/scripts/**/*.js',

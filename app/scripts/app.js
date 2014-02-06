@@ -6,6 +6,7 @@ angular.module('pdApp', [
     'pdCommon',
     'pdFrontend',
     'pdAdmin',
+    'pdLoru',
     'pdConfig',
     'vcRecaptcha',
     'ivpusic.cookie'
@@ -17,12 +18,6 @@ angular.module('pdApp', [
         controller: 'LandingPageCtrl',
         templateUrl: 'views/landing_page.html',
         hideMainMenu: true
-      })
-      .when('/loru', {
-        template: 'Лору',
-        title: 'Лору панель',
-        secured: true,
-        menuConfig: 'adminMenu'
       })
       .otherwise({
         templateUrl: 'views/404.html',
@@ -44,14 +39,19 @@ angular.module('pdApp', [
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
 
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated() && auth.isCurrentHasClientRole()) {
+      if ('/' === currentRoute.originalPath && auth.isAuthenticated() && !auth.isCurrentHasOmsRole()) {
         $rootScope.redirectToBasePage();
       }
     });
 
     $rootScope.redirectToBasePage = function () {
-      if (auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()) {
+      if (auth.isCurrentHasOmsRole()) {
         $window.location.href = pdConfig.backendUrl;
+        return;
+      }
+
+      if (auth.isCurrentHasLoruRole()) {
+        $location.path('/loru');
         return;
       }
 

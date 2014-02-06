@@ -1,0 +1,50 @@
+<div class="panel panel-default" ng-show="newProductsStates">
+  <div class="panel-heading">
+    <h1 class="panel-title">Продукты на площадках</h1>
+  </div>
+  <div class="panel-body">
+    <p class="text-right">Сумма к оплате: <strong>{{total}}</strong></p>
+  </div>
+
+  <table class="table table-hover">
+    <tr>
+      <td></td>
+      <td ng-repeat="place in places">{{place.name}} - {{place.cost}} ({{place.currency}})</td>
+    </tr>
+    <tr ng-repeat="product in products">
+      <td>{{product.name}}</td>
+      <td ng-repeat="place in places"
+          ng-class="{
+            'danger': isChangedProductInPlace(product.id, place.id, 'disable'),
+            'success': isChangedProductInPlace(product.id, place.id, 'enable'),
+            'info': isChangedProductInPlace(product.id, place.id, 'up')
+          }">
+        <div class="btn-group">
+          <button type="button"
+                  class="btn btn-default"
+                  ng-model="newProductsStates[product.id][place.id]"
+                  btn-radio="'disable'">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          <button type="button"
+                  class="btn btn-default"
+                  ng-model="newProductsStates[product.id][place.id]"
+                  btn-radio="'enable'">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+          <button type="button"
+                  class="btn btn-default"
+                  ng-model="newProductsStates[product.id][place.id]"
+                  btn-radio="'up'"
+                  ng-disabled="newProductsStates[product.id][place.id] === 'disable'">
+            <span class="glyphicon glyphicon-arrow-up"></span>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="panel-footer">
+    <button class="btn btn-success" ng-click="saveChanges()" ng-disabled="!changedProducts.length">Сохранить</button>
+  </div>
+</div>

@@ -26,6 +26,13 @@
           items: [
             {link: serverHost, title: 'Django панель'}
           ]
+        },
+        loruMenu: {
+          navbarClasses: 'navbar-inverse',
+          items: [
+            {link: serverHost, title: 'Django панель'},
+            {link: '#/loru/advertisement', title: 'Реклама'}
+          ]
         }
       }
     })
