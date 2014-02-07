@@ -30,16 +30,18 @@ angular.module('pdLoru')
 
           return total + parseFloat(placeData.cost);
         }, 0);
+      },
+      getProductsData = function () {
+        advertisement.getProductsByPlaces()
+          .then(function (productsData) {
+            initialProductsStates = productsData.productsByPlaces;
+            $scope.products = productsData.products;
+            $scope.places = productsData.places;
+            $scope.newProductsStates = _.cloneDeep(initialProductsStates);
+          });
       };
 
-    advertisement.getProductsByPlaces()
-      .then(function (productsData) {
-        initialProductsStates = productsData.productsByPlaces;
-        $scope.products = productsData.products;
-        $scope.places = productsData.places;
-        $scope.newProductsStates = _.cloneDeep(initialProductsStates);
-      });
-
+    getProductsData();
     $scope.productAvailable = function (product, placeId) {
       return _.contains(product.availableOnPlaces, placeId);
     };
@@ -51,6 +53,7 @@ angular.module('pdLoru')
     $scope.saveChanges = function () {
       advertisement.saveProductsChanges($scope.changedProducts).then(function () {
         $scope.changedProducts = [];
+        initialProductsStates = _.cloneDeep($scope.newProductsStates);
       });
     };
     $scope.cancelChanges = function () {
