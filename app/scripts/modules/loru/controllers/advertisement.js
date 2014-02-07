@@ -3,9 +3,9 @@
 angular.module('pdLoru')
   .controller('LoruAdvertisementCtrl', function ($scope, advertisement, objectsDiff) {
     var initialProductsStates = {},
-      getChangedProducts = function () {
+      convertProductsStates = function (productsStates) {
         var ret = [];
-        _.forEach(objectsDiff(initialProductsStates, $scope.newProductsStates), function (productData, productId) {
+        _.forEach(productsStates, function (productData, productId) {
           _.forEach(productData, function (status, placeId) {
             ret.push({
               productId: productId,
@@ -17,8 +17,11 @@ angular.module('pdLoru')
 
         return ret;
       },
-      calculateTotal = function (status) {
-        return _.reduce($scope.changedProducts, function (total, itemData) {
+      getChangedProducts = function () {
+        return convertProductsStates(objectsDiff(initialProductsStates, $scope.newProductsStates));
+      },
+      calculateTotal = function (status, productsData) {
+        return _.reduce(productsData ? productsData : $scope.changedProducts, function (total, itemData) {
           if (status !== itemData.status) {
             return total;
           }
@@ -40,10 +43,10 @@ angular.module('pdLoru')
     $scope.productAvailable = function (product, placeId) {
       return _.contains(product.availableOnPlaces, placeId);
     };
-    $scope.$watch('newProductsStates', function () {
+    $scope.$watch('newProductsStates', function (newProductsStates) {
       $scope.changedProducts = getChangedProducts();
-      $scope.totalEnabled = calculateTotal('enable');
       $scope.totalUpped = calculateTotal('up');
+      $scope.totalEnabled = calculateTotal('enable', convertProductsStates(newProductsStates)) + $scope.totalUpped;
     }, true);
     $scope.saveChanges = function () {
       advertisement.saveProductsChanges($scope.changedProducts).then(function () {
