@@ -49,7 +49,8 @@
                   ng-model="newProductsStates[product.id][place.id]"
                   ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
                   btn-radio="'up'"
-                  ng-disabled="newProductsStates[product.id][place.id] === 'disable'">
+                  ng-disabled="newProductsStates[product.id][place.id] === 'disable'
+                    || isChangedProductInPlace(product.id, place.id, 'enable')">
             <span class="glyphicon glyphicon-arrow-up"></span>
           </button>
         </div>
