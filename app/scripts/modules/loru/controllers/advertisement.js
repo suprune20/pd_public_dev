@@ -45,11 +45,16 @@ angular.module('pdLoru')
       advertisement.saveProductsChanges($scope.changedProducts);
     };
     $scope.isChangedProductInPlace = function (productId, placeId, status) {
-      return _.some($scope.changedProducts, {
+      var needData = {
         productId: String(productId),
-        placeId: String(placeId),
-        status: status
-      });
+        placeId: String(placeId)
+      };
+
+      if (status) {
+        needData.status = status;
+      }
+
+      return _.some($scope.changedProducts, needData);
     };
   })
 ;

@@ -14,27 +14,26 @@
     <tr ng-repeat="product in products">
       <td>{{product.name}}</td>
       <td ng-repeat="place in places"
-          ng-class="{
-            'danger': isChangedProductInPlace(product.id, place.id, 'disable'),
-            'success': isChangedProductInPlace(product.id, place.id, 'enable'),
-            'info': isChangedProductInPlace(product.id, place.id, 'up')
-          }">
+          ng-class="{'active': isChangedProductInPlace(product.id, place.id)}">
         <div class="btn-group">
           <button type="button"
                   class="btn btn-default"
                   ng-model="newProductsStates[product.id][place.id]"
+                  ng-class="{'btn-danger': newProductsStates[product.id][place.id] === 'disable'}"
                   btn-radio="'disable'">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
           <button type="button"
                   class="btn btn-default"
                   ng-model="newProductsStates[product.id][place.id]"
+                  ng-class="{'btn-success': newProductsStates[product.id][place.id] === 'enable'}"
                   btn-radio="'enable'">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
           <button type="button"
                   class="btn btn-default"
                   ng-model="newProductsStates[product.id][place.id]"
+                  ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
                   btn-radio="'up'"
                   ng-disabled="newProductsStates[product.id][place.id] === 'disable'">
             <span class="glyphicon glyphicon-arrow-up"></span>
