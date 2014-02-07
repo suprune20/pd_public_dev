@@ -16,6 +16,17 @@ angular.module('pdLoru')
         });
 
         return ret;
+      },
+      calculateTotal = function (status) {
+        return _.reduce($scope.changedProducts, function (total, itemData) {
+          if (status !== itemData.status) {
+            return total;
+          }
+
+          var placeData = _.find($scope.places, {id: parseInt(itemData.placeId, 10)});
+
+          return total + parseFloat(placeData.cost);
+        }, 0);
       };
 
     advertisement.getProductsByPlaces()
@@ -31,18 +42,22 @@ angular.module('pdLoru')
     };
     $scope.$watch('newProductsStates', function () {
       $scope.changedProducts = getChangedProducts();
-      $scope.total = _.reduce($scope.changedProducts, function (total, itemData) {
-        if ('disable' === itemData.status) {
-          return total;
-        }
-
-        var placeData = _.find($scope.places, {id: parseInt(itemData.placeId, 10)});
-
-        return total + parseFloat(placeData.cost);
-      }, 0);
+      $scope.totalEnabled = calculateTotal('enable');
+      $scope.totalUpped = calculateTotal('up');
     }, true);
     $scope.saveChanges = function () {
       advertisement.saveProductsChanges($scope.changedProducts);
+    };
+    $scope.cancelChanges = function () {
+      $scope.newProductsStates = _.cloneDeep(initialProductsStates);
+      $scope.changedProducts = [];
+    };
+    $scope.resetAllStates = function () {
+      _.forEach($scope.newProductsStates, function (productData, productId) {
+        _.forEach(productData, function (status, placeId) {
+          $scope.newProductsStates[productId][placeId] = 'disable';
+        });
+      });
     };
     $scope.isChangedProductInPlace = function (productId, placeId, status) {
       var needData = {
