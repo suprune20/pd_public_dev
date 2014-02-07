@@ -46,7 +46,9 @@ angular.module('pdLoru')
       $scope.totalUpped = calculateTotal('up');
     }, true);
     $scope.saveChanges = function () {
-      advertisement.saveProductsChanges($scope.changedProducts);
+      advertisement.saveProductsChanges($scope.changedProducts).then(function () {
+        $scope.changedProducts = [];
+      });
     };
     $scope.cancelChanges = function () {
       $scope.newProductsStates = _.cloneDeep(initialProductsStates);
