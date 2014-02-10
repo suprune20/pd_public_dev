@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('User', function ($http, apiEndpoint, pdYandex, $q) {
+  .factory('User', function ($http, pdConfig, pdYandex, $q) {
     return function () {
       var getProfile = function () {
-          return $http.get(apiEndpoint + 'cabinet', {
+          return $http.get(pdConfig.apiEndpoint + 'cabinet', {
             tracker: 'commonLoadingTracker'
           }).then(function (resp) {
             var userProfileData = resp.data;

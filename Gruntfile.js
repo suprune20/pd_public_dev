@@ -315,7 +315,11 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
         }]
-      }
+      },
+      configDev: {
+        files: [{src: '<%= yeoman.app %>/scripts/config_dev_const.js', dest: '.tmp/scripts/config_const.js'}]
+      },
+      configPd3: {}
     },
 
     // Run some tasks in parallel to speed up the build process
@@ -479,22 +483,29 @@ module.exports = function (grunt) {
     'karma:unit_ci'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'bower-install',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngmin',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'rev',
-    'usemin',
-    'htmlmin'
-  ]);
+  grunt.registerTask('build', function (target) {
+    if (-1 === ['pd3', 'dev', 'prod'].indexOf(target)) {
+      target = 'pd3';
+    }
+
+    grunt.task.run([
+      'clean:dist',
+      'bower-install',
+      'useminPrepare',
+      'copy:config' + target.charAt(0).toUpperCase() + target.slice(1),
+      'concurrent:dist',
+      'autoprefixer',
+      'concat',
+      'ngmin',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'rev',
+      'usemin',
+      'htmlmin'
+    ]);
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',

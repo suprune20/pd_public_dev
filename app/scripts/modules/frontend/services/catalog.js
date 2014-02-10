@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('Catalog', function ($http, apiEndpoint) {
+  .factory('Catalog', function ($http, pdConfig) {
     return function (productsCountPerRequest) {
       // Products data provider class
       var ProductsDataProvider = function (productsCountPerRequest) {
@@ -18,7 +18,7 @@ angular.module('pdFrontend')
           }
 
           isBusy = true;
-          $http.get(apiEndpoint + 'products', {
+          $http.get(pdConfig.apiEndpoint + 'products', {
               params: _.merge(filtersData || {}, {
                 limit: productsCountPerRequest,
                 offset: products.length
@@ -54,21 +54,21 @@ angular.module('pdFrontend')
       var productsDataProvider = new ProductsDataProvider(productsCountPerRequest);
 
       function getFilters() {
-        return $http.get(apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
+        return $http.get(pdConfig.apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
           .then(function (resp) {
             return resp.data;
           });
       }
 
       function getCategories() {
-        return $http.get(apiEndpoint + 'product_category', {tracker: 'commonLoadingTracker'})
+        return $http.get(pdConfig.apiEndpoint + 'product_category', {tracker: 'commonLoadingTracker'})
           .then(function (resp) {
             return resp.data.results;
           });
       }
 
       function getProduct(productId) {
-        return $http.get(apiEndpoint + 'product', {
+        return $http.get(pdConfig.apiEndpoint + 'product', {
           params: {
             id: productId
           },

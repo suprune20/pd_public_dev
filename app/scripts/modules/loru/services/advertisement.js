@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('advertisement', function ($http, apiEndpoint, $q) {
+  .service('advertisement', function ($http, pdConfig, $q) {
     var getProducts = function () {
-        return $http.get(apiEndpoint + 'loru/products', {
+        return $http.get(pdConfig.apiEndpoint + 'loru/products', {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {
           return resp.data;
         });
       },
       getPlaces = function () {
-        return $http.get(apiEndpoint + 'loru/places', {
+        return $http.get(pdConfig.apiEndpoint + 'loru/places', {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {
           return resp.data.results;
@@ -35,7 +35,7 @@ angular.module('pdLoru')
           .value()
         ;
 
-        return $http.post(apiEndpoint + 'loru/product_places', preparedProductsData, {
+        return $http.post(pdConfig.apiEndpoint + 'loru/product_places', preparedProductsData, {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {
           return resp.data;
