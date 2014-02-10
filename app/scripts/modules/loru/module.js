@@ -12,7 +12,7 @@ angular.module('pdLoru', [
       },
       '/advertisement': {
         controller: 'LoruAdvertisementCtrl',
-        templateUrl: 'views/modules/loru/advertisement/main.html',
+        templateUrl: 'views/modules/loru/productplaces/main.html',
         title: 'Реклама'
       }
     };
