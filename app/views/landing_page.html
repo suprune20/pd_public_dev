@@ -50,7 +50,8 @@
         <input type="checkbox" ng-model="confirmedTC" ng-init="confirmedTC = false">
         Принимаю <a href="javascript: void(0);" ng-click="showTCModal()">пользовательское соглашение</a>
       </label>
-      <button class="btn btn-lg btn-info btn-block"
+      <button type="button"
+              class="btn btn-lg btn-info btn-block"
               ng-click="getPasswordBySms(signinModel.username, captchaData)"
               ng-disabled="!clientLoginForm.username.$valid || !captchaData.response || !confirmedTC">
         Получить пароль по SMS
