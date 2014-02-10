@@ -17,7 +17,8 @@ angular.module('pdApp', [
       .when('/', {
         controller: 'LandingPageCtrl',
         templateUrl: 'views/landing_page.html',
-        hideMainMenu: true
+        hideMainMenu: true,
+        pageClass: 'landing-page'
       })
       .otherwise({
         templateUrl: 'views/404.html',
@@ -38,6 +39,7 @@ angular.module('pdApp', [
       mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
+      $rootScope.pageClass = currentRoute.pageClass;
 
       if ('/' === currentRoute.originalPath && auth.isAuthenticated() && !auth.isCurrentHasOmsRole()) {
         $rootScope.redirectToBasePage();
