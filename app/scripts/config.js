@@ -17,7 +17,7 @@
       menuConfigs: {
         cabinetMenu: {
           items:[
-            {link: '#/client-panel', title: 'Панель пользователя'},
+            {link: '#/client-panel', title: 'Кабинет ответственного'},
             {link: '#/catalog', title: 'Каталог'}
           ]
         },
