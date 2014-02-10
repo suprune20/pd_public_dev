@@ -27,7 +27,7 @@ angular.module('pdApp')
             return;
           }
 
-          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Обратитесь к администрации сайта';
+          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз и обратитесь к администрации сайта';
         });
     };
     $scope.getPasswordBySms = function (username, captchaData) {
