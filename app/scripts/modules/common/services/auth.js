@@ -99,6 +99,8 @@ angular.module('pdCommon')
       responseError: function (rejection) {
         // If access forbidden response from api then redirect to signin page
         if (_.has(rejection.config, 'url') && apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
+          storage.remove(pdConfig.AUTH_TOKEN_KEY);
+          storage.remove(pdConfig.AUTH_ROLES_KEY);
           $location.path('/');
         }
 
