@@ -5,15 +5,15 @@ describe('Directive decorators', function () {
   var $rootScope;
 
   beforeEach(module('pdCommon'));
-//  beforeEach(module('views/client/panel.html'));
-//  beforeEach(module('views/auth/signin.html'));
 
   describe('ngSrc directive', function () {
     beforeEach(function () {
       module(function($provide) {
-        $provide.constant('imageThumbnailerConfig', {
-          baseUrl: 'http://pd.com/media',
-          thumbnailBaseUrl: 'http://pd.com/thumb'
+        $provide.value('pdConfig', {
+          imageThumbnailerConfig: {
+            baseUrl: 'http://pd.com/media',
+            thumbnailBaseUrl: 'http://pd.com/thumb'
+          }
         });
       });
     });

@@ -6,9 +6,9 @@ describe('Service: Loru advertisement', function () {
     advertisementService;
 
   beforeEach(module('pdLoru'));
-  beforeEach(inject(function (_$httpBackend_, apiEndpoint, advertisement) {
+  beforeEach(inject(function (_$httpBackend_, pdConfig, advertisement) {
     $httpBackend = _$httpBackend_;
-    serverEndpointUrl = apiEndpoint;
+    serverEndpointUrl = pdConfig.apiEndpoint;
     advertisementService = advertisement;
   }));
   afterEach(function () {

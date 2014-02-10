@@ -34,7 +34,9 @@ angular.module('pdFrontend')
         return {
           getNextProducts: getNextProducts,
           isBusy: function () { return isBusy; },
-          isNoMoreProducts: function () { return isNoProducts && products.length >= productsCountPerRequest; },
+          isNoMoreProducts: function () {
+            return isNoProducts && (products.length >= productsCountPerRequest || !products.length);
+          },
           getProducts: function () {
             return products;
           },

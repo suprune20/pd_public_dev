@@ -6,11 +6,9 @@ describe('Service: Catalog', function () {
     catalogService;
 
   beforeEach(module('pdFrontend'));
-//  beforeEach(module('views/module/frontend/client/panel.html'));
-//  beforeEach(module('views/auth/signin.html'));
-  beforeEach(inject(function (_$httpBackend_, apiEndpoint, Catalog) {
+  beforeEach(inject(function (_$httpBackend_, pdConfig, Catalog) {
     $httpBackend = _$httpBackend_;
-    serverEndpointUrl = apiEndpoint;
+    serverEndpointUrl = pdConfig.apiEndpoint;
     catalogService = new Catalog();
   }));
   afterEach(function () {
