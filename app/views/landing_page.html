@@ -1,4 +1,4 @@
-<div class="page-header">
+<div class="page-header text-center">
   <h1>Похоронное Дело</h1>
 </div>
 
@@ -9,16 +9,16 @@
             ng-show="loadedLoginForm !== 'employee'">Вход для сотрудников</button>
 
     <form name="employeeLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'employee'"
-          fix-autofill="{{ loadedLoginForm === 'employee' }}">
+          fix-autofill="{{ loadedLoginForm === 'employee' }}" ng-submit="signin(signinModel, employeeLoginForm)">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
 
       <input name="username" ng-model="signinModel.username" type="text" class="form-control" placeholder="Логин"
              required autofocus />
       <input name="password" ng-model="signinModel.password" type="password" class="form-control" placeholder="Пароль"
              required />
-      <button class="btn btn-lg btn-primary btn-block"
-              ng-disabled="!employeeLoginForm.$valid"
-              ng-click="signin(signinModel, employeeLoginForm)">Войти</button>
+      <button type="submit"
+              class="btn btn-lg btn-primary btn-block"
+              ng-disabled="!employeeLoginForm.$valid">Войти</button>
     </form>
   </div>
 
@@ -28,7 +28,7 @@
             ng-show="loadedLoginForm !== 'client'">Вход для клиентов</button>
 
     <form name="clientLoginForm" novalidate class="form-signin" role="form" ng-show="loadedLoginForm === 'client'"
-          fix-autofill="{{ loadedLoginForm === 'client' }}">
+          fix-autofill="{{ loadedLoginForm === 'client' }}" ng-submit="signin(signinModel, clientLoginForm)">
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
       <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
 
@@ -36,8 +36,8 @@
              placeholder="Номер телефона" required autofocus />
       <input name="password" ng-model="signinModel.password" type="password" class="form-control"
              placeholder="Пароль" required />
-      <button class="btn btn-lg btn-primary btn-block"
-              ng-click="signin(signinModel, clientLoginForm)"
+      <button type="submit"
+              class="btn btn-lg btn-primary btn-block"
               ng-disabled="!clientLoginForm.$valid">Войти</button>
 
       <h5 class="text-center text-muted">или</h5>
