@@ -9,9 +9,11 @@ angular.module('pdApp', [
     'pdLoru',
     'pdConfig',
     'vcRecaptcha',
-    'ivpusic.cookie'
+    'ivpusic.cookie',
+    'ngRaven'
   ])
-  .config(function ($routeProvider, $httpProvider) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment) {
+    RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
     $routeProvider
       .when('/', {
