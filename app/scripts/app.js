@@ -29,6 +29,9 @@ angular.module('pdApp', [
     ;
   })
   .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+    $rootScope.$on('auth.signout', function () {
+      $location.path('/');
+    });
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Check for secured url and available for current logged in user
       if (!security.isAvailableUrl(currentRoute.originalPath)) {

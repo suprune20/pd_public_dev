@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, ipCookie, $q) {
+  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope) {
     var signin = function (username, password) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
@@ -36,8 +36,12 @@ angular.module('pdCommon')
           });
       },
       signout = function () {
-        storage.remove(pdConfig.AUTH_TOKEN_KEY);
-        storage.remove(pdConfig.AUTH_ROLES_KEY);
+        return $http.post(pdConfig.apiEndpoint + 'auth/signout', {}, {tracker: 'commonLoadingTracker'})
+          .then(function () {
+            storage.remove(pdConfig.AUTH_TOKEN_KEY);
+            storage.remove(pdConfig.AUTH_ROLES_KEY);
+            $rootScope.$broadcast('auth.signout');
+          });
       },
       isAuthenticated = function () {
         return !!storage.get(pdConfig.AUTH_TOKEN_KEY);
