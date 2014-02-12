@@ -149,9 +149,7 @@ describe('Service: Auth', function () {
 
   describe('signout method', function () {
     it('should call remove storage method', function () {
-      $httpBackend.expectPOST(serverEndpointUrl + 'auth/signout').respond(200, {});
       authService.signout();
-      $httpBackend.flush();
 
       expect(storageMock.remove).toHaveBeenCalled();
     });
