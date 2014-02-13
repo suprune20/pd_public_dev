@@ -22,6 +22,13 @@ angular.module('pdApp', [
         hideMainMenu: true,
         pageClass: 'landing-page'
       })
+      .when('/signout', {
+        resolve: {
+          signout: function (auth) {
+            auth.signout();
+          }
+        }
+      })
       .otherwise({
         templateUrl: 'views/404.html',
         title: 404
