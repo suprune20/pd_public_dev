@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdApp')
-  .controller('LandingPageCtrl', function ($scope, auth, $location, $modal) {
+  .controller('LandingPageCtrl', function ($scope, auth, $location, $modal, vcRecaptchaService) {
     var resetMessages = function () {
       $scope.formErrorMessage = null;
       $scope.formSuccessMessage = null;
@@ -38,6 +38,7 @@ angular.module('pdApp')
             $scope.formSuccessMessage = 'Пароль установлен: ' + responseData.password;
           }
         }, function (errorData) {
+          vcRecaptchaService.reload();
           if (_.has(errorData, 'status') && 'error' === errorData.status) {
             $scope.formErrorMessage = errorData.message;
             return;
