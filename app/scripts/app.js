@@ -24,9 +24,9 @@ angular.module('pdApp', [
       })
       .when('/signout', {
         resolve: {
-          signout: function (auth) {
+          signout: ['auth', function (auth) {
             auth.signout();
-          }
+          }]
         }
       })
       .otherwise({

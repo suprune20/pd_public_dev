@@ -36,10 +36,13 @@ angular.module('pdCommon')
           });
       },
       signout = function () {
-        ipCookie('pdsession', 'wrong_session', {domain: pdConfig.AUTH_COOKIE_DOMAIN});
-        storage.remove(pdConfig.AUTH_TOKEN_KEY);
-        storage.remove(pdConfig.AUTH_ROLES_KEY);
-        $rootScope.$broadcast('auth.signout');
+        return $http.post(pdConfig.apiEndpoint + 'auth/signout', {}, {tracker: 'commonLoadingTracker'})
+          .then(function () {
+            ipCookie('pdsession', 'wrong_session', {domain: pdConfig.AUTH_COOKIE_DOMAIN});
+            storage.remove(pdConfig.AUTH_TOKEN_KEY);
+            storage.remove(pdConfig.AUTH_ROLES_KEY);
+            $rootScope.$broadcast('auth.signout');
+          });
       },
       isAuthenticated = function () {
         return !!storage.get(pdConfig.AUTH_TOKEN_KEY);
