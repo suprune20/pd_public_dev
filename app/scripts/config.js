@@ -7,6 +7,7 @@ angular.module('pdConfig', [])
       backendUrl: serverConfig.serverHost,
       AUTH_TOKEN_KEY: 'pd.auth.token',
       AUTH_ROLES_KEY: 'pd.auth.roles',
+      AUTH_PROFILE_KEY: 'pd.auth.user.profile',
       AUTH_COOKIE_DOMAIN: serverConfig.cookieDomain,
       imageThumbnailerConfig: {
         baseUrl: serverConfig.serverHost + 'media',

@@ -23,6 +23,12 @@ angular.module('pdCommon')
               storage.set(pdConfig.AUTH_ROLES_KEY, responseData.role);
             }
 
+            // Save user's profile data into localstorage
+            var profileData = {};
+            profileData.profile = responseData.profile || {};
+            profileData.organisation = responseData.org || {};
+            storage.set(pdConfig.AUTH_PROFILE_KEY, profileData);
+
             return responseData;
           }, function (errorResponse) {
             var respData = errorResponse.data;
@@ -62,6 +68,12 @@ angular.module('pdCommon')
         }, function (responseData) {
           return $q.reject(responseData.data);
         });
+      },
+      getUserProfile = function () {
+        return storage.get(pdConfig.AUTH_PROFILE_KEY).profile;
+      },
+      getUserOrganisation = function () {
+        return storage.get(pdConfig.AUTH_PROFILE_KEY).organisation;
       },
       isContainsRole = function (role) {
         return _.contains(getRoles(), role);
