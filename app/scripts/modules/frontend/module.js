@@ -27,6 +27,7 @@ angular.module('pdFrontend', [
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig) {
-    mainMenuManager.addMenuConfig('cabinetMenu', pdConfig.menuConfigs.cabinetMenu);
+    var cabinetMenuConfig = mainMenuManager.addMenuConfig('cabinetMenu');
+    cabinetMenuConfig.setMainMenuItems(pdConfig.menuConfigs.cabinetMenu.items);
   })
 ;

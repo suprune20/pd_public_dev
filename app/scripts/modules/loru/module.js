@@ -26,7 +26,26 @@ angular.module('pdLoru', [
       ;
     });
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig) {
-    mainMenuManager.addMenuConfig('loruMenu', pdConfig.menuConfigs.loruMenu);
+  .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
+    var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu');
+
+    loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
+    loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
+
+    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
+      var userOrgId = auth.getUserOrganisation().id || null,
+        rightMenuItems = [
+        {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
+        {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
+        {link: serverConfig.serverHost + 'org/log', title: 'Журнал'}
+      ];
+
+      if (userOrgId) {
+        rightMenuItems.unshift({link: serverConfig.serverHost + 'org/' + userOrgId + '/edit', title: 'Организация'});
+      }
+      loruMenuConfig.setRightMenuItems(rightMenuItems);
+
+      mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
+    });
   })
 ;

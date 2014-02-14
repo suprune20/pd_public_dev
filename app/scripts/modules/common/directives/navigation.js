@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdCommon')
-  .directive('pdMainMenu', function (mainMenuManager, security) {
+  .directive('pdMainMenu', function (mainMenuManager, security, auth) {
     return {
       restrict: 'EA',
       replace: true,
@@ -15,6 +15,14 @@ angular.module('pdCommon')
             return security.isAvailableUrl(item.link);
           });
         });
+        scope.$watch(function () {
+          return mainMenuManager.getRightMenuItems();
+        }, function (menuItems) {
+          scope.rightMenuItems = _.filter(menuItems, function (item) {
+            return security.isAvailableUrl(item.link);
+          });
+        });
+        scope.auth = auth;
       }
     };
   })

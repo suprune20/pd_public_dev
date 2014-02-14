@@ -29,7 +29,11 @@ angular.module('pdConfig', [])
         loruMenu: {
           navbarClasses: 'navbar-inverse',
           items: [
-            {link: serverConfig.serverHost, title: 'Django панель'},
+            {link: serverConfig.serverHost, title: 'Открытые'},
+            {link: serverConfig.serverHost + 'burials/search/', title: 'Захоронения'},
+            {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
+            {link: serverConfig.serverHost + 'order/', title: 'Заказы'},
+            {link: serverConfig.serverHost + 'order/create/', title: 'Создать заказ'},
             {link: '#/loru/advertisement', title: 'Реклама'}
           ]
         }

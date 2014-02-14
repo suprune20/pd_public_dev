@@ -97,7 +97,9 @@ angular.module('pdCommon')
       getPasswordBySMS: getPasswordBySMS,
       isCurrentHasClientRole: isCurrentHasClientRole,
       isCurrentHasLoruRole: isCurrentHasLoruRole,
-      isCurrentHasOmsRole: isCurrentHasOmsRole
+      isCurrentHasOmsRole: isCurrentHasOmsRole,
+      getUserProfile: getUserProfile,
+      getUserOrganisation: getUserOrganisation
     };
   })
   .factory('authApiInterceptor', function ($q, $location, pdConfig, storage) {

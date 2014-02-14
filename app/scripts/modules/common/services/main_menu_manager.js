@@ -2,47 +2,72 @@
 
 angular.module('pdCommon')
   .service('mainMenuManager', function () {
+    var MenuConfig = function () {
+      var mainMenuItems,
+        rightMenuItems,
+        menuClass;
+
+      return {
+        setMenuClass: function (_menuClass_) {
+          menuClass = _menuClass_;
+        },
+        getMenuClasses: function () {
+          return menuClass;
+        },
+        setMainMenuItems: function (items) {
+          mainMenuItems = items;
+        },
+        getMainMenuItems: function () {
+          return mainMenuItems;
+        },
+        setRightMenuItems: function (items) {
+          rightMenuItems = items;
+        },
+        getRightMenuItems: function () {
+          return rightMenuItems;
+        }
+      };
+    };
+
     var hidden = false,
-      menuItems,
-      menuBlockClasses,
       menuConfigs = [],
+      currentMenuConfig,
       hideMenu = function (isHidden) {
         hidden = !!isHidden;
       },
       isHiddenMenu = function () {
         return hidden;
       },
-      setMenuItems = function (_menuItems_) {
-        menuItems = _menuItems_;
-      },
       getMenuItems = function () {
-        return menuItems;
+        return currentMenuConfig ? currentMenuConfig.getMainMenuItems() : '';
       },
-      setClasses = function (classes) {
-        menuBlockClasses = classes;
+      getRightMenuItems = function () {
+        return currentMenuConfig ? currentMenuConfig.getRightMenuItems() : '';
       },
       getClasses = function () {
-        return menuBlockClasses;
+        return currentMenuConfig ? currentMenuConfig.getMenuClasses() : '';
       },
-      addMenuConfig = function (configName, menuConfig) {
-        menuConfigs[configName] = menuConfig;
+      addMenuConfig = function (configName) {
+        if (_.has(menuConfigs, configName)) {
+          return menuConfigs[configName];
+        }
+
+        menuConfigs[configName] = new MenuConfig();
+        return menuConfigs[configName];
       },
       setCurrentMenuConfig = function (configName) {
         if (!menuConfigs[configName]) {
           return;
         }
 
-        var menuConfig = menuConfigs[configName];
-        menuItems = menuConfig.items;
-        menuBlockClasses = menuConfig.navbarClasses ? menuConfig.navbarClasses : [];
+        currentMenuConfig = menuConfigs[configName];
       };
 
     return {
       hide: hideMenu,
       isHidden: isHiddenMenu,
-      setMenuItems: setMenuItems,
       getMenuItems: getMenuItems,
-      setClasses: setClasses,
+      getRightMenuItems: getRightMenuItems,
       getClasses: getClasses,
       addMenuConfig: addMenuConfig,
       setCurrentMenuConfig: setCurrentMenuConfig

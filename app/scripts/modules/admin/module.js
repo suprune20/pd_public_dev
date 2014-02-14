@@ -5,6 +5,8 @@ angular.module('pdAdmin', [
     'pdCommon'
   ])
   .run(function ($rootScope, mainMenuManager, pdConfig) {
-    mainMenuManager.addMenuConfig('adminMenu', pdConfig.menuConfigs.adminMenu);
+    var adminMenuConfig = mainMenuManager.addMenuConfig('loruMenu');
+    adminMenuConfig.setMainMenuItems(pdConfig.menuConfigs.adminMenu.items);
+    adminMenuConfig.setMenuClass(pdConfig.menuConfigs.adminMenu.navbarClasses);
   })
 ;
