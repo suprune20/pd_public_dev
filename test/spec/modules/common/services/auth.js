@@ -5,7 +5,8 @@ describe('Service: Auth', function () {
     serverEndpointUrl,
     authService,
     storageMock,
-    ipCookieMock;
+    ipCookieMock,
+    pdConfig;
 
   beforeEach(function () {
     storageMock = {
@@ -19,10 +20,11 @@ describe('Service: Auth', function () {
     $provide.value('storage', storageMock);
     $provide.value('ipCookie', ipCookieMock);
   }));
-  beforeEach(inject(function (_$httpBackend_, pdConfig, auth) {
+  beforeEach(inject(function (_$httpBackend_, _pdConfig_, auth) {
     $httpBackend = _$httpBackend_;
-    serverEndpointUrl = pdConfig.apiEndpoint;
+    serverEndpointUrl = _pdConfig_.apiEndpoint;
     authService = auth;
+    pdConfig = _pdConfig_;
   }));
   afterEach(function () {
     $httpBackend.verifyNoOutstandingExpectation();
@@ -53,8 +55,7 @@ describe('Service: Auth', function () {
       authService.signin('username', 'password');
       $httpBackend.flush();
 
-      expect(storageMock.set).toHaveBeenCalled();
-      expect(storageMock.set.mostRecentCall.args[1]).toEqual('qwee123dsczx3rq');
+      expect(storageMock.set).toHaveBeenCalledWith(pdConfig.AUTH_TOKEN_KEY, 'qwee123dsczx3rq');
     });
 
     it('should save user sessionId into cookies if success', function () {
@@ -105,8 +106,7 @@ describe('Service: Auth', function () {
       authService.signin('username', 'password');
       $httpBackend.flush();
 
-      expect(storageMock.set).toHaveBeenCalled();
-      expect(storageMock.set.mostRecentCall.args[1]).toEqual(['ROLE_CLIENT']);
+      expect(storageMock.set).toHaveBeenCalledWith(pdConfig.AUTH_ROLES_KEY, ['ROLE_CLIENT']);
     });
   });
 

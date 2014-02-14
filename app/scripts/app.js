@@ -9,7 +9,6 @@ angular.module('pdApp', [
     'pdLoru',
     'pdConfig',
     'vcRecaptcha',
-    'ivpusic.cookie',
     'ngRaven'
   ])
   .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment) {

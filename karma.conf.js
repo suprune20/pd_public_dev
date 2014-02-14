@@ -22,6 +22,7 @@ module.exports = function(config) {
       'app/bower_components/select2/select2.js',
       'app/bower_components/angular-ui-select2/src/select2.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
+      'app/bower_components/angular-cookie/angular-cookie.js',
       'app/bower_components/angularLocalStorage/src/angularLocalStorage.js',
       'app/bower_components/angular-promise-tracker/promise-tracker.js',
       'app/bower_components/angular-animate/angular-animate.js',

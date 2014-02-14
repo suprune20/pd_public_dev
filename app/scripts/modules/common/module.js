@@ -4,7 +4,8 @@ angular.module('pdCommon', [
     'pdConfig',
     'ui.bootstrap',
     'angularLocalStorage',
-    'ajoslin.promise-tracker'
+    'ajoslin.promise-tracker',
+    'ivpusic.cookie'
   ])
   .run(function ($rootScope, promiseTracker) {
     $rootScope.commonLoadingTracker = promiseTracker('commonLoadingTracker');
