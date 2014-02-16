@@ -29,6 +29,9 @@ angular.module('pdCommon')
             profileData.organisation = responseData.org || {};
             storage.set(pdConfig.AUTH_PROFILE_KEY, profileData);
 
+            // Broadcast success signin event
+            $rootScope.$broadcast('auth.signin_success');
+
             return responseData;
           }, function (errorResponse) {
             var respData = errorResponse.data;

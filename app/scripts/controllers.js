@@ -17,9 +17,7 @@ angular.module('pdApp')
     $scope.signin = function (signinModel, form) {
       resetMessages();
       auth.signin(signinModel.username, signinModel.password)
-        .then(function () {
-          $scope.redirectToBasePage();
-        }, function (errorData) {
+        .catch(function (errorData) {
           if ('wrong_credentials' === errorData.errorCode) {
             $scope.formErrorMessage = 'Неверный {type} или пароль'
               .replace('{type}', 'clientLoginForm' === form.$name ? 'номер телефона' : 'логин');
