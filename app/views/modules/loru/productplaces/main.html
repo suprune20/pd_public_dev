@@ -44,15 +44,21 @@
                   btn-radio="'enable'">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
-          <button type="button"
-                  class="btn btn-default"
-                  ng-model="newProductsStates[product.id][place.id]"
-                  ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
-                  btn-radio="'up'"
-                  ng-disabled="newProductsStates[product.id][place.id] === 'disable'
-                    || isChangedProductInPlace(product.id, place.id, 'enable')">
-            <span class="glyphicon glyphicon-arrow-up"></span>
-          </button>
+          <div class="btn-group"
+               ng-init="isDisabledUp = newProductsStates[product.id][place.id] === 'disable' ||
+                                          isChangedProductInPlace(product.id, place.id, 'enable')"
+               ng-attr-title="{{isDisabledUp ?
+                                  'Обновление публикации возможно только для уже опубликованного товара' :
+                                  ''}}">
+            <button type="button"
+                    class="btn btn-default"
+                    ng-model="newProductsStates[product.id][place.id]"
+                    ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
+                    btn-radio="'up'"
+                    ng-disabled="isDisabledUp">
+              <span class="glyphicon glyphicon-arrow-up"></span>
+            </button>
+          </div>
         </div>
       </td>
     </tr>
