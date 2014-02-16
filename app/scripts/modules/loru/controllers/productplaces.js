@@ -53,7 +53,7 @@ angular.module('pdLoru')
     $scope.saveChanges = function () {
       advertisement.saveProductsChanges($scope.changedProducts).then(function () {
         $scope.changedProducts = [];
-        initialProductsStates = _.cloneDeep($scope.newProductsStates);
+        getProductsData();
       });
     };
     $scope.cancelChanges = function () {
