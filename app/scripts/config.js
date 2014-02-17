@@ -33,8 +33,7 @@ angular.module('pdConfig', [])
             {link: serverConfig.serverHost + 'burials/search/', title: 'Захоронения'},
             {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
             {link: serverConfig.serverHost + 'order/', title: 'Заказы'},
-            {link: serverConfig.serverHost + 'order/create/', title: 'Создать заказ'},
-            {link: '#/loru/advertisement', title: 'Реклама'}
+            {link: serverConfig.serverHost + 'order/create/', title: 'Создать заказ'}
           ]
         }
       }

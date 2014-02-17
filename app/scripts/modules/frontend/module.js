@@ -26,8 +26,21 @@ angular.module('pdFrontend', [
       })
     ;
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig) {
+  .run(function ($rootScope, mainMenuManager, pdConfig, auth) {
     var cabinetMenuConfig = mainMenuManager.addMenuConfig('cabinetMenu');
     cabinetMenuConfig.setMainMenuItems(pdConfig.menuConfigs.cabinetMenu.items);
+
+    $rootScope.$on('$routeChangeSuccess', function () {
+      cabinetMenuConfig.setRightMenuItems([
+        {
+          type: 'dropdown',
+          title: auth.getUserProfile().lastname || '',
+          icon: 'glyphicon-user',
+          items: [
+            {link: '#/signout', title: 'Выйти'}
+          ]
+        }
+      ]);
+    });
   })
 ;
