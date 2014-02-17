@@ -1,57 +1,83 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('User', function ($http, pdConfig, pdYandex, $q) {
-    return function () {
-      var getPlaces = function () {
-          return $http.get(pdConfig.apiEndpoint + 'cabinet', {
-            tracker: 'commonLoadingTracker'
-          }).then(function (resp) {
-            var userProfileData = resp.data;
+  .factory('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage) {
+    return {
+      getCurrentUserProfile: function () {
+        return auth.getUserProfile();
+      },
+      getPlaces: function () {
+        return $http.get(pdConfig.apiEndpoint + 'cabinet', {
+          tracker: 'commonLoadingTracker'
+        }).then(function (resp) {
+          var userProfileData = resp.data;
 
-            userProfileData.places.map(function (placeData) {
-              if (placeData.location && (!placeData.location.longitude || !placeData.location.latitude)) {
-                placeData.location = null;
-              }
+          userProfileData.places.map(function (placeData) {
+            if (placeData.location && (!placeData.location.longitude || !placeData.location.latitude)) {
+              placeData.location = null;
+            }
 
-              // Sort and formatting gallery data for fancybox
-              placeData.gallery = _(placeData.gallery)
-                .sortBy('addedAt')
-                .map(function (galleryItem) {
-                  galleryItem.href = galleryItem.photo;
-                  galleryItem.title = galleryItem.addedAt;
+            // Sort and formatting gallery data for fancybox
+            placeData.gallery = _(placeData.gallery)
+              .sortBy('addedAt')
+              .map(function (galleryItem) {
+                galleryItem.href = galleryItem.photo;
+                galleryItem.title = galleryItem.addedAt;
 
-                  return galleryItem;
-                })
-                .value()
-              ;
-              placeData.mainPhoto = _.first(placeData.gallery);
+                return galleryItem;
+              })
+              .value()
+            ;
+            placeData.mainPhoto = _.first(placeData.gallery);
 
-              return placeData;
-            });
-
-            return userProfileData;
+            return placeData;
           });
-        },
-        getPlaceCoordinates = function (placeData) {
-          var deferred = $q.defer();
 
-          if (placeData.location) {
-            deferred.resolve([placeData.location.longitude, placeData.location.latitude]);
-          } else if (placeData.address) {
-            pdYandex.geocode(placeData.address).then(deferred.resolve, deferred.reject);
-          } else {
-            deferred.reject('Wrong place data: no location and address attributes');
-          }
+          return userProfileData;
+        });
+      },
+      getPlaceCoordinates: function (placeData) {
+        var deferred = $q.defer();
 
-          return deferred.promise;
+        if (placeData.location) {
+          deferred.resolve([placeData.location.longitude, placeData.location.latitude]);
+        } else if (placeData.address) {
+          pdYandex.geocode(placeData.address).then(deferred.resolve, deferred.reject);
+        } else {
+          deferred.reject('Wrong place data: no location and address attributes');
         }
-      ;
 
-      return {
-        getPlaces: getPlaces,
-        getPlaceCoordinates: getPlaceCoordinates
-      };
+        return deferred.promise;
+      },
+      saveSettings: function (settingsData) {
+        var saveUrl = pdConfig.apiEndpoint + 'settings';
+
+        if (settingsData.userPhoto) {
+          return $upload.upload({
+            url: saveUrl,
+            tracker: 'commonLoadingTracker',
+            data: settingsData,
+            file: settingsData.userPhoto,
+            fileFormDataName: 'userPhoto'
+          });
+        }
+
+        return $http.put(saveUrl, settingsData, {tracker: 'commonLoadingTracker'})
+          .then(function () {
+            // Update user profile in locale storage
+            var currentUserData = storage.get(pdConfig.AUTH_PROFILE_KEY);
+            currentUserData.profile.mainPhone = settingsData.mainPhone;
+            storage.set(pdConfig.AUTH_PROFILE_KEY, currentUserData);
+          }, function (errorResp) {
+            var respData = errorResp.data;
+
+            if (_.has(respData, 'message')) {
+              respData.message = _.isArray(respData.message) ? respData.message : [respData.message];
+            }
+
+            return $q.reject(respData);
+          });
+      }
     };
   })
 ;

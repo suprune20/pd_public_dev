@@ -1,0 +1,9 @@
+<div class="pd-file-selector">
+  <div class="pd-file-selector-preview"></div>
+  <div class="btn btn-default btn-file">
+    <span ng-show="isEmptyModel">Выбрать</span>
+    <span ng-hide="isEmptyModel">Изменить</span>
+    <input type="file" />
+  </div>
+  <div class="btn btn-default" ng-hide="isEmptyModel" ng-click="clearSelection()">Удалить</div>
+</div>

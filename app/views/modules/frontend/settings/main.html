@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h1>Настройки пользователя</h1>
+</div>
+
+<form name="settingsForm" role="form" ng-submit="save()" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+  <ul class="list-unstyled alert alert-danger" ng-show="errorData">
+    <li ng-repeat="error in errorData.message">{{ error }}</li>
+  </ul>
+
+  <div class="form-group">
+    <label class="control-label">ФИО</label>
+    <p class="form-control-static">
+      {{ settingsData.lastname }} {{ settingsData.firstname }} {{ settingsData.middlename }}
+    </p>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid}">
+    <label for="mainPhone">Телефон для входа</label>
+    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа"
+           name="mainPhone" ng-model="settingsData.mainPhone" required>
+    <span class="glyphicon glyphicon-remove form-control-feedback"
+          ng-show="settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.oldPassword.$invalid}">
+    <label for="mainPhone">Текущий пароль</label>
+    <input type="text" class="form-control" id="oldPassword" placeholder="Введите текущий пароль"
+           name="oldPassword" ng-model="settingsData.oldPassword" ng-required="settingsData.newPassword">
+    <span class="glyphicon glyphicon-remove form-control-feedback"
+          ng-show="settingsForm.$dirty && settingsForm.oldPassword.$invalid"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.newPassword.$invalid}">
+    <label for="mainPhone">Новый пароль</label>
+    <input type="text" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
+           name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword">
+    <span class="glyphicon glyphicon-remove form-control-feedback"
+          ng-show="settingsForm.$dirty && settingsForm.newPassword.$invalid"></span>
+  </div>
+
+  <!--<div class="form-group">-->
+    <!--<label>Фото</label>-->
+    <!--<pd-file-selector pd-allow-preview ng-model="settingsData.userPhoto"></pd-file-selector>-->
+  <!--</div>-->
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="settingsForm.$invalid">Сохранить</button>
+    <button type="button" class="btn btn-danger" ng-click="">Удалить аккаунт</button>
+  </div>
+</form>

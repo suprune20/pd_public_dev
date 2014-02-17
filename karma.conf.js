@@ -27,6 +27,7 @@ module.exports = function(config) {
       'app/bower_components/angular-promise-tracker/promise-tracker.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-growl/build/angular-growl.js',
+      'app/bower_components/ng-file-upload/angular-file-upload.js',
       'app/scripts/modules/admin/module.js',
       'app/scripts/modules/frontend/module.js',
       'app/scripts/modules/loru/module.js',

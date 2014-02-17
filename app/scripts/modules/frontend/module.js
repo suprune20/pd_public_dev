@@ -24,6 +24,14 @@ angular.module('pdFrontend', [
         secured: true,
         menuConfig: 'cabinetMenu'
       })
+      .when('/settings', {
+        controller: 'PdFrontendSettingsCtrl',
+        templateUrl: 'views/modules/frontend/settings/main.html',
+        title: 'Настройки пользователя',
+        secured: true,
+        menuConfig: 'cabinetMenu',
+        pageClass: 'pd-frontend-settings-page'
+      })
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, auth) {
@@ -37,6 +45,8 @@ angular.module('pdFrontend', [
           title: auth.getUserProfile().lastname || '',
           icon: 'glyphicon-user',
           items: [
+            {link: '#/settings', title: 'Настройки'},
+            {class: 'divider'},
             {link: '#/signout', title: 'Выйти'}
           ]
         }

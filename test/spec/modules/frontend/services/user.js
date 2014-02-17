@@ -15,11 +15,11 @@ describe('Service: User', function () {
   beforeEach(module('pdFrontend', function($provide) {
     $provide.value('pdYandex', pdYandexMock);
   }));
-  beforeEach(inject(function (_$httpBackend_, pdConfig, _$rootScope_, User) {
+  beforeEach(inject(function (_$httpBackend_, pdConfig, _$rootScope_, user) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = pdConfig.apiEndpoint;
     $rootScope = _$rootScope_;
-    userService = new User();
+    userService = user;
   }));
   afterEach(function () {
     $httpBackend.verifyNoOutstandingExpectation();

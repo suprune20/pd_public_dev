@@ -6,7 +6,8 @@ angular.module('pdCommon', [
     'angularLocalStorage',
     'ajoslin.promise-tracker',
     'ivpusic.cookie',
-    'angular-growl'
+    'angular-growl',
+    'angularFileUpload'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);

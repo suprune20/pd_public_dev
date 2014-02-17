@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, User) {
-    var user = new User();
-
+  .controller('ClientPanelCtrl', function ($scope, user) {
     $scope.selectPlace = function (placeData) {
       if (placeData === $scope.selectedPlace) {
         return;
