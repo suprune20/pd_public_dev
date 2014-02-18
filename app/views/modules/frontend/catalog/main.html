@@ -29,8 +29,10 @@
       <div class="clearfix visible-xs"></div>
 
       <div class="form-group col-xs-12 col-sm-2">
-        <select class="form-control" ng-model="filters.category" ng-options="c.id as c.name for c in categoriesFilter">
-          <option value="">Категория</option>
+        <select class="form-control" ng-model="filters.category" ui-select2="{allowClear:true}"
+                data-placeholder="Категория">
+          <option value=""></option>
+          <option ng-repeat="category in categoriesFilter" ng-value="{{category.id}}">{{category.name}}</option>
         </select>
       </div>
 
