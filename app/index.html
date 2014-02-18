@@ -11,6 +11,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/select2/select2.css" />
     <!-- endbower -->
+    <link rel="stylesheet" href="bower_components/angular-growl/build/angular-growl.min.css"/>
     <!-- endbuild -->
 
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -39,6 +40,9 @@
 
         <ng-view></ng-view>
       </div>
+
+      <!-- Block for show growl messages -->
+      <div growl></div>
     </div>
 
     <footer class="footer">
@@ -72,6 +76,7 @@
     <script src="bower_components/angular-promise-tracker/promise-tracker.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-raven/angular-raven.js"></script>
+    <script src="bower_components/angular-growl/build/angular-growl.js"></script>
     <!-- endbower -->
     <script src="bower_components/select2/select2_locale_ru.js"></script>
     <script src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
@@ -90,12 +95,14 @@
     <script src="scripts/modules/common/services/yandex_api.js"></script>
     <script src="scripts/modules/common/services/main_menu_manager.js"></script>
     <script src="scripts/modules/common/services/object.js"></script>
+    <script src="scripts/modules/common/services/api/feedback.js"></script>
     <script src="scripts/modules/common/directives/auth.js"></script>
     <script src="scripts/modules/common/directives/sticky_block.js"></script>
     <script src="scripts/modules/common/directives/images.js"></script>
     <script src="scripts/modules/common/directives/navigation.js"></script>
     <script src="scripts/modules/common/directives/form.js"></script>
     <script src="scripts/modules/common/filters/default_value.js"></script>
+    <script src="scripts/modules/common/controllers/feedback.js"></script>
     <script src="scripts/modules/frontend/module.js"></script>
     <script src="scripts/modules/frontend/controllers/catalog.js"></script>
     <script src="scripts/modules/frontend/services/catalog.js"></script>

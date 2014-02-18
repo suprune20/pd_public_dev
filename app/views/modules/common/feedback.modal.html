@@ -1,0 +1,43 @@
+<form role="form" name="feedbackForm" ng-submit="sendFeedback()">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="close()" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Обратная связь</h4>
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-danger" ng-show="formError">{{formError}}</div>
+    <div class="form-group">
+      <label for="subject">Тема (необязательно)</label>
+      <input type="text" class="form-control" id="subject" placeholder="Введите тему вопроса"
+             ng-model="feedbackData.subject" name="subject" />
+    </div>
+    <div class="form-group has-feedback"
+         ng-class="{'has-error': feedbackForm.text.$dirty && feedbackForm.text.$invalid}">
+      <label for="text">Вопрос</label>
+      <textarea class="form-control" id="text" placeholder="Введите текст вопроса"
+                ng-model="feedbackData.text" name="text" required></textarea>
+      <span class="glyphicon glyphicon-remove form-control-feedback"
+            ng-show="feedbackForm.text.$dirty && feedbackForm.text.$invalid"></span>
+    </div>
+    <div class="form-group has-feedback"
+         ng-class="{'has-error': feedbackForm.email.$dirty && feedbackForm.email.$invalid}">
+      <label for="email">Email для получения ответа (будет сохранен как Ваш контактный)</label>
+      <input type="email" class="form-control" id="email" placeholder="Введите email"
+             ng-model="feedbackData.email" name="email" required />
+      <span class="glyphicon glyphicon-remove form-control-feedback"
+            ng-show="feedbackForm.email.$dirty && feedbackForm.email.$invalid"></span>
+    </div>
+    <div class="form-group" ng-if="!isAuthenticated()">
+      <div vc-recaptcha
+           ng-model="feedbackData.captchaData"
+           theme="white"
+           lang="ru"
+           key="{{recaptchaPublicKey}}"></div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-disabled="feedbackForm.$invalid">Отправить</button>
+    <button type="button" class="btn btn-default" ng-click="close()">Закрыть</button>
+  </div>
+</form>

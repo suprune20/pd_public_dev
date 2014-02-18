@@ -9,6 +9,7 @@ angular.module('pdConfig', [])
       AUTH_ROLES_KEY: 'pd.auth.roles',
       AUTH_PROFILE_KEY: 'pd.auth.user.profile',
       AUTH_COOKIE_DOMAIN: serverConfig.cookieDomain,
+      recaptchaPubKey: '6Lei0O0SAAAAAOdE7TBoo_swYvho9uGz7hadCL0O',
       imageThumbnailerConfig: {
         baseUrl: serverConfig.serverHost + 'media',
         thumbnailBaseUrl: serverConfig.serverHost + 'thumb'

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdCommon')
-  .directive('pdMainMenu', function (mainMenuManager, security, auth) {
+  .directive('pdMainMenu', function (mainMenuManager, security, auth, $modal) {
     return {
       restrict: 'EA',
       replace: true,
@@ -23,6 +23,12 @@ angular.module('pdCommon')
           });
         });
         scope.auth = auth;
+        scope.showFeedbackModal = function () {
+          $modal.open({
+            templateUrl: 'views/modules/common/feedback.modal.html',
+            controller: 'pdCommonFeedbackModalCtrl'
+          });
+        };
       }
     };
   })

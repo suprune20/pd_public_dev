@@ -35,6 +35,7 @@ angular.module('pdApp', [
     ;
   })
   .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+    $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
     $rootScope.$on('auth.signout', function () {
       $location.path('/');
     });
