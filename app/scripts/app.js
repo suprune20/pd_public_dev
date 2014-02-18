@@ -14,6 +14,7 @@ angular.module('pdApp', [
   .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment) {
     RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
+    $httpProvider.interceptors.push('httpErrorsInterceptor');
     $routeProvider
       .when('/', {
         controller: 'LandingPageCtrl',
