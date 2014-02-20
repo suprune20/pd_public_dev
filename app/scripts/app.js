@@ -99,5 +99,8 @@ angular.module('pdApp', [
 
       $location.path('/client-panel');
     };
+
+    // Custom email regexp
+    $rootScope.EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
   })
 ;

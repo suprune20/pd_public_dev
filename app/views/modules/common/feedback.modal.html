@@ -23,7 +23,7 @@
          ng-class="{'has-error': feedbackForm.email.$dirty && feedbackForm.email.$invalid}">
       <label for="email">Email для получения ответа (будет сохранен как Ваш контактный)</label>
       <input type="email" class="form-control" id="email" placeholder="Введите email"
-             ng-model="feedbackData.email" name="email" required />
+             ng-model="feedbackData.email" name="email" required ng-pattern="EMAIL_REGEXP" />
       <span class="glyphicon glyphicon-remove form-control-feedback"
             ng-show="feedbackForm.email.$dirty && feedbackForm.email.$invalid"></span>
     </div>
