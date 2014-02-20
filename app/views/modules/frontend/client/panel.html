@@ -37,7 +37,7 @@
            ng-repeat="place in userData.places"
            ng-click="selectPlace(place)">
           <div class="pull-left">
-            <img ng-src="{{place.photoUrl}}"
+            <img ng-src="{{place.photo}}"
                  pd-thumb
                  pd-thumb-size="150x150"
                  default-image="http://placehold.it/150x150"
@@ -68,10 +68,10 @@
   </div>
   <div class="panel-body">
     <carousel>
-      <slide ng-repeat="selectedPlace in selectedPlace.gallery|orderBy:'addedAt'">
-        <img ng-src="{{selectedPlace.photoUrl}}" style="margin:auto;">
+      <slide ng-repeat="item in selectedPlace.gallery">
+        <img ng-src="{{item.photo}}" style="margin:auto;" pd-thumb pd-thumb-size="500x300" />
         <div class="carousel-caption">
-          <p>{{selectedPlace.addedAt}}</p>
+          <p>{{item.addedAt}}</p>
         </div>
       </slide>
     </carousel>
