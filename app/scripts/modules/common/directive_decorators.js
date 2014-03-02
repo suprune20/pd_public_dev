@@ -3,8 +3,8 @@
 angular.module('pdCommon')
   .config(function ($provide) {
     // Use api server thumbnailer for resize images in ngSrc directive
-    $provide.decorator('ngSrcDirective', ['$delegate', 'pdConfig',
-      function ($delegate, pdConfig) {
+    $provide.decorator('ngSrcDirective', ['$delegate', 'pdThumbnailer',
+      function ($delegate, pdThumbnailer) {
         var directive = $delegate[0];
 
         directive.compile = function() {
@@ -15,14 +15,9 @@ angular.module('pdCommon')
               }
 
               if (_.has(iAttrs, 'pdThumb')) {
-                var thumbSize = iAttrs.pdThumbSize || '120x100',
-                  thumbMethod = iAttrs.pdThumbMethod || 'crop',
-                  baseUrlRegexp = new RegExp('^' + pdConfig.imageThumbnailerConfig.baseUrl),
-                  imageExt = imageSrcValue.split('.').pop();
-
-                if (baseUrlRegexp.test(imageSrcValue) && thumbSize && imageExt) {
-                  imageSrcValue = imageSrcValue.replace(baseUrlRegexp, pdConfig.imageThumbnailerConfig.thumbnailBaseUrl) +
-                    '/' + thumbSize + '~' + thumbMethod + '~12.' + imageExt;
+                var thumbnail = pdThumbnailer.getThumbnailUrl(imageSrcValue, iAttrs.pdThumbSize, iAttrs.pdThumbMethod);
+                if (thumbnail) {
+                  imageSrcValue = thumbnail;
                 }
               }
 
