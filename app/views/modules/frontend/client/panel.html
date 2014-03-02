@@ -1,58 +1,10 @@
-<div class="panel panel-default" ng-if="userData">
-  <div class="panel-body media">
-    <div class="pull-left">
-      <img ng-src="{{userData.photo}}"
-           class="img-thumbnail"
-           pd-thumb
-           pd-thumb-size="75x75"
-           default-image="http://placehold.it/75x75" />
-    </div>
-    <div class="media-body">
-      <h3 class="media-heading"
-          ng-bind-template="{{userData.lastName}} {{userData.firstName}} {{userData.surName}}"></h3>
-      <ul class="list-unstyled">
-        <li>{{userData.address}}</li>
-        <li ng-if="userData.phones.length">
-          Телефоны:
-          <ul>
-            <li ng-repeat="phone in userData.phones">{{phone}}</li>
-          </ul>
-        </li>
-        <li>Телефон для входа: {{userData.loginPhone}}</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="panel panel-default client-panel-places-block" ng-if="userData.places.length">
+<div class="panel panel-default" ng-if="userData.places.length">
   <div class="panel-heading">
-    <h4 class="panel-title">Места захоронений</h4>
+    <h4 class="panel-title">Карта захоронений</h4>
   </div>
-  <div class="panel-body row">
-    <div class="col-xs-12 col-sm-6">
-      <div class="list-group media-list no-bottom-margin">
-        <a href="javascript: void(0);"
-           class="list-group-item media"
-           ng-class="{active: selectedPlace === place}"
-           ng-repeat="place in userData.places"
-           ng-click="selectPlace(place)">
-          <div class="pull-left">
-            <img ng-src="{{place.photo}}"
-                 pd-thumb
-                 pd-thumb-size="150x150"
-                 default-image="http://placehold.it/150x150"
-                 class="img-thumbnail media-object" />
-          </div>
-          <div class="media-body list-group-item-text">
-            {{place.address}}
-          </div>
-        </a>
-      </div>
-    </div>
 
-    <div class="clearfix visible-xs"></div>
-
-    <ya-map class="col-xs-12 col-sm-6 client-panel-place-map"
+  <div class="panel-body">
+    <ya-map class="client-panel-place-map"
             ya-center="{{yaPlacePoint.geometry.coordinates}}"
             ya-zoom="10"
             ya-options="{maxZoom: 18}">
@@ -62,51 +14,53 @@
   </div>
 </div>
 
-<div class="panel panel-default" ng-if="selectedPlace.gallery.length">
+<div class="panel panel-default client-panel-places-block" ng-if="userData.places.length">
   <div class="panel-heading">
-    <h4 class="panel-title">Галерея фотографий места захоронения</h4>
+    <h4 class="panel-title">Места захоронений</h4>
   </div>
   <div class="panel-body">
-    <carousel>
-      <slide ng-repeat="item in selectedPlace.gallery">
-        <img ng-src="{{item.photo}}" style="margin:auto;" pd-thumb pd-thumb-size="500x300" />
-        <div class="carousel-caption">
-          <p>{{item.addedAt}}</p>
+    <ul class="list-group media-list no-bottom-margin">
+      <li class="list-group-item media place-item-container"
+         ng-class="{active: selectedPlace === place}"
+         ng-repeat="place in userData.places"
+         ng-click="selectPlace(place)">
+        <div class="pull-left" pb-fancybox-gallery="{{ place.gallery }}">
+          <img ng-src="{{place.mainPhoto.photo}}"
+               pd-thumb
+               pd-thumb-size="150x150"
+               default-image="http://placehold.it/150x150"
+               class="img-thumbnail media-object" />
+          <p ng-if="place.mainPhoto" class="text-center">{{place.mainPhoto.addedAt}}</p>
         </div>
-      </slide>
-    </carousel>
-  </div>
-</div>
+        <div class="media-body list-group-item-text">
+          <h5 class="media-heading">{{place.address}}</h5>
 
-<div class="panel panel-default" ng-if="selectedPlace.graves.length">
-  <div class="panel-heading">
-    <h4 class="panel-title">Расположение усопших в месте захоронения</h4>
-  </div>
-  <div class="panel-body reset-padding">
-    <div class="col-sm-4 no-bottom-margin"
-         ng-repeat="grave in selectedPlace.graves">
-      <div class="panel panel-default client-panel-site-item">
-        <div class="panel-body no-left-padding no-right-padding">
-          <h4 ng-if="!grave.burials.length">Зарезервировано</h4>
+          <ul class="list-inline graves-list" ng-if="place.graves.length">
+            <li ng-repeat="grave in place.graves" class="col-xs-12 col-sm-6 col-md-4 grave-panel">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4 ng-if="!grave.burials.length">Зарезервировано</h4>
 
-          <ul class="media-list" ng-if="grave.burials.length">
-            <li class="media" ng-repeat="burial in grave.burials">
-              <a class="pull-left" href="#">
-                <img class="media-object img-thumbnail"
-                     ng-src="{{burial.photo}}"
-                     pd-thumb
-                     pd-thumb-size="50x50"
-                     default-image="http://placehold.it/50x50" />
-              </a>
-              <div class="media-body">
-                <strong class="media-heading">{{burial.fio}}</strong>
-                <p>{{burial.birthDate|default:'?'}} - {{burial.deathDate|default:'?'}}</p>
+                  <ul class="media-list" ng-if="grave.burials.length">
+                    <li class="media" ng-repeat="burial in grave.burials">
+                      <img class="media-object img-thumbnail pull-left"
+                           ng-src="{{burial.photo}}"
+                           pd-thumb
+                           pd-thumb-size="50x50"
+                           default-image="http://placehold.it/50x50" />
+                      <div class="media-body">
+                        <strong class="media-heading" ng-bind-html="burial.fio|space2br"></strong>
+                        <p>{{burial.birthDate|default:'?'}} - {{burial.deathDate|default:'?'}}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </li>
           </ul>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </div>
 

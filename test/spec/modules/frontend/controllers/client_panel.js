@@ -9,7 +9,7 @@ describe('Controller: ClientPanelCtrl', function () {
   beforeEach(function () {
     userMock = function () {
       return {
-        getProfile: jasmine.createSpy('user getProfile() mock')
+        getPlaces: jasmine.createSpy('user getPlaces() mock')
           .andCallFake(function () {
             return {
               then: jasmine.createSpy().andCallFake(function (cb) {

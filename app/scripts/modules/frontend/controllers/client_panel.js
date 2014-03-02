@@ -5,6 +5,10 @@ angular.module('pdFrontend')
     var user = new User();
 
     $scope.selectPlace = function (placeData) {
+      if (placeData === $scope.selectedPlace) {
+        return;
+      }
+
       $scope.selectedPlace = placeData;
       $scope.yaPlacePoint = null;
 
@@ -17,7 +21,7 @@ angular.module('pdFrontend')
         };
       });
     };
-    user.getProfile().then(function (userData) {
+    user.getPlaces().then(function (userData) {
       $scope.userData = userData;
 
       // Select first place by default

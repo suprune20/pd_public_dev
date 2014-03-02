@@ -3,7 +3,7 @@
 angular.module('pdFrontend')
   .factory('User', function ($http, pdConfig, pdYandex, $q) {
     return function () {
-      var getProfile = function () {
+      var getPlaces = function () {
           return $http.get(pdConfig.apiEndpoint + 'cabinet', {
             tracker: 'commonLoadingTracker'
           }).then(function (resp) {
@@ -13,6 +13,19 @@ angular.module('pdFrontend')
               if (placeData.location && (!placeData.location.longitude || !placeData.location.latitude)) {
                 placeData.location = null;
               }
+
+              // Sort and formatting gallery data for fancybox
+              placeData.gallery = _(placeData.gallery)
+                .sortBy('addedAt')
+                .map(function (galleryItem) {
+                  galleryItem.href = galleryItem.photo;
+                  galleryItem.title = galleryItem.addedAt;
+
+                  return galleryItem;
+                })
+                .value()
+              ;
+              placeData.mainPhoto = _.first(placeData.gallery);
 
               return placeData;
             });
@@ -36,7 +49,7 @@ angular.module('pdFrontend')
       ;
 
       return {
-        getProfile: getProfile,
+        getPlaces: getPlaces,
         getPlaceCoordinates: getPlaceCoordinates
       };
     };

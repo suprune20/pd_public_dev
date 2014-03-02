@@ -3,6 +3,7 @@
 angular.module('pdApp', [
     'ngRoute',
     'ngAnimate',
+    'ngSanitize',
     'pdCommon',
     'pdFrontend',
     'pdAdmin',

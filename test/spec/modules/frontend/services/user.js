@@ -26,12 +26,12 @@ describe('Service: User', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should convert location data in user\'s cabinet data', function () {
+  it('should get cabinet data', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
     $httpBackend.expectGET(serverEndpointUrl + 'cabinet').respond(200, {places: []});
-    userService.getProfile().then(successCallback, errorCallback);
+    userService.getPlaces().then(successCallback, errorCallback);
     $httpBackend.flush();
 
     expect(successCallback).toHaveBeenCalled();
@@ -50,15 +50,15 @@ describe('Service: User', function () {
         {location: null}
       ]
     });
-    userService.getProfile().then(successCallback, errorCallback);
+    userService.getPlaces().then(successCallback, errorCallback);
     $httpBackend.flush();
 
     expect(successCallback).toHaveBeenCalledWith({
       places: [
-        {location: {longitude: 31, latitude: 43}},
-        {location: null},
-        {location: null},
-        {location: null}
+        {location: {longitude: 31, latitude: 43}, gallery: []},
+        {location: null, gallery: []},
+        {location: null, gallery: []},
+        {location: null, gallery: []}
       ]
     });
     expect(errorCallback).not.toHaveBeenCalled();
