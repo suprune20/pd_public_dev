@@ -103,5 +103,7 @@ angular.module('pdApp', [
 
     // Custom email regexp
     $rootScope.EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
+    // Save backend url into root scope for using in templates
+    $rootScope.backendUrl = pdConfig.backendUrl;
   })
 ;

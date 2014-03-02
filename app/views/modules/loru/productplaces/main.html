@@ -26,7 +26,9 @@
       <td ng-repeat="place in places">{{place.name}} - {{place.cost}} ({{place.currency}})</td>
     </tr>
     <tr ng-repeat="product in products">
-      <td>{{product.name}}</td>
+      <td>
+        <a ng-href="{{backendUrl + 'manage/product/' + product.id + '/edit/'}}" target="_blank">{{product.name}}</a>
+      </td>
       <td ng-repeat="place in places"
           ng-class="{'active': isChangedProductInPlace(product.id, place.id)}">
         <div class="btn-group">
