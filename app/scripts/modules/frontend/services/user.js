@@ -77,6 +77,9 @@ angular.module('pdFrontend')
 
             return $q.reject(respData);
           });
+      },
+      removeAccount: function () {
+        $http.delete(pdConfig.apiEndpoint + 'user', null, {tracker: 'commonLoadingTracker'});
       }
     };
   })
