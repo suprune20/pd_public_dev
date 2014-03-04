@@ -17,8 +17,8 @@
   <div class="form-group has-feedback"
        ng-class="{'has-error': settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid}">
     <label for="mainPhone">Телефон для входа</label>
-    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа"
-           name="mainPhone" ng-model="settingsData.mainPhone" required>
+    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа (375291234567)"
+           name="mainPhone" ng-model="settingsData.mainPhone" required ng-pattern="/^\d{10,12}$/">
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid"></span>
   </div>
@@ -26,7 +26,7 @@
   <div class="form-group has-feedback"
        ng-class="{'has-error': settingsForm.$dirty && settingsForm.oldPassword.$invalid}">
     <label for="mainPhone">Текущий пароль</label>
-    <input type="text" class="form-control" id="oldPassword" placeholder="Введите текущий пароль"
+    <input type="password" class="form-control" id="oldPassword" placeholder="Введите текущий пароль"
            name="oldPassword" ng-model="settingsData.oldPassword" ng-required="settingsData.newPassword">
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.$dirty && settingsForm.oldPassword.$invalid"></span>
@@ -36,9 +36,31 @@
        ng-class="{'has-error': settingsForm.$dirty && settingsForm.newPassword.$invalid}">
     <label for="mainPhone">Новый пароль</label>
     <input type="text" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
-           name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword">
+           name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword"
+           ng-maxlength="50" ng-minlength="8" />
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.$dirty && settingsForm.newPassword.$invalid"></span>
+
+    <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.minlength">
+      Минимальная длина нового пароля 8 символов
+    </span>
+    <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.maxlength">
+      Максимальная длина нового пароля 50 символов
+    </span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid}">
+    <label for="mainPhone">Повторите новый пароль</label>
+    <input type="text" class="form-control" id="repeatNewPassword" placeholder="Повторите новый пароль для изменения"
+           name="repeatNewPassword" password-repeat="newPassword" ng-model="settingsData.confirmPassword" />
+    <span class="glyphicon glyphicon-remove form-control-feedback"
+          ng-show="settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid"></span>
+
+    <span ng-show="settingsForm.repeatNewPassword.$invalid && settingsForm.repeatNewPassword.$error.passwordRepeat"
+          class="help-block">
+      Пароли не совпадают
+    </span>
   </div>
 
   <!--<div class="form-group">-->

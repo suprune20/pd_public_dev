@@ -54,7 +54,7 @@ angular.module('pdCommon')
                 .then(function (imageData) {
                   addPreviewImage(imageData);
                 });
-            } else if(/https?:\/\//.test(modelValue)) {
+            } else if (/https?:\/\//.test(modelValue)) {
               addPreviewImage(modelValue);
             } else {
               clearPreview();
@@ -75,6 +75,30 @@ angular.module('pdCommon')
         scope.clearSelection = function () {
           updateModelViewValue(null);
         };
+      }
+    };
+  })
+  .directive('passwordRepeat', function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, iElement, iAttrs, modelCtrl) {
+        var otherInput = iElement.inheritedData('$formController')[iAttrs.passwordRepeat];
+
+        modelCtrl.$parsers.push(function (value) {
+          if (value === otherInput.$viewValue) {
+            modelCtrl.$setValidity('passwordRepeat', true);
+
+            return value;
+          }
+
+          modelCtrl.$setValidity('passwordRepeat', false);
+        });
+
+        otherInput.$parsers.push(function (value) {
+          modelCtrl.$setValidity('passwordRepeat', value === modelCtrl.$viewValue);
+
+          return value;
+        });
       }
     };
   })

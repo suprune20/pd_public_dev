@@ -2,7 +2,10 @@
 
 angular.module('pdCommon')
   .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope) {
-    var signin = function (username, password) {
+    var getUserProfileData = function () {
+        return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
+      },
+      signin = function (username, password) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
             password: password
@@ -73,10 +76,10 @@ angular.module('pdCommon')
         });
       },
       getUserProfile = function () {
-        return storage.get(pdConfig.AUTH_PROFILE_KEY).profile;
+        return getUserProfileData().profile || {};
       },
       getUserOrganisation = function () {
-        return storage.get(pdConfig.AUTH_PROFILE_KEY).organisation;
+        return getUserProfileData().organisation || {};
       },
       isContainsRole = function (role) {
         return _.contains(getRoles(), role);
