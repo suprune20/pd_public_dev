@@ -13,7 +13,7 @@ angular.module('pdLoru')
         return $http.get(pdConfig.apiEndpoint + 'loru/places', {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {
-          return resp.data.results;
+          return resp.data;
         });
       },
       saveProductsChanges = function (productsData) {

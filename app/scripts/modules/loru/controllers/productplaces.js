@@ -26,9 +26,10 @@ angular.module('pdLoru')
             return total;
           }
 
-          var placeData = _.find($scope.places, {id: parseInt(itemData.placeId, 10)});
+          var placeData = _.find($scope.places, {id: parseInt(itemData.placeId, 10)}),
+            costKey = 'costFor' + status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 
-          return total + parseFloat(placeData.cost);
+          return total + parseFloat(placeData[costKey]);
         }, 0);
       },
       getProductsData = function () {
