@@ -23,6 +23,7 @@
     "$": false,
     "_":  false,
     "ymaps": false,
+    "moment": false,
     "File": false
   }
 }
