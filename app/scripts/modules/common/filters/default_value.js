@@ -10,4 +10,9 @@ angular.module('pdCommon')
       return defaultVal || '';
     };
   })
+  .filter('toFixed', function () {
+    return function (value, precision) {
+      return value.toFixed(precision);
+    };
+  })
 ;

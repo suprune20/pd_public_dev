@@ -70,7 +70,14 @@ angular.module('pdLoru')
       getProducts: getProducts,
       getPlaces: getPlaces,
       saveProductsChanges: saveProductsChanges,
-      getProductsByPlaces: getProductsByPlaces
+      getProductsByPlaces: getProductsByPlaces,
+      getCurrentBalance: function () {
+        return $http.get(pdConfig.apiEndpoint + 'balance', {
+          tracker: 'commonLoadingTracker'
+        }).then(function (resp) {
+          return resp.data.currentBalance[0];
+        });
+      }
     };
   })
 ;

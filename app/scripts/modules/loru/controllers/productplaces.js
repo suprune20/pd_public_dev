@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('LoruAdvertisementCtrl', function ($scope, advertisement, objectsDiff) {
+  .controller('LoruAdvertisementCtrl', function ($scope, $q, advertisement, objectsDiff) {
     var initialProductsStates = {},
       convertProductsStates = function (productsStates) {
         var ret = [];
@@ -20,21 +20,14 @@ angular.module('pdLoru')
       getChangedProducts = function () {
         return convertProductsStates(objectsDiff(initialProductsStates, $scope.newProductsStates));
       },
-      calculateTotal = function (status, productsData) {
-        return _.reduce(productsData ? productsData : $scope.changedProducts, function (total, itemData) {
-          if (status !== itemData.status) {
-            return total;
-          }
-
-          var placeData = _.find($scope.places, {id: parseInt(itemData.placeId, 10)}),
-            costKey = 'costFor' + status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-
-          return total + parseFloat(placeData[costKey]);
-        }, 0);
-      },
       getProductsData = function () {
-        advertisement.getProductsByPlaces()
-          .then(function (productsData) {
+        $q.all([advertisement.getProductsByPlaces(), advertisement.getCurrentBalance()])
+          .then(function (responseData) {
+            var productsData = responseData[0];
+
+            $scope.balanceData = responseData[1];
+            $scope.balanceData.amount = parseFloat($scope.balanceData.amount);
+            // Calculate products/places data
             initialProductsStates = productsData.productsByPlaces;
             $scope.products = productsData.products;
             $scope.places = productsData.places;
@@ -48,9 +41,31 @@ angular.module('pdLoru')
     };
     $scope.$watch('newProductsStates', function (newProductsStates) {
       $scope.changedProducts = getChangedProducts();
-      $scope.totalUpped = calculateTotal('up');
-      $scope.totalEnabled = calculateTotal('enable', convertProductsStates(newProductsStates)) + $scope.totalUpped;
+      // Calculate total upped products cost
+      $scope.totalUpped = _.reduce($scope.changedProducts, function (total, itemData) {
+        if ('up' !== itemData.status) {
+          return total;
+        }
+
+        return total + parseFloat(_.find($scope.places, {id: parseInt(itemData.placeId, 10)}).costForUp);
+      }, 0);
+      // Calculate total enabled products cost
+      $scope.totalEnabled = _.reduce(convertProductsStates(newProductsStates), function (total, itemData) {
+        if (!_.contains(['enable', 'up'], itemData.status)) {
+          return total;
+        }
+
+        return total + parseFloat(_.find($scope.places, {id: parseInt(itemData.placeId, 10)}).costForEnable);
+      }, 0);
+      // Calculate available balance days
+      if ($scope.balanceData && $scope.totalEnabled) {
+        $scope.balanceData.availablePeriod = ($scope.balanceData.amount - $scope.totalUpped) > 0 ?
+          Math.round(($scope.balanceData.amount - $scope.totalUpped) / $scope.totalEnabled) :
+          0;
+      }
     }, true);
+
+    // Save changes in products/places data
     $scope.saveChanges = function () {
       advertisement.saveProductsChanges($scope.changedProducts).then(function () {
         $scope.changedProducts = [];
