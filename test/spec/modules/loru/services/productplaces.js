@@ -37,7 +37,7 @@ describe('Service: Loru advertisement', function () {
       }];
 
     $httpBackend.expectGET(serverEndpointUrl + 'loru/products').respond(200, products);
-    $httpBackend.expectGET(serverEndpointUrl + 'loru/places').respond(200, {results: places});
+    $httpBackend.expectGET(serverEndpointUrl + 'loru/places').respond(200, places);
     advertisementService.getProductsByPlaces().then(function (productsData) {
       expect(productsData.products).toEqual(products);
       expect(productsData.places).toEqual(places);
