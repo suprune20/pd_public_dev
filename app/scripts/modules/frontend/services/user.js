@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage) {
+  .factory('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage, $filter) {
     return {
       getCurrentUserProfile: function () {
         return auth.getUserProfile();
@@ -20,9 +20,10 @@ angular.module('pdFrontend')
             // Sort and formatting gallery data for fancybox
             placeData.gallery = _(placeData.gallery)
               .sortBy('addedAt')
+              .reverse()
               .map(function (galleryItem) {
                 galleryItem.href = galleryItem.photo;
-                galleryItem.title = galleryItem.addedAt;
+                galleryItem.title = $filter('momentDate')(galleryItem.addedAt, 'DD-MM-YYYY HH:mm');
 
                 return galleryItem;
               })
