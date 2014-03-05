@@ -77,8 +77,12 @@
   </div>
   <div class="col-xs-12 col-sm-5 col-md-4">
     <ul class="list-unstyled">
-      <li>Сумма ежедневного списания: <strong>{{totalEnabled|toFixed:2}}</strong></li>
-      <li>Сумма разового списания: <strong>{{totalUpped|toFixed:2}}</strong></li>
+      <li>
+        Сумма ежедневного списания: <strong>{{totalEnabled|toFixed:2}}</strong> {{balanceData.currency.shortName}}
+      </li>
+      <li>
+        Сумма разового списания: <strong>{{totalUpped|toFixed:2}}</strong> {{balanceData.currency.shortName}}
+      </li>
       <li ng-show="balanceData">
         Баланс: <strong>{{balanceData.amount}}</strong>
         {{balanceData.currency.shortName}} (<strong>~{{balanceData.availablePeriod|default:'0'}}</strong> дн.)
