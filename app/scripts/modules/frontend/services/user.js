@@ -67,9 +67,11 @@ angular.module('pdFrontend')
           .then(function () {
             // Update user profile in locale storage
             var currentUserData = storage.get(pdConfig.AUTH_PROFILE_KEY);
-            currentUserData.profile.mainPhone = _.has(settingsData, 'mainPhone') ?
-              settingsData.mainPhone :
-              currentUserData.profile.mainPhone;
+
+            currentUserData.profile.mainPhone = settingsData.mainPhone || currentUserData.profile.mainPhone;
+            currentUserData.profile.email = _.has(settingsData, 'email') ?
+              settingsData.email :
+              currentUserData.profile.email;
             storage.set(pdConfig.AUTH_PROFILE_KEY, currentUserData);
           }, function (errorResp) {
             var respData = errorResp.data;
