@@ -17,7 +17,7 @@
   <div class="form-group has-feedback"
        ng-class="{'has-error': settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid}">
     <label for="mainPhone">Телефон для входа</label>
-    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа (375291234567)"
+    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа (79019030523)"
            name="mainPhone" ng-model="settingsData.mainPhone" required ng-pattern="/^\d{10,12}$/">
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid"></span>
