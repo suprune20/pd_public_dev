@@ -24,6 +24,7 @@
     <tr ng-repeat="product in products">
       <td>
         <a ng-href="{{backendUrl + 'manage/product/' + product.id + '/edit/'}}" target="_blank">{{product.name}}</a>
+        <span class="label label-default">{{ product.category.name }}</span>
       </td>
       <td ng-repeat="place in places"
           ng-class="{'active': isChangedProductInPlace(product.id, place.id)}">
