@@ -35,7 +35,7 @@
   <div class="form-group has-feedback"
        ng-class="{'has-error': settingsForm.$dirty && settingsForm.newPassword.$invalid}">
     <label for="mainPhone">Новый пароль</label>
-    <input type="text" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
+    <input type="password" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
            name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword"
            ng-maxlength="50" ng-minlength="8" />
     <span class="glyphicon glyphicon-remove form-control-feedback"
@@ -52,7 +52,7 @@
   <div class="form-group has-feedback"
        ng-class="{'has-error': settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid}">
     <label for="mainPhone">Повторите новый пароль</label>
-    <input type="text" class="form-control" id="repeatNewPassword" placeholder="Повторите новый пароль для изменения"
+    <input type="password" class="form-control" id="repeatNewPassword" placeholder="Повторите новый пароль для изменения"
            name="repeatNewPassword" password-repeat="newPassword" ng-model="settingsData.confirmPassword" />
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid"></span>
