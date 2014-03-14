@@ -316,8 +316,9 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }]
       },
-      configDev: {files:[{src:'<%= yeoman.app %>/scripts/config_dev_const.js',dest:'.tmp/scripts/config_const.js'}]},
-      configPd3: {files:[{src:'<%= yeoman.app %>/scripts/config_pd3_const.js',dest:'.tmp/scripts/config_const.js'}]}
+      configDev: {files:[{src:'<%= yeoman.app %>/scripts/config_dev_const.js', dest:'.tmp/scripts/config_const.js'}]},
+      configPd3: {files:[{src:'<%= yeoman.app %>/scripts/config_pd3_const.js', dest:'.tmp/scripts/config_const.js'}]},
+      configProd: {files:[{src:'<%= yeoman.app %>/scripts/config_prod_const.js', dest:'.tmp/scripts/config_const.js'}]}
     },
 
     // Run some tasks in parallel to speed up the build process
