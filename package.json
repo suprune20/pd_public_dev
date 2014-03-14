@@ -38,7 +38,7 @@
     "requirejs": "~2.1.9",
     "karma-requirejs": "~0.2.1",
     "karma-phantomjs-launcher": "~0.1.1",
-    "karma": "~0.11.13",
+    "karma": "~0.12.0",
     "karma-ng-html2js-preprocessor": "~0.1.0",
     "grunt-html2js": "~0.2.3",
     "karma-junit-reporter": "~0.2.1"
