@@ -304,7 +304,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/**/*.html',
+//            'views/**/*.html',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
@@ -345,17 +345,18 @@ module.exports = function (grunt) {
     * Add grunt-angular-templates node module into package.json
     * !!Note: not working with rev images now
     */
-//    ngtemplates: {
-//      app: {
-//        cwd: '<%= yeoman.app %>',
-//        src: 'views/**.html',
-//        dest: '.tmp/templates.js',
-//        options: {
-//          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
-//          usemin: 'scripts/templates.js'
-//        }
-//      }
-//    },
+    ngtemplates: {
+      app: {
+        cwd: '<%= yeoman.app %>',
+        src: 'views/**/*.html',
+        dest: '.tmp/templates.js',
+        options: {
+          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+          usemin: 'scripts/scripts.js',
+          module: 'pdApp'
+        }
+      }
+    },
 
     html2js: {
       options: {
@@ -494,6 +495,7 @@ module.exports = function (grunt) {
       'copy:config' + target.charAt(0).toUpperCase() + target.slice(1),
       'concurrent:dist',
       'autoprefixer',
+      'ngtemplates',
       'concat',
       'ngmin',
       'copy:dist',
@@ -501,8 +503,8 @@ module.exports = function (grunt) {
       'cssmin',
       'uglify',
       'rev',
-      'usemin',
-      'htmlmin'
+      'usemin'
+//      'htmlmin'
     ]);
   });
 
