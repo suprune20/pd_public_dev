@@ -266,7 +266,10 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: [
+            '*.html'
+//            'views/{,*/}*.html'
+          ],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -416,6 +419,12 @@ module.exports = function (grunt) {
       }
     },
 
+    processhtml: {
+      prod: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}},
+      dev: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}},
+      pd3: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}}
+    },
+
 //    uglify: {
 //      options: {
 //        mangle: false
@@ -500,11 +509,12 @@ module.exports = function (grunt) {
       'ngmin',
       'copy:dist',
       'cdnify',
+      'processhtml:' + target,
       'cssmin',
       'uglify',
       'rev',
-      'usemin'
-//      'htmlmin'
+      'usemin',
+      'htmlmin'
     ]);
   });
 
