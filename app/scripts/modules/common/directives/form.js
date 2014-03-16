@@ -8,7 +8,10 @@ angular.module('pdCommon')
       iAttrs.$observe('fixAutofill', function (needFix) {
         if (true === scope.$eval(needFix)) {
           intervalPromise = $interval(function () {
-            iElement.find('input').trigger('change');
+            iElement.find('input, textarea, select')
+              .trigger('input')
+              .trigger('change')
+              .trigger('keydown');
           }, 500);
         } else if (intervalPromise) {
           // Clear intervals between needFix callbacks callbacks
