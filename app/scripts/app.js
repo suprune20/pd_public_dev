@@ -60,9 +60,9 @@ angular.module('pdApp', [
       $rootScope.redirectToBasePage();
     });
 
-    $rootScope.$on('$locationChangeStart', function (event) {
+    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
       // Redirect to oms site
-      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole()) {
+      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
         $window.location.href = pdConfig.backendUrl;
         event.preventDefault();
       }
