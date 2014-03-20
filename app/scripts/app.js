@@ -111,6 +111,6 @@ angular.module('pdApp', [
     // Security mirror object for use in templates
     $rootScope.security = {
       isCurrentHasClientRole: auth.isCurrentHasClientRole
-    }
+    };
   })
 ;

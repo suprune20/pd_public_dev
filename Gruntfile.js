@@ -123,7 +123,8 @@ module.exports = function (grunt) {
         options: {
           reporter: 'checkstyle',
           reporterOutput: 'build/jshint_tests.xml',
-          jshintrc: 'test/.jshintrc'
+          jshintrc: 'test/.jshintrc',
+          force: true
         },
         src: ['test/spec/**/*.js']
       }
