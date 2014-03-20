@@ -60,6 +60,14 @@ angular.module('pdApp', [
       $rootScope.redirectToBasePage();
     });
 
+    $rootScope.$on('$locationChangeStart', function (event) {
+      // Redirect to oms site
+      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole()) {
+        $window.location.href = pdConfig.backendUrl;
+        event.preventDefault();
+      }
+    });
+
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Save url for redirect after success login (external links) (get param redirect_url)
       $rootScope.redirectUrl = $rootScope.redirectUrl ?
@@ -82,17 +90,12 @@ angular.module('pdApp', [
       mainMenuManager.hide(currentRoute.hideMainMenu);
       $rootScope.pageClass = currentRoute.pageClass;
 
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated() && !auth.isCurrentHasOmsRole()) {
+      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
         $rootScope.redirectToBasePage();
       }
     });
 
     $rootScope.redirectToBasePage = function () {
-      if (auth.isCurrentHasOmsRole()) {
-        $window.location.href = pdConfig.backendUrl;
-        return;
-      }
-
       if (auth.isCurrentHasLoruRole()) {
         $location.path('/loru');
         return;
