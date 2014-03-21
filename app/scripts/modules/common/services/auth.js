@@ -79,8 +79,14 @@ angular.module('pdCommon')
           }
 
           return respData;
-        }, function (responseData) {
-          return $q.reject(responseData.data);
+        }, function (errorResponseData) {
+          var responseData = errorResponseData.data;
+
+          if (!_.has(responseData, 'status') || !_.has(responseData, 'message')) {
+            responseData.message = 'Неизвестная ошибка. Обратитесь к администрации сайта';
+          }
+
+          return $q.reject(responseData);
         });
       },
       getUserProfile = function () {

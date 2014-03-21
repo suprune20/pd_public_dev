@@ -25,7 +25,7 @@ angular.module('pdApp')
             return;
           }
 
-          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз и обратитесь к администрации сайта';
+          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз или обратитесь к администрации сайта';
         });
     };
     $scope.getPasswordBySms = function (username, captchaData) {
@@ -37,12 +37,7 @@ angular.module('pdApp')
           }
         }, function (errorData) {
           vcRecaptchaService.reload();
-          if (_.has(errorData, 'status') && 'error' === errorData.status) {
-            $scope.formErrorMessage = errorData.message;
-            return;
-          }
-
-          $scope.formErrorMessage = 'Неизвестная ошибка. Обратитесь к администрации сайта';
+          $scope.formErrorMessage = errorData.message;
         });
     };
   })
