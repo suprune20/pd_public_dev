@@ -5,14 +5,20 @@ describe('Service: User', function () {
     serverEndpointUrl,
     $rootScope,
     pdYandexMock,
-    userService;
+    userService,
+    storageMock;
 
   beforeEach(function () {
     pdYandexMock = {
       geocode: jasmine.createSpy('pdYandexMock mock for "geocode" method')
     };
+    storageMock = {
+      set: jasmine.createSpy('storage mock for "set" method'),
+      get: jasmine.createSpy('storage mock for "get" method')
+    };
   });
   beforeEach(module('pdFrontend', function($provide) {
+    $provide.value('storage', storageMock);
     $provide.value('pdYandex', pdYandexMock);
   }));
   beforeEach(inject(function (_$httpBackend_, pdConfig, _$rootScope_, user) {
@@ -109,6 +115,18 @@ describe('Service: User', function () {
 
       expect(successCallback).not.toHaveBeenCalled();
       expect(errorCallback).toHaveBeenCalled();
+    });
+  });
+
+  describe('saveSettings()', function () {
+    it('should update phone number if settings has been successfully saved', function () {
+      storageMock.get.andReturn({profile: {}});
+      $httpBackend.expectPUT(serverEndpointUrl + 'settings').respond(200, {});
+      userService.saveSettings({mainPhone: 'mainPhoneNumber'})
+        .then(function () {
+          expect(storageMock.set).toHaveBeenCalledWith(jasmine.any(String), {profile: {mainPhone: 'mainPhoneNumber'}});
+        });
+      $httpBackend.flush();
     });
   });
 });

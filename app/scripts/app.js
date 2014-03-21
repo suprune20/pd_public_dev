@@ -60,6 +60,14 @@ angular.module('pdApp', [
       $rootScope.redirectToBasePage();
     });
 
+    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
+      // Redirect to oms site
+      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
+        $window.location.href = pdConfig.backendUrl;
+        event.preventDefault();
+      }
+    });
+
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       // Save url for redirect after success login (external links) (get param redirect_url)
       $rootScope.redirectUrl = $rootScope.redirectUrl ?
@@ -82,17 +90,12 @@ angular.module('pdApp', [
       mainMenuManager.hide(currentRoute.hideMainMenu);
       $rootScope.pageClass = currentRoute.pageClass;
 
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated() && !auth.isCurrentHasOmsRole()) {
+      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
         $rootScope.redirectToBasePage();
       }
     });
 
     $rootScope.redirectToBasePage = function () {
-      if (auth.isCurrentHasOmsRole()) {
-        $window.location.href = pdConfig.backendUrl;
-        return;
-      }
-
       if (auth.isCurrentHasLoruRole()) {
         $location.path('/loru');
         return;
@@ -105,5 +108,9 @@ angular.module('pdApp', [
     $rootScope.EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
     // Save backend url into root scope for using in templates
     $rootScope.backendUrl = pdConfig.backendUrl;
+    // Security mirror object for use in templates
+    $rootScope.security = {
+      isCurrentHasClientRole: auth.isCurrentHasClientRole
+    };
   })
 ;

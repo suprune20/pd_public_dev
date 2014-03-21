@@ -123,7 +123,8 @@ module.exports = function (grunt) {
         options: {
           reporter: 'checkstyle',
           reporterOutput: 'build/jshint_tests.xml',
-          jshintrc: 'test/.jshintrc'
+          jshintrc: 'test/.jshintrc',
+          force: true
         },
         src: ['test/spec/**/*.js']
       }
@@ -266,7 +267,10 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: [
+            '*.html'
+//            'views/{,*/}*.html'
+          ],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -304,7 +308,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/**/*.html',
+//            'views/**/*.html',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
@@ -345,17 +349,18 @@ module.exports = function (grunt) {
     * Add grunt-angular-templates node module into package.json
     * !!Note: not working with rev images now
     */
-//    ngtemplates: {
-//      app: {
-//        cwd: '<%= yeoman.app %>',
-//        src: 'views/**.html',
-//        dest: '.tmp/templates.js',
-//        options: {
-//          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
-//          usemin: 'scripts/templates.js'
-//        }
-//      }
-//    },
+    ngtemplates: {
+      app: {
+        cwd: '<%= yeoman.app %>',
+        src: 'views/**/*.html',
+        dest: '.tmp/templates.js',
+        options: {
+          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+          usemin: 'scripts/scripts.js',
+          module: 'pdApp'
+        }
+      }
+    },
 
     html2js: {
       options: {
@@ -413,6 +418,12 @@ module.exports = function (grunt) {
           return content;
         }
       }
+    },
+
+    processhtml: {
+      prod: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}},
+      dev: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}},
+      pd3: {files: {'<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'}}
     },
 
 //    uglify: {
@@ -494,10 +505,12 @@ module.exports = function (grunt) {
       'copy:config' + target.charAt(0).toUpperCase() + target.slice(1),
       'concurrent:dist',
       'autoprefixer',
+      'ngtemplates',
       'concat',
       'ngmin',
       'copy:dist',
       'cdnify',
+      'processhtml:' + target,
       'cssmin',
       'uglify',
       'rev',

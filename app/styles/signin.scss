@@ -13,6 +13,23 @@
     box-sizing: border-box;
   }
 
+  .input-group {
+    .input-group-btn {
+      .btn {
+        height: 43px;
+        width: 43px;
+        border-bottom: 0;
+      }
+    }
+    &.login-input-group {
+      .input-group-btn {
+        .btn {
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
+  }
+
   input[type=text] {
     margin-bottom: -1px;
     border-bottom-left-radius: 0;
