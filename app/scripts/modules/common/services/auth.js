@@ -70,7 +70,15 @@ angular.module('pdCommon')
           phoneNumber: username,
           recaptchaData: captchaData
         }, {tracker: 'commonLoadingTracker'}).then(function (responseData) {
-          return responseData.data;
+          var respData = responseData.data;
+
+          if (_.has(respData, 'password')) {
+            respData.message = 'Пароль установлен: ' + respData.password;
+          } else {
+            respData.message = 'SMS с кодом отправлено на указанный номер, укажите его в поле пароль';
+          }
+
+          return respData;
         }, function (responseData) {
           return $q.reject(responseData.data);
         });

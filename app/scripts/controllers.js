@@ -32,8 +32,8 @@ angular.module('pdApp')
       resetMessages();
       auth.getPasswordBySMS(username, captchaData)
         .then(function (responseData) {
-          if ('success' === responseData.status) {
-            $scope.formSuccessMessage = 'Пароль установлен: ' + responseData.password;
+          if ('success' === responseData.status && _.has(responseData, 'message')) {
+            $scope.formSuccessMessage = responseData.message;
           }
         }, function (errorData) {
           vcRecaptchaService.reload();
