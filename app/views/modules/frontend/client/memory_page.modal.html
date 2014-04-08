@@ -1,0 +1,130 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Страница памяти</h4>
+</div>
+
+<div class="modal-body">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="media burial-data-media">
+        <div class="pull-left">
+          <img class="img-thumbnail media-object"
+               ng-src="{{burialData.photo}}"
+               pd-thumb
+               pd-thumb-size="75x75"
+               default-image="http://placehold.it/75x75" />
+        </div>
+        <div class="media-body">
+          <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)">
+            <h4 class="media-heading">
+              <span editable-text="burialData.lastname"
+                    e-name="lastname">{{burialData.lastname}}</span>
+              <span editable-text="burialData.firstname"
+                    e-name="firstname">{{burialData.firstname}}</span>
+              <span editable-text="burialData.middlename"
+                    e-name="middlename" e-placeholder="Отчество">{{burialData.middlename}}</span>
+
+              <span class="glyphicon glyphicon-pencil pointer-cursor"
+                    ng-click="burialDataForm.$show()"
+                    ng-show="!burialDataForm.$visible"></span>
+            </h4>
+
+            <div class="buttons">
+              <div ng-show="burialDataForm.$visible">
+                <button type="submit"
+                        class="btn btn-primary"
+                        ng-disabled="burialDataForm.$waiting">
+                  Save
+                </button>
+                <button type="button"
+                        class="btn btn-default"
+                        ng-disabled="burialDataForm.$waiting"
+                        ng-click="burialDataForm.$cancel()">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p>
+            {{burialData.dob|default:'?'}} / {{burialData.dod|default:'?'}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Памятный текст
+      <div class="pull-right">
+        <span class="glyphicon glyphicon-pencil pointer-cursor"
+              ng-click="burialCommonTextForm.$show()"
+              ng-show="!burialCommonTextForm.$visible"></span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span
+          editable-textarea="burialData.commonText"
+          e-form="burialCommonTextForm"
+          onbeforesave="saveCommonText($data)"
+          e-rows="7" e-cols="65">
+        {{burialData.commonText}}
+      </span>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Галерея
+      <div class="pull-right">
+        <span class="glyphicon glyphicon-plus pointer-cursor"></span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <flex-slider slides="photo in burialData.gallery"
+                   class="carousel memory-carousel"
+                   slideshow="false" animation="slide" control-nav="false"
+                   item-width="100" item-margin="5">
+        <li>
+          <img ng-src="{{photo.photoUrl}}"
+               pd-thumb
+               pd-thumb-size="100x100"/>
+        </li>
+      </flex-slider>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Воспоминания</div>
+    <div class="panel-body">
+      <form name="postMemoryForm" class="row">
+        <div class="col-xs-12">
+          <div class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-plus"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Изображение</a></li>
+                <li><a href="#">Видео</a></li>
+              </ul>
+            </div>
+            <input type="text" class="form-control" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-ok"></i></button>
+            </span>
+          </div>
+        </div>
+      </form>
+
+      <ul class="memories-list">
+        <li ng-repeat="memory in memoriesData"></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Закрыть</button>
+</div>

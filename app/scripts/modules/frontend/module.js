@@ -6,7 +6,8 @@ angular.module('pdFrontend', [
     'ui.select2',
     'infinite-scroll',
     'yaMap',
-    'mgcrea.ngStrap.datepicker'
+    'mgcrea.ngStrap.datepicker',
+    'xeditable'
   ])
   .config(function (authRouteProvider) {
     authRouteProvider
@@ -37,7 +38,7 @@ angular.module('pdFrontend', [
       }, 'ROLE_CLIENT')
     ;
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig, auth) {
+  .run(function ($rootScope, mainMenuManager, pdConfig, auth, editableOptions) {
     var cabinetMenuConfig = mainMenuManager.addMenuConfig('cabinetMenu');
     cabinetMenuConfig.setMainMenuItems(pdConfig.menuConfigs.cabinetMenu.items);
 
@@ -55,5 +56,7 @@ angular.module('pdFrontend', [
         }
       ]);
     });
+    // x-editable options
+    editableOptions.theme = 'bs3';
   })
 ;
