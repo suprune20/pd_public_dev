@@ -1,0 +1,14 @@
+.custom-file-input {
+  position: relative;
+  overflow: hidden;
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 200px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+  }
+}

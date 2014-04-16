@@ -20,7 +20,7 @@ angular.module('pdCommon')
           return $scope.$watch(collectionString, function(collection) {
             var attrKey, attrVal, c, childScope, e, n, slides, _i, _j, _len, _len1;
 
-            if (elementsScopes.length > 0 || (flexsliderDiv != null)) {
+            if (elementsScopes.length > 0 || (flexsliderDiv !== null)) {
               $element.children().remove();
               for (_i = 0, _len = elementsScopes.length; _i < _len; _i++) {
                 e = elementsScopes[_i];
@@ -32,7 +32,7 @@ angular.module('pdCommon')
             flexsliderDiv = $('<div class="flexslider"></div>');
             flexsliderDiv.append(slides);
             $element.append(flexsliderDiv);
-            if (collection == null) {
+            if (collection === null) {
               return;
             }
             for (_j = 0, _len1 = collection.length; _j < _len1; _j++) {

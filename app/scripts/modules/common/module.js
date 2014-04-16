@@ -9,13 +9,15 @@ angular.module('pdCommon', [
     'ivpusic.cookie',
     'angular-growl',
     'angularFileUpload',
-    'checklist-model'
+    'checklist-model',
+    'angularMoment'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
   })
-  .run(function ($rootScope, promiseTracker) {
+  .run(function ($rootScope, promiseTracker, amMoment) {
     $rootScope.commonLoadingTracker = promiseTracker('commonLoadingTracker');
+    amMoment.changeLanguage('ru');
   })
   .factory('httpErrorsInterceptor', function (pdConfig, $q, growl) {
     var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);

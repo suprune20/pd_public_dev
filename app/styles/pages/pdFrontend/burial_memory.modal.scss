@@ -13,4 +13,34 @@
       margin: 0;
     }
   }
+
+  .memories-list {
+    margin: 0;
+
+    .memory-item {
+      margin: 10px 0;
+      border-bottom: solid 1px #efefef;
+
+      &:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+      .memory-item-image {
+        img {
+          max-width: 100%;
+        }
+      }
+      .memory-item-text {
+        margin: 10px 0;
+      }
+      .memory-item-footer {
+        margin: 0;
+      }
+      videogular {
+        vg-timedisplay {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 }

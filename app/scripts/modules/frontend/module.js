@@ -7,7 +7,9 @@ angular.module('pdFrontend', [
     'infinite-scroll',
     'yaMap',
     'mgcrea.ngStrap.datepicker',
-    'xeditable'
+    'xeditable',
+    'com.2fdevs.videogular',
+    'com.2fdevs.videogular.plugins.controls'
   ])
   .config(function (authRouteProvider) {
     authRouteProvider
