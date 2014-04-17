@@ -49,7 +49,7 @@ angular.module('pdApp')
             return $scope;
           }
         },
-        controller: function ($scope, $modalInstance, signinScope) {
+        controller: ['$scope', '$modalInstance', 'signinScope', function ($scope, $modalInstance, signinScope) {
           $scope.getPasswordBySms = function (username, captchaData) {
             resetMessages();
             auth.getPasswordBySMS(username, captchaData)
@@ -63,7 +63,7 @@ angular.module('pdApp')
                 $scope.restoreErrorMessage = errorData.message;
               });
           };
-        }
+        }]
       });
     };
   })
