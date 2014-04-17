@@ -4,9 +4,10 @@
 </div>
 
 <div class="modal-body">
-  Система работает в тестовом режиме. Эта страница находится в разработке.
+  <ng-include src="'views/terms_and_conditions.text.html'"></ng-include>
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-click="$close()">Закрыть</button>
+  <button type="button" class="btn btn-success" ng-click="$close()">Согласен</button>
+  <button type="button" class="btn btn-danger" ng-click="$dismiss()">Не согласен</button>
 </div>

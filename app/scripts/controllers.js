@@ -12,15 +12,27 @@ angular.module('pdApp')
       $scope.signinModel = {};
     });
     $scope.showTCModal = function () {
-      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'});
+      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
+        .result.then(function () {
+          $scope.signin(_.merge($scope.signinModel, {confirmTC: true}));
+        }, function () {
+          $scope.signinModel = {};
+        });
     };
     $scope.signin = function (signinModel, form) {
       resetMessages();
-      auth.signin(signinModel.username, signinModel.password)
+      auth.signin(signinModel.username, signinModel.password, signinModel.confirmTC)
         .catch(function (errorData) {
           if ('wrong_credentials' === errorData.errorCode) {
             $scope.formErrorMessage = 'Неверный {type} или пароль'
               .replace('{type}', 'clientLoginForm' === form.$name ? 'номер телефона' : 'логин');
+
+            return;
+          }
+
+          // T&C hasn't been confirmed - show popup
+          if ('unconfirmed_tc' === errorData.errorCode) {
+            $scope.showTCModal();
 
             return;
           }
