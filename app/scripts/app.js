@@ -30,6 +30,10 @@ angular.module('pdApp', [
           }]
         }
       })
+      .when('/useragreement', {
+        templateUrl: 'views/terms_and_conditions.text.html',
+        title: 'Пользовательское соглашение'
+      })
       .otherwise({
         templateUrl: 'views/404.html',
         title: 404

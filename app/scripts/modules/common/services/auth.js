@@ -5,10 +5,11 @@ angular.module('pdCommon')
     var getUserProfileData = function () {
         return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
       },
-      signin = function (username, password) {
+      signin = function (username, password, confirmTC) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
-            password: password
+            password: password,
+            confirmTC: confirmTC ? true : undefined
           }, {tracker: 'commonLoadingTracker'}).then(function (response) {
             var responseData = response.data;
 
@@ -42,6 +43,10 @@ angular.module('pdCommon')
 
             if (400 === errorResponse.status) {
               respData.errorCode = 'wrong_credentials';
+
+              if ('unconfirmed_tc' === respData.message) {
+                respData.errorCode = respData.message;
+              }
             }
 
             return $q.reject(respData);
@@ -71,8 +76,14 @@ angular.module('pdCommon')
           recaptchaData: captchaData
         }, {tracker: 'commonLoadingTracker'}).then(function (responseData) {
           return responseData.data;
-        }, function (responseData) {
-          return $q.reject(responseData.data);
+        }, function (errorResponseData) {
+          var responseData = errorResponseData.data;
+
+          if (!_.has(responseData, 'status') || !_.has(responseData, 'message')) {
+            responseData.message = 'Неизвестная ошибка. Обратитесь к администрации сайта';
+          }
+
+          return $q.reject(responseData);
         });
       },
       getUserProfile = function () {

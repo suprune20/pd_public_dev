@@ -5,6 +5,8 @@ angular.module('pdApp')
     var resetMessages = function () {
       $scope.formErrorMessage = null;
       $scope.formSuccessMessage = null;
+      $scope.restoreErrorMessage = null;
+      $scope.restoreSuccessMessage = null;
     };
     // Reset signin form values and error message when move between login forms
     $scope.$watch('loadedLoginForm', function () {
@@ -12,38 +14,57 @@ angular.module('pdApp')
       $scope.signinModel = {};
     });
     $scope.showTCModal = function () {
-      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'});
+      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
+        .result.then(function () {
+          $scope.signin(_.merge($scope.signinModel, {confirmTC: true}));
+        }, function () {
+          $scope.signinModel = {};
+        });
     };
-    $scope.signin = function (signinModel, form) {
+    $scope.signin = function (signinModel) {
       resetMessages();
-      auth.signin(signinModel.username, signinModel.password)
+      auth.signin(signinModel.username, signinModel.password, signinModel.confirmTC)
         .catch(function (errorData) {
           if ('wrong_credentials' === errorData.errorCode) {
-            $scope.formErrorMessage = 'Неверный {type} или пароль'
-              .replace('{type}', 'clientLoginForm' === form.$name ? 'номер телефона' : 'логин');
+            $scope.formErrorMessage = 'Неверный логин/номер телефона или пароль';
 
             return;
           }
 
-          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз и обратитесь к администрации сайта';
+          // T&C hasn't been confirmed - show popup
+          if ('unconfirmed_tc' === errorData.errorCode) {
+            $scope.showTCModal();
+
+            return;
+          }
+
+          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз или обратитесь к администрации сайта';
         });
     };
-    $scope.getPasswordBySms = function (username, captchaData) {
-      resetMessages();
-      auth.getPasswordBySMS(username, captchaData)
-        .then(function (responseData) {
-          if ('success' === responseData.status) {
-            $scope.formSuccessMessage = 'Пароль установлен: ' + responseData.password;
+    $scope.openRestorePasswordPopup = function () {
+      $modal.open({
+        templateUrl: 'views/restore_password.modal.html',
+        resolve: {
+          signinScope: function () {
+            return $scope;
           }
-        }, function (errorData) {
-          vcRecaptchaService.reload();
-          if (_.has(errorData, 'status') && 'error' === errorData.status) {
-            $scope.formErrorMessage = errorData.message;
-            return;
-          }
-
-          $scope.formErrorMessage = 'Неизвестная ошибка. Обратитесь к администрации сайта';
-        });
+        },
+        controller: ['$scope', '$modalInstance', 'signinScope', function ($scope, $modalInstance, signinScope) {
+          $scope.getPasswordBySms = function (username, captchaData) {
+            resetMessages();
+            auth.getPasswordBySMS(username, captchaData)
+              .then(function (responseData) {
+                if ('success' === responseData.status && _.has(responseData, 'message')) {
+                  signinScope.formSuccessMessage = responseData.message;
+                  $modalInstance.close();
+                }
+              }, function (errorData) {
+                vcRecaptchaService.reload();
+                $scope.restoreErrorMessage = errorData.message;
+              });
+          };
+        }]
+      });
     };
   })
 ;

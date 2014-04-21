@@ -39,6 +39,8 @@
            name="oldPassword" ng-model="settingsData.oldPassword" ng-required="settingsData.newPassword">
     <span class="glyphicon glyphicon-remove form-control-feedback"
           ng-show="settingsForm.$dirty && settingsForm.oldPassword.$invalid"></span>
+    <!-- Chrome autofill workaround: duplicate password field - hidden -->
+    <input type="password" name="oldPassword" class="hidden">
   </div>
 
   <div class="form-group has-feedback"
