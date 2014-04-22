@@ -3,59 +3,67 @@
 angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog) {
     var openProductDetailsModal = function (productId) {
-      $location.search('productId', productId);
-      var productData = $scope.catalog.getProduct(productId);
+        $location.search('productId', productId);
+        var productData = $scope.catalog.getProduct(productId);
 
-      $modal.open({
-        templateUrl: 'views/modules/frontend/catalog/product.details.modal.html',
-        windowClass: 'catalog-product-modal',
-        resolve: {
-          productData: function () {
-            return productData;
-          }
-        },
-        controller: ['$scope', '$modalInstance', 'productData',
-          function ($scope, $modalInstance, productData) {
-            $scope.productData = productData;
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-          }
-        ]
-      }).result.catch(function () {
-          $location.search('productId', null);
-        });
-    };
+        // Open modal for product details
+        $modal.open({
+          templateUrl: 'views/modules/frontend/catalog/product.details.modal.html',
+          windowClass: 'catalog-product-modal',
+          resolve: {
+            productData: function () {
+              return productData;
+            }
+          },
+          controller: ['$scope', '$modalInstance', 'productData',
+            function ($scope, $modalInstance, productData) {
+              $scope.productData = productData;
+              $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+              };
+            }
+          ]
+        }).result.catch(function () {
+            $location.search('productId', null);
+          });
+      },
+      suppliersInTheBounds = [],
+      applySuppliersFilterByMap = function (yaMap) {
+        // Select only suppliers markers and filter by them
+        $scope.filters.supplier = [];
+        $scope.visibleSuppliersCategories = [];
+        ymaps.geoQuery(yaMap.geoObjects).searchIntersect(yaMap)
+          .search('properties.type = "supplier_place"')
+          .search('properties.active = true')
+          .each(function (geoObject) {
+            $scope.filters.supplier.push(geoObject.properties.get('pointData').id);
+            $scope.visibleSuppliersCategories.push(geoObject.properties.get('pointData.categories'));
+          });
+        $scope.visibleSuppliersCategories = _.union.apply(null, $scope.visibleSuppliersCategories);
+        suppliersInTheBounds = _.clone($scope.filters.supplier);
 
+        $scope.applyFilters();
+      }
+    ;
+
+    // Initial set for scope variables
     $scope.filters = {};
+    $scope.orders = {};
     $scope.catalog = new Catalog();
     // Get filters data
     $scope.catalog.getCategories().then(function (categories) {
       $scope.categoriesFilter = categories;
-    });
-    $scope.catalog.getFilters().then(function (filtersData) {
-      $scope.suppliersFilter = filtersData.supplier;
-      $scope.placesFilter = filtersData.place;
+      $scope.selectAllCategories = true;
     });
 
     // Restore product modal details from query params
     if (_.has($routeParams, 'productId')) {
       openProductDetailsModal($routeParams.productId);
     }
-    // Restore filters from query params after reload
-    _.forEach($routeParams, function (value, key) {
-      if (/^filter_/.test(key)) {
-        $scope.filters[key.replace(/^filter_/, '')] = !isNaN(value) ? parseInt(value, 10) : value;
-      }
-    });
-    $scope.catalog.productsDataProvider.applyFilters($scope.filters);
 
     $scope.openProductDetailsModal = openProductDetailsModal;
     $scope.applyFilters = function () {
-      _.forEach($scope.filters, function (value, filterName) {
-        $location.search('filter_' + filterName, value);
-      });
-      $scope.catalog.productsDataProvider.applyFilters($scope.filters);
+      $scope.catalog.productsDataProvider.applyFilters($scope.filters, $scope.orders);
     };
     $scope.clearFilters = function () {
       _.forEach($scope.filters, function (value, filterName) {
@@ -63,6 +71,72 @@ angular.module('pdFrontend')
       });
       $scope.filters = {};
       $scope.catalog.productsDataProvider.applyFilters($scope.filters);
+    };
+
+    $scope.mapInitialized = function (map) {
+      $scope.$watch('userPlaces', function (userPlaces) {
+        if (!userPlaces) {
+          return;
+        }
+
+        if (userPlaces.length > 1) {
+          map.setBounds($scope.catalog.getUsersPlacesBounds(userPlaces));
+        }
+      });
+    };
+    // Get yandex map markers data (user's places, suppliers locations, etc.)
+    $scope.catalog.getYaMapPoints().then(function (mapPoints) {
+      $scope.geoObjects = mapPoints.allPoints;
+      $scope.userPlaces = mapPoints.userPlacesPoints;
+      // Set initial map center
+      if (1 === $scope.userPlaces.length) {
+        var userPlaceLocation = $scope.userPlaces[0].location;
+        $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
+      }
+    });
+    // Filtered markers by yandex map
+    $scope.yaMapBoundsChange = function (event) {
+      var eventTarget = event.get('target'),
+        yaMap = 'function' === typeof(eventTarget.getMap) ? eventTarget.getMap() : eventTarget;
+
+      applySuppliersFilterByMap(yaMap);
+    };
+    $scope.markerClick = function (event) {
+      var marker = event.get('target');
+
+      if ('supplier_place' === marker.properties.get('type')) {
+        $scope.catalog.toggleSupplierYaMarker(marker);
+        applySuppliersFilterByMap(marker.getMap());
+      }
+    };
+    // Toggle select/unselect all categories filter
+    $scope.$watch('selectAllCategories', function (isSelectAllCategories) {
+      $scope.filters.category = isSelectAllCategories ? _.pluck($scope.categoriesFilter, 'id') : [];
+    });
+    // Update/filters suppliers markers when change categories filter
+    $scope.$watchCollection(function () {
+      return $scope.filters.category;
+    }, function (selectedCategories) {
+      $scope.geoObjects = $scope.catalog.filterSuppliersByCategories($scope.geoObjects, selectedCategories);
+      // Filter by visible suppliers in the bounds
+      $scope.filters.supplier = _($scope.geoObjects)
+        .filter(function (geoObject) {
+          return _.contains(suppliersInTheBounds, geoObject.properties.pointData.id) &&
+            geoObject.options.visible;
+        })
+        .map(function (geoObject) {
+          return geoObject.properties.pointData.id;
+        })
+        .value()
+      ;
+      $scope.applyFilters();
+    });
+    // Toggle order control
+    $scope.toggleProductsOrder = function (orderAttr) {
+      var toggleValues = [undefined, 'asc', 'desc'];
+
+      $scope.orders[orderAttr] = toggleValues[(toggleValues.indexOf($scope.orders[orderAttr]) % toggleValues.length) + 1];
+      $scope.applyFilters();
     };
   })
 ;

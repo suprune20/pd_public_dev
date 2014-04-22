@@ -1,12 +1,15 @@
 .catalog-filters-panel {
   &.pb-sticky-block {
     position: fixed;
-    top: 50px;
+    top: 0;
     left: 0;
     right: 0;
 
     .panel-heading {
       display: none;
+    }
+    &+.catalog-products-list {
+      padding-top: 84px;
     }
   }
 }
@@ -30,5 +33,27 @@
 .catalog-product-modal {
   .product-image-media {
     margin-bottom: 10px;
+  }
+}
+
+.catalog-places-map {
+  display:block;
+  height: 300px;
+  position: relative;
+
+  .catalog-places-map-categories-filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 245px;
+    padding: 10px;
+    overflow-y: scroll;
+    background-color: #ddd;
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }

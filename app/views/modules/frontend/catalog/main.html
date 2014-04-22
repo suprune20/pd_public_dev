@@ -1,98 +1,128 @@
-<div class="page-header">
-  <h1>Каталог</h1>
-</div>
+<ya-map class="catalog-places-map"
+        ya-center="{{mapCenterPoint}}"
+        ya-zoom="10"
+        ya-options="{maxZoom: 18}"
+        ya-after-init="mapInitialized($target)"
+        ya-event-boundschange="yaMapBoundsChange($event)">
+  <ya-toolbar ya-name="zoomControl" ya-options="{left: 250}"></ya-toolbar>
+  <pd-ya-search-toolbar ya-options="{left: 300}"></pd-ya-search-toolbar>
+  <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
+    <ya-geo-object ng-repeat="point in geoObjects"
+                   ya-source="point"
+                   ya-event-click="markerClick($event)"></ya-geo-object>
+  </ya-collection>
 
-<div class="panel panel-default catalog-filters-panel" pb-sticky-block top-position="50">
-  <div class="panel-heading">Фильтры</div>
-  <div class="panel-body">
-    <form class="form-inline row" role="form">
-      <div class="form-group col-xs-6 col-sm-2">
-        <select class="form-control" ui-select2 ng-model="filters.place" multiple data-placeholder="Место">
-          <option ng-repeat="f in placesFilter" value="{{f.id}}">{{f.place}}</option>
-        </select>
-      </div>
-      <div class="form-group col-xs-6 col-sm-2">
-        <select class="form-control" ng-model="filters.supplier" ui-select2 multiple data-placeholder="Поставщик">
-          <option ng-repeat="f in suppliersFilter" value="{{f.id}}">{{f.name}}</option>
-        </select>
-      </div>
-
-      <div class="clearfix visible-xs"></div>
-
-      <div class="form-group col-xs-6 col-sm-3 col-lg-2">
-        <input type="number" class="form-control" placeholder="Цена от" min="0" ng-model="filters.price_from" />
-      </div>
-      <div class="form-group col-xs-6 col-sm-3 col-lg-2">
-        <input type="number" class="form-control" placeholder="Цена до" min="0" ng-model="filters.price_to" />
-      </div>
-
-      <div class="clearfix visible-xs"></div>
-
-      <div class="form-group col-xs-12 col-sm-2">
-        <select class="form-control" ng-model="filters.category" ui-select2="{allowClear:true}"
-                data-placeholder="Категория">
-          <option value=""></option>
-          <option ng-repeat="category in categoriesFilter" ng-value="{{category.id}}">{{category.name}}</option>
-        </select>
-      </div>
-
-      <div class="clearfix hidden-lg margin-bottom-15"></div>
-
-      <div class="col-xs-3 col-xs-offset-9 col-lg-offset-0 col-lg-2 btn-group">
-        <button type="submit" class="btn btn-primary" ng-click="applyFilters(applyFilters)">
-          Применить
-        </button>
-        <button class="btn btn-warning" ng-click="clearFilters()">
-          <span class="glyphicon glyphicon-remove-circle"></span>
-        </button>
-      </div>
-    </form>
+  <div ng-show="categoriesFilter.length" class="catalog-places-map-categories-filter" isolate-scrolling>
+    <ul class="list-unstyled">
+      <li>
+        <label>
+          <input type="checkbox" ng-model="selectAllCategories" />
+          <small>выбрать/отменить все</small>
+        </label>
+      </li>
+      <li ng-repeat="category in categoriesFilter">
+        <label ng-class="{'text-muted': -1 === visibleSuppliersCategories.indexOf(category.id)}">
+          <input type="checkbox"
+                 checklist-model="filters.category"
+                 checklist-value="category.id"
+                 ng-disabled="-1 === visibleSuppliersCategories.indexOf(category.id)" />
+          {{category.name}}
+        </label>
+      </li>
+    </ul>
   </div>
-</div>
+</ya-map>
 
-<div class="catalog-products-list"
-     infinite-scroll="catalog.productsDataProvider.getNextProducts()"
-     infinite-scroll-disabled="catalog.productsDataProvider.isBusy()">
-
-  <div ng-repeat="product in catalog.productsDataProvider.getProducts()"
-       class="catalog-product-item"
-       ng-click="openProductDetailsModal(product.id)">
-
-    <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
-
-    <div class="media">
-      <div class="pull-left">
-        <img class="img-thumbnail media-object product-photo"
-             ng-src="{{product.photo}}"
-             pd-thumb
-             pd-thumb-size=100x100
-             default-image="http://placehold.it/100x100" />
-      </div>
-      <div class="media-body">
-        <dl>
-          <dt ng-show="product.sku">Артикул</dt>
-          <dd ng-show="product.sku">{{product.sku}}</dd>
-          <dt ng-show="product.description">Описание</dt>
-          <dd ng-show="product.description">{{product.description}}</dd>
-          <dt>Поставщик</dt>
-          <dd>{{product.supplier}}</dd>
-          <dt>Цена</dt>
-          <dd>{{product.price}}</dd>
-          <dt>Валюта</dt>
-          <dd>{{product.currency}}</dd>
-          <dt ng-show="product.measure">Оплата за</dt>
-          <dd ng-show="product.measure">{{product.measure}}</dd>
-        </dl>
+<div class="container">
+  <div class="row">
+    <div class="panel panel-default catalog-filters-panel" pb-sticky-block>
+      <div class="panel-body row">
+        <form class="form-inline row" role="form">
+          <div class="col-md-3 col-xs-11 col-xs-offset-1">
+        <span ng-click="toggleProductsOrder('date')" class="pointer-cursor col-xs-2 col-md-6">
+          Дата <i class="glyphicon"
+                  ng-class="{
+                    'glyphicon-sort-by-attributes': 'asc' === orders.date,
+                    'glyphicon-sort-by-attributes-alt': 'desc' === orders.date,
+                    'glyphicon-sort': undefined === order.date
+                  }"></i>
+        </span>
+        <span ng-click="toggleProductsOrder('price')" class="pointer-cursor col-xs-2 col-md-6">
+          Цена <i class="glyphicon"
+                  ng-class="{
+                    'glyphicon-sort-by-attributes': 'asc' === orders.price,
+                    'glyphicon-sort-by-attributes-alt': 'desc' === orders.price,
+                    'glyphicon-sort': undefined === order.price
+                  }"></i>
+        </span>
+          </div>
+          <div class="clearfix visible-xs visible-sm margin-bottom-15"></div>
+          <div class="col-sm-12 col-md-7 col-md-offset-1">
+            <div class="form-group col-xs-6 col-sm-4">
+              <input type="number" class="form-control" placeholder="Цена от" min="0" ng-model="filters.price_from" />
+            </div>
+            <div class="form-group col-xs-6 col-sm-4">
+              <input type="number" class="form-control" placeholder="Цена до" min="0" ng-model="filters.price_to" />
+            </div>
+            <div class="clearfix visible-xs"></div>
+            <div class="col-xs-5 col-xs-offset-7 col-sm-4 col-sm-offset-0 btn-group">
+              <button type="submit" class="btn btn-primary" ng-click="applyFilters(applyFilters)">
+                Применить
+              </button>
+              <button class="btn btn-warning" ng-click="clearFilters()">
+                <span class="glyphicon glyphicon-remove-circle"></span>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
-  </div>
+    <div class="catalog-products-list"
+         infinite-scroll="catalog.productsDataProvider.getNextProducts()"
+         infinite-scroll-disabled="catalog.productsDataProvider.isBusy()">
 
-  <div class="alert alert-info" ng-show="catalog.productsDataProvider.isBusy()">
-    <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка ...
-  </div>
-  <div class="alert alert-info" ng-show="catalog.productsDataProvider.isNoMoreProducts()">
-    <span class="glyphicon glyphicon-ban-circle"></span> Нет больше данных
+      <div ng-repeat="product in catalog.productsDataProvider.getProducts()"
+           class="catalog-product-item"
+           ng-click="openProductDetailsModal(product.id)">
+
+        <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
+
+        <div class="media">
+          <div class="pull-left">
+            <img class="img-thumbnail media-object product-photo"
+                 ng-src="{{product.photo}}"
+                 pd-thumb
+                 pd-thumb-size=100x100
+                 default-image="http://placehold.it/100x100" />
+          </div>
+          <div class="media-body">
+            <dl>
+              <dt ng-show="product.sku">Артикул</dt>
+              <dd ng-show="product.sku">{{product.sku}}</dd>
+              <dt ng-show="product.description">Описание</dt>
+              <dd ng-show="product.description">{{product.description}}</dd>
+              <dt>Поставщик</dt>
+              <dd>{{product.supplier}}</dd>
+              <dt>Цена</dt>
+              <dd>{{product.price}}</dd>
+              <dt>Валюта</dt>
+              <dd>{{product.currency}}</dd>
+              <dt ng-show="product.measure">Оплата за</dt>
+              <dd ng-show="product.measure">{{product.measure}}</dd>
+            </dl>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert alert-info" ng-show="catalog.productsDataProvider.isBusy()">
+        <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка ...
+      </div>
+      <div class="alert alert-info" ng-show="catalog.productsDataProvider.isNoMoreProducts()">
+        <span class="glyphicon glyphicon-ban-circle"></span> Нет больше данных
+      </div>
+    </div>
   </div>
 
 </div>

@@ -46,6 +46,18 @@ angular.module('pdApp', [
     ;
   })
   .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+    $rootScope.pageClass = [];
+    $rootScope.addPageClass = function (classValue) {
+      if (!classValue) {
+        return;
+      }
+
+      if (_.isArray(classValue)) {
+        $rootScope.pageClass = $rootScope.pageClass.concat(classValue);
+      } else {
+        $rootScope.pageClass.push(classValue);
+      }
+    };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
     $rootScope.$on('auth.signout', function () {
       $location.path('/');
@@ -83,6 +95,8 @@ angular.module('pdApp', [
         // $window.location.href = currentRoute.absoluteRedirectTo;
         return;
       }
+      // Remove "container" class from root block
+      $rootScope.hideRootContainerClass = currentRoute.hideRootContainerClass;
       // Save url for redirect after success login (external links) (get param redirect_url)
       $rootScope.redirectUrl = $rootScope.redirectUrl ?
         $rootScope.redirectUrl :
@@ -100,9 +114,17 @@ angular.module('pdApp', [
       $rootScope.title = currentRoute.title;
       // Set main menu items
       mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
+      // Set page class from route config
+      $rootScope.pageClass = currentRoute.pageClass ?
+        _.isString(currentRoute.pageClass) ?
+          [currentRoute.pageClass] :
+          currentRoute.pageClass :
+        [];
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
-      $rootScope.pageClass = currentRoute.pageClass;
+      if (true === currentRoute.hideMainMenu) {
+        $rootScope.addPageClass('hide-main-menu');
+      }
 
       if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
         $rootScope.redirectToBasePage();

@@ -14,8 +14,10 @@ angular.module('pdFrontend', [
         templateUrl: 'views/modules/frontend/catalog/main.html',
         reloadOnSearch: false,
         title: 'Каталог',
-        secured: true,
-        menuConfig: 'cabinetMenu'
+        secured: false,
+        menuConfig: 'cabinetMenu',
+        hideMainMenu: true,
+        hideRootContainerClass: true
       })
       .when('/client-panel', {
         controller: 'ClientPanelCtrl',

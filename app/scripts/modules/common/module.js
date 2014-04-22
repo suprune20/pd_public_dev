@@ -8,7 +8,8 @@ angular.module('pdCommon', [
     'ajoslin.promise-tracker',
     'ivpusic.cookie',
     'angular-growl',
-    'angularFileUpload'
+    'angularFileUpload',
+    'checklist-model'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
