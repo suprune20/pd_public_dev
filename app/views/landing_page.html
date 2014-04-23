@@ -9,27 +9,16 @@
       <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
       <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
 
-      <div class="input-group login-input-group">
-        <input name="username" ng-model="signinModel.username" type="text" class="form-control"
-               placeholder="Номер телефона (74996772043)" required autofocus />
-        <span class="input-group-btn">
-          <button class="btn btn-default"
-                  type="button"
-                  popover-placement="top"
-                  popover-append-to-body="true"
-                  popover="Введите номер телефона в международном формате без '+' и без '8'. Пример: 74996772043">
-            <strong>?</strong>
-          </button>
-        </span>
-      </div>
+      <input name="username" ng-model="signinModel.username" type="text" class="form-control"
+             placeholder="Логин" required autofocus tabindex="1" />
       <input name="password" ng-model="signinModel.password" type="password" class="form-control"
-             placeholder="Пароль" required />
-      <button type="submit"
+             placeholder="Пароль" required tabindex="2" />
+      <button type="submit" tabindex="3"
               class="btn btn-lg btn-primary btn-block"
               ng-disabled="!clientLoginForm.$valid">Войти</button>
 
       <div class="text-center">
-        <a href="javascript: void(0);" ng-click="openRestorePasswordPopup()" class="text-info">
+        <a href="javascript: void(0);" ng-click="openRestorePasswordPopup()" class="text-info" tabindex="4">
           <i class="glyphicon glyphicon-info-sign"></i> Восстановить пароль
         </a>
       </div>

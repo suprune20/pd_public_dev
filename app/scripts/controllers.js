@@ -47,9 +47,20 @@ angular.module('pdApp')
         resolve: {
           signinScope: function () {
             return $scope;
+          },
+          enteredUsername: function () {
+            return $scope.signinModel.username;
           }
         },
-        controller: ['$scope', '$modalInstance', 'signinScope', function ($scope, $modalInstance, signinScope) {
+        controller: ['$scope', '$modalInstance', 'signinScope', 'enteredUsername', function (
+          $scope,
+          $modalInstance,
+          signinScope,
+          enteredUsername
+        ) {
+          $scope.restoreModel = {
+            username: enteredUsername
+          };
           $scope.getPasswordBySms = function (username, captchaData) {
             resetMessages();
             auth.getPasswordBySMS(username, captchaData)
