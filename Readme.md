@@ -68,7 +68,26 @@ bower search jquery
 bower install jquery --save
 ```
 
-### ToDo
+## Обновление продакшн сервера
 
-* Настроить Continuous Integration для запуска тестов и проверки codestyle.
-* Настроить e2e тесты
+Продакшн сервер обновляется с помощью jenkins. Код продакшн версии находится в ветке **prod**.
+Для обновления нужно выполнить следующие шаги:
+
+* получить последние код из репозитория (на момент написания мануала это: git@bitbucket.org:robotd/pd_public_dev.git)
+```
+git checkout master
+git pull --rebase origin master
+git checkout prod
+git pull --rebase origin prod
+```
+* делаем merge ветки **master** (нестабильный код девелоперского сервера, на котором тестируют функционал) в ветку **prod**
+```
+git checkout prod
+git merge master --no-ff
+```
+* затем отправляем merge-commit обратно в репозиторий
+```
+git push origin prod
+```
+* заходим в jenkins (k.pohoronnoedelo.ru:8080) и запускаем задачу **pohoronnoe delo prod**. Если все прошло успешно, то
+поздравляю, продакшн сервер обновился :)
