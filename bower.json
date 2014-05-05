@@ -14,7 +14,7 @@
     "nginfinitescroll": "1.0.0",
     "angular-bootstrap": "0.10.0",
     "lodash": "2.4.1",
-    "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#54b25ec1f63bf91b881f3c7195dd716c924d0031",
+    "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#ac89b1eb73c3f8390393c002ad637ab25be02452",
     "angularLocalStorage": "0.1.7",
     "angular-recaptcha": "0.0.7",
     "angular-cookie": "92292c9815e4ec7230a705b5f1d0212a2badd557",
@@ -25,7 +25,8 @@
     "angular-growl": "0.4.0",
     "fancybox": "2.1.5",
     "ng-file-upload": "1.2.7",
-    "momentjs": "2.5.1"
+    "momentjs": "2.5.1",
+    "bootstrap3-typeahead": "3.0.3"
   },
   "devDependencies": {
     "angular-mocks": "1.2.14",

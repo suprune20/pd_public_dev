@@ -1,0 +1,14 @@
+<ya-template-layout ya-key="pdSearchTemplate" ya-overrides="searchOver">
+  <form class="form-search">
+    <div class="input-group col-xs-6">
+      <input type="text" class="form-control search-query" data-provide="typeahead">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default">Поиск</button>
+      </span>
+    </div>
+  </form>
+</ya-template-layout>
+
+<ya-toolbar ya-name="toolBar" ya-options="{{options}}">
+  <ya-control ya-type="searchControl" ya-options="{layout:'pdSearchTemplate'}"></ya-control>
+</ya-toolbar>
