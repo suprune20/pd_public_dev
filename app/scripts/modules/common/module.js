@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('pdCommon', [
+    'ngRoute',
     'pdConfig',
     'ui.bootstrap',
     'angularLocalStorage',
@@ -31,4 +32,26 @@ angular.module('pdCommon', [
       }
     };
   })
+  // Route provider with check allowed roles
+  .provider('authRoute', ['$routeProvider', function ($routeProvider) {
+    return angular.extend({}, $routeProvider, {
+      when: function(path, route, allowedRoles) {
+        route.resolve = route.resolve || {};
+        angular.extend(route.resolve, { isAllowedAccess: ['$q', 'auth', function ($q, auth) {
+          var deferred = $q.defer();
+
+          if (auth.isContainsRole(allowedRoles)) {
+            deferred.resolve();
+          } else {
+            deferred.reject({ accessDenied: true });
+          }
+
+          return deferred.promise;
+        }
+        ]});
+
+        return $routeProvider.when(path, route);
+      }
+    });
+  }])
 ;

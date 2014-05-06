@@ -1,0 +1,38 @@
+<div class="row">
+  <ya-map class="col-xs-12 inventory-map"
+          ng-if="placesGeoObjects"
+          ya-zoom="10"
+          ya-options="{maxZoom: 18}">
+    <ya-toolbar ya-name="zoomControl"></ya-toolbar>
+    <pd-ya-search-toolbar ya-options="{left: 350, top: 15}"></pd-ya-search-toolbar>
+    <ya-collection show-all="true">
+      <ya-geo-object ng-repeat="point in placesGeoObjects" ya-source="point"></ya-geo-object>
+    </ya-collection>
+
+    <div class="btn-group filters-btn-group">
+      <label class="btn btn-info" ng-model="filters.statusFilter.dt_size_violated" btn-checkbox
+             popover="Нарушение размеров" popover-trigger="mouseenter" popover-placement="bottom">
+        <span class="glyphicon glyphicon-resize-full"></span>
+      </label>
+      <label class="btn btn-info" ng-model="filters.statusFilter.dt_unowned" btn-checkbox
+             popover="Заброшенное" popover-trigger="mouseenter" popover-placement="bottom">
+        <span class="glyphicon glyphicon-globe"></span>
+      </label>
+      <label class="btn btn-info" ng-model="filters.statusFilter.dt_unindentified" btn-checkbox
+             popover="Неопознанное" popover-trigger="mouseenter" popover-placement="bottom">
+        <span class="glyphicon glyphicon-eye-close"></span>
+      </label>
+      <label class="btn btn-info" ng-model="filters.statusFilter.dt_military" btn-checkbox
+             popover="Воинское" popover-trigger="mouseenter" popover-placement="bottom">
+        <span class="glyphicon glyphicon-flag"></span>
+      </label>
+      <label class="btn btn-info" ng-model="filters.statusFilter.dt_wrong_fio" btn-checkbox
+             popover="Неверные ФИО" popover-trigger="mouseenter" popover-placement="bottom">
+        <span class="glyphicon glyphicon-font"></span>
+      </label>
+      <label type="button" class="btn btn-success" ng-model="filters.showActive" btn-checkbox>
+        Действующие
+      </label>
+    </div>
+  </ya-map>
+</div>

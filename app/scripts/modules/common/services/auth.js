@@ -93,7 +93,7 @@ angular.module('pdCommon')
         return getUserProfileData().organisation || {};
       },
       isContainsRole = function (role) {
-        return _.contains(getRoles(), role);
+        return _.intersection(getRoles(), _.isArray(role) ? role : [role]).length;
       },
       isCurrentHasClientRole = function () {
         return isContainsRole('ROLE_CLIENT');
@@ -115,6 +115,7 @@ angular.module('pdCommon')
       isCurrentHasClientRole: isCurrentHasClientRole,
       isCurrentHasLoruRole: isCurrentHasLoruRole,
       isCurrentHasOmsRole: isCurrentHasOmsRole,
+      isContainsRole: isContainsRole,
       getUserProfile: getUserProfile,
       getUserOrganisation: getUserOrganisation
     };

@@ -1,42 +1,41 @@
 'use strict';
 
-angular.module('pdLoru', [
-    'ngRoute',
-    'pdCommon'
-  ])
+angular.module('pdOms', [
+  'ngRoute',
+  'pdCommon'
+])
   .config(function (authRouteProvider) {
     var routeConfig = {
-      '': {
-        templateUrl: 'views/modules/loru/main.html',
-        title: 'Loru'
+      '/': {
+        absoluteRedirectTo: 'http://org.pd2cat.pohoronnoedelo.ru/'
       },
-      '/advertisement': {
-        controller: 'LoruAdvertisementCtrl',
-        templateUrl: 'views/modules/loru/productplaces/main.html',
-        title: 'Реклама'
+      '/placesmap': {
+        controller: 'OmsPlacesMapCtrl',
+        templateUrl: 'views/modules/oms/placesmap/main.html',
+        title: 'Инвентаризация',
+        pageClass: 'oms-placesmap'
       }
     };
 
     _.forEach(routeConfig, function (routeData, routeUri) {
       authRouteProvider
-        .when('/loru' + routeUri, _.merge({
+        .when('/oms' + routeUri, _.merge({
           secured: true,
-          menuConfig: 'loruMenu'
-        }, routeData || {}), 'ROLE_LORU')
+          menuConfig: 'omsMenu'
+        }, routeData || {}), 'ROLE_OMS')
       ;
     });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
-    var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu');
+    var omsMenuConfig = mainMenuManager.addMenuConfig('omsMenu');
 
-    loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
-    loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
-
+    omsMenuConfig.setMainMenuItems(pdConfig.menuConfigs.omsMenu.items);
+    omsMenuConfig.setMenuClass(pdConfig.menuConfigs.omsMenu.navbarClasses);
     $rootScope.$on('$routeChangeSuccess', function () {
       var userOrgId = auth.getUserOrganisation().id;
 
-      loruMenuConfig.setRightMenuItems([
-        {link: '#/loru/advertisement', title: 'Реклама'},
+      omsMenuConfig.setRightMenuItems([
+        {link: serverConfig.serverHost + 'manage/cemetery', title: 'Кладбища'},
         {
           type: 'dropdown',
           title: auth.getUserProfile().lastname || '',

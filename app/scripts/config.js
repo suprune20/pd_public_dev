@@ -14,6 +14,9 @@ angular.module('pdConfig', [])
         baseUrl: serverConfig.serverHost + 'media',
         thumbnailBaseUrl: serverConfig.serverHost + 'thumb'
       },
+      roles: {
+        oms: 'ROLE_OMS'
+      },
       menuConfigs: {
         cabinetMenu: {
           items:[
@@ -35,6 +38,16 @@ angular.module('pdConfig', [])
             {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
             {link: serverConfig.serverHost + 'order/', title: 'Заказы'},
             {link: serverConfig.serverHost + 'order/create/', title: 'Создать заказ'}
+          ]
+        },
+        omsMenu: {
+          navbarClasses: 'navbar-inverse',
+          items: [
+            {link: serverConfig.serverHost, title: 'Открытые'},
+            {link: serverConfig.serverHost + 'burials/search/', title: 'Захоронения'},
+            {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
+            {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'},
+            {link: '#/oms/placesmap', title: 'Инвентаризация'}
           ]
         }
       }

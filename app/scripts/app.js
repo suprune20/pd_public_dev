@@ -8,6 +8,7 @@ angular.module('pdApp', [
     'pdFrontend',
     'pdAdmin',
     'pdLoru',
+    'pdOms',
     'pdConfig',
     'vcRecaptcha',
     'ngRaven'
@@ -33,6 +34,10 @@ angular.module('pdApp', [
       .when('/useragreement', {
         templateUrl: 'views/terms_and_conditions.text.html',
         title: 'Пользовательское соглашение'
+      })
+      .when('/403', {
+        templateUrl: 'views/403.html',
+        title: 403
       })
       .otherwise({
         templateUrl: 'views/404.html',
@@ -64,15 +69,20 @@ angular.module('pdApp', [
       $rootScope.redirectToBasePage();
     });
 
-    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
-      // Redirect to oms site
-      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
-        $window.location.href = pdConfig.backendUrl;
-        event.preventDefault();
-      }
-    });
+//    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
+//      // Redirect to oms site
+//      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
+//        $window.location.href = pdConfig.backendUrl;
+//        event.preventDefault();
+//      }
+//    });
 
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
+      if (currentRoute.absoluteRedirectTo) {
+        // ToDo: Finish redirection to absolute url
+        // $window.location.href = currentRoute.absoluteRedirectTo;
+        return;
+      }
       // Save url for redirect after success login (external links) (get param redirect_url)
       $rootScope.redirectUrl = $rootScope.redirectUrl ?
         $rootScope.redirectUrl :
@@ -98,8 +108,19 @@ angular.module('pdApp', [
         $rootScope.redirectToBasePage();
       }
     });
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+      if (rejection && true === rejection.accessDenied) {
+        // Show access denied predefined page
+        $location.path('/403');
+      }
+    });
 
     $rootScope.redirectToBasePage = function () {
+      if (auth.isCurrentHasOmsRole()) {
+        $location.path('/oms/placesmap');
+        return;
+      }
+
       if (auth.isCurrentHasLoruRole()) {
         $location.path('/loru');
         return;

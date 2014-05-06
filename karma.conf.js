@@ -31,6 +31,7 @@ module.exports = function(config) {
       'app/scripts/modules/admin/module.js',
       'app/scripts/modules/frontend/module.js',
       'app/scripts/modules/loru/module.js',
+      'app/scripts/modules/oms/module.js',
       'app/scripts/modules/common/module.js',
       '.tmp/scripts/*.js',
       'app/scripts/**/*.js',
