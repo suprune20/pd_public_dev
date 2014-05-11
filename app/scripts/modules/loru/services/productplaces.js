@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('advertisement', function ($http, pdConfig, $q) {
+  .service('advertisement', function ($http, pdConfig, $q, pdLoruStoresApi) {
     var getProducts = function () {
         return $http.get(pdConfig.apiEndpoint + 'loru/products', {
           tracker: 'commonLoadingTracker'
@@ -77,6 +77,14 @@ angular.module('pdLoru')
         }).then(function (resp) {
           return resp.data.currentBalance[0];
         });
+      },
+      isExistsMyStores: function () {
+        return pdLoruStoresApi.getStores()
+          .then(function (storesData) {
+            if (!!storesData.length) {
+              return $q.reject();
+            }
+          });
       }
     };
   })

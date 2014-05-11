@@ -18,6 +18,24 @@ angular.module('pdCommon')
 
         return deferred.promise;
       },
+      reverseGeocode: function (coords) {
+        var deferred = $q.defer();
+
+        mapApiLoad(function () {
+          ymaps.geocode(coords, { results: 1 }).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+
+            deferred.resolve({
+              name: firstGeoObject.properties.get('name'),
+              text: firstGeoObject.properties.get('text')
+            });
+          }, function (err) {
+            deferred.reject(err);
+          });
+        });
+
+        return deferred.promise;
+      },
       getBoundsByPoints: function (points) {
         if (points.length < 2) {
           return null;

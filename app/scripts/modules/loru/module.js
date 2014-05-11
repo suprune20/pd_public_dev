@@ -14,6 +14,12 @@ angular.module('pdLoru', [
         controller: 'LoruAdvertisementCtrl',
         templateUrl: 'views/modules/loru/productplaces/main.html',
         title: 'Реклама'
+      },
+      '/orgplaces': {
+        controller: 'LoruOrgPlacesCtrl',
+        templateUrl: 'views/modules/loru/orgplaces/main.html',
+        title: 'Места',
+        pageClass: 'loru-orgplaces'
       }
     };
 
@@ -48,6 +54,7 @@ angular.module('pdLoru', [
               hide: !userOrgId
             },
             {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
+            {link: '#/loru/orgplaces', title: 'Склады'},
             {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
             {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
             {class: 'divider'},
