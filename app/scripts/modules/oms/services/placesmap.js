@@ -40,10 +40,11 @@ angular.module('pdOms')
         });
 
         return _.map(placesGeoObjects, function (placeGeoObject) {
-          placeGeoObject.options.visible = !!_.intersection(
-            placeGeoObject.properties.placeData.status,
-            selectedStatuses
-          ).length;
+          placeGeoObject.options.visible = selectedStatuses.length ?
+            // show point with any intersected statuses with selected statuses filter
+            !!_.intersection(placeGeoObject.properties.placeData.status, selectedStatuses).length :
+            // if no selected statuses show points without statuses
+            !placeGeoObject.properties.placeData.status.length;
 
           return placeGeoObject;
         });

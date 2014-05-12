@@ -119,5 +119,25 @@ describe('Service: OMS placesmap', function () {
           visible: true
         }
       }]);
+    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {'dt_military': false, 'dt_size_violated': false}))
+      .toEqual([{
+        properties: {
+          placeData: {
+            status: []
+          }
+        },
+        options: {
+          visible: true
+        }
+      }, {
+        properties: {
+          placeData: {
+            status: ['dt_military']
+          }
+        },
+        options: {
+          visible: false
+        }
+      }]);
   });
 });
