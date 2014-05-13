@@ -72,7 +72,9 @@ describe('Service: OMS placesmap', function () {
           balloonContentBody: '<a href="' + placeDetailsPageUrl + '" target="_blank">Перейти на карточку места</a>'
         },
         options: {
-          preset: 'twirl#greyIcon'
+          iconImageHref: 'images/blueCircleDotIcon.png',
+          iconImageSize: [25, 25],
+          iconImageOffset: [-12, -12]
         },
         geometry: {
           type: 'Point',
