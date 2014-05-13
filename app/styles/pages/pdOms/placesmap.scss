@@ -1,6 +1,10 @@
 .oms-placesmap {
   .inventory-map {
-    height: 500px;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 50px;
 
     .filters-btn-group {
       position: absolute;
