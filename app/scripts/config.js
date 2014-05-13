@@ -46,8 +46,7 @@ angular.module('pdConfig', [])
             {link: serverConfig.serverHost, title: 'Открытые'},
             {link: serverConfig.serverHost + 'burials/search/', title: 'Захоронения'},
             {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
-            {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'},
-            {link: '#/oms/placesmap', title: 'Инвентаризация'}
+            {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'}
           ]
         }
       }

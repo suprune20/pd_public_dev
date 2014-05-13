@@ -41,6 +41,7 @@ angular.module('pdOms', [
           title: auth.getUserProfile().lastname || '',
           icon: 'glyphicon-user',
           items: [
+            {link: '#/oms/placesmap', title: 'Карта захоронений'},
             {
               link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
               title: 'Организация',
