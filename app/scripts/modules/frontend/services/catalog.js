@@ -174,7 +174,7 @@ angular.module('pdFrontend')
         filterSuppliersByCategories: function (geoObjects, categories) {
           return _.map(geoObjects, function (geoObject) {
             if ('supplier_place' === geoObject.properties.type) {
-              geoObject.options.visible = _.intersection(categories, geoObject.properties.pointData.categories).length;
+              geoObject.options.visible = !!_.intersection(categories, geoObject.properties.pointData.categories).length;
             }
 
             return geoObject;
