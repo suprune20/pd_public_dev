@@ -91,20 +91,9 @@ angular.module('pdFrontend')
               categories: _categories
             },
             tracker: 'commonLoadingTracker'
-          })
-            .then(function (resp) {
-              // ToDo: remove after tests
-              return _.map(resp.data.supplier, function (supplier) {
-                if (!supplier.location) {
-                  supplier.location = {
-                    latitude: 55 + Math.random(),
-                    longitude: 37 + Math.random()
-                  };
-                }
-
-                return supplier;
-              });
-            });
+          }).then(function (resp) {
+            return resp.data.supplier;
+          });
         },
         productsDataProvider: productsDataProvider,
         getProduct: getProduct,
