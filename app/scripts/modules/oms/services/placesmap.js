@@ -37,20 +37,27 @@ angular.module('pdOms')
           };
         });
       },
-      filterPlacesGeoObjects: function (placesGeoObjects, statusesFilter) {
+      filterPlacesGeoObjects: function (placesGeoObjects, filters) {
         var selectedStatuses = [];
-        _.forEach(statusesFilter, function (isActive, status) {
+        _.forEach(filters.statusFilter, function (isActive, status) {
           if (isActive) {
             selectedStatuses.push(status);
           }
         });
 
         return _.map(placesGeoObjects, function (placeGeoObject) {
-          placeGeoObject.options.visible = selectedStatuses.length ?
-            // show point with any intersected statuses with selected statuses filter
-            !!_.intersection(placeGeoObject.properties.placeData.status, selectedStatuses).length :
-            // if no selected statuses show points without statuses
-            !placeGeoObject.properties.placeData.status.length;
+          var statuses = placeGeoObject.properties.placeData.status;
+          placeGeoObject.options.visible = !!(filters.showActive ?
+            // active burials: if select any needed statuses for burials
+            selectedStatuses.length ?
+              // if selected any statuses when filter by them
+              _.intersection(statuses, selectedStatuses).length :
+              // else show all points with any statuses
+              statuses.length :
+            // inactive burials: if "show all active burials" is not set when show burials without statuses
+            // and burials with any selected statuses
+            !statuses.length || _.intersection(statuses, selectedStatuses).length
+          );
 
           return placeGeoObject;
         });

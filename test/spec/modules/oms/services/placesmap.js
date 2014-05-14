@@ -152,7 +152,14 @@ describe('Service: OMS placesmap', function () {
       options: {}
     }];
 
-    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {'dt_military': true, 'dt_size_violated': true}))
+    // Show active and filter by selected statuses filter
+    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {
+      statusFilter: {
+        'dt_military': true,
+        'dt_size_violated': true
+      },
+      showActive: true
+    }))
       .toEqual([{
         properties: {
           placeData: {
@@ -172,7 +179,41 @@ describe('Service: OMS placesmap', function () {
           visible: true
         }
       }]);
-    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {'dt_military': false, 'dt_size_violated': false}))
+    // Show active and no one statuses is selected by filter
+    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {
+      statusFilter: {
+        'dt_military': false,
+        'dt_size_violated': false
+      },
+      showActive: true
+    }))
+      .toEqual([{
+        properties: {
+          placeData: {
+            status: []
+          }
+        },
+        options: {
+          visible: false
+        }
+      }, {
+        properties: {
+          placeData: {
+            status: ['dt_military']
+          }
+        },
+        options: {
+          visible: true
+        }
+      }]);
+    // Show inactive and no one statuses is selected by filter
+    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {
+      statusFilter: {
+        'dt_military': false,
+        'dt_size_violated': false
+      },
+      showActive: false
+    }))
       .toEqual([{
         properties: {
           placeData: {
@@ -190,6 +231,33 @@ describe('Service: OMS placesmap', function () {
         },
         options: {
           visible: false
+        }
+      }]);
+    // Show inactive and any statuses is selected by filter
+    expect(omsPlacesService.filterPlacesGeoObjects(yaGeoObjects, {
+      statusFilter: {
+        'dt_military': true,
+        'dt_size_violated': false
+      },
+      showActive: false
+    }))
+      .toEqual([{
+        properties: {
+          placeData: {
+            status: []
+          }
+        },
+        options: {
+          visible: true
+        }
+      }, {
+        properties: {
+          placeData: {
+            status: ['dt_military']
+          }
+        },
+        options: {
+          visible: true
         }
       }]);
   });

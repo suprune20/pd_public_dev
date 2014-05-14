@@ -14,22 +14,15 @@ angular.module('pdOms')
       showActive: true
     };
     omsPlaces.getPlaces().then(function (places) {
-      $scope.placesGeoObjects = omsPlaces.filterPlacesGeoObjects(
-        omsPlaces.getYaMapGeoObjectsForPlaces(places),
-        $scope.filters.statusFilter
-      );
+      $scope.placesGeoObjects = omsPlaces
+        .filterPlacesGeoObjects(omsPlaces.getYaMapGeoObjectsForPlaces(places), $scope.filters);
     });
-    $scope.$watchCollection(function () { return $scope.filters.statusFilter; }, function (statusFilter) {
+    $scope.$watch('filters', function (filters) {
       if (!$scope.placesGeoObjects) {
         return;
       }
 
-      $scope.placesGeoObjects = omsPlaces.filterPlacesGeoObjects($scope.placesGeoObjects, statusFilter);
-    });
-    $scope.$watch(function () { return $scope.filters.showActive; }, function (showActivePlaces) {
-      $scope.filters.statusFilter = _.mapValues($scope.filters.statusFilter, function () {
-        return showActivePlaces;
-      });
-    });
+      $scope.placesGeoObjects = omsPlaces.filterPlacesGeoObjects($scope.placesGeoObjects, filters);
+    }, true);
   })
 ;
