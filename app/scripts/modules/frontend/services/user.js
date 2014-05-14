@@ -1,16 +1,12 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage, $filter) {
+  .service('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage, $filter) {
     return {
       getCurrentUserProfile: function () {
         return auth.getUserProfile();
       },
       getPlaces: function () {
-        if (!auth.isAuthenticated()) {
-          return $q.when({});
-        }
-
         return $http.get(pdConfig.apiEndpoint + 'profile', {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {

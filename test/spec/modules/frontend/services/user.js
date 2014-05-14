@@ -32,11 +32,11 @@ describe('Service: User', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should get cabinet data', function () {
+  it('should get places data', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
-    $httpBackend.expectGET(serverEndpointUrl + 'cabinet').respond(200, {places: []});
+    $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {places: []});
     userService.getPlaces().then(successCallback, errorCallback);
     $httpBackend.flush();
 
@@ -44,11 +44,11 @@ describe('Service: User', function () {
     expect(errorCallback).not.toHaveBeenCalled();
   });
 
-  it('should convert location data in user\'s cabinet data', function () {
+  it('should convert location data in user\'s places data', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
-    $httpBackend.expectGET(serverEndpointUrl + 'cabinet').respond(200, {
+    $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {
       places: [
         {location: {longitude: 31, latitude: 43}},
         {location: {longitude: 31, latitude: null}},
