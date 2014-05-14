@@ -73,8 +73,10 @@ describe('Service: OMS placesmap', function () {
         },
         options: {
           iconImageHref: 'images/blueCircleDotIcon.png',
-          iconImageSize: [25, 25],
-          iconImageOffset: [-12, -12]
+          iconImageSize: [5, 5],
+          iconImageOffset: [-2.5, -2.5],
+          iconContentOffset: [-2.5, -2.5],
+          iconContentSize: [10, 10]
         },
         geometry: {
           type: 'Point',
