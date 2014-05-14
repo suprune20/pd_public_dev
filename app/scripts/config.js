@@ -44,7 +44,7 @@ angular.module('pdConfig', [])
           navbarClasses: 'navbar-inverse',
           items: [
             {link: serverConfig.serverHost, title: 'Открытые'},
-            {link: serverConfig.serverHost + 'burials/search/', title: 'Захоронения'},
+            {link: serverConfig.serverHost + 'burials/', title: 'Захоронения'},
             {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
             {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'}
           ]
