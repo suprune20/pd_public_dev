@@ -212,7 +212,8 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/styles/fonts/*',
             // Exclude any images
-            '!<%= yeoman.dist %>/images/blueCircleDotIcon.png' // Yandex map custom marker
+            '!<%= yeoman.dist %>/images/blueCircleDotIcon.png', // Yandex map custom marker
+            '!<%= yeoman.dist %>/images/redCircleDotIcon.png' // Yandex map custom marker
           ]
         }
       }

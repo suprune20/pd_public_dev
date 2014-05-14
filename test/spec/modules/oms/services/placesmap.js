@@ -85,6 +85,55 @@ describe('Service: OMS placesmap', function () {
       }]);
   });
 
+  it('should return different markers for places with different statuses', function () {
+    var placesData = [{
+        areaId: 2,
+        cemeteryId: 3,
+        id: 4,
+        location: {
+          latitude: 43.23,
+          longitude: 53.2
+        },
+        status: []
+      }, {
+        areaId: 2,
+        cemeteryId: 3,
+        id: 4,
+        location: {
+          latitude: 43.23,
+          longitude: 53.2
+        },
+        status: ['dt_military']
+      }, {
+        areaId: 2,
+        cemeteryId: 3,
+        id: 4,
+        location: {
+          latitude: 43.23,
+          longitude: 53.2
+        },
+        status: ['dt_unowned']
+      }, {
+        areaId: 2,
+        cemeteryId: 3,
+        id: 4,
+        location: {
+          latitude: 43.23,
+          longitude: 53.2
+        },
+        status: ['dt_unindentified', 'dt_military']
+      }];
+
+    expect(omsPlacesService.getYaMapGeoObjectsForPlaces(placesData)[0].options.iconImageHref)
+      .toEqual('images/blueCircleDotIcon.png');
+    expect(omsPlacesService.getYaMapGeoObjectsForPlaces(placesData)[1].options.iconImageHref)
+      .toEqual('images/blueCircleDotIcon.png');
+    expect(omsPlacesService.getYaMapGeoObjectsForPlaces(placesData)[2].options.iconImageHref)
+      .toEqual('images/redCircleDotIcon.png');
+    expect(omsPlacesService.getYaMapGeoObjectsForPlaces(placesData)[3].options.iconImageHref)
+      .toEqual('images/redCircleDotIcon.png');
+  });
+
   it('should filter yandex geo objects for show/hide on the map by selected statuses filter', function () {
     // Mock tiny yandex geo objects array
     var yaGeoObjects = [{
