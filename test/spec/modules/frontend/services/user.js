@@ -6,7 +6,8 @@ describe('Service: User', function () {
     $rootScope,
     pdYandexMock,
     userService,
-    storageMock;
+    storageMock,
+    authMock;
 
   beforeEach(function () {
     pdYandexMock = {
@@ -16,9 +17,13 @@ describe('Service: User', function () {
       set: jasmine.createSpy('storage mock for "set" method'),
       get: jasmine.createSpy('storage mock for "get" method')
     };
+    authMock = {
+      isAuthenticated: jasmine.createSpy('auth isAuthenticated methos mock')
+    };
   });
   beforeEach(module('pdFrontend', function($provide) {
     $provide.value('storage', storageMock);
+    $provide.value('auth', authMock);
     $provide.value('pdYandex', pdYandexMock);
   }));
   beforeEach(inject(function (_$httpBackend_, pdConfig, _$rootScope_, user) {
@@ -36,6 +41,7 @@ describe('Service: User', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
+    authMock.isAuthenticated.andReturn(true);
     $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {places: []});
     userService.getPlaces().then(successCallback, errorCallback);
     $httpBackend.flush();
@@ -44,10 +50,21 @@ describe('Service: User', function () {
     expect(errorCallback).not.toHaveBeenCalled();
   });
 
+  it('should not send api request for getting profile data for anonymous user', function () {
+    var successCallback = jasmine.createSpy('success callback'),
+      errorCallback = jasmine.createSpy('error callback');
+
+    authMock.isAuthenticated.andReturn(false);
+    userService.getPlaces().then(successCallback, errorCallback);
+
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
   it('should convert location data in user\'s places data', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
+    authMock.isAuthenticated.andReturn(true);
     $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {
       places: [
         {location: {longitude: 31, latitude: 43}},
