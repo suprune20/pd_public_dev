@@ -7,6 +7,10 @@ angular.module('pdFrontend')
         return auth.getUserProfile();
       },
       getPlaces: function () {
+        if (!auth.isAuthenticated()) {
+          return $q.when({});
+        }
+
         return $http.get(pdConfig.apiEndpoint + 'profile', {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) {
