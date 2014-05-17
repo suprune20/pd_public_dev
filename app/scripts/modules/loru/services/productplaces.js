@@ -81,7 +81,7 @@ angular.module('pdLoru')
       isExistsMyStores: function () {
         return pdLoruStoresApi.getStores()
           .then(function (storesData) {
-            if (!!storesData.length) {
+            if (!storesData.length) {
               return $q.reject();
             }
           });
