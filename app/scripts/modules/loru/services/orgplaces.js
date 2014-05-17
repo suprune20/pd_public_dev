@@ -122,6 +122,7 @@ angular.module('pdLoru')
         addStoreYaMapEvent: function (event) {
           var coords = event.get('coords');
 
+          // change locations of store marker if has been selected marker previous
           if (selectedPlaceGeoObject) {
             selectedPlaceGeoObject.geometry.coordinates = coords;
           } else {
