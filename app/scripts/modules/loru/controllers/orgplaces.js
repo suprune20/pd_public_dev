@@ -2,6 +2,9 @@
 
 angular.module('pdLoru')
   .controller('LoruOrgPlacesCtrl', function ($scope, PdLoruOrgPlaces, modalNotifications, growl) {
+    // Show informer when open page
+    growl.addInfoMessage('Для добавления новой записи нажмите в нужном месте на карте', {ttl: 10000});
+
     $scope.pdLoruPlaces = new PdLoruOrgPlaces();
     $scope.addStore = function () {
       $scope.pdLoruPlaces.addNewStoreFromSelected()
