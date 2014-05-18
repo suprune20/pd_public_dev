@@ -177,6 +177,9 @@ describe('Service: Catalog', function () {
             geometry: {
               type: 'Point',
               coordinates: [userPlacesData.places[0].location.longitude, userPlacesData.places[0].location.latitude]
+            },
+            options: {
+              visible: true
             }
           }],
           userPlacesPoints: userPlacesData.places,

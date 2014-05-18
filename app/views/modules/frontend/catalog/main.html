@@ -7,12 +7,19 @@
   <ya-toolbar ya-name="zoomControl" ya-options="{left: 250}"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 300}"></pd-ya-search-toolbar>
   <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
-    <ya-geo-object ng-repeat="point in geoObjects"
+    <ya-geo-object ng-repeat="point in catalogGeoObjects"
                    ya-source="point"
                    ya-event-click="markerClick($event)"></ya-geo-object>
   </ya-collection>
 
-  <div ng-show="categoriesFilter.length" class="catalog-places-map-categories-filter" isolate-scrolling>
+  <div class="additional-controls-cont">
+    <div class="btn-group">
+      <label class="btn btn-primary" ng-model="catalogViewIsShown" btn-checkbox>Каталог</label>
+    </div>
+  </div>
+
+  <div ng-show="categoriesFilter.length" ng-if="catalogViewIsShown" class="catalog-places-map-categories-filter"
+       isolate-scrolling>
     <ul class="list-unstyled">
       <li>
         <label>
@@ -33,7 +40,7 @@
   </div>
 </ya-map>
 
-<div class="container">
+<div class="container" ng-if="catalogViewIsShown">
   <div class="row">
     <div class="panel panel-default catalog-filters-panel" pb-sticky-block>
       <div class="panel-body row">
@@ -124,5 +131,4 @@
       </div>
     </div>
   </div>
-
 </div>

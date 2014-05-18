@@ -1,7 +1,48 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('Catalog', function ($http, pdConfig, $q, user, pdYandex) {
+  .service('pdFrontendCatalogApi', function ($http, pdConfig) {
+    return {
+      getFilters: function () {
+        return $http.get(pdConfig.apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
+          .then(function (resp) {
+            return resp.data;
+          });
+      },
+      getCategories: function () {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/categories', {tracker: 'commonLoadingTracker'})
+          .then(function (resp) {
+            return resp.data.results;
+          });
+      },
+      getSuppliers: function (_categories) {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/suppliers', {
+          params: {
+            categories: _categories
+          },
+          tracker: 'commonLoadingTracker'
+        }).then(function (resp) {
+          return resp.data.supplier;
+        });
+      },
+      getProducts: function (paramsData) {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/products', {
+          params: paramsData,
+          tracker: 'commonLoadingTracker'
+        }).then(function (resp) {
+          return resp.data.results;
+        });
+      },
+      getProduct: function (productId) {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId, {
+          tracker: 'commonLoadingTracker'
+        }).then(function (resp) {
+          return resp.data.results[0];
+        });
+      }
+    };
+  })
+  .factory('Catalog', function ($q, user, pdYandex, pdFrontendCatalogApi) {
     return function (productsCountPerRequest) {
       var SUPPLIER_YA_MARKER_CHECKED_PRESET = 'twirl#darkgreenDotIcon',
         SUPPLIER_YA_MARKER_UNCHECKED_PRESET = 'twirl#darkgreenIcon';
@@ -20,16 +61,14 @@ angular.module('pdFrontend')
           }
 
           isBusy = true;
-          $http.get(pdConfig.apiEndpoint + 'catalog/products', {
-              params: _.merge(filtersData || {}, {
-                limit: productsCountPerRequest,
-                offset: products.length
-              }),
-              tracker: 'commonLoadingTracker'
-            }).then(function (resp) {
+          pdFrontendCatalogApi.getProducts(_.merge(filtersData || {}, {
+            limit: productsCountPerRequest,
+            offset: products.length
+          }))
+            .then(function (productsData) {
               isBusy = false;
-              isNoProducts = resp.data.results.length < productsCountPerRequest;
-              products = products.concat(resp.data.results);
+              isNoProducts = productsData.length < productsCountPerRequest;
+              products = products.concat(productsData);
             }, function () { isBusy = false; });
         }
 
@@ -60,45 +99,13 @@ angular.module('pdFrontend')
       // Create instance of products data provider class
       var productsDataProvider = new ProductsDataProvider(productsCountPerRequest);
 
-      function getFilters() {
-        return $http.get(pdConfig.apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
-          .then(function (resp) {
-            return resp.data;
-          });
-      }
-
-      function getCategories() {
-        return $http.get(pdConfig.apiEndpoint + 'catalog/categories', {tracker: 'commonLoadingTracker'})
-          .then(function (resp) {
-            return resp.data.results;
-          });
-      }
-
-      function getProduct(productId) {
-        return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId, {
-          tracker: 'commonLoadingTracker'
-        }).then(function (resp) {
-          return resp.data.results[0];
-        });
-      }
-
       return {
-        getFilters: getFilters,
-        getCategories: getCategories,
-        getSuppliers: function (_categories) {
-          return $http.get(pdConfig.apiEndpoint + 'catalog/suppliers', {
-            params: {
-              categories: _categories
-            },
-            tracker: 'commonLoadingTracker'
-          }).then(function (resp) {
-            return resp.data.supplier;
-          });
-        },
+        getFilters: pdFrontendCatalogApi.getFilters,
+        getCategories: pdFrontendCatalogApi.getCategories,
+        getProduct: pdFrontendCatalogApi.getProduct,
         productsDataProvider: productsDataProvider,
-        getProduct: getProduct,
         getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
-          return $q.all([user.getPlaces(), this.getSuppliers(suppliersCategories)])
+          return $q.all([user.getPlaces(), pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
             .then(function (promiseData) {
               var points = [],
                 userPlacesData = promiseData[0].places || [],
@@ -118,6 +125,9 @@ angular.module('pdFrontend')
                   geometry: {
                     type: 'Point',
                     coordinates: [place.location.longitude, place.location.latitude]
+                  },
+                  options: {
+                    visible: true
                   }
                 });
               });

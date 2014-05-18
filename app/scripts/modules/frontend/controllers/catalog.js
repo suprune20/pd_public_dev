@@ -86,7 +86,7 @@ angular.module('pdFrontend')
     };
     // Get yandex map markers data (user's places, suppliers locations, etc.)
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
-      $scope.geoObjects = mapPoints.allPoints;
+      $scope.catalogGeoObjects = mapPoints.allPoints;
       $scope.userPlaces = mapPoints.userPlacesPoints;
       // Set initial map center
       if (1 === $scope.userPlaces.length) {
@@ -117,9 +117,9 @@ angular.module('pdFrontend')
     $scope.$watchCollection(function () {
       return $scope.filters.category;
     }, function (selectedCategories) {
-      $scope.geoObjects = $scope.catalog.filterSuppliersByCategories($scope.geoObjects, selectedCategories);
+      $scope.catalogGeoObjects = $scope.catalog.filterSuppliersByCategories($scope.catalogGeoObjects, selectedCategories);
       // Filter by visible suppliers in the bounds
-      $scope.filters.supplier = _($scope.geoObjects)
+      $scope.filters.supplier = _($scope.catalogGeoObjects)
         .filter(function (geoObject) {
           return _.contains(suppliersInTheBounds, geoObject.properties.pointData.id) &&
             geoObject.options.visible;
@@ -138,5 +138,13 @@ angular.module('pdFrontend')
       $scope.orders[orderAttr] = toggleValues[(toggleValues.indexOf($scope.orders[orderAttr]) % toggleValues.length) + 1];
       $scope.applyFilters();
     };
+
+    // Check custom place
+    $scope.catalogViewIsShown = true;
+    $scope.$watch('catalogViewIsShown', function (isShown) {
+      $scope.catalogGeoObjects.forEach(function (geoObject) {
+        geoObject.options.visible = isShown;
+      });
+    });
   })
 ;
