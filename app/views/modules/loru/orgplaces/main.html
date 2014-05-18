@@ -2,6 +2,7 @@
         ya-zoom="10"
         ya-options="{maxZoom: 18}" ya-event-click="pdLoruPlaces.addStoreYaMapEvent($event)">
   <ya-toolbar ya-name="zoomControl"></ya-toolbar>
+  <ya-toolbar ya-name="typeSelector"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 15, top: 15}"></pd-ya-search-toolbar>
   <ya-collection show-all="true">
     <ya-geo-object ng-repeat="point in pdLoruPlaces.getStoresGeoObjects() track by point.properties.placeData.id"
