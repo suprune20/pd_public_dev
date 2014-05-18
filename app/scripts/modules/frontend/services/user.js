@@ -7,7 +7,7 @@ angular.module('pdFrontend')
         return auth.getUserProfile();
       },
       getPlaces: function () {
-        if (!auth.isAuthenticated()) {
+        if (!auth.isAuthenticated() || !auth.isCurrentHasClientRole()) {
           return $q.when({});
         }
 
