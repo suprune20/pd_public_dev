@@ -42,13 +42,13 @@ angular.module('pdOms', [
           icon: 'glyphicon-user',
           items: [
             {link: '#/oms/placesmap', title: 'Карта захоронений'},
+            {link: serverConfig.serverHost + 'loruregistry', title: 'Реестр ЛОРУ'},
             {
               link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
               title: 'Организация',
               hide: !userOrgId
             },
             {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-            {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
             {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
             {class: 'divider'},
             {link: '#/signout', title: 'Выйти'}
