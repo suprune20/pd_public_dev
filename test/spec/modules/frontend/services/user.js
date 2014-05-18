@@ -18,7 +18,8 @@ describe('Service: User', function () {
       get: jasmine.createSpy('storage mock for "get" method')
     };
     authMock = {
-      isAuthenticated: jasmine.createSpy('auth isAuthenticated methos mock')
+      isAuthenticated: jasmine.createSpy('auth isAuthenticated method mock'),
+      isCurrentHasClientRole: jasmine.createSpy('auth isCurrentHasClientRole method mock')
     };
   });
   beforeEach(module('pdFrontend', function($provide) {
@@ -42,6 +43,7 @@ describe('Service: User', function () {
       errorCallback = jasmine.createSpy('error callback');
 
     authMock.isAuthenticated.andReturn(true);
+    authMock.isCurrentHasClientRole.andReturn(true);
     $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {places: []});
     userService.getPlaces().then(successCallback, errorCallback);
     $httpBackend.flush();
@@ -65,6 +67,7 @@ describe('Service: User', function () {
       errorCallback = jasmine.createSpy('error callback');
 
     authMock.isAuthenticated.andReturn(true);
+    authMock.isCurrentHasClientRole.andReturn(true);
     $httpBackend.expectGET(serverEndpointUrl + 'profile').respond(200, {
       places: [
         {location: {longitude: 31, latitude: 43}},
