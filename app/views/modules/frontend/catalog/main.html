@@ -12,9 +12,14 @@
                    ya-event-click="markerClick($event)"></ya-geo-object>
   </ya-collection>
 
+  <ya-collection>
+    <ya-geo-object ng-repeat="point in unownedPlacesGeoObjects" ya-source="point"></ya-geo-object>
+  </ya-collection>
+
   <div class="additional-controls-cont">
     <div class="btn-group">
       <label class="btn btn-primary" ng-model="catalogViewIsShown" btn-checkbox>Каталог</label>
+      <label class="btn btn-primary" ng-model="unownedPlacesViewIsShown" btn-checkbox>Неухоженные места</label>
     </div>
   </div>
 

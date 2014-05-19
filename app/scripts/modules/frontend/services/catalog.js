@@ -39,6 +39,16 @@ angular.module('pdFrontend')
         }).then(function (resp) {
           return resp.data.results[0];
         });
+      },
+      getPlaces: function (statuses) {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/places', {
+          params: {
+            'filter[status]': _.isArray(statuses) ? statuses : [statuses]
+          },
+          tracker: 'commonLoadingTracker'
+        }).then(function (response) {
+          return response.data;
+        });
       }
     };
   })
@@ -189,6 +199,31 @@ angular.module('pdFrontend')
 
             return geoObject;
           });
+        },
+        getUnidentifiedPlacesYaGeoObjects: function () {
+          return pdFrontendCatalogApi.getPlaces(['dt_unowned', 'dt_unindentified'])
+            .then(function (placesData) {
+              return _.map(placesData, function (place) {
+                return {
+                  properties: {
+                    type: 'unidentified_place',
+                    pointData: place
+                  },
+                  options: {
+                    iconImageHref: 'images/redCircleDotIcon.png',
+                    iconImageSize: [5, 5],
+                    iconImageOffset: [-2.5, -2.5],
+                    iconContentOffset: [-2.5, -2.5],
+                    iconContentSize: [10, 10],
+                    visible: false
+                  },
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [place.location.longitude, place.location.latitude]
+                  }
+                };
+              });
+            });
         }
       };
     };

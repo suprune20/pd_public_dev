@@ -146,5 +146,17 @@ angular.module('pdFrontend')
         geoObject.options.visible = isShown;
       });
     });
+
+    // Unidentified places section
+    $scope.unownedPlacesViewIsShown = false;
+    $scope.catalog.getUnidentifiedPlacesYaGeoObjects()
+      .then(function (placesGeoObjects) {
+        $scope.unownedPlacesGeoObjects = placesGeoObjects;
+      });
+    $scope.$watch('unownedPlacesViewIsShown', function (isShown) {
+      _.forEach($scope.unownedPlacesGeoObjects, function (geoObject) {
+        geoObject.options.visible = isShown;
+      });
+    });
   })
 ;

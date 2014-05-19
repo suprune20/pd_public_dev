@@ -61,7 +61,12 @@ describe('Controller: CatalogCtrl', function () {
             return {
               then: jasmine.createSpy()
             };
-          })
+          }),
+        getUnidentifiedPlacesYaGeoObjects: jasmine.createSpy().andCallFake(function () {
+          return {
+            then: jasmine.createSpy()
+          };
+        })
       };
     };
   });
