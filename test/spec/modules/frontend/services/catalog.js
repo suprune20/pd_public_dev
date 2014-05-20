@@ -159,9 +159,14 @@ describe('Service: Catalog', function () {
           location: {
             latitude: 43,
             longitude: 54
-          }
+          },
+          stores: [{location: {
+            latitude: 43,
+            longitude: 54
+          }}]
         }, {
-          location: null
+          location: null,
+          stores: []
         }]
       };
 
@@ -196,42 +201,41 @@ describe('Service: Catalog', function () {
             latitude: 43,
             longitude: 54
           },
-          categories: ['test']
+          categories: ['test'],
+          stores: [{
+            id: 1,
+            location: {
+              latitude: 43,
+              longitude: 54
+            }
+          }]
         }, {
           location: {
             latitude: 43,
             longitude: 54
           },
-          categories: []
+          categories: [],
+          stores: []
         }, {
           location: null,
-          categories: ['test']
+          categories: ['test'],
+          stores: [{
+            location: {
+              latitude: 43,
+              longitude: 54
+            }
+          }]
         }]
       };
 
       userServiceMock.getPlaces.andReturn({});
       $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, suppliersData);
       catalogService.getYaMapPoints().then(function (mapPoints) {
-        expect(mapPoints).toEqual({
-          // return only first element: with locations and categories, ignore another
-          allPoints: [{
-            properties: {
-              type: 'supplier_place',
-              pointData: suppliersData.supplier[0],
-              active: true
-            },
-            options: {
-              preset: 'twirl#darkgreenDotIcon',
-              visible: true
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [suppliersData.supplier[0].location.longitude, suppliersData.supplier[0].location.latitude]
-            }
-          }],
-          userPlacesPoints: [],
-          suppliersPoints: suppliersData.supplier
-        });
+        expect(mapPoints.allPoints.length).toBe(1);
+        expect(mapPoints.allPoints[0].properties.pointData.id).toBe(1);
+        expect(mapPoints.allPoints[0].properties.pointData.categories).toEqual(suppliersData.supplier[0].categories);
+        expect(mapPoints.userPlacesPoints.length).toBe(0);
+        expect(mapPoints.suppliersPoints.length).toBe(3);
       });
       $httpBackend.flush();
     });
@@ -240,7 +244,7 @@ describe('Service: Catalog', function () {
   it('should filter suppliers by selected categories', function () {
     var geoObjects = [{
       properties: {
-        type: 'supplier_place',
+        type: 'supplier_store_place',
         pointData: {
           categories: ['category1', 'category2']
         },
@@ -256,7 +260,7 @@ describe('Service: Catalog', function () {
       }
     }, {
       properties: {
-        type: 'supplier_place',
+        type: 'supplier_store_place',
         pointData: {
           categories: ['category2']
         },
@@ -272,7 +276,7 @@ describe('Service: Catalog', function () {
       }
     }, {
       properties: {
-        type: 'supplier_place',
+        type: 'supplier_store_place',
         pointData: {
           categories: ['category3']
         },
@@ -291,7 +295,7 @@ describe('Service: Catalog', function () {
     expect(catalogService.filterSuppliersByCategories(geoObjects, ['category2']))
       .toEqual([{
         properties: {
-          type: 'supplier_place',
+          type: 'supplier_store_place',
           pointData: {
             categories: ['category1', 'category2']
           },
@@ -307,7 +311,7 @@ describe('Service: Catalog', function () {
         }
       }, {
         properties: {
-          type: 'supplier_place',
+          type: 'supplier_store_place',
           pointData: {
             categories: ['category2']
           },
@@ -323,7 +327,7 @@ describe('Service: Catalog', function () {
         }
       }, {
         properties: {
-          type: 'supplier_place',
+          type: 'supplier_store_place',
           pointData: {
             categories: ['category3']
           },

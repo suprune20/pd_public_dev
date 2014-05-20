@@ -49,11 +49,12 @@ angular.module('pdFrontend')
     // Initial set for scope variables
     $scope.filters = {};
     $scope.orders = {};
+    $scope.flags = {};
     $scope.catalog = new Catalog();
     // Get filters data
     $scope.catalog.getCategories().then(function (categories) {
       $scope.categoriesFilter = categories;
-      $scope.selectAllCategories = true;
+      $scope.flags.selectAllCategories = true;
     });
 
     // Restore product modal details from query params
@@ -110,7 +111,9 @@ angular.module('pdFrontend')
       }
     };
     // Toggle select/unselect all categories filter
-    $scope.$watch('selectAllCategories', function (isSelectAllCategories) {
+    $scope.$watch(function () {
+      return $scope.flags.selectAllCategories;
+    }, function (isSelectAllCategories) {
       $scope.filters.category = isSelectAllCategories ? _.pluck($scope.categoriesFilter, 'id') : [];
     });
     // Update/filters suppliers markers when change categories filter

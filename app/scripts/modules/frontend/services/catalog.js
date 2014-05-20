@@ -153,7 +153,7 @@ angular.module('pdFrontend')
                 }
 
                 supplier.stores.forEach(function (storeData) {
-                  storeData.catagories = _.clone(supplier.categories);
+                  storeData.categories = supplier.categories;
                   points.push({
                     properties: {
                       type: 'supplier_store_place',

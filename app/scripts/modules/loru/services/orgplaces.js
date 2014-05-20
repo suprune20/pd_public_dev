@@ -140,6 +140,7 @@ angular.module('pdLoru')
 
           selectedPlaceGeoObject = _.cloneDeep(originaSelectedStoreGeoObject);
           selectedPlaceGeoObject.options.preset = 'twirl#blueIcon';
+          selectedPlaceGeoObject.options.draggable = true;
           originaSelectedStoreGeoObject.options.visible = false;
         },
         selectedGeoObjectDragendEvent: function (event) {

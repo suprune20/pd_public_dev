@@ -8,7 +8,7 @@
     <ya-geo-object ng-repeat="point in pdLoruPlaces.getStoresGeoObjects() track by point.properties.placeData.id"
                    ya-source="point" ya-event-click="pdLoruPlaces.selectGeoObjectEvent($event)"></ya-geo-object>
     <ya-geo-object ya-source="pdLoruPlaces.getSelectedPlaceGeoObject()"
-                   ya-event-dragend="pfLoruPlaces.selectedGeoObjectDragendEvent($event)"></ya-geo-object>
+                   ya-event-dragend="pdLoruPlaces.selectedGeoObjectDragendEvent($event)"></ya-geo-object>
   </ya-collection>
 
   <div ng-show="pdLoruPlaces.getSelectedPlaceGeoObject()" class="addEditPlaceFormCont">
