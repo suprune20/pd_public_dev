@@ -143,7 +143,7 @@ angular.module('pdFrontend')
               });
               // Add suppliers places points
               _.forEach(suppliersData, function (supplier) {
-                if (!supplier.location) {
+                if (!supplier.location || !supplier.stores.length) {
                   return;
                 }
 
@@ -152,20 +152,23 @@ angular.module('pdFrontend')
                   return;
                 }
 
-                points.push({
-                  properties: {
-                    type: 'supplier_place',
-                    pointData: supplier,
-                    active: true
-                  },
-                  options: {
-                    preset: SUPPLIER_YA_MARKER_CHECKED_PRESET,
-                    visible: true
-                  },
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [supplier.location.longitude, supplier.location.latitude]
-                  }
+                supplier.stores.forEach(function (storeData) {
+                  storeData.catagories = _.clone(supplier.categories);
+                  points.push({
+                    properties: {
+                      type: 'supplier_store_place',
+                      pointData: storeData,
+                      active: true
+                    },
+                    options: {
+                      preset: SUPPLIER_YA_MARKER_CHECKED_PRESET,
+                      visible: true
+                    },
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [storeData.location.longitude, storeData.location.latitude]
+                    }
+                  });
                 });
               });
 
@@ -193,7 +196,7 @@ angular.module('pdFrontend')
         },
         filterSuppliersByCategories: function (geoObjects, categories) {
           return _.map(geoObjects, function (geoObject) {
-            if ('supplier_place' === geoObject.properties.type) {
+            if ('supplier_store_place' === geoObject.properties.type) {
               geoObject.options.visible = !!_.intersection(categories, geoObject.properties.pointData.categories).length;
             }
 

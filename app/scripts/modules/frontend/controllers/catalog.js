@@ -30,17 +30,17 @@ angular.module('pdFrontend')
       suppliersInTheBounds = [],
       applySuppliersFilterByMap = function (yaMap) {
         // Select only suppliers markers and filter by them
-        $scope.filters.supplier = [];
+        $scope.filters.supplierStore = [];
         $scope.visibleSuppliersCategories = [];
         ymaps.geoQuery(yaMap.geoObjects).searchIntersect(yaMap)
-          .search('properties.type = "supplier_place"')
+          .search('properties.type = "supplier_store_place"')
           .search('properties.active = true')
           .each(function (geoObject) {
-            $scope.filters.supplier.push(geoObject.properties.get('pointData').id);
+            $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
             $scope.visibleSuppliersCategories.push(geoObject.properties.get('pointData.categories'));
           });
         $scope.visibleSuppliersCategories = _.union.apply(null, $scope.visibleSuppliersCategories);
-        suppliersInTheBounds = _.clone($scope.filters.supplier);
+        suppliersInTheBounds = _.clone($scope.filters.supplierStore);
 
         $scope.applyFilters();
       }
@@ -104,7 +104,7 @@ angular.module('pdFrontend')
     $scope.markerClick = function (event) {
       var marker = event.get('target');
 
-      if ('supplier_place' === marker.properties.get('type')) {
+      if ('supplier_store_place' === marker.properties.get('type')) {
         $scope.catalog.toggleSupplierYaMarker(marker);
         applySuppliersFilterByMap(marker.getMap());
       }
@@ -119,7 +119,7 @@ angular.module('pdFrontend')
     }, function (selectedCategories) {
       $scope.catalogGeoObjects = $scope.catalog.filterSuppliersByCategories($scope.catalogGeoObjects, selectedCategories);
       // Filter by visible suppliers in the bounds
-      $scope.filters.supplier = _($scope.catalogGeoObjects)
+      $scope.filters.supplierStore = _($scope.catalogGeoObjects)
         .filter(function (geoObject) {
           return _.contains(suppliersInTheBounds, geoObject.properties.pointData.id) &&
             geoObject.options.visible;
