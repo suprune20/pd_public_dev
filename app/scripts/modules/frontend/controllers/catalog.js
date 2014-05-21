@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
@@ -32,7 +32,9 @@ angular.module('pdFrontend')
         // Select only suppliers markers and filter by them
         $scope.filters.supplierStore = [];
         $scope.visibleSuppliersCategories = [];
-        ymaps.geoQuery(yaMap.geoObjects).searchIntersect(yaMap)
+        // Filter for non editors geo objects
+        ymaps.geoQuery(_.filter(yaMap.geoObjects, function (obj) { return !_.has(obj, 'editor'); }))
+          .searchIntersect(yaMap)
           .search('properties.type = "supplier_store_place"')
           .search('properties.active = true')
           .each(function (geoObject) {
@@ -152,14 +154,8 @@ angular.module('pdFrontend')
 
     // Unidentified places section
     $scope.unownedPlacesViewIsShown = false;
-    $scope.catalog.getUnidentifiedPlacesYaGeoObjects()
-      .then(function (placesGeoObjects) {
-        $scope.unownedPlacesGeoObjects = placesGeoObjects;
-      });
     $scope.$watch('unownedPlacesViewIsShown', function (isShown) {
-      _.forEach($scope.unownedPlacesGeoObjects, function (geoObject) {
-        geoObject.options.visible = isShown;
-      });
+      $scope.catalogUnownedPlacesProvider = isShown ? new CatalogUnownedPlaces() : null;
     });
   })
 ;

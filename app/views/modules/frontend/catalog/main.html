@@ -13,8 +13,12 @@
   </ya-collection>
 
   <ya-collection>
-    <ya-geo-object ng-repeat="point in unownedPlacesGeoObjects" ya-source="point"></ya-geo-object>
+    <ya-geo-object ng-repeat="point in catalogUnownedPlacesProvider.getPlacesGeoObjects()"
+                   ya-source="point"></ya-geo-object>
   </ya-collection>
+
+  <ya-geo-object ya-source="catalogUnownedPlacesProvider.selectorPolygonGeoObject" ya-draw
+                 ya-event-geometrychange="catalogUnownedPlacesProvider.filterPlacesBySelectorYaHandler($event)"></ya-geo-object>
 
   <div class="additional-controls-cont">
     <div class="btn-group">
@@ -45,8 +49,26 @@
   </div>
 </ya-map>
 
-<div class="container" ng-if="catalogViewIsShown">
-  <div class="row">
+<div class="container">
+  <div class="row catalog-unowned-places-details-cont" ng-if="catalogUnownedPlacesProvider.getSelectedPlacesGallery()">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Галерея неухоженных мест</h3>
+      </div>
+      <div class="panel-body">
+        <pd-carousel pd-carousel-responsive>
+          <li ng-repeat="item in catalogUnownedPlacesProvider.getSelectedPlacesGallery()"
+              pb-fancybox-gallery="item.photo|pdThumbnail:'600x800'">
+            <div class="thumbnail">
+              <img ng-src="{{item.photo}}" pd-thumb pd-thumb-size="500x300" />
+            </div>
+          </li>
+        </pd-carousel>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" ng-if="catalogViewIsShown">
     <div class="panel panel-default catalog-filters-panel" pb-sticky-block>
       <div class="panel-body row">
         <form class="form-inline row" role="form">
