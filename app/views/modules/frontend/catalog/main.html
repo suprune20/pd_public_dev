@@ -1,24 +1,49 @@
-<ya-map class="catalog-places-map"
+<ya-map class="catalog-places-map pd-ya-map"
         ya-center="{{mapCenterPoint}}"
         ya-zoom="10"
         ya-options="{maxZoom: 18}"
         ya-after-init="mapInitialized($target)"
-        ya-event-boundschange="yaMapBoundsChange($event)">
+        ya-event-boundschange="yaMapBoundsChange($event)"
+        ya-event-click="userPlacesProvider.yaMapClickHandle($event)">
   <ya-toolbar ya-name="zoomControl" ya-options="{left: 250}"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 300}"></pd-ya-search-toolbar>
+
+  <!-- Suppliers and user's markers -->
   <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
     <ya-geo-object ng-repeat="point in catalogGeoObjects"
                    ya-source="point"
                    ya-event-click="markerClick($event)"></ya-geo-object>
   </ya-collection>
+  <!-- End suppliers and user's markers -->
 
+  <!-- Unowned places markers and polygon -->
   <ya-collection>
     <ya-geo-object ng-repeat="point in catalogUnownedPlacesProvider.getPlacesGeoObjects()"
                    ya-source="point"></ya-geo-object>
   </ya-collection>
-
   <ya-geo-object ya-source="catalogUnownedPlacesProvider.selectorPolygonGeoObject" ya-draw
                  ya-event-geometrychange="catalogUnownedPlacesProvider.filterPlacesBySelectorYaHandler($event)"></ya-geo-object>
+  <!-- End unowned places -->
+
+  <!-- User's places -->
+  <ya-collection>
+    <ya-geo-object ya-source="userPlacesProvider.getSelectedPlaceGeoObject()"></ya-geo-object>
+    <ya-geo-object ng-repeat="point in userPlacesProvider.getPlacesGeoObjects()" ya-source="point"></ya-geo-object>
+  </ya-collection>
+  <!-- End user's places -->
+
+  <!-- Include button for add user's place -->
+  <ya-template-layout ya-key="addPlaceBtnTemplate">
+    <div class='btn btn-primary'>
+      <span class="glyphicon glyphicon-map-marker"></span>
+      Добавить место
+    </div>
+  </ya-template-layout>
+  <ya-toolbar ya-name="toolBar" ya-options="{right:5,top:5}">
+    <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
+                ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
+  </ya-toolbar>
+  <!-- End include button for add user's place -->
 
   <div class="additional-controls-cont">
     <div class="btn-group">
@@ -46,6 +71,29 @@
         </label>
       </li>
     </ul>
+  </div>
+
+  <div ng-show="userPlacesProvider.getSelectedPlaceGeoObject()" class="edit-modal-cont">
+    <form role="form" name="placeAddForm" novalidate>
+      <div class="form-group has-feedback"
+           ng-class="{'has-error': placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid}">
+        <label for="orgPlaceName">Название</label>
+        <input class="form-control" id="orgPlaceName" placeholder="Введите название" required
+               name="userPlaceName"
+               ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.name">
+        <span class="glyphicon glyphicon-remove form-control-feedback"
+              ng-show="placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid"></span>
+      </div>
+      <div class="form-group">
+        <label for="userPlaceAddress">Адрес</label>
+        <textarea class="form-control" id="userPlaceAddress" readonly
+                  ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.address"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success" ng-disabled="placeAddForm.$invalid"
+              ng-click="userPlacesProvider.addNewPlaceFromSelected()">Добавить</button>
+      <button class="btn btn-default" ng-click="userPlacesProvider.cancelEdit()">Отмена</button>
+    </form>
   </div>
 </ya-map>
 

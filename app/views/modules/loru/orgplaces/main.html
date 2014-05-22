@@ -1,4 +1,4 @@
-<ya-map class="fullview-header-footer orgplaces-map"
+<ya-map class="fullview-header-footer orgplaces-map pd-ya-map"
         ya-zoom="10"
         ya-options="{maxZoom: 18}" ya-event-click="pdLoruPlaces.addStoreYaMapEvent($event)">
   <ya-toolbar ya-name="zoomControl"></ya-toolbar>
@@ -11,7 +11,7 @@
                    ya-event-dragend="pdLoruPlaces.selectedGeoObjectDragendEvent($event)"></ya-geo-object>
   </ya-collection>
 
-  <div ng-show="pdLoruPlaces.getSelectedPlaceGeoObject()" class="addEditPlaceFormCont">
+  <div ng-show="pdLoruPlaces.getSelectedPlaceGeoObject()" class="edit-modal-cont">
     <form role="form" name="placeEditAddForm" novalidate>
       <div class="form-group has-feedback"
            ng-class="{'has-error': placeEditAddForm.orgPlaceName.$dirty && placeEditAddForm.orgPlaceName.$invalid}">

@@ -184,7 +184,8 @@ describe('Service: Catalog', function () {
               coordinates: [userPlacesData.places[0].location.longitude, userPlacesData.places[0].location.latitude]
             },
             options: {
-              visible: true
+              visible: true,
+              preset: 'twirl#greyIcon'
             }
           }],
           userPlacesPoints: userPlacesData.places,

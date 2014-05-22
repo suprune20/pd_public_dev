@@ -137,7 +137,8 @@ angular.module('pdFrontend')
                     coordinates: [place.location.longitude, place.location.latitude]
                   },
                   options: {
-                    visible: true
+                    visible: true,
+                    preset: 'twirl#greyIcon'
                   }
                 });
               });
@@ -262,6 +263,107 @@ angular.module('pdFrontend')
             .each(function (geoObject) {
               selectedPlacesGallery = selectedPlacesGallery.concat(geoObject.properties.get('pointData').photos);
             });
+        }
+      };
+    };
+  })
+  .factory('CatalogMyPlaces', function (pdYandex, storage) {
+    return function () {
+      var MARKER_CURRENT_MARKER_PRESET = 'twirl#redIcon',
+        MARKER_PLACE_PRESET = 'twirl#greyIcon';
+      var currentPlaceGeoObject;
+
+      var createPlacemark = function (coords) {
+          return {
+            geometry: {
+              type: 'Point',
+              coordinates: coords
+            },
+            properties: {
+              type: 'users_place',
+              placeData: {}
+            },
+            options: {
+              preset: MARKER_CURRENT_MARKER_PRESET,
+              draggable: true
+            }
+          };
+        },
+        getAddress = function (coords) {
+          pdYandex.reverseGeocode(coords).then(function (res) {
+            currentPlaceGeoObject.properties.placeData.address = res.text;
+          });
+        },
+        convertYaGeoObject2Place = function (geoObject) {
+          return _.merge(geoObject.properties.placeData, {
+            location: {
+              longitude: geoObject.geometry.coordinates[0],
+              latitude: geoObject.geometry.coordinates[1]
+            }
+          });
+        },
+        getYaGeoObjectFromPlace = function (placeData) {
+          return {
+            properties: {
+              type: 'users_place',
+              placeData: placeData
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [placeData.location.longitude, placeData.location.latitude]
+            },
+            options: {
+              preset: MARKER_PLACE_PRESET,
+              visible: true
+            }
+          };
+        },
+        placesGeoObjects = _.map(storage.get('catalog.my_places') || [], function (placeData) {
+          return getYaGeoObjectFromPlace(placeData);
+        });
+
+      return {
+        getPlacesGeoObjects: function () {
+          return placesGeoObjects;
+        },
+        getSelectedPlaceGeoObject: function () {
+          return currentPlaceGeoObject;
+        },
+        cancelEdit: function () {
+          currentPlaceGeoObject = null;
+        },
+        yaMapClickHandle: function (event) {
+          if (!currentPlaceGeoObject) {
+            return;
+          }
+
+          var coords = event.get('coords');
+          // change locations of store marker position
+          currentPlaceGeoObject.geometry.coordinates = coords;
+          getAddress(coords);
+        },
+        addBtnYaMapHandle: function (event) {
+          var map = event.get('target').getParent().getMap();
+
+          currentPlaceGeoObject = createPlacemark(map.getCenter());
+          getAddress(map.getCenter());
+        },
+        selectedGeoObjectDragendHandler: function (event) {
+          getAddress(event.get('target').geometry.getCoordinates());
+          currentPlaceGeoObject.geometry.coordinates = event.get('target').geometry.getCoordinates();
+        },
+        addNewPlaceFromSelected: function () {
+          var addedGeoObject = _.cloneDeep(currentPlaceGeoObject);
+          addedGeoObject.options.preset = MARKER_PLACE_PRESET;
+          addedGeoObject.options.draggable = false;
+
+          placesGeoObjects.push(addedGeoObject);
+          storage.set('catalog.my_places', _.map(placesGeoObjects, function (placeGeoObject) {
+            return convertYaGeoObject2Place(placeGeoObject);
+          }));
+
+          // Reset current place
+          currentPlaceGeoObject = null;
         }
       };
     };

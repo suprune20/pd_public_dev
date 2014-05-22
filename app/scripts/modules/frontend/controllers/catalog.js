@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces, CatalogMyPlaces) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
@@ -157,5 +157,8 @@ angular.module('pdFrontend')
     $scope.$watch('unownedPlacesViewIsShown', function (isShown) {
       $scope.catalogUnownedPlacesProvider = isShown ? new CatalogUnownedPlaces() : null;
     });
+
+    // My places
+    $scope.userPlacesProvider = new CatalogMyPlaces();
   })
 ;

@@ -1,0 +1,17 @@
+.pd-ya-map {
+  .edit-modal-cont {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 300px;
+    background-color: #fff;
+    padding: 10px;
+    overflow-y: scroll;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
