@@ -139,7 +139,7 @@ angular.module('pdApp', [
 
     $rootScope.redirectToBasePage = function () {
       if (auth.isCurrentHasOmsRole()) {
-        $location.path('/oms/placesmap');
+        $location.path('/oms');
         return;
       }
 

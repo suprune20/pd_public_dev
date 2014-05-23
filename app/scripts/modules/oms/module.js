@@ -7,7 +7,11 @@ angular.module('pdOms', [
   .config(function (authRouteProvider) {
     var routeConfig = {
       '/': {
-        absoluteRedirectTo: 'http://org.pd2cat.pohoronnoedelo.ru/'
+        resolve: {
+          redirect: ['$window', 'pdConfig', function ($window, pdConfig) {
+            $window.location.href = pdConfig.backendUrl;
+          }]
+        }
       },
       '/placesmap': {
         controller: 'OmsPlacesMapCtrl',
