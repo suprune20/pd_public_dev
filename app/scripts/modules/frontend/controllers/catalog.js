@@ -118,11 +118,9 @@ angular.module('pdFrontend')
     }, function (isSelectAllCategories) {
       $scope.filters.category = isSelectAllCategories ? _.pluck($scope.categoriesFilter, 'id') : [];
     });
-    // Update/filters suppliers markers when change categories filter
-    $scope.$watchCollection(function () {
-      return $scope.filters.category;
-    }, function (selectedCategories) {
-      $scope.catalogGeoObjects = $scope.catalog.filterSuppliersByCategories($scope.catalogGeoObjects, selectedCategories);
+
+    var suppliersFilterDependsCategories = function () {
+      $scope.catalogGeoObjects = $scope.catalog.filterSuppliersByCategories($scope.catalogGeoObjects, $scope.filters.category);
       // Filter by visible suppliers in the bounds
       $scope.filters.supplierStore = _($scope.catalogGeoObjects)
         .filter(function (geoObject) {
@@ -135,6 +133,12 @@ angular.module('pdFrontend')
         .value()
       ;
       $scope.applyFilters();
+    };
+    // Update/filters suppliers markers when change categories filter
+    $scope.$watchCollection(function () {
+      return $scope.filters.category;
+    }, function () {
+      suppliersFilterDependsCategories();
     });
     // Toggle order control
     $scope.toggleProductsOrder = function (orderAttr) {
@@ -150,6 +154,8 @@ angular.module('pdFrontend')
       $scope.catalogGeoObjects.forEach(function (geoObject) {
         geoObject.options.visible = isShown;
       });
+
+      suppliersFilterDependsCategories();
     });
 
     // Unidentified places section
