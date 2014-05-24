@@ -27,7 +27,8 @@
 
   <!-- User's places -->
   <ya-collection>
-    <ya-geo-object ya-source="userPlacesProvider.getSelectedPlaceGeoObject()"></ya-geo-object>
+    <ya-geo-object ya-source="userPlacesProvider.getSelectedPlaceGeoObject()"
+                   ya-event-dragend="userPlacesProvider.selectedGeoObjectDragendHandler($event)"></ya-geo-object>
     <ya-geo-object ng-repeat="point in userPlacesProvider.getPlacesGeoObjects()" ya-source="point"></ya-geo-object>
   </ya-collection>
   <!-- End user's places -->
