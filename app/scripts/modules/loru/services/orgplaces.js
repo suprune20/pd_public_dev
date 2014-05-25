@@ -26,8 +26,11 @@ angular.module('pdLoru')
     };
   })
   // Factory for Loru orgplaces page with yandex map
-  .factory('PdLoruOrgPlaces', function (pdLoruStoresApi, pdYandex) {
+  .factory('PdLoruOrgPlaces', function (pdLoruStoresApi, pdYandex, storage) {
     return function () {
+      // Constants
+      var PD_LORU_PLACESMAP_MAP_TYPE = 'pd.loru.places_map_type';
+
       // Initial data
       var storesGeoObjects = [],
         selectedPlaceGeoObject = null,
@@ -194,6 +197,12 @@ angular.module('pdLoru')
         },
         removePhoneFromSelectedStore: function (phoneObj) {
           _.remove(selectedPlaceGeoObject.properties.placeData.phones, phoneObj);
+        },
+        changedYaMapTypeHandler: function (event) {
+          storage.set(PD_LORU_PLACESMAP_MAP_TYPE, event.get('newType'));
+        },
+        getYaMapType: function () {
+          return storage.get(PD_LORU_PLACESMAP_MAP_TYPE);
         }
       };
     };

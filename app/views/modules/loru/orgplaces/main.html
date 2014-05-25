@@ -1,6 +1,9 @@
 <ya-map class="fullview-header-footer orgplaces-map pd-ya-map"
         ya-zoom="10"
-        ya-options="{maxZoom: 18}" ya-event-click="pdLoruPlaces.addStoreYaMapEvent($event)">
+        ya-options="{maxZoom: 18}"
+        ya-type="{{pdLoruPlaces.getYaMapType()}}"
+        ya-event-click="pdLoruPlaces.addStoreYaMapEvent($event)"
+        ya-event-typechange="pdLoruPlaces.changedYaMapTypeHandler($event)">
   <ya-toolbar ya-name="zoomControl"></ya-toolbar>
   <ya-toolbar ya-name="typeSelector"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 15, top: 15}"></pd-ya-search-toolbar>
