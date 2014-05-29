@@ -5,7 +5,8 @@ angular.module('pdFrontend', [
     'pdCommon',
     'ui.select2',
     'infinite-scroll',
-    'yaMap'
+    'yaMap',
+    'mgcrea.ngStrap.datepicker'
   ])
   .config(function ($routeProvider) {
     $routeProvider

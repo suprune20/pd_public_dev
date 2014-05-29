@@ -75,28 +75,7 @@
     </ul>
   </div>
 
-  <div ng-show="userPlacesProvider.getSelectedPlaceGeoObject()" class="edit-modal-cont">
-    <form role="form" name="placeAddForm" novalidate>
-      <div class="form-group has-feedback"
-           ng-class="{'has-error': placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid}">
-        <label for="orgPlaceName">Название</label>
-        <input class="form-control" id="orgPlaceName" placeholder="Введите название" required
-               name="userPlaceName"
-               ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.name">
-        <span class="glyphicon glyphicon-remove form-control-feedback"
-              ng-show="placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid"></span>
-      </div>
-      <div class="form-group">
-        <label for="userPlaceAddress">Адрес</label>
-        <textarea class="form-control" id="userPlaceAddress" readonly
-                  ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.address"></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-success" ng-disabled="placeAddForm.$invalid"
-              ng-click="userPlacesProvider.addNewPlaceFromSelected()">Добавить</button>
-      <button class="btn btn-default" ng-click="userPlacesProvider.cancelEdit()">Отмена</button>
-    </form>
-  </div>
+  <ng-include src="'views/modules/frontend/catalog/add_place_block.html'"></ng-include>
 </ya-map>
 
 <div class="container">

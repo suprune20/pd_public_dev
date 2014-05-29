@@ -167,7 +167,11 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/',
         exclude: [
           'bower_components/respond/dest/respond.src.js',
-          'bower_components/ng-file-upload/angular-file-upload-shim.js'
+          'bower_components/ng-file-upload/angular-file-upload-shim.js',
+          // Use custom modules instead of full lib
+          'bower_components/angular-strap/dist/angular-strap.min.js',
+          'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
+          'bower_components/bootstrap/dist/css/bootstrap.css'
         ]
       }
     },

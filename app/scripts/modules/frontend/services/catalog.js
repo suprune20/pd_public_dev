@@ -364,6 +364,20 @@ angular.module('pdFrontend')
 
           // Reset current place
           currentPlaceGeoObject = null;
+        },
+        addDeceased: function () {
+          if (!currentPlaceGeoObject.properties.placeData.deceased) {
+            currentPlaceGeoObject.properties.placeData.deceased = [];
+          }
+
+          currentPlaceGeoObject.properties.placeData.deceased.push({
+            fullname: null,
+            dob: null,
+            dod: null
+          });
+        },
+        removeDeceased: function (deceased) {
+          _.remove(currentPlaceGeoObject.properties.placeData.deceased, deceased);
         }
       };
     };

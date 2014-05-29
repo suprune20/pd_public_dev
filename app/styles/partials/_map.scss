@@ -13,5 +13,17 @@
     &:hover {
       opacity: 1;
     }
+
+    .inner-forms-cont {
+      .inner-form {
+        padding: 0 0 5px 15px;
+        font-size: 12px;
+        border-top: solid 1px #a4a4a4;
+
+        &:first-of-type {
+          border-top: none;
+        }
+      }
+    }
   }
 }
