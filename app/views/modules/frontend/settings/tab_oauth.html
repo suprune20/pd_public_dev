@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Акаунты социальных сетей</div>
+  <div class="panel-body">
+    <button ng-click="attachOAuthProvider('facebook')" class="btn btn-default"
+            ng-hide="additionalSettingsData.oauthProviders.facebook">facebook</button>
+    <button ng-click="detachOAuthProvider('facebook')" class="btn btn-danger"
+            ng-show="additionalSettingsData.oauthProviders.facebook">
+      <i class="glyphicon glyphicon-remove-circle"></i>
+      facebook ({{additionalSettingsData.oauthProviders.facebook.username}})
+    </button>
+  </div>
+</div>

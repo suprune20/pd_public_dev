@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces, CatalogMyPlaces) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
+                                       CatalogMyPlaces) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);

@@ -13,7 +13,10 @@ angular.module('pdApp', [
     'vcRecaptcha',
     'ngRaven'
   ])
-  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider) {
+    oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
+    oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
+
     RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
     $httpProvider.interceptors.push('httpErrorsInterceptor');
@@ -35,6 +38,7 @@ angular.module('pdApp', [
         templateUrl: 'views/terms_and_conditions.text.html',
         title: 'Пользовательское соглашение'
       })
+      .when('/oauth_callback', {})
       .when('/403', {
         templateUrl: 'views/403.html',
         menuConfig: 'emptyMenu',

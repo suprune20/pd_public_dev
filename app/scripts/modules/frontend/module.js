@@ -33,7 +33,12 @@ angular.module('pdFrontend', [
         title: 'Настройки пользователя',
         secured: true,
         menuConfig: 'cabinetMenu',
-        pageClass: 'pd-frontend-settings-page'
+        pageClass: 'pd-frontend-settings-page',
+        resolve: {
+          additionalSettingsData: ['settingsProvider', function (settingsProvider) {
+            return settingsProvider;
+          }]
+        }
       }, 'ROLE_CLIENT')
     ;
   })

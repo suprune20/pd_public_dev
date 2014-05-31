@@ -87,8 +87,30 @@ angular.module('pdFrontend')
             return $q.reject(respData);
           });
       },
+      getSettings: function () {
+        return $http.get(pdConfig.apiEndpoint + 'settings')
+          .then(function (response) {
+            var settingsData = response.data;
+            settingsData.oauthProviders = _.indexBy(settingsData.oauthProviders, 'id');
+
+            return settingsData;
+          });
+      },
       removeAccount: function () {
         $http.delete(pdConfig.apiEndpoint + 'user', null, {tracker: 'commonLoadingTracker'});
+      },
+      addOAuthProvider: function (providerId, accessToken) {
+        return $http.post(pdConfig.apiEndpoint + 'settings/oauth_providers', {
+          provider: providerId,
+          accessToken: accessToken
+        }, { tracker: 'commonLoadingTracker' }).then(function (response) {
+          return response.data;
+        });
+      },
+      removeOAuthProvider: function (providerId) {
+        return $http.delete(pdConfig.apiEndpoint + 'settings/oauth_providers/' + providerId, null, {
+          tracker: 'commonLoadingTracker'
+        });
       }
     };
   })
