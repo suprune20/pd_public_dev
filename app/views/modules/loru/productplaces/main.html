@@ -5,62 +5,79 @@
   <div class="panel-body row" ng-include="'adv_buttons_block.html'"></div>
 
   <table class="table table-hover">
-    <tr>
-      <td class="text-right">
-        <ul class="list-unstyled">
-          <li>Название площадки:</li>
-          <li>Стоимость ежедневного списания:</li>
-          <li>Стоимость разового списания:</li>
-        </ul>
-      </td>
-      <td ng-repeat="place in places" style="min-width: 135px;">
-        <ul class="list-unstyled">
-          <li>{{place.name}}</li>
-          <li>{{place.costForEnable}} {{place.currency.shortName}}</li>
-          <li>{{place.costForUp}} {{place.currency.shortName}}</li>
-        </ul>
-      </td>
-    </tr>
-    <tr ng-repeat="product in products">
-      <td>
-        <a ng-href="{{backendUrl + 'manage/product/' + product.id + '/edit/'}}" target="_blank">{{product.name}}</a>
-        <span class="label label-default">{{ product.category.name }}</span>
-      </td>
-      <td ng-repeat="place in places"
-          ng-class="{'active': isChangedProductInPlace(product.id, place.id)}">
-        <div class="btn-group">
-          <button type="button"
-                  class="btn btn-default"
-                  ng-model="newProductsStates[product.id][place.id]"
-                  ng-class="{'btn-danger': newProductsStates[product.id][place.id] === 'disable'}"
-                  btn-radio="'disable'">
-            <span class="glyphicon glyphicon-remove"></span>
-          </button>
-          <button type="button"
-                  class="btn btn-default"
-                  ng-model="newProductsStates[product.id][place.id]"
-                  ng-class="{'btn-success': newProductsStates[product.id][place.id] === 'enable'}"
-                  btn-radio="'enable'">
-            <span class="glyphicon glyphicon-ok"></span>
-          </button>
-          <div class="btn-group"
-               ng-init="isDisabledUp = newProductsStates[product.id][place.id] === 'disable' ||
-                                          isChangedProductInPlace(product.id, place.id, 'enable')"
-               ng-attr-title="{{isDisabledUp ?
-                                  'Обновление публикации возможно только для уже опубликованного товара' :
-                                  ''}}">
+    <thead>
+      <tr>
+        <th class="text-right">
+          <ul class="list-unstyled">
+            <li>Название площадки:</li>
+            <li>Стоимость ежедневного списания:</li>
+            <li>Стоимость разового списания:</li>
+          </ul>
+        </th>
+        <th ng-repeat="place in places" style="min-width: 135px;">
+          <ul class="list-unstyled">
+            <li>{{place.name}}</li>
+            <li>{{place.costForEnable}} {{place.currency.shortName}}</li>
+            <li>{{place.costForUp}} {{place.currency.shortName}}</li>
+          </ul>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody ng-repeat="(category, products) in productsByCategories" ng-init="showProductsCategory=false">
+      <tr class="info">
+        <td colspan="2" ng-click="showProductsCategory = !showProductsCategory">
+          <h5>
+            <i class="glyphicon"
+               ng-class="{
+                  'glyphicon-chevron-down': !showProductsCategory,
+                  'glyphicon-chevron-up': showProductsCategory
+               }"></i>
+            {{category}}
+          </h5>
+        </td>
+      </tr>
+      <tr ng-repeat="product in products" ng-show="showProductsCategory">
+        <td>
+          <a ng-href="{{backendUrl + 'manage/product/' + product.id + '/edit/'}}" target="_blank">{{product.name}}</a>
+          <span class="label label-default">{{ product.category.name }}</span>
+        </td>
+        <td ng-repeat="place in places"
+            ng-class="{'active': isChangedProductInPlace(product.id, place.id)}">
+          <div class="btn-group">
             <button type="button"
                     class="btn btn-default"
                     ng-model="newProductsStates[product.id][place.id]"
-                    ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
-                    btn-radio="'up'"
-                    ng-disabled="isDisabledUp">
-              <span class="glyphicon glyphicon-arrow-up"></span>
+                    ng-class="{'btn-danger': newProductsStates[product.id][place.id] === 'disable'}"
+                    btn-radio="'disable'">
+              <span class="glyphicon glyphicon-remove"></span>
             </button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-model="newProductsStates[product.id][place.id]"
+                    ng-class="{'btn-success': newProductsStates[product.id][place.id] === 'enable'}"
+                    btn-radio="'enable'">
+              <span class="glyphicon glyphicon-ok"></span>
+            </button>
+            <div class="btn-group"
+                 ng-init="isDisabledUp = newProductsStates[product.id][place.id] === 'disable' ||
+                                            isChangedProductInPlace(product.id, place.id, 'enable')"
+                 ng-attr-title="{{isDisabledUp ?
+                                    'Обновление публикации возможно только для уже опубликованного товара' :
+                                    ''}}">
+              <button type="button"
+                      class="btn btn-default"
+                      ng-model="newProductsStates[product.id][place.id]"
+                      ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
+                      btn-radio="'up'"
+                      ng-disabled="isDisabledUp">
+                <span class="glyphicon glyphicon-arrow-up"></span>
+              </button>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr>
+        </td>
+      </tr>
+    </tbody>
   </table>
 
   <div class="panel-footer">

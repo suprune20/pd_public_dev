@@ -60,7 +60,10 @@ angular.module('pdLoru')
             return {
               productsByPlaces: productsByPlaces,
               products: products,
-              places: places
+              places: places,
+              productsByCategories: _.groupBy(products, function (product) {
+                return product.category.name;
+              })
             };
           });
       }

@@ -41,6 +41,7 @@ angular.module('pdLoru')
             $scope.products = productsData.products;
             $scope.places = productsData.places;
             $scope.newProductsStates = _.cloneDeep(initialProductsStates);
+            $scope.productsByCategories = productsData.productsByCategories;
           });
       };
 
