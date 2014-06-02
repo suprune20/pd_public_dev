@@ -8,8 +8,8 @@ angular.module('pdFrontend', [
     'yaMap',
     'mgcrea.ngStrap.datepicker'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
+  .config(function (authRouteProvider) {
+    authRouteProvider
       .when('/catalog', {
         controller: 'CatalogCtrl',
         templateUrl: 'views/modules/frontend/catalog/main.html',
@@ -21,12 +21,12 @@ angular.module('pdFrontend', [
         hideRootContainerClass: true
       })
       .when('/client-panel', {
-        controller: 'ClientPanelCtrl',
+        controller: function () {console.log('aaaa');},//'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
         secured: true,
         menuConfig: 'cabinetMenu'
-      })
+      }, 'ROLE_CLIENT')
       .when('/settings', {
         controller: 'PdFrontendSettingsCtrl',
         templateUrl: 'views/modules/frontend/settings/main.html',
@@ -34,7 +34,7 @@ angular.module('pdFrontend', [
         secured: true,
         menuConfig: 'cabinetMenu',
         pageClass: 'pd-frontend-settings-page'
-      })
+      }, 'ROLE_CLIENT')
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, auth) {

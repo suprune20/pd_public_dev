@@ -36,16 +36,16 @@ angular.module('pdCommon', [
   // Route provider with check allowed roles
   .provider('authRoute', ['$routeProvider', function ($routeProvider) {
     return angular.extend({}, $routeProvider, {
-      when: function(path, route, allowedRoles) {
+      when: function (path, route, allowedRoles) {
         route.resolve = route.resolve || {};
         angular.extend(route.resolve, { isAllowedAccess: ['$q', 'auth', function ($q, auth) {
           var deferred = $q.defer();
 
-          // Check for "non" regular expr string: !ROLE
-          if (!allowedRoles ||
-            (_.isString(allowedRoles) && '!' === allowedRoles[0]) ?
+          if (!route.secured ||
+            // Check for "non" regular expr string: !ROLE
+            ((_.isString(allowedRoles) && '!' === allowedRoles[0]) ?
               !auth.isContainsRole(allowedRoles.substring(1)) :
-              auth.isContainsRole(allowedRoles)
+              auth.isContainsRole(allowedRoles))
           ) {
             deferred.resolve();
           } else {
@@ -56,7 +56,10 @@ angular.module('pdCommon', [
         }
         ]});
 
-        return $routeProvider.when(path, route);
+        // Call parent method
+        $routeProvider.when(path, route);
+
+        return this;
       }
     });
   }])

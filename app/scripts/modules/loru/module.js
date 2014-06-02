@@ -15,7 +15,6 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/auth/signup.html',
         title: 'Регистрация ЛОРУ',
         secured: false,
-        allowedRole: '!ROLE_LORU',
         menuConfig: 'emptyMenu'
       },
       '/advertisement': {
@@ -36,7 +35,7 @@ angular.module('pdLoru', [
         .when('/loru' + routeUri, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, routeData || {}), routeData.allowedRole || 'ROLE_LORU')
+        }, routeData || {}), 'ROLE_LORU')
       ;
     });
   })
