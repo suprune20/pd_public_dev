@@ -37,15 +37,20 @@ angular.module('pdApp', [
       })
       .when('/403', {
         templateUrl: 'views/403.html',
+        menuConfig: 'emptyMenu',
         title: 403
       })
       .otherwise({
         templateUrl: 'views/404.html',
+        menuConfig: 'emptyMenu',
         title: 404
       })
     ;
   })
   .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+    // Add empty menu config
+    mainMenuManager.addMenuConfig('emptyMenu');
+
     $rootScope.pageClass = [];
     $rootScope.addPageClass = function (classValue) {
       if (!classValue) {

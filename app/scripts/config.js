@@ -18,6 +18,7 @@ angular.module('pdConfig', [])
         oms: 'ROLE_OMS'
       },
       menuConfigs: {
+        emptyMenu: { items: [] },
         cabinetMenu: {
           items:[
             {link: '#/client-panel', title: 'Кабинет ответственного'},

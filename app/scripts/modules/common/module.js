@@ -41,7 +41,12 @@ angular.module('pdCommon', [
         angular.extend(route.resolve, { isAllowedAccess: ['$q', 'auth', function ($q, auth) {
           var deferred = $q.defer();
 
-          if (auth.isContainsRole(allowedRoles)) {
+          // Check for "non" regular expr string: !ROLE
+          if (!allowedRoles ||
+            (_.isString(allowedRoles) && '!' === allowedRoles[0]) ?
+              !auth.isContainsRole(allowedRoles.substring(1)) :
+              auth.isContainsRole(allowedRoles)
+          ) {
             deferred.resolve();
           } else {
             deferred.reject({ accessDenied: true });

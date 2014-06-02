@@ -10,6 +10,14 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/main.html',
         title: 'Loru'
       },
+      '/signup': {
+        controller: 'LoruSignupCtrl',
+        templateUrl: 'views/modules/loru/auth/signup.html',
+        title: 'Регистрация ЛОРУ',
+        secured: false,
+        allowedRole: '!ROLE_LORU',
+        menuConfig: 'emptyMenu'
+      },
       '/advertisement': {
         controller: 'LoruAdvertisementCtrl',
         templateUrl: 'views/modules/loru/productplaces/main.html',
@@ -28,7 +36,7 @@ angular.module('pdLoru', [
         .when('/loru' + routeUri, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, routeData || {}), 'ROLE_LORU')
+        }, routeData || {}), routeData.allowedRole || 'ROLE_LORU')
       ;
     });
   })

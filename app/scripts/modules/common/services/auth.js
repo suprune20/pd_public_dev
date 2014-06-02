@@ -68,7 +68,7 @@ angular.module('pdCommon')
         return storage.get(pdConfig.AUTH_TOKEN_KEY);
       },
       getRoles = function () {
-        return storage.get(pdConfig.AUTH_ROLES_KEY);
+        return isAuthenticated() ? storage.get(pdConfig.AUTH_ROLES_KEY) : ['AUTH_ROLE_ANONYMOUS'];
       },
       getPasswordBySMS = function (username, captchaData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {

@@ -28,14 +28,19 @@ angular.module('pdFrontend')
           });
       },
       suppliersInTheBounds = [],
+      getSuppliersGeoobjects = function (yaMap) {
+        return ymaps
+          .geoQuery(_.filter(yaMap.geoObjects, function (obj) { return !_.has(obj, 'editor'); }))
+          .searchIntersect(yaMap)
+          .search('properties.type = "supplier_store_place"')
+        ;
+      },
       applySuppliersFilterByMap = function (yaMap) {
         // Select only suppliers markers and filter by them
         $scope.filters.supplierStore = [];
         $scope.visibleSuppliersCategories = [];
         // Filter for non editors geo objects
-        ymaps.geoQuery(_.filter(yaMap.geoObjects, function (obj) { return !_.has(obj, 'editor'); }))
-          .searchIntersect(yaMap)
-          .search('properties.type = "supplier_store_place"')
+        getSuppliersGeoobjects(yaMap)
           .search('properties.active = true')
           .each(function (geoObject) {
             $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
@@ -89,6 +94,7 @@ angular.module('pdFrontend')
     };
     // Get yandex map markers data (user's places, suppliers locations, etc.)
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
+      $scope.isLoadedGeoObjects = true;
       $scope.catalogGeoObjects = mapPoints.allPoints;
       $scope.userPlaces = mapPoints.userPlacesPoints;
       // Set initial map center
@@ -103,6 +109,8 @@ angular.module('pdFrontend')
         yaMap = 'function' === typeof(eventTarget.getMap) ? eventTarget.getMap() : eventTarget;
 
       applySuppliersFilterByMap(yaMap);
+      // get suppliers geoobjects count
+      $scope.allSuppliersInTheBoundsCount = getSuppliersGeoobjects(yaMap).getLength();
     };
     $scope.markerClick = function (event) {
       var marker = event.get('target');
