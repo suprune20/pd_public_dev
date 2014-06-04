@@ -3,7 +3,7 @@
 angular.module('pdConfig')
   .constant('ravenDevelopment', true)
   .constant('serverConfig', {
-    serverHost: 'http://org.pd2cat.pohoronnoedelo.ru/',
+    serverHost: 'https://org.dev.pohoronnoedelo.ru/',
     cookieDomain: '.pohoronnoedelo.ru'
   })
 ;

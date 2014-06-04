@@ -21,7 +21,7 @@ angular.module('pdFrontend', [
         hideRootContainerClass: true
       })
       .when('/client-panel', {
-        controller: function () {console.log('aaaa');},//'ClientPanelCtrl',
+        controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
         secured: true,
