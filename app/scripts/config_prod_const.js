@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdConfig')
-  .constant('env', 'prod')
+  .constant('appEnv', 'prod')
   .constant('ravenDevelopment', false)
   .value('serverConfig', {
     serverHost: 'https://org.pohoronnoedelo.ru/',
