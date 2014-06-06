@@ -1,7 +1,16 @@
 'use strict';
 
 angular.module('pdConfig', [])
-  .factory('pdConfig', function (serverConfig) {
+  .factory('pdConfig', function (serverConfig, $window, appEnv) {
+    // Dynamic change server host for generate .ru and .by domains for backend urls (only staging and prod envs)
+    // frontend: pohoronnoedelo.by -> backend urls: org.pohoronnoedelo.by
+    if (_.contains(['staging', 'prod'], appEnv)) {
+      serverConfig.serverHost = $window.location.protocol + '//org.' + $window.location.host + '/';
+
+      var hostParts = $window.location.host.split('.');
+      serverConfig.cookieDomain = '.' + hostParts[hostParts.length - 2] + '.' + hostParts[hostParts.length - 1];
+    }
+
     return {
       apiEndpoint: serverConfig.serverHost + 'api/',
       backendUrl: serverConfig.serverHost,

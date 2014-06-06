@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('pdConfig')
+  .constant('env', 'prod')
   .constant('ravenDevelopment', false)
-  .constant('serverConfig', {
+  .value('serverConfig', {
     serverHost: 'https://org.pohoronnoedelo.ru/',
     cookieDomain: '.pohoronnoedelo.ru'
   })
