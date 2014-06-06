@@ -128,7 +128,8 @@ angular.module('pdFrontend')
     });
 
     var suppliersFilterDependsCategories = function () {
-      $scope.catalogGeoObjects = $scope.catalog.filterSuppliersByCategories($scope.catalogGeoObjects, $scope.filters.category);
+      $scope.catalogGeoObjects = $scope.catalog
+        .filterSuppliersByCategories($scope.catalogGeoObjects, $scope.filters.category);
       // Filter by visible suppliers in the bounds
       $scope.filters.supplierStore = _($scope.catalogGeoObjects)
         .filter(function (geoObject) {
@@ -163,7 +164,9 @@ angular.module('pdFrontend')
         geoObject.options.visible = isShown;
       });
 
-      suppliersFilterDependsCategories();
+      if (isShown) {
+        suppliersFilterDependsCategories();
+      }
     });
 
     // Unidentified places section
