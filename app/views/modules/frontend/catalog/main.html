@@ -36,13 +36,13 @@
 
   <!-- Include button for add user's place -->
   <ya-template-layout ya-key="addPlaceBtnTemplate">
-    <div class='btn btn-primary'>
+    <div class="btn btn-primary">
       <span class="glyphicon glyphicon-map-marker"></span>
       Добавить место
     </div>
   </ya-template-layout>
   <ya-toolbar ya-name="toolBar" ya-options="{right:5,top:5}">
-    <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
+    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}" ya-visible="{{unownedPlacesViewIsShown}}"
                 ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
   </ya-toolbar>
   <!-- End include button for add user's place -->
