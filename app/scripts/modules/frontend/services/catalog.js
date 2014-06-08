@@ -244,6 +244,9 @@ angular.module('pdFrontend')
           geometry: {
             type: 'Polygon',
             coordinates: []
+          },
+          options: {
+            editorDrawingCursor: 'crosshair'
           }
         },
         getSelectedPlacesGallery: function () {

@@ -22,7 +22,8 @@
     <ya-geo-object ng-repeat="point in catalogUnownedPlacesProvider.getPlacesGeoObjects()"
                    ya-source="point"></ya-geo-object>
   </ya-collection>
-  <ya-geo-object ya-source="catalogUnownedPlacesProvider.selectorPolygonGeoObject" ya-draw
+  <ya-geo-object ya-source="catalogUnownedPlacesProvider.selectorPolygonGeoObject"
+                 ya-draw="{{isAllowDrawUnownedPlaces}}"
                  ya-event-geometrychange="catalogUnownedPlacesProvider.filterPlacesBySelectorYaHandler($event)"></ya-geo-object>
   <!-- End unowned places -->
 
@@ -42,7 +43,7 @@
     </div>
   </ya-template-layout>
   <ya-toolbar ya-name="toolBar" ya-options="{right:5,top:5}">
-    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}" ya-visible="{{unownedPlacesViewIsShown}}"
+    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}"
                 ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
   </ya-toolbar>
   <!-- End include button for add user's place -->
@@ -52,6 +53,11 @@
       <label class="btn btn-primary" ng-model="catalogViewIsShown" btn-checkbox>Каталог</label>
       <label class="btn btn-primary" ng-model="unownedPlacesViewIsShown" btn-checkbox>Неухоженные места</label>
     </div>
+    <br/>
+    <button type="button" class="btn btn-default draw-polygon-places-btn" ng-init="isAllowDrawUnownedPlaces = false"
+            ng-model="isAllowDrawUnownedPlaces" btn-checkbox ng-show="unownedPlacesViewIsShown">
+      <i class="glyphicon glyphicon-pencil"></i> Выделить места
+    </button>
   </div>
 
   <div ng-show="categoriesFilter.length" ng-if="catalogViewIsShown" class="catalog-places-map-categories-filter"

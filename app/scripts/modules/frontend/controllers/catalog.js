@@ -30,9 +30,9 @@ angular.module('pdFrontend')
       suppliersInTheBounds = [],
       getSuppliersGeoobjects = function (yaMap) {
         return ymaps
-          .geoQuery(_.filter(yaMap.geoObjects, function (obj) { return !_.has(obj, 'editor'); }))
-          .searchIntersect(yaMap)
+          .geoQuery(yaMap.geoObjects)
           .search('properties.type = "supplier_store_place"')
+          .searchIntersect(yaMap)
         ;
       },
       applySuppliersFilterByMap = function (yaMap) {
