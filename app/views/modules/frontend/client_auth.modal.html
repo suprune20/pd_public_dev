@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Авторизация</h4>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <form name="clientLoginForm" novalidate class="form-signin" role="form"
+          ng-submit="signin(signinModel)" fix-autofill="true">
+      <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
+      <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
+
+      <input name="username" ng-model="signinModel.username" type="text" class="form-control"
+             placeholder="Логин" required autofocus tabindex="1" />
+      <input name="password" ng-model="signinModel.password" type="password" class="form-control"
+             placeholder="Пароль" required tabindex="2" />
+      <button type="submit" tabindex="3"
+              class="btn btn-lg btn-primary btn-block"
+              ng-enabled="clientLoginForm.$valid">Войти</button>
+    </form>
+  </div>
+  <p class="text-center">или через</p>
+  <div class="row">
+    <button class="btn btn-default" ng-click="signinOAuth('facebook')">facebook</button>
+  </div>
+</div>

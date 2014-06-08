@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdApp')
-  .controller('LandingPageCtrl', function ($scope, auth, $location, $modal, vcRecaptchaService) {
+  .controller('LandingPageCtrl', function ($scope, $rootScope, $window, auth, $location, $modal, vcRecaptchaService) {
     var resetMessages = function () {
       $scope.formErrorMessage = null;
       $scope.formSuccessMessage = null;
@@ -24,7 +24,24 @@ angular.module('pdApp')
     $scope.signin = function (signinModel) {
       resetMessages();
       auth.signin(signinModel.username, signinModel.password, signinModel.confirmTC)
-        .catch(function (errorData) {
+        .then(function () {
+          // Redirect to requested page if needed
+          if ($rootScope.redirectUrl) {
+            var redirectUrl = $rootScope.redirectUrl;
+            $rootScope.redirectUrl = null;
+            $location.search('redirect_url', null);
+
+            if (/^https?:\/\//.test(redirectUrl)) {
+              $window.location.href = redirectUrl;
+              return;
+            }
+
+            $location.path(redirectUrl);
+            return;
+          }
+
+          $rootScope.redirectToBasePage();
+        }, function (errorData) {
           if ('wrong_credentials' === errorData.errorCode) {
             $scope.formErrorMessage = 'Неверный логин/номер телефона или пароль';
 

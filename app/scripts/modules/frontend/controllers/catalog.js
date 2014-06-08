@@ -178,5 +178,13 @@ angular.module('pdFrontend')
 
     // My places
     $scope.userPlacesProvider = new CatalogMyPlaces();
+
+    // Client signin modal
+    $scope.clientSignin = function () {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client_auth.modal.html',
+        controller: 'pdFrontendAuth'
+      });
+    };
   })
 ;

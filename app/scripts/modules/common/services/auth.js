@@ -1,15 +1,18 @@
 'use strict';
 
+/* jshint -W069 */
+
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope) {
+  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope, oauthIO) {
     var getUserProfileData = function () {
         return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
       },
-      signin = function (username, password, confirmTC) {
+      signin = function (username, password, confirmTC, oauthData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
             username: username,
             password: password,
-            confirmTC: confirmTC ? true : undefined
+            confirmTC: confirmTC ? true : undefined,
+            oauth: oauthData
           }, {tracker: 'commonLoadingTracker'}).then(function (response) {
             var responseData = response.data;
 
@@ -50,6 +53,15 @@ angular.module('pdCommon')
             }
 
             return $q.reject(respData);
+          });
+      },
+      signinOAuth = function (providerId) {
+        return oauthIO.popup(providerId)
+          .then(function (result) {
+            return signin(undefined, undefined, undefined, {
+              provider: providerId,
+              accessToken: result['access_token']
+            });
           });
       },
       signout = function () {
@@ -107,6 +119,7 @@ angular.module('pdCommon')
 
     return {
       signin: signin,
+      signinOAuth: signinOAuth,
       signout: signout,
       isAuthenticated: isAuthenticated,
       getAuthToken: getAuthToken,

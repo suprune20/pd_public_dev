@@ -71,24 +71,6 @@ angular.module('pdApp', [
     $rootScope.$on('auth.signout', function () {
       $location.path('/');
     });
-    $rootScope.$on('auth.signin_success', function () {
-      // Redirect to requested page if needed
-      if ($rootScope.redirectUrl) {
-        var redirectUrl = $rootScope.redirectUrl;
-        $rootScope.redirectUrl = null;
-        $location.search('redirect_url', null);
-
-        if (/^https?:\/\//.test(redirectUrl)) {
-          $window.location.href = redirectUrl;
-          return;
-        }
-
-        $location.path(redirectUrl);
-        return;
-      }
-
-      $rootScope.redirectToBasePage();
-    });
 
 //    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
 //      // Redirect to oms site
