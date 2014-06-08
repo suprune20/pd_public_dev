@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdConfig', [])
-  .factory('pdConfig', function (serverConfig, $window, appEnv) {
+  .service('pdConfig', function (serverConfig, $window, appEnv) {
     // Dynamic change server host for generate .ru and .by domains for backend urls (only staging and prod envs)
     // frontend: pohoronnoedelo.by -> backend urls: org.pohoronnoedelo.by
     if (_.contains(['staging', 'prod'], appEnv)) {
@@ -18,7 +18,7 @@ angular.module('pdConfig', [])
       AUTH_ROLES_KEY: 'pd.auth.roles',
       AUTH_PROFILE_KEY: 'pd.auth.user.profile',
       AUTH_COOKIE_DOMAIN: serverConfig.cookieDomain,
-      recaptchaPubKey: '6Lei0O0SAAAAAOdE7TBoo_swYvho9uGz7hadCL0O',
+      recaptchaPubKey: '6LcZ5ucSAAAAAE118VGTsppT8_PfKAeZBzKp-x3i',
       imageThumbnailerConfig: {
         baseUrl: serverConfig.serverHost + 'media',
         thumbnailBaseUrl: serverConfig.serverHost + 'thumb'
