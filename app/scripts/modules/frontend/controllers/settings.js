@@ -31,8 +31,8 @@ angular.module('pdFrontend')
       additionalSettingsData.attachOAuthProvider(providerId)
         .then(function () {
           growl.addSuccessMessage('Аккаунт был успешно подключен');
-        }, function () {
-          growl.addErrorMessage('Произошла ошибка при подключении акаунта');
+        }, function (errorData) {
+          growl.addErrorMessage('Произошла ошибка при подключении акаунта: ' + errorData.message);
         });
     };
     $scope.detachOAuthProvider = function (providerId) {

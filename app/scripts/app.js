@@ -151,5 +151,8 @@ angular.module('pdApp', [
       isCurrentHasClientRole: auth.isCurrentHasClientRole,
       isCurrentHasLoruRole: auth.isCurrentHasLoruRole
     };
+
+    // Set oauth providers key/title object for templates
+    $rootScope.oauthProviders = pdConfig.oauthProviders;
   })
 ;

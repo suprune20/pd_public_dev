@@ -105,7 +105,7 @@ angular.module('pdFrontend')
           accessToken: accessToken
         }, { tracker: 'commonLoadingTracker' }).then(function (response) {
           return response.data;
-        });
+        }, function (errorResponse) { return $q.reject(errorResponse.data); });
       },
       removeOAuthProvider: function (providerId) {
         return $http.delete(pdConfig.apiEndpoint + 'settings/oauth_providers/' + providerId, null, {

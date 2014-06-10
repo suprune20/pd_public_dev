@@ -3,7 +3,7 @@
 /* jshint -W069 */
 
 angular.module('pdFrontend')
-  .service('settingsProvider', function (user, oauthIO) {
+  .service('settingsProvider', function (user, oauthIO, $q) {
     return user.getSettings().then(function (settingsData) {
       settingsData.attachOAuthProvider = function (provider) {
         return oauthIO.popup(provider)
@@ -17,6 +17,10 @@ angular.module('pdFrontend')
 
                 return attachedProviderData;
               });
+          }, function () {
+            return $q.reject({
+              message: 'Ошибка работы с OAuth сервиса ' + provider
+            });
           });
       };
       settingsData.detachOAuthProvider = function (providerId) {

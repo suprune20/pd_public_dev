@@ -59,6 +59,13 @@ angular.module('pdConfig', [])
             {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'}
           ]
         }
+      },
+      oauthProviders: {
+        facebook: 'Facebook',
+        google: 'Google',
+        yandex: 'Yandex',
+        vk: 'Vkontakte',
+        odnoklassniki: 'Odnoklassniki'
       }
     };
   })

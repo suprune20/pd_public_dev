@@ -1,12 +1,20 @@
-<div class="panel panel-default">
-  <div class="panel-heading">Акаунты социальных сетей</div>
-  <div class="panel-body">
-    <button ng-click="attachOAuthProvider('facebook')" class="btn btn-default"
-            ng-hide="additionalSettingsData.oauthProviders.facebook">facebook</button>
-    <button ng-click="detachOAuthProvider('facebook')" class="btn btn-danger"
-            ng-show="additionalSettingsData.oauthProviders.facebook">
-      <i class="glyphicon glyphicon-remove-circle"></i>
-      facebook ({{additionalSettingsData.oauthProviders.facebook.username}})
-    </button>
-  </div>
-</div>
+<table class="table">
+  <tr ng-repeat="(providerId, providerTitle) in oauthProviders">
+    <td>{{providerTitle}}</td>
+    <td class="text-right">
+      <span ng-show="additionalSettingsData.oauthProviders[providerId].username">
+        подключен как <strong>{{additionalSettingsData.oauthProviders[providerId].username}}</strong>
+      </span>
+      <button ng-click="detachOAuthProvider(providerId)" class="btn btn-danger"
+              ng-show="additionalSettingsData.oauthProviders[providerId]">
+        <i class="glyphicon glyphicon-remove-circle"></i>
+        Отключить
+      </button>
+
+      <button ng-click="attachOAuthProvider(providerId)" class="btn btn-default"
+              ng-hide="additionalSettingsData.oauthProviders[providerId]">
+        Подключить
+      </button>
+    </td>
+  </tr>
+</table>
