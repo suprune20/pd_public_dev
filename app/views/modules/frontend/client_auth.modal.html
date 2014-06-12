@@ -80,8 +80,14 @@
                    tabindex="6" />
           </div>
 
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" ng-model="signupModel.profile.email" class="form-control"
+                   tabindex="7" />
+          </div>
+
           <div class="text-center">
-            <button type="submit" tabindex="7" class="btn btn-lg btn-primary" ng-disabled="clientSignupForm.$invalid">
+            <button type="submit" tabindex="8" class="btn btn-lg btn-primary" ng-disabled="clientSignupForm.$invalid">
               Регистрация
             </button>
           </div>

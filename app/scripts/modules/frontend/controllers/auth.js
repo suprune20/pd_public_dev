@@ -51,14 +51,14 @@ angular.module('pdFrontend')
         .then(function (oauthResult) {
           oauthResult.me().then(function (profileData) {
             $scope.signupModel = {
-              username: profileData.email,
               oauth: {
                 provider: providerId,
                 accessToken: oauthResult.accessToken
               },
               profile: {
                 firstname: profileData.firstName,
-                lastname: profileData.lastName
+                lastname: profileData.lastName,
+                email: profileData.email
               }
             };
           });
