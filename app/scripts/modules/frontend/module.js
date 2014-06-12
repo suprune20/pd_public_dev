@@ -10,11 +10,11 @@ angular.module('pdFrontend', [
   ])
   .config(function (authRouteProvider) {
     authRouteProvider
-      .when('/catalog', {
+      .when('/map', {
         controller: 'CatalogCtrl',
         templateUrl: 'views/modules/frontend/catalog/main.html',
         reloadOnSearch: false,
-        title: 'Каталог',
+        title: 'Карта мест захоронений',
         secured: false,
         menuConfig: 'cabinetMenu',
         hideMainMenu: true,

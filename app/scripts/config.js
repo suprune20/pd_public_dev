@@ -31,7 +31,7 @@ angular.module('pdConfig', [])
         cabinetMenu: {
           items:[
             {link: '#/client-panel', title: 'Кабинет ответственного'},
-            {link: '#/catalog', title: 'Каталог'}
+            {link: '#/map', title: 'Карта мест захоронений'}
           ]
         },
         adminMenu: {
