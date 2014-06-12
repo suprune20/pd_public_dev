@@ -1,14 +1,9 @@
 <div ng-show="userPlacesProvider.getSelectedPlaceGeoObject()" class="edit-modal-cont" isolate-scrolling>
   <form role="form" name="placeAddForm" novalidate>
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid}">
-      <label for="orgPlaceName">Название</label>
-      <input class="form-control" id="orgPlaceName" placeholder="Введите название" required
-             name="userPlaceName"
-             ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.name">
-        <span class="glyphicon glyphicon-remove form-control-feedback"
-              ng-show="placeAddForm.orgPlaceName.$dirty && placeAddForm.orgPlaceName.$invalid"></span>
+    <div class="alert alert-danger" ng-show="userPlacesProvider.getAddPlaceError()">
+      {{userPlacesProvider.getAddPlaceError()}}
     </div>
+
     <div class="form-group">
       <label for="userPlaceAddress">Адрес</label>
       <textarea class="form-control" id="userPlaceAddress" readonly
@@ -18,20 +13,28 @@
     <div class="form-group inner-forms-cont">
       <label>Список усопших</label>
 
-      <div ng-repeat="deceased in userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.deceased"
+      <div ng-repeat="deceased in userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.deadmens"
            class="inner-form">
         <div class="form-group">
-          <label for="deceasedFullname{{$index}}">ФИО усопшего</label>
-          <input class="form-control" id="deceasedFullname{{$index}}" ng-model="deceased.fullname" required />
+          <label for="deceasedFirstname{{$index}}">Имя усопшего</label>
+          <input class="form-control" id="deceasedFirstname{{$index}}" ng-model="deceased.firstname" required />
+        </div>
+        <div class="form-group">
+          <label for="deceasedLastname{{$index}}">Фамилия усопшего</label>
+          <input class="form-control" id="deceasedLastname{{$index}}" ng-model="deceased.lastname" required />
+        </div>
+        <div class="form-group">
+          <label for="deceasedMiddlename{{$index}}">Отчество усопшего</label>
+          <input class="form-control" id="deceasedMiddlename{{$index}}" ng-model="deceased.middlename" required />
         </div>
         <div class="form-group">
           <label for="deceasedDob{{$index}}">Дата рождения</label>
-          <input type="text" class="form-control" id="deceasedDob{{$index}}" ng-model="deceased.dob" bs-datepicker
+          <input type="text" class="form-control" id="deceasedDob{{$index}}" ng-model="deceased.birthDate" bs-datepicker
                  autoclose="true" container="body" />
         </div>
         <div class="form-group">
           <label for="deceasedDod{{$index}}">Дата смерти</label>
-          <input type="text" class="form-control" id="deceasedDod{{$index}}" ng-model="deceased.dod" bs-datepicker
+          <input type="text" class="form-control" id="deceasedDod{{$index}}" ng-model="deceased.deathDate" bs-datepicker
                  autoclose="true" container="body" />
         </div>
 

@@ -270,11 +270,12 @@ angular.module('pdFrontend')
       };
     };
   })
-  .factory('CatalogMyPlaces', function (pdYandex, storage) {
+  .factory('CatalogMyPlaces', function (pdYandex, user, growl) {
     return function () {
       var MARKER_CURRENT_MARKER_PRESET = 'twirl#redIcon',
         MARKER_PLACE_PRESET = 'twirl#greyIcon';
-      var currentPlaceGeoObject;
+      var currentPlaceGeoObject,
+        addPlaceError;
 
       var createPlacemark = function (coords) {
           return {
@@ -321,9 +322,7 @@ angular.module('pdFrontend')
             }
           };
         },
-        placesGeoObjects = _.map(storage.get('catalog.my_places') || [], function (placeData) {
-          return getYaGeoObjectFromPlace(placeData);
-        });
+        placesGeoObjects = [];
 
       return {
         getPlacesGeoObjects: function () {
@@ -350,6 +349,8 @@ angular.module('pdFrontend')
 
           currentPlaceGeoObject = createPlacemark(map.getCenter());
           getAddress(map.getCenter());
+          // reset previous error message
+          addPlaceError = null;
         },
         selectedGeoObjectDragendHandler: function (event) {
           getAddress(event.get('target').geometry.getCoordinates());
@@ -359,28 +360,37 @@ angular.module('pdFrontend')
           var addedGeoObject = _.cloneDeep(currentPlaceGeoObject);
           addedGeoObject.options.preset = MARKER_PLACE_PRESET;
           addedGeoObject.options.draggable = false;
+          // reset previous error if exist
+          addPlaceError = null;
 
-          placesGeoObjects.push(addedGeoObject);
-          storage.set('catalog.my_places', _.map(placesGeoObjects, function (placeGeoObject) {
-            return convertYaGeoObject2Place(placeGeoObject);
-          }));
-
-          // Reset current place
-          currentPlaceGeoObject = null;
+          user.addPlace(convertYaGeoObject2Place(addedGeoObject))
+            .then(function () {
+              placesGeoObjects.push(addedGeoObject);
+              // Reset current place
+              currentPlaceGeoObject = null;
+              growl.addSuccessMessage('Место было успешно сохранено');
+            }, function (errorData) {
+              addPlaceError = errorData.message;
+            });
         },
         addDeceased: function () {
-          if (!currentPlaceGeoObject.properties.placeData.deceased) {
-            currentPlaceGeoObject.properties.placeData.deceased = [];
+          if (!currentPlaceGeoObject.properties.placeData.deadmens) {
+            currentPlaceGeoObject.properties.placeData.deadmens = [];
           }
 
-          currentPlaceGeoObject.properties.placeData.deceased.push({
-            fullname: null,
-            dob: null,
-            dod: null
+          currentPlaceGeoObject.properties.placeData.deadmens.push({
+            firstname: null,
+            lastname: null,
+            middlename: null,
+            birthDate: null,
+            deathDate: null
           });
         },
-        removeDeceased: function (deceased) {
-          _.remove(currentPlaceGeoObject.properties.placeData.deceased, deceased);
+        removeDeceased: function (deadmen) {
+          _.remove(currentPlaceGeoObject.properties.placeData.deadmens, deadmen);
+        },
+        getAddPlaceError: function () {
+          return addPlaceError;
         }
       };
     };

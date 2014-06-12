@@ -54,6 +54,12 @@ angular.module('pdFrontend')
 
         return deferred.promise;
       },
+      addPlace: function (placeModel) {
+        return $http.post(pdConfig.apiEndpoint + 'places', placeModel, { tracker: 'commonLoadingTracker' })
+          .catch(function (errorResponse) {
+            return $q.reject(errorResponse.data);
+          });
+      },
       saveSettings: function (settingsData) {
         var saveUrl = pdConfig.apiEndpoint + 'settings';
 
