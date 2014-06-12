@@ -183,7 +183,8 @@ angular.module('pdFrontend')
     $scope.clientSignin = function () {
       $modal.open({
         templateUrl: 'views/modules/frontend/client_auth.modal.html',
-        controller: 'pdFrontendAuth'
+        controller: 'pdFrontendAuth',
+        windowClass: 'frontend-auth-modal'
       });
     };
   })

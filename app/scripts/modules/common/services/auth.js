@@ -42,8 +42,12 @@ angular.module('pdCommon')
             return responseData;
           }, function (errorResponse) {
             var respData = errorResponse.data;
-            respData.errorCode = 'undefined_error';
 
+            if (respData.errorCode) {
+              return $q.reject(respData);
+            }
+
+            respData.errorCode = 'undefined_error';
             if (400 === errorResponse.status) {
               respData.errorCode = 'wrong_credentials';
 
@@ -61,6 +65,10 @@ angular.module('pdCommon')
             return signin(undefined, undefined, undefined, {
               provider: providerId,
               accessToken: result['access_token']
+            });
+          }, function () {
+            return $q.reject({
+              message: 'Ошибка OAuth провайдера ' + providerId
             });
           });
       },
@@ -130,7 +138,13 @@ angular.module('pdCommon')
       isCurrentHasOmsRole: isCurrentHasOmsRole,
       isContainsRole: isContainsRole,
       getUserProfile: getUserProfile,
-      getUserOrganisation: getUserOrganisation
+      getUserOrganisation: getUserOrganisation,
+      signup: function (signupModel) {
+        return $http.post(pdConfig.apiEndpoint + 'auth/signup', signupModel, {tracker: 'commonLoadingTracker'})
+          .catch(function (errorResponse) {
+            return $q.reject(errorResponse.data);
+          });
+      }
     };
   })
   .factory('authApiInterceptor', function ($q, $location, pdConfig, storage) {

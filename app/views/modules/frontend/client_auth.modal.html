@@ -4,23 +4,101 @@
 </div>
 
 <div class="modal-body">
-  <div class="row">
-    <form name="clientLoginForm" novalidate class="form-signin" role="form"
-          ng-submit="signin(signinModel)" fix-autofill="true">
-      <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
-      <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
+  <tabset justified="true">
+    <tab heading="Вход">
+      <div class="row">
+        <form name="clientLoginForm" novalidate class="form-signin" role="form"
+              ng-submit="signin(signinModel)" fix-autofill="true">
+          <div class="alert alert-danger" ng-show="formErrorMessage">{{ formErrorMessage }}</div>
+          <div class="alert alert-success" ng-show="formSuccessMessage">{{ formSuccessMessage }}</div>
 
-      <input name="username" ng-model="signinModel.username" type="text" class="form-control"
-             placeholder="Логин" required autofocus tabindex="1" />
-      <input name="password" ng-model="signinModel.password" type="password" class="form-control"
-             placeholder="Пароль" required tabindex="2" />
-      <button type="submit" tabindex="3"
-              class="btn btn-lg btn-primary btn-block"
-              ng-enabled="clientLoginForm.$valid">Войти</button>
-    </form>
-  </div>
-  <p class="text-center">или через</p>
-  <div class="row">
-    <button class="btn btn-default" ng-click="signinOAuth('facebook')">facebook</button>
-  </div>
+          <input name="username" ng-model="signinModel.username" type="text" class="form-control"
+                 placeholder="Логин" required autofocus tabindex="1" />
+          <input name="password" ng-model="signinModel.password" type="password" class="form-control"
+                 placeholder="Пароль" required tabindex="2" />
+          <button type="submit" tabindex="3"
+                  class="btn btn-lg btn-primary btn-block"
+                  ng-disabled="clientLoginForm.$invalid">Войти</button>
+        </form>
+      </div>
+      <p class="text-center text-muted">или через</p>
+      <div class="row text-center oauth-btns-list">
+        <button ng-repeat="(providerId, providerTitle) in oauthProviders" class="btn btn-default"
+                ng-click="signinOAuth(providerId)">{{providerTitle}}</button>
+      </div>
+    </tab>
+
+    <tab heading="Регистрация">
+      <div class="row col-xs-10 col-xs-offset-1">
+        <form name="clientSignupForm" novalidate class="form-signup" role="form"
+              ng-submit="signup()" fix-autofill="true">
+          <div class="alert alert-danger" ng-show="signupErrorMsg">{{signupErrorMsg}}</div>
+
+          <div class="form-group has-feedback"
+               ng-class="{'has-error': clientSignupForm.username.$dirty && clientSignupForm.username.$invalid}">
+            <label for="username">Номер телефона</label>
+            <input name="username" id="username" ng-model="signupModel.username" class="form-control"
+                   required autofocus tabindex="1" />
+          </div>
+
+          <div class="form-group has-feedback"
+               ng-class="{'has-error': clientSignupForm.password.$dirty && clientSignupForm.password.$invalid}">
+            <label for="password">Пароль</label>
+            <input name="password" id="password" ng-model="signupModel.password" type="password" class="form-control"
+                   required tabindex="2" />
+          </div>
+          <div class="form-group has-feedback"
+               ng-class="{'has-error': clientSignupForm.passwordConfirm.$dirty && clientSignupForm.passwordConfirm.$invalid}">
+            <label for="passwordConfirm">Повторите пароль</label>
+            <input name="passwordConfirm" id="passwordConfirm" type="password" class="form-control"
+                   ng-model="signupModel.passwordConfirm" password-repeat="password" required tabindex="3" />
+          </div>
+
+          <div class="form-group" ng-if="!signupModel.oauth">
+            <div vc-recaptcha
+                 ng-model="signupModel.captchaData"
+                 theme="white"
+                 lang="ru"
+                 key="{{recaptchaPublicKey}}"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="firstname">Имя</label>
+            <input name="firstname" id="firstname" ng-model="signupModel.profile.firstname" class="form-control"
+                   tabindex="4" />
+          </div>
+
+          <div class="form-group">
+            <label for="lastname">Фамилия</label>
+            <input name="lastname" id="lastname" ng-model="signupModel.profile.lastname" class="form-control"
+                   tabindex="5" />
+          </div>
+
+          <div class="form-group">
+            <label for="middlename">Отчество</label>
+            <input name="middlename" id="middlename" ng-model="signupModel.profile.middlename" class="form-control"
+                   tabindex="6" />
+          </div>
+
+          <div class="text-center">
+            <button type="submit" tabindex="7" class="btn btn-lg btn-primary" ng-disabled="clientSignupForm.$invalid">
+              Регистрация
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <p class="text-center text-muted">или с помощью</p>
+      </div>
+      <div class="row text-center oauth-btns-list">
+        <button ng-repeat="(providerId, providerTitle) in oauthProviders" class="btn btn-default"
+                ng-class="{'btn-success': signupModel.oauth.provider === providerId}"
+                ng-click="getSignupOAuthData(providerId)">
+          <i class="glyphicon glyphicon-ok" ng-show="signupModel.oauth.provider === providerId"></i>
+          {{providerTitle}}
+        </button>
+      </div>
+    </tab>
+  </tabset>
 </div>
