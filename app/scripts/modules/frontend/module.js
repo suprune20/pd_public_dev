@@ -18,7 +18,8 @@ angular.module('pdFrontend', [
         secured: false,
         menuConfig: 'cabinetMenu',
         hideMainMenu: true,
-        hideRootContainerClass: true
+        hideRootContainerClass: true,
+        pageClass: 'map-page'
       })
       .when('/client-panel', {
         controller: 'ClientPanelCtrl',

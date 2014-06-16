@@ -5,9 +5,23 @@
         ya-after-init="mapInitialized($target)"
         ya-event-boundschange="yaMapBoundsChange($event)"
         ya-event-click="userPlacesProvider.yaMapClickHandle($event)">
-  <ya-toolbar ya-name="zoomControl" ya-options="{left: 250}"></ya-toolbar>
+  <ya-toolbar ya-name="zoomControl" ya-options="{left: 250, top: 50}"></ya-toolbar>
   <ya-toolbar ya-name="typeSelector" ya-options="{top: 45, left: 298}"></ya-toolbar>
-  <pd-ya-search-toolbar ya-options="{left: 300}"></pd-ya-search-toolbar>
+
+  <pd-ya-search-toolbar ya-options="{left: 220}"></pd-ya-search-toolbar>
+
+  <!-- Include button for add user's place -->
+  <ya-template-layout ya-key="addPlaceBtnTemplate">
+    <div class="btn btn-primary">
+      <span class="glyphicon glyphicon-map-marker"></span>
+      Добавить место
+    </div>
+  </ya-template-layout>
+  <ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">
+    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}"
+                ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
+  </ya-toolbar>
+  <!-- End include button for add user's place -->
 
   <!-- Suppliers and user's markers -->
   <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
@@ -35,19 +49,7 @@
   </ya-collection>
   <!-- End user's places -->
 
-  <!-- Include button for add user's place -->
-  <ya-template-layout ya-key="addPlaceBtnTemplate">
-    <div class="btn btn-primary">
-      <span class="glyphicon glyphicon-map-marker"></span>
-      Добавить место
-    </div>
-  </ya-template-layout>
-  <ya-toolbar ya-name="toolBar" ya-options="{right:5,top:5}">
-    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}"
-                ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
-  </ya-toolbar>
-  <!-- End include button for add user's place -->
-
+  <a class="navbar-brand" href="#/">Похоронное дело</a>
   <div class="additional-controls-cont">
     <div class="btn-group">
       <label class="btn btn-primary" ng-model="catalogViewIsShown" btn-checkbox>Каталог</label>
@@ -58,7 +60,14 @@
             ng-model="isAllowDrawUnownedPlaces" btn-checkbox ng-show="unownedPlacesViewIsShown">
       <i class="glyphicon glyphicon-pencil"></i> Выделить места
     </button>
-    <button class="btn btn-default" ng-click="clientSignin()">signin</button>
+  </div>
+  <div class="map-signin-signout-btn-cont">
+    <button class="btn btn-success" ng-hide="security.isAuthenticated()" ng-click="clientSignin()">
+      <i class="glyphicon glyphicon-log-in"></i> Войти
+    </button>
+    <button class="btn btn-success" ng-show="security.isAuthenticated()" ng-click="clientSignout()">
+      <i class="glyphicon glyphicon-log-out"></i> Выйти
+    </button>
   </div>
 
   <div ng-show="categoriesFilter.length" ng-if="catalogViewIsShown" class="catalog-places-map-categories-filter"

@@ -29,8 +29,8 @@ angular.module('pdApp', [
       })
       .when('/signout', {
         resolve: {
-          signout: ['auth', function (auth) {
-            auth.signout();
+          signout: ['auth', '$location', function (auth, $location) {
+            auth.signout().then(function () { $location.path('/'); });
           }]
         }
       })
@@ -68,9 +68,9 @@ angular.module('pdApp', [
       }
     };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
-    $rootScope.$on('auth.signout', function () {
-      $location.path('/');
-    });
+//    $rootScope.$on('auth.signout', function () {
+//      $location.path('/');
+//    });
 
 //    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
 //      // Redirect to oms site
@@ -149,7 +149,8 @@ angular.module('pdApp', [
     // Security mirror object for use in templates
     $rootScope.security = {
       isCurrentHasClientRole: auth.isCurrentHasClientRole,
-      isCurrentHasLoruRole: auth.isCurrentHasLoruRole
+      isCurrentHasLoruRole: auth.isCurrentHasLoruRole,
+      isAuthenticated: auth.isAuthenticated
     };
 
     // Set oauth providers key/title object for templates

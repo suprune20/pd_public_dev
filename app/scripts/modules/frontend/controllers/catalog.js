@@ -2,7 +2,7 @@
 
 angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
-                                       CatalogMyPlaces) {
+                                       CatalogMyPlaces, auth) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
@@ -187,5 +187,6 @@ angular.module('pdFrontend')
         windowClass: 'frontend-auth-modal'
       });
     };
+    $scope.clientSignout = function () { auth.signout(); };
   })
 ;

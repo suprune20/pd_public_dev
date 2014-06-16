@@ -1,74 +1,90 @@
-.catalog-filters-panel {
-  &.pb-sticky-block {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    .panel-heading {
-      display: none;
-    }
-    &+.catalog-products-list {
-      padding-top: 84px;
-    }
-  }
-}
-
-.catalog-product-item {
-  width: 275px;
-  margin: 5px;
-  padding: 10px;
-  display: inline-block;
-  border: solid 1px shade(#fff, 30%);
-  border-radius: 5px;
-  vertical-align: top;
-  cursor: pointer;
-
-  .product-photo {
-    float: left;
-    margin-right: 10px;
-  }
-}
-
-.catalog-product-modal {
-  .product-image-media {
-    margin-bottom: 10px;
-  }
-}
-
-.catalog-places-map {
-  display:block;
-  height: 300px;
-  position: relative;
-
-  .catalog-places-map-categories-filter {
+.map-page {
+  .navbar-brand {
     position: absolute;
     top: 0;
     left: 0;
-    bottom: 0;
-    width: 245px;
-    padding: 10px;
-    overflow-y: scroll;
-    background-color: #ddd;
-    opacity: 0.6;
+    color: #5e5e5e;
+    background: rgba(255,255,255,0.4);
+  }
 
-    &:hover {
-      opacity: 1;
+  .catalog-filters-panel {
+    &.pb-sticky-block {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      .panel-heading {
+        display: none;
+      }
+      &+.catalog-products-list {
+        padding-top: 84px;
+      }
     }
   }
-  .additional-controls-cont {
+
+  .catalog-product-item {
+    width: 275px;
+    margin: 5px;
+    padding: 10px;
+    display: inline-block;
+    border: solid 1px shade(#fff, 30%);
+    border-radius: 5px;
+    vertical-align: top;
+    cursor: pointer;
+
+    .product-photo {
+      float: left;
+      margin-right: 10px;
+    }
+  }
+
+  .catalog-product-modal {
+    .product-image-media {
+      margin-bottom: 10px;
+    }
+  }
+
+  .catalog-places-map {
+    display:block;
+    height: 300px;
+    position: relative;
+
+    .catalog-places-map-categories-filter {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 245px;
+      padding: 10px;
+      overflow-y: scroll;
+      background-color: #ddd;
+      opacity: 0.6;
+      margin-top: 50px;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .additional-controls-cont {
+      position: absolute;
+      top: 5px;
+      left: 800px;
+      text-align: right;
+
+      .draw-polygon-places-btn {
+        margin-top: 10px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .catalog-unowned-places-details-cont {
+    padding: 15px 0 0;
+  }
+  .map-signin-signout-btn-cont {
     position: absolute;
     top: 5px;
-    left: 870px;
-    text-align: right;
-
-    .draw-polygon-places-btn {
-      margin-top: 10px;
-      margin-right: 4px;
-    }
+    right: 5px;
   }
-}
-
-.catalog-unowned-places-details-cont {
-  padding: 15px 0 0;
 }
