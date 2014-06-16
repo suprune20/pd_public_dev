@@ -27,6 +27,14 @@ angular.module('pdApp', [
         hideMainMenu: true,
         pageClass: 'landing-page'
       })
+      .when('/org/signup', {
+        controller: 'CommonOrgSignupCtrl',
+        templateUrl: 'views/modules/common/org_auth/signup.html',
+        title: 'Регистрация поставщика',
+        secured: false,
+        menuConfig: 'emptyMenu',
+        pageClass: 'org-signup-page'
+      })
       .when('/signout', {
         resolve: {
           signout: ['auth', '$location', function (auth, $location) {

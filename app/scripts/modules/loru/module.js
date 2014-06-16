@@ -10,13 +10,6 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/main.html',
         title: 'Loru'
       },
-      '/signup': {
-        controller: 'LoruSignupCtrl',
-        templateUrl: 'views/modules/loru/auth/signup.html',
-        title: 'Регистрация ЛОРУ',
-        secured: false,
-        menuConfig: 'emptyMenu'
-      },
       '/advertisement': {
         controller: 'LoruAdvertisementCtrl',
         templateUrl: 'views/modules/loru/productplaces/main.html',

@@ -21,6 +21,7 @@ $table-bg-active: darken(#f5f5f5, 10%);
 
 // Directives styles
 @import "directives/ya_pd_autocomplete_search";
+@import "directives/pd_file_selector";
 
 // Pages styles
 @import "pages/landing_page";
@@ -28,3 +29,4 @@ $table-bg-active: darken(#f5f5f5, 10%);
 @import "pages/pdOms/placesmap";
 @import "pages/pdLoru/orgplaces";
 @import "pages/pdFrontend/auth_modal";
+@import "pages/pdCommon/org_signup_page";

@@ -1,0 +1,26 @@
+.org-signup-page {
+  ya-map {
+    height: 300px;
+    width: 100%;
+    display: block;
+
+    .ya-pd-autocomplete-search {
+      width: 95%;
+
+      .dropdown-menu {
+        & > li {
+          & > a {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+
+  .form-signup {
+    .bank-account-form {
+      display: block;
+      padding-bottom: 15px;
+    }
+  }
+}

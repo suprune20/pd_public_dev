@@ -3,9 +3,35 @@
 /* jshint -W069 */
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope, oauthIO) {
+  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope, oauthIO, $upload) {
     var getUserProfileData = function () {
         return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
+      },
+      applySuccessSigninResponse = function (responseData) {
+        if (_.has(responseData, 'token')) {
+          storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
+        }
+
+        // Set session cookie for "old" django backend
+        if (_.has(responseData, 'sessionId')) {
+          ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
+        }
+
+        if (_.has(responseData, 'role')) {
+          responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
+          storage.set(pdConfig.AUTH_ROLES_KEY, responseData.role);
+        }
+
+        // Save user's profile data into localstorage
+        var profileData = {};
+        profileData.profile = responseData.profile || {};
+        profileData.organisation = responseData.org || {};
+        storage.set(pdConfig.AUTH_PROFILE_KEY, profileData);
+
+        // Broadcast success signin event
+        $rootScope.$broadcast('auth.signin_success');
+
+        return responseData;
       },
       signin = function (username, password, confirmTC, oauthData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
@@ -14,32 +40,7 @@ angular.module('pdCommon')
             confirmTC: confirmTC ? true : undefined,
             oauth: oauthData
           }, {tracker: 'commonLoadingTracker'}).then(function (response) {
-            var responseData = response.data;
-
-            if (_.has(responseData, 'token')) {
-              storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
-            }
-
-            // Set session cookie for "old" django backend
-            if (_.has(responseData, 'sessionId')) {
-              ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
-            }
-
-            if (_.has(responseData, 'role')) {
-              responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
-              storage.set(pdConfig.AUTH_ROLES_KEY, responseData.role);
-            }
-
-            // Save user's profile data into localstorage
-            var profileData = {};
-            profileData.profile = responseData.profile || {};
-            profileData.organisation = responseData.org || {};
-            storage.set(pdConfig.AUTH_PROFILE_KEY, profileData);
-
-            // Broadcast success signin event
-            $rootScope.$broadcast('auth.signin_success');
-
-            return responseData;
+            return applySuccessSigninResponse(response.data);
           }, function (errorResponse) {
             var respData = errorResponse.data;
 
@@ -144,6 +145,26 @@ angular.module('pdCommon')
           .catch(function (errorResponse) {
             return $q.reject(errorResponse.data);
           });
+      },
+      organisationSignup: function (signupModel) {
+        var deferred = $q.defer(),
+          certificateFile = signupModel.certificatePhoto;
+
+        delete signupModel.certificatePhoto;
+        $upload.upload({
+            url: pdConfig.apiEndpoint + 'org/signup',
+            tracker: 'commonLoadingTracker',
+            data: signupModel,
+            file: certificateFile,
+            fileFormDataName: 'certificatePhoto'
+          })
+          .then(function (response) {
+            deferred.resolve(applySuccessSigninResponse(response.data));
+          }, function (errorResponse) {
+            deferred.reject(errorResponse.data);
+          });
+
+        return deferred.promise;
       }
     };
   })
