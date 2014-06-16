@@ -363,7 +363,7 @@ angular.module('pdFrontend')
           // reset previous error if exist
           addPlaceError = null;
 
-          user.addPlace(convertYaGeoObject2Place(addedGeoObject))
+          user.addCustomPlace(convertYaGeoObject2Place(addedGeoObject))
             .then(function () {
               placesGeoObjects.push(addedGeoObject);
               // Reset current place

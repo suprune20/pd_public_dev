@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .service('user', function ($http, pdConfig, pdYandex, $q, $upload, auth, storage, $filter) {
+  .service('user', function ($http, pdHttp, pdConfig, pdYandex, $q, $upload, auth, storage, $filter) {
+    var CUSTOM_PLACES_BASE_URL = pdConfig.apiEndpoint + 'client/customplaces';
+
     return {
       getCurrentUserProfile: function () {
         return auth.getUserProfile();
@@ -54,11 +56,17 @@ angular.module('pdFrontend')
 
         return deferred.promise;
       },
-      addPlace: function (placeModel) {
-        return $http.post(pdConfig.apiEndpoint + 'places', placeModel, { tracker: 'commonLoadingTracker' })
-          .catch(function (errorResponse) {
-            return $q.reject(errorResponse.data);
-          });
+      addCustomPlace: function (placeModel) {
+        return pdHttp.post(CUSTOM_PLACES_BASE_URL, placeModel);
+      },
+      getCustomPlaces: function () {
+        return pdHttp.get(CUSTOM_PLACES_BASE_URL);
+      },
+      saveCustomPlace: function (placeId, placeData) {
+        return pdHttp.put(CUSTOM_PLACES_BASE_URL + '/' + placeId, placeData);
+      },
+      deleteCustomPlace: function (placeId) {
+        return pdHttp.delete(CUSTOM_PLACES_BASE_URL + '/' + placeId);
       },
       saveSettings: function (settingsData) {
         var saveUrl = pdConfig.apiEndpoint + 'settings';
