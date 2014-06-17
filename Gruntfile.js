@@ -112,7 +112,8 @@ module.exports = function (grunt) {
       'ci_src': {
         options: {
           reporter: 'checkstyle',
-          reporterOutput: 'build/jshint_src.xml'
+          reporterOutput: 'build/jshint_src.xml',
+          force: true
         },
         src: [
           'Gruntfile.js',
