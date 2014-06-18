@@ -13,7 +13,7 @@ angular.module('pdApp', [
     'vcRecaptcha',
     'ngRaven'
   ])
-  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $stateProvider) {
     oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 
@@ -34,13 +34,21 @@ angular.module('pdApp', [
         }
       };
     });
-    $routeProvider
-      .when('/', {
+    $stateProvider
+      .state('main', {
+        url: '/',
         controller: 'LandingPageCtrl',
         templateUrl: 'views/landing_page.html',
         hideMainMenu: true,
         pageClass: 'landing-page'
       })
+      .state('403', {
+        url: '/403',
+        templateUrl: 'views/403.html',
+        menuConfig: 'emptyMenu',
+        title: 403
+      });
+    $routeProvider
       .when('/org/signup', {
         controller: 'CommonOrgSignupCtrl',
         templateUrl: 'views/modules/common/org_auth/signup.html',
@@ -60,12 +68,6 @@ angular.module('pdApp', [
         templateUrl: 'views/terms_and_conditions.text.html',
         title: 'Пользовательское соглашение'
       })
-      .when('/oauth_callback', {})
-      .when('/403', {
-        templateUrl: 'views/403.html',
-        menuConfig: 'emptyMenu',
-        title: 403
-      })
       .otherwise({
         templateUrl: 'views/404.html',
         menuConfig: 'emptyMenu',
@@ -73,7 +75,7 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, $state) {
     // Add empty menu config
     mainMenuManager.addMenuConfig('emptyMenu');
 
@@ -90,59 +92,58 @@ angular.module('pdApp', [
       }
     };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
-//    $rootScope.$on('auth.signout', function () {
-//      $location.path('/');
-//    });
 
-//    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
-//      // Redirect to oms site
-//      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
-//        $window.location.href = pdConfig.backendUrl;
-//        event.preventDefault();
-//      }
-//    });
-
-    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
-      if (currentRoute.absoluteRedirectTo) {
-        // ToDo: Finish redirection to absolute url
-        // $window.location.href = currentRoute.absoluteRedirectTo;
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
+      if (toState.allowRole && !auth.isContainsRole(toState.allowRole)) {
+        event.preventDefault();
+        $state.go('403');
         return;
       }
-      // Remove "container" class from root block
-      $rootScope.hideRootContainerClass = currentRoute.hideRootContainerClass;
-      // Save url for redirect after success login (external links) (get param redirect_url)
-      $rootScope.redirectUrl = $rootScope.redirectUrl ?
-        $rootScope.redirectUrl :
-        currentRoute.params.redirectUrl || null;
-
       // Check for secured url and available for current logged in user
-      if (!security.isAvailableUrl(currentRoute.originalPath)) {
+      if (!security.isAvailableUrl(toState.url)) {
+        event.preventDefault();
         // Save path for redirect after login (internal paths)
-        $rootScope.redirectUrl = currentRoute.originalPath;
-        $location.path('/');
+        $rootScope.redirectUrl = toState.url;
+        $state.go('main');
         return;
       }
-
-      // Set title for current page from routeProvider data
-      $rootScope.title = currentRoute.title;
-      // Set main menu items
-      mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
-      // Set page class from route config
-      $rootScope.pageClass = currentRoute.pageClass ?
-        _.isString(currentRoute.pageClass) ?
-          [currentRoute.pageClass] :
-          currentRoute.pageClass :
-        [];
-      // Hide/Show main menu by route param
-      mainMenuManager.hide(currentRoute.hideMainMenu);
-      if (true === currentRoute.hideMainMenu) {
-        $rootScope.addPageClass('hide-main-menu');
-      }
-
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
+      if ('/' === toState.url && auth.isAuthenticated()) {
+        event.preventDefault();
         $rootScope.redirectToBasePage();
       }
     });
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
+      $rootScope.title = toState.title;
+      // Set page class from route config
+      $rootScope.pageClass = toState.pageClass ?
+        _.isString(toState.pageClass) ? [toState.pageClass] : toState.pageClass :
+        [];
+      // Remove "container" class from root block
+      $rootScope.hideRootContainerClass = toState.hideRootContainerClass;
+      // Set main menu items
+      mainMenuManager.setCurrentMenuConfig(toState.menuConfig);
+      // Hide/Show main menu by route param
+      mainMenuManager.hide(toState.hideMainMenu);
+      if (true === toState.hideMainMenu) {
+        $rootScope.addPageClass('hide-main-menu');
+      }
+
+
+      // Save url for redirect after success login (external links) (get param redirect_url)
+      $rootScope.redirectUrl = $rootScope.redirectUrl ?
+        $rootScope.redirectUrl :
+        toParams.redirectUrl || null;
+
+
+    });
+
+//    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
+//      if (currentRoute.absoluteRedirectTo) {
+//        // ToDo: Finish redirection to absolute url
+//        // $window.location.href = currentRoute.absoluteRedirectTo;
+//        return;
+//      }
+//    });
     $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
       if (rejection && true === rejection.accessDenied) {
         // Show access denied predefined page
@@ -152,12 +153,12 @@ angular.module('pdApp', [
 
     $rootScope.redirectToBasePage = function () {
       if (auth.isCurrentHasOmsRole()) {
-        $location.path('/oms');
+        $window.location.href = pdConfig.backendUrl;
         return;
       }
 
       if (auth.isCurrentHasLoruRole()) {
-        $location.path('/loru');
+        $state.go('loru.orgplaces');
         return;
       }
 

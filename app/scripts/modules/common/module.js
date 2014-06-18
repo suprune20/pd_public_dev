@@ -3,6 +3,7 @@
 angular.module('pdCommon', [
     'ngRoute',
     'pdConfig',
+    'ui.router',
     'ui.bootstrap',
     'angularLocalStorage',
     'ajoslin.promise-tracker',

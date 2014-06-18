@@ -24,24 +24,26 @@
   </head>
   <body ng-class="pageClass">
     <div class="wrap">
-      <pd-main-menu></pd-main-menu>
-
       <div class="alert alert-info common-loading-container animated-slide-top"
            ng-show="commonLoadingTracker.active()">
         <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
       </div>
 
-      <div ng-class="{'container': !hideRootContainerClass}">
-        <!--[if lt IE 7]>
-        <div class="alert alert-danger">
-          <span class="glyphicon glyphicon-warning-sign"></span>
-          You are using an <strong>outdated</strong> browser.
-          Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
-        </div>
-        <![endif]-->
+      <ui-view>
+        <pd-main-menu></pd-main-menu>
 
-        <ng-view></ng-view>
-      </div>
+        <div ng-class="{'container': !hideRootContainerClass}">
+          <!--[if lt IE 7]>
+          <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            You are using an <strong>outdated</strong> browser.
+            Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+          </div>
+          <![endif]-->
+
+          <ng-view></ng-view>
+        </div>
+      </ui-view>
 
       <!-- Block for show growl messages -->
       <div growl></div>
@@ -87,6 +89,7 @@
     <script src="bower_components/jcarousel/dist/jquery.jcarousel.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/oauth-js/dist/oauth.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <script src="bower_components/angular-i18n/angular-locale_ru.js"></script>
     <script src="bower_components/select2/select2_locale_ru.js"></script>

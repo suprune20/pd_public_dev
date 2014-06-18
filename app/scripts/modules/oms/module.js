@@ -4,31 +4,22 @@ angular.module('pdOms', [
   'ngRoute',
   'pdCommon'
 ])
-  .config(function (authRouteProvider) {
-    var routeConfig = {
-      '/': {
-        resolve: {
-          redirect: ['$window', 'pdConfig', function ($window, pdConfig) {
-            $window.location.href = pdConfig.backendUrl;
-          }]
-        }
-      },
-      '/placesmap': {
-        controller: 'OmsPlacesMapCtrl',
-        templateUrl: 'views/modules/oms/placesmap/main.html',
-        title: 'Инвентаризация',
-        pageClass: 'oms-placesmap'
-      }
-    };
-
-    _.forEach(routeConfig, function (routeData, routeUri) {
-      authRouteProvider
-        .when('/oms' + routeUri, _.merge({
-          secured: true,
-          menuConfig: 'omsMenu'
-        }, routeData || {}), 'ROLE_OMS')
-      ;
-    });
+  .config(function (authRouteProvider, $stateProvider) {
+    $stateProvider
+      .state('oms', {
+        url: '/oms',
+        templateUrl: 'views/modules/oms/main.html',
+        abstract: true
+      })
+        .state('oms.placesmap', {
+          url: '/placesmap',
+          controller: 'OmsPlacesMapCtrl',
+          templateUrl: 'views/modules/oms/placesmap/main.html',
+          title: 'Инвентаризация',
+          pageClass: 'oms-placesmap',
+          allowRole: 'ROLE_OMS'
+        })
+    ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
     var omsMenuConfig = mainMenuManager.addMenuConfig('omsMenu');

@@ -4,33 +4,65 @@ angular.module('pdLoru', [
     'ngRoute',
     'pdCommon'
   ])
-  .config(function (authRouteProvider) {
-    var routeConfig = {
-      '': {
+  .config(function (authRouteProvider, $stateProvider) {
+    $stateProvider
+      .state('loru', {
+        url: '/loru',
         templateUrl: 'views/modules/loru/main.html',
-        title: 'Loru'
-      },
-      '/advertisement': {
-        controller: 'LoruAdvertisementCtrl',
-        templateUrl: 'views/modules/loru/productplaces/main.html',
-        title: 'Реклама'
-      },
-      '/orgplaces': {
-        controller: 'LoruOrgPlacesCtrl',
-        templateUrl: 'views/modules/loru/orgplaces/main.html',
-        title: 'Места',
-        pageClass: 'loru-orgplaces'
-      }
-    };
+        abstract: true,
+        controller: ['$scope', 'auth', 'serverConfig', function ($scope, auth, serverConfig) {
+          $scope.auth = auth;
+          $scope.serverConfig = serverConfig;
+        }]
+      })
+        .state('loru.advertisement', {
+          url: '/advertisement',
+          controller: 'LoruAdvertisementCtrl',
+          templateUrl: 'views/modules/loru/productplaces/main.html',
+          title: 'Реклама',
+          allowRole: 'ROLE_LORU'
+        })
+        .state('loru.orgplaces', {
+          url: '/orgplaces',
+          controller: 'LoruOrgPlacesCtrl',
+          templateUrl: 'views/modules/loru/orgplaces/main.html',
+          allowRole: 'ROLE_LORU'
+        })
+    ;
 
-    _.forEach(routeConfig, function (routeData, routeUri) {
-      authRouteProvider
-        .when('/loru' + routeUri, _.merge({
-          secured: true,
-          menuConfig: 'loruMenu'
-        }, routeData || {}), 'ROLE_LORU')
-      ;
-    });
+//    var routeConfig = {
+//      '': {
+//        templateUrl: 'views/modules/loru/main.html',
+//        title: 'Loru'
+//      },
+//      '/signup': {
+//        controller: 'LoruSignupCtrl',
+//        templateUrl: 'views/modules/loru/auth/signup.html',
+//        title: 'Регистрация ЛОРУ',
+//        secured: false,
+//        menuConfig: 'emptyMenu'
+//      },
+//      '/advertisement': {
+//        controller: 'LoruAdvertisementCtrl',
+//        templateUrl: 'views/modules/loru/productplaces/main.html',
+//        title: 'Реклама'
+//      },
+//      '/orgplaces': {
+//        controller: 'LoruOrgPlacesCtrl',
+//        templateUrl: 'views/modules/loru/orgplaces/main.html',
+//        title: 'Места',
+//        pageClass: 'loru-orgplaces'
+//      }
+//    };
+//
+//    _.forEach(routeConfig, function (routeData, routeUri) {
+//      authRouteProvider
+//        .when('/loru' + routeUri, _.merge({
+//          secured: true,
+//          menuConfig: 'loruMenu'
+//        }, routeData || {}), 'ROLE_LORU')
+//      ;
+//    });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu');
