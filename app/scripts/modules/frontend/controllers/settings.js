@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('PdFrontendSettingsCtrl', function ($scope, user, objectsDiff, $modal, additionalSettingsData, growl) {
+  .controller('PdFrontendSettingsCtrl', function ($scope, user, objectsDiff, $modal, additionalSettingsData, growl,
+                                                  $location) {
     var getInitialData = function () {
         return _.defaults(user.getCurrentUserProfile(), {
           mainPhone: null,
@@ -23,7 +24,12 @@ angular.module('pdFrontend')
     };
     $scope.removeAccount = function () {
       $modal.open({templateUrl: 'views/modules/frontend/settings/confirm_delete.modal.html'})
-        .result.then(function () { user.removeAccount(); });
+        .result.then(function () {
+          user.removeAccount().then(function () {
+            growl.addSuccessMessage('Аккаунт был успешно удален');
+            $location.path('/');
+          });
+        });
     };
 
     $scope.additionalSettingsData = additionalSettingsData;

@@ -111,7 +111,11 @@ angular.module('pdFrontend')
           });
       },
       removeAccount: function () {
-        $http.delete(pdConfig.apiEndpoint + 'user', null, {tracker: 'commonLoadingTracker'});
+        return pdHttp.delete(pdConfig.apiEndpoint + 'user')
+          .then(function () {
+            storage.remove(pdConfig.AUTH_TOKEN_KEY);
+            storage.remove(pdConfig.AUTH_ROLES_KEY);
+          });
       },
       addOAuthProvider: function (providerId, accessToken) {
         return $http.post(pdConfig.apiEndpoint + 'settings/oauth_providers', {

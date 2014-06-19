@@ -3,7 +3,7 @@
 /* jshint -W069 */
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope, oauthIO, $upload) {
+  .service('auth', function ($http, pdHttp, pdConfig, storage, ipCookie, $q, $rootScope, oauthIO, $upload) {
     var getUserProfileData = function () {
         return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
       },
@@ -66,6 +66,10 @@ angular.module('pdCommon')
             return signin(undefined, undefined, undefined, {
               provider: providerId,
               accessToken: result['access_token']
+            }).catch(function (errorData) {
+              errorData.oauthResult = result;
+
+              return $q.reject(errorData);
             });
           }, function () {
             return $q.reject({
@@ -141,9 +145,9 @@ angular.module('pdCommon')
       getUserProfile: getUserProfile,
       getUserOrganisation: getUserOrganisation,
       signup: function (signupModel) {
-        return $http.post(pdConfig.apiEndpoint + 'auth/signup', signupModel, {tracker: 'commonLoadingTracker'})
-          .catch(function (errorResponse) {
-            return $q.reject(errorResponse.data);
+        return pdHttp.post(pdConfig.apiEndpoint + 'auth/signup', signupModel)
+          .then(function (signupData) {
+            return applySuccessSigninResponse(signupData);
           });
       },
       organisationSignup: function (signupModel) {
