@@ -30,7 +30,11 @@ describe('Controller: CatalogCtrl', function () {
           .andCallFake(function () {
             return {
               then: jasmine.createSpy().andCallFake(function (cb) {
-                cb([{id: 1, title: 'category 1'}]);
+                cb([ { id : 1, title : 'category 1' } ]);
+
+                return {
+                  then: jasmine.createSpy()
+                };
               })
             };
           }),
