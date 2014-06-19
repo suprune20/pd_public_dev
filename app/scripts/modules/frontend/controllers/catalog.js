@@ -51,6 +51,12 @@ angular.module('pdFrontend')
         suppliersInTheBounds = _.clone($scope.filters.supplierStore);
 
         $scope.applyFilters();
+      },
+      loadCategories = function () {
+        return $scope.catalog.getCategories()
+          .then(function (categories) {
+            $scope.categoriesFilter = categories;
+          });
       }
     ;
 
@@ -60,8 +66,7 @@ angular.module('pdFrontend')
     $scope.flags = {};
     $scope.catalog = new Catalog();
     // Get filters data
-    $scope.catalog.getCategories().then(function (categories) {
-      $scope.categoriesFilter = categories;
+    loadCategories().then(function () {
       $scope.flags.selectAllCategories = true;
     });
 
@@ -185,8 +190,10 @@ angular.module('pdFrontend')
         templateUrl: 'views/modules/frontend/client_auth.modal.html',
         controller: 'pdFrontendAuth',
         windowClass: 'frontend-auth-modal'
-      });
+      }).result.then(function () { loadCategories(); });
     };
-    $scope.clientSignout = function () { auth.signout(); };
+    $scope.clientSignout = function () {
+      auth.signout().then(function () { loadCategories(); });
+    };
   })
 ;
