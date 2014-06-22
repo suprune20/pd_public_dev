@@ -190,10 +190,16 @@ angular.module('pdFrontend')
         templateUrl: 'views/modules/frontend/client_auth.modal.html',
         controller: 'pdFrontendAuth',
         windowClass: 'frontend-auth-modal'
-      }).result.then(function () { loadCategories(); });
+      }).result.then(function () {
+        loadCategories();
+        $scope.userPlacesProvider.loadMyPlaces();
+      });
     };
     $scope.clientSignout = function () {
-      auth.signout().then(function () { loadCategories(); });
+      auth.signout().then(function () {
+        loadCategories();
+        $scope.userPlacesProvider.loadMyPlaces();
+      });
     };
   })
 ;

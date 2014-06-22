@@ -45,7 +45,8 @@
   <ya-collection>
     <ya-geo-object ya-source="userPlacesProvider.getSelectedPlaceGeoObject()"
                    ya-event-dragend="userPlacesProvider.selectedGeoObjectDragendHandler($event)"></ya-geo-object>
-    <ya-geo-object ng-repeat="point in userPlacesProvider.getPlacesGeoObjects()" ya-source="point"></ya-geo-object>
+    <ya-geo-object ng-repeat="point in userPlacesProvider.getPlacesGeoObjects()" ya-source="point"
+                   ya-event-click="userPlacesProvider.editPlaceGeoObject($event)"></ya-geo-object>
   </ya-collection>
   <!-- End user's places -->
 
@@ -93,6 +94,12 @@
 
   <ng-include src="'views/modules/frontend/catalog/add_place_block.html'"></ng-include>
 </ya-map>
+
+<div class="alert alert-warning alert-dismissable unsaved-places-alert"
+     ng-show="userPlacesProvider.isExistsUnsavedPlaces()">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  Зарегистрируйтесь для сохранения Ваших данных
+</div>
 
 <div class="container">
   <div class="row catalog-unowned-places-details-cont" ng-if="catalogUnownedPlacesProvider.getSelectedPlacesGallery()">
