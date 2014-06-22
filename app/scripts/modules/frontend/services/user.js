@@ -72,7 +72,8 @@ angular.module('pdFrontend')
       getCustomPlaces: function () {
         var unsavedPlaces = storage.get(CUSTOM_PLACES_STORAGE_KEY) || [];
 
-        if (!auth.isAuthenticated()) {
+        // Read custom user's places from localstorage for non clients users
+        if (!auth.isCurrentHasClientRole()) {
           return $q.when(unsavedPlaces);
         }
 

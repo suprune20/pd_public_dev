@@ -18,7 +18,8 @@
     </div>
   </ya-template-layout>
   <ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">
-    <ya-control ya-type="button" ya-options="{ layout:'addPlaceBtnTemplate'}"
+    <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
+                ya-visible="{{!security.isAuthenticated() || security.isCurrentHasClientRole()}}"
                 ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
   </ya-toolbar>
   <!-- End include button for add user's place -->

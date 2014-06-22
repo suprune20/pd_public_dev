@@ -29,6 +29,15 @@ angular.module('pdCommon')
         $rootScope.$broadcast('auth.signin_success');
 
         return responseData;
+      },
+      isAuthenticated = function () {
+        return authStorage.isAvailableAuthToken();
+      },
+      getRoles = function () {
+        return isAuthenticated() ? authStorage.getRoles() : ['AUTH_ROLE_ANONYMOUS'];
+      },
+      isContainsRole = function (role) {
+        return !!_.intersection(getRoles(), _.isArray(role) ? role : [role]).length;
       }
     ;
 
@@ -86,15 +95,11 @@ angular.module('pdCommon')
             $rootScope.$broadcast('auth.signout');
           });
       },
-      isAuthenticated: function () {
-        return authStorage.isAvailableAuthToken();
-      },
+      isAuthenticated: isAuthenticated,
       getAuthToken: function () {
         return authStorage.getApiAuthToken();
       },
-      getRoles: function () {
-        return this.isAuthenticated() ? authStorage.getRoles() : ['AUTH_ROLE_ANONYMOUS'];
-      },
+      getRoles: getRoles,
       getPasswordBySMS: function (username, captchaData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
@@ -109,17 +114,15 @@ angular.module('pdCommon')
         });
       },
       isCurrentHasClientRole: function () {
-        return this.isContainsRole('ROLE_CLIENT');
+        return isContainsRole('ROLE_CLIENT');
       },
       isCurrentHasLoruRole: function () {
-        return this.isContainsRole('ROLE_LORU');
+        return isContainsRole('ROLE_LORU');
       },
       isCurrentHasOmsRole: function () {
-        return this.isContainsRole('ROLE_OMS');
+        return isContainsRole('ROLE_OMS');
       },
-      isContainsRole: function (role) {
-        return _.intersection(this.getRoles(), _.isArray(role) ? role : [role]).length;
-      },
+      isContainsRole: isContainsRole,
       getUserProfile: function () {
         return authStorage.getProfile();
       },

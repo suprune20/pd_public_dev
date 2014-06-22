@@ -172,6 +172,7 @@ angular.module('pdApp', [
     $rootScope.security = {
       isCurrentHasClientRole: auth.isCurrentHasClientRole,
       isCurrentHasLoruRole: auth.isCurrentHasLoruRole,
+      isCurrentHasOmsRole: auth.isCurrentHasOmsRole,
       isAuthenticated: auth.isAuthenticated
     };
 
