@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('pdCommon')
-  .controller('CommonOrgSignupCtrl', function ($scope, OrgAuthSignupModel, $location, growl) {
-    $scope.authProvider = new OrgAuthSignupModel();
+  .controller('CommonOrgSignupCtrl', function ($scope, OrgAuthSignupModel, $location, growl, $routeParams) {
+    $scope.authProvider = new OrgAuthSignupModel($routeParams.orgType);
     $scope.signup = function () {
       $scope.authProvider.signup()
         .then(function () {

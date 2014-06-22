@@ -13,7 +13,7 @@
              required autofocus />
     </div>
 
-    <div class="form-group" ng-init="authProvider.getSignupModel().orgType = 'loru'">
+    <div class="form-group" ng-show="authProvider.getOrgTypes()">
       <label class="control-label" for="orgType">Тип организации</label>
       <select name="orgType" id="orgType" ng-model="authProvider.getSignupModel().orgType" class="form-control"
               ng-options="type as title for (type, title) in authProvider.getOrgTypes()"></select>

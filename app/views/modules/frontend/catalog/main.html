@@ -72,6 +72,10 @@
     </button>
   </div>
 
+  <a href="#/org/signup?orgType=loru" class="btn btn-default signup-supplier-btn" ng-show="catalogViewIsShown">
+    Регистрация поставщиков
+  </a>
+
   <div ng-show="categoriesFilter.length" ng-if="catalogViewIsShown" class="catalog-places-map-categories-filter"
        isolate-scrolling>
     <ul class="list-unstyled">
@@ -211,7 +215,7 @@
       <div class="alert alert-warning" ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount">
         <span class="glyphicon glyphicon-ban-circle"></span>
         В данном регионе поставщики товаров и услуг не зарегистрированы.
-        Нажмите <a href="#/org/signup">"Регистрация поставщиков"</a> чтобы зарегистрироваться.
+        Нажмите <a href="#/org/signup?orgType=loru">"Регистрация поставщиков"</a> чтобы зарегистрироваться.
       </div>
     </div>
   </div>

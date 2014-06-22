@@ -2,9 +2,15 @@
 
 angular.module('pdCommon')
   .factory('OrgAuthSignupModel', function (pdYandex, auth) {
-    return function () {
+    return function (predefinedOrgType) {
       var officeGeoObject,
-        signupModel = {};
+        orgTypes = {
+          oms: 'Регистрация захоронений',
+          loru: 'Учет заказов'
+        },
+        signupModel = {
+          orgType: orgTypes[predefinedOrgType] ? predefinedOrgType : 'loru'
+        };
 
       var getAddress = function (coords) {
         pdYandex.reverseGeocode(coords).then(function (res) {
@@ -20,10 +26,7 @@ angular.module('pdCommon')
 
       return {
         getOrgTypes: function () {
-          return {
-            oms: 'Регистрация захоронений',
-            loru: 'Учет заказов'
-          };
+          return orgTypes[predefinedOrgType] ? null : orgTypes;
         },
         getDirectorPowerSources: function () {
           return {
