@@ -20,6 +20,20 @@ angular.module('pdApp', [
     RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
     $httpProvider.interceptors.push('httpErrorsInterceptor');
+    // Set interceptor into first position in interceptors
+    $httpProvider.interceptors.unshift(function () {
+      return {
+        request: function (config) {
+          // Add common loading tracker
+          config.tracker = _.union(
+            ['commonLoadingTracker'],
+            _.isString(config.tracker) ? [config.tracker] : config.tracker
+          );
+
+          return config;
+        }
+      };
+    });
     $routeProvider
       .when('/', {
         controller: 'LandingPageCtrl',
