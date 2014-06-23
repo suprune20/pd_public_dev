@@ -185,7 +185,7 @@ describe('Service: Catalog', function () {
             },
             options: {
               visible: true,
-              preset: 'twirl#greyIcon'
+              preset: 'twirl#greyDotIcon'
             }
           }],
           userPlacesPoints: userPlacesData.places,
