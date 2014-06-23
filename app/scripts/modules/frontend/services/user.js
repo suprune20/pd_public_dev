@@ -124,9 +124,13 @@ angular.module('pdFrontend')
               });
           }, this);
 
-        return $q.all(allPromises).finally(function () {
-          storage.set(CUSTOM_PLACES_STORAGE_KEY, unsavedPlaces);
-        });
+        return $q.all(allPromises)
+          .then(function () {
+            return allPromises.length;
+          })
+          .finally(function () {
+            storage.set(CUSTOM_PLACES_STORAGE_KEY, unsavedPlaces);
+          });
       },
       saveSettings: function (settingsData) {
         var saveUrl = pdConfig.apiEndpoint + 'settings';

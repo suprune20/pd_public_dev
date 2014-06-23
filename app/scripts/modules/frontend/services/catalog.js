@@ -138,7 +138,7 @@ angular.module('pdFrontend')
                   },
                   options: {
                     visible: true,
-                    preset: 'twirl#greyIcon'
+                    preset: 'twirl#greyDotIcon'
                   }
                 });
               });
@@ -353,8 +353,10 @@ angular.module('pdFrontend')
       loadMyPlaces();
       // Save unsaved user's places when client logged in
       $rootScope.$on('auth.signin_success', function () {
-        user.saveUnsavedPlaces().then(function () {
-          growl.addSuccessMessage('Все места были успешно сохранены');
+        user.saveUnsavedPlaces().then(function (savedPlacesCount) {
+          if (savedPlacesCount > 0) {
+            growl.addSuccessMessage('Все места были успешно сохранены');
+          }
         });
       });
 
