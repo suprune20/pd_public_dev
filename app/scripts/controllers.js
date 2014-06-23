@@ -14,7 +14,10 @@ angular.module('pdApp')
       $scope.signinModel = {};
     });
     $scope.showTCModal = function () {
-      $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
+      $modal.open({
+        templateUrl: 'views/terms_and_conditions.modal.html',
+        windowClass: 'terms-and-conditions-modal'
+      })
         .result.then(function () {
           $scope.signin(_.merge($scope.signinModel, {confirmTC: true}));
         }, function () {
