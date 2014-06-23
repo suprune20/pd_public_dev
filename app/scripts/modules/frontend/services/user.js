@@ -125,7 +125,6 @@ angular.module('pdFrontend')
           }, this);
 
         return $q.all(allPromises).finally(function () {
-          console.log('finally', unsavedPlaces);
           storage.set(CUSTOM_PLACES_STORAGE_KEY, unsavedPlaces);
         });
       },
