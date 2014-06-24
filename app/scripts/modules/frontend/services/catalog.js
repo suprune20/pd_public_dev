@@ -50,8 +50,8 @@ angular.module('pdFrontend')
   })
   .factory('Catalog', function ($q, user, pdYandex, pdFrontendCatalogApi) {
     return function (productsCountPerRequest) {
-      var SUPPLIER_YA_MARKER_CHECKED_PRESET = 'twirl#darkgreenDotIcon',
-        SUPPLIER_YA_MARKER_UNCHECKED_PRESET = 'twirl#darkgreenIcon';
+      var SUPPLIER_YA_MARKER_CHECKED_PRESET = 'twirl#greyDotIcon',
+        SUPPLIER_YA_MARKER_UNCHECKED_PRESET = 'twirl#greyIcon';
       // Products data provider class
       var ProductsDataProvider = function (productsCountPerRequest) {
         var isBusy = false,
@@ -114,30 +114,8 @@ angular.module('pdFrontend')
           return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
             .then(function (promiseData) {
               var points = [],
-                userPlacesData = [],
                 suppliersData = promiseData[0];
 
-              // Add user's places point
-              _.forEach(userPlacesData, function (place) {
-                if (!place.location) {
-                  return;
-                }
-
-                points.push({
-                  properties: {
-                    type: 'users_place',
-                    pointData: place
-                  },
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [place.location.longitude, place.location.latitude]
-                  },
-                  options: {
-                    visible: true,
-                    preset: 'twirl#greyDotIcon'
-                  }
-                });
-              });
               // Add suppliers places points
               _.forEach(suppliersData, function (supplier) {
                 if (!supplier.location || !supplier.stores.length) {
@@ -171,7 +149,6 @@ angular.module('pdFrontend')
 
               return {
                 allPoints: points,
-                userPlacesPoints: userPlacesData,
                 suppliersPoints: suppliersData
               };
             });
@@ -261,8 +238,8 @@ angular.module('pdFrontend')
   .factory('CatalogMyPlaces', function (pdYandex, user, growl, $rootScope, $q) {
     return function () {
       var MARKER_CURRENT_PRESET = 'twirl#redIcon',
-        MARKER_PLACE_PRESET = 'twirl#greyIcon',
-        MARKER_REGULAR_PLACE_PRESET = 'twirl#greyDotIcon';
+        MARKER_PLACE_PRESET = 'twirl#darkgreenIcon',
+        MARKER_REGULAR_PLACE_PRESET = 'twirl#darkgreenDotIcon';
       var currentPlaceGeoObject,
         placeFormError;
 
