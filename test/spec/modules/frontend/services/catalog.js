@@ -144,54 +144,9 @@ describe('Service: Catalog', function () {
   });
 
   describe('getYaMapPoints method', function () {
-    it('should send requests for getting user\'s places and suppliers', function () {
-      userServiceMock.getPlaces.andReturn([{}]);
+    it('should send requests for getting suppliers', function () {
       $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, {});
       catalogService.getYaMapPoints();
-      $httpBackend.flush();
-
-      expect(userServiceMock.getPlaces).toHaveBeenCalled();
-    });
-
-    it('should return user\'s places converted for yandex map geoobjects and ignore places without location', function () {
-      var userPlacesData = {
-        places: [{
-          location: {
-            latitude: 43,
-            longitude: 54
-          },
-          stores: [{location: {
-            latitude: 43,
-            longitude: 54
-          }}]
-        }, {
-          location: null,
-          stores: []
-        }]
-      };
-
-      userServiceMock.getPlaces.andReturn(userPlacesData);
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, {});
-      catalogService.getYaMapPoints().then(function (mapPoints) {
-        expect(mapPoints).toEqual({
-          allPoints: [{
-            properties: {
-              type: 'users_place',
-              pointData: userPlacesData.places[0]
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [userPlacesData.places[0].location.longitude, userPlacesData.places[0].location.latitude]
-            },
-            options: {
-              visible: true,
-              preset: 'twirl#greyDotIcon'
-            }
-          }],
-          userPlacesPoints: userPlacesData.places,
-          suppliersPoints: undefined
-        });
-      });
       $httpBackend.flush();
     });
 
@@ -235,7 +190,6 @@ describe('Service: Catalog', function () {
         expect(mapPoints.allPoints.length).toBe(1);
         expect(mapPoints.allPoints[0].properties.pointData.id).toBe(1);
         expect(mapPoints.allPoints[0].properties.pointData.categories).toEqual(suppliersData.supplier[0].categories);
-        expect(mapPoints.userPlacesPoints.length).toBe(0);
         expect(mapPoints.suppliersPoints.length).toBe(3);
       });
       $httpBackend.flush();
