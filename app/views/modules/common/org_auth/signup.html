@@ -8,20 +8,31 @@
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.orgName.$dirty && orgSignupForm.orgName.$invalid}">
-      <label class="control-label" for="orgName">Название организации</label>
+      <label class="control-label" for="orgName">
+        Краткое наименование организации <span class="form-require-mark">*</span>
+      </label>
       <input name="orgName" id="orgName" ng-model="authProvider.getSignupModel().orgName" class="form-control"
              required autofocus />
     </div>
 
+    <div class="form-group has-feedback"
+         ng-class="{'has-error': orgSignupForm.orgFullName.$dirty && orgSignupForm.orgFullName.$invalid}">
+      <label class="control-label" for="orgFullName">Полное наименование организации</label>
+      <input name="orgFullName" id="orgFullName" ng-model="authProvider.getSignupModel().orgFullName"
+             class="form-control" />
+    </div>
+
     <div class="form-group" ng-show="authProvider.getOrgTypes()">
-      <label class="control-label" for="orgType">Тип организации</label>
+      <label class="control-label" for="orgType">Тип организации <span class="form-require-mark">*</span></label>
       <select name="orgType" id="orgType" ng-model="authProvider.getSignupModel().orgType" class="form-control"
               ng-options="type as title for (type, title) in authProvider.getOrgTypes()"></select>
     </div>
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.registredOfficeAddress.$dirty && orgSignupForm.registredOfficeAddress.$invalid}">
-      <label class="control-label" for="registredOfficeAddress">Юридический адрес</label>
+      <label class="control-label" for="registredOfficeAddress">
+        Юридический адрес <span class="form-require-mark">*</span>
+      </label>
       <textarea name="registredOfficeAddress" id="registredOfficeAddress" class="form-control" required
                 ng-model="authProvider.getSignupModel().registredOffice.address" readonly></textarea>
 
@@ -40,37 +51,41 @@
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.directorFullname.$dirty && orgSignupForm.directorFullname.$invalid}">
-      <label class="control-label" for="directorFullname">ФИО директора (в родительном падеже)</label>
+      <label class="control-label" for="directorFullname">
+        ФИО директора (в родительном падеже) <span class="form-require-mark">*</span>
+      </label>
       <input name="directorFullname" id="directorFullname" ng-model="authProvider.getSignupModel().directorFullname"
              class="form-control" required placeholder="Иванова Петра Петровича" />
     </div>
 
     <div class="form-group has-feedback" ng-init="authProvider.getSignupModel().directorPowerSource = 'charter'"
          ng-class="{'has-error': orgSignupForm.directorPowerSource.$dirty && orgSignupForm.directorPowerSource.$invalid}">
-      <label class="control-label" for="directorPowerSource">Основание действия регистрирующего лица</label>
+      <label class="control-label" for="directorPowerSource">
+        Основание действия регистрирующего лица <span class="form-require-mark">*</span>
+      </label>
       <select name="directorPowerSource" id="directorPowerSource" class="form-control"
               ng-model="authProvider.getSignupModel().directorPowerSource"
               ng-options="source as title for (source, title) in authProvider.getDirectorPowerSources()"></select>
     </div>
 
     <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.tin.$dirty && orgSignupForm.tin.$invalid}">
-      <label class="control-label" for="tin">ИНН</label>
+      <label class="control-label" for="tin">ИНН <span class="form-require-mark">*</span></label>
       <input name="tin" id="tin" ng-model="authProvider.getSignupModel().tin" class="form-control" required />
     </div>
 
     <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.OGRN.$dirty && orgSignupForm.OGRN.$invalid}">
-      <label class="control-label" for="OGRN">ОГРН</label>
+      <label class="control-label" for="OGRN">ОГРН <span class="form-require-mark">*</span></label>
       <input name="OGRN" id="OGRN" ng-model="authProvider.getSignupModel().OGRN" class="form-control" required />
     </div>
 
     <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.email.$dirty && orgSignupForm.email.$invalid}">
-      <label class="control-label" for="email">Email</label>
+      <label class="control-label" for="email">Email <span class="form-require-mark">*</span></label>
       <input name="email" id="email" ng-model="authProvider.getSignupModel().email" class="form-control" required
              type="email" />
     </div>
 
     <div class="form-group has-feedback" ng-init="authProvider.getSignupModel().phones = [{phone:''}]">
-      <label>Телефон(ы)</label>
+      <label class="control-label">Телефон(ы) <span class="form-require-mark">*</span></label>
 
       <div ng-repeat="phoneItem in authProvider.getSignupModel().phones" class="margin-bottom-15 has-feedback"
            ng-class="{
@@ -94,19 +109,20 @@
     </div>
 
     <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.fax.$dirty && orgSignupForm.fax.$invalid}">
-      <label class="control-label" for="fax">Факс</label>
+      <label class="control-label" for="fax">Факс <span class="form-require-mark">*</span></label>
       <input name="fax" id="fax" ng-model="authProvider.getSignupModel().fax" class="form-control" required />
     </div>
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.username.$dirty && orgSignupForm.username.$invalid}">
-      <label class="control-label" for="username">Имя пользователя</label>
-      <input name="username" id="username" ng-model="authProvider.getSignupModel().username" class="form-control" required />
+      <label class="control-label" for="username">Имя пользователя <span class="form-require-mark">*</span></label>
+      <input name="username" id="username" ng-model="authProvider.getSignupModel().username" class="form-control"
+             required />
     </div>
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.password.$dirty && orgSignupForm.password.$invalid}">
-      <label class="control-label" for="password">Пароль</label>
+      <label class="control-label" for="password">Пароль <span class="form-require-mark">*</span></label>
 
       <div class="alert alert-warning"ng-show="showGeneratedPassword">
         Сгенерированный пароль: <strong>{{authProvider.getSignupModel().password}}</strong>
@@ -115,6 +131,8 @@
       <div class="input-group">
         <input name="password" id="password" ng-model="authProvider.getSignupModel().password" class="form-control"
                required type="password" ng-change="showGeneratedPassword = false" />
+        <!-- Quickfix for chrome autofill bug (https://code.google.com/p/chromium/issues/detail?id=352347) -->
+        <input type="password" style="display: none"/>
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" title="Сгенерировать пароль"
                   ng-click="authProvider.generatePassword(); showGeneratedPassword = true">
@@ -126,14 +144,18 @@
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.passwordConfirm.$dirty && orgSignupForm.passwordConfirm.$invalid}">
-      <label class="control-label" for="passwordConfirm">Повторите пароль</label>
+      <label class="control-label" for="passwordConfirm">
+        Повторите пароль <span class="form-require-mark">*</span>
+      </label>
       <input name="passwordConfirm" id="passwordConfirm" ng-model="authProvider.getSignupModel().passwordConfirm"
              type="password" class="form-control" required password-repeat="password" />
     </div>
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.certificatePhoto.$dirty && orgSignupForm.certificatePhoto.$invalid}">
-      <label class="control-label">Скан/фото свидетельства госрегистрации</label>
+      <label class="control-label">
+        Скан/фото свидетельства госрегистрации <span class="form-require-mark">*</span>
+      </label>
       <pd-file-selector pd-allow-preview ng-model="authProvider.getSignupModel().certificatePhoto"
                         name="certificatePhoto" required pd-max-height="150px"></pd-file-selector>
     </div>

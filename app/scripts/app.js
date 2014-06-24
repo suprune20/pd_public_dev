@@ -41,7 +41,7 @@ angular.module('pdApp', [
         hideMainMenu: true,
         pageClass: 'landing-page'
       })
-      .when('/org/signup', {
+      .when('/register', {
         controller: 'CommonOrgSignupCtrl',
         templateUrl: 'views/modules/common/org_auth/signup.html',
         title: 'Регистрация поставщика',
@@ -60,7 +60,6 @@ angular.module('pdApp', [
         templateUrl: 'views/terms_and_conditions.text.html',
         title: 'Пользовательское соглашение'
       })
-      .when('/oauth_callback', {})
       .when('/403', {
         templateUrl: 'views/403.html',
         menuConfig: 'emptyMenu',

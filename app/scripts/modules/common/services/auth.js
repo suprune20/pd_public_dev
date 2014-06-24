@@ -124,7 +124,7 @@ angular.module('pdCommon')
       },
       isContainsRole: isContainsRole,
       getUserProfile: function () {
-        return authStorage.getProfile();
+        return authStorage.getProfile().profile || {};
       },
       getUserOrganisation: function () {
         return this.getUserProfile().organisation || {};
