@@ -4,13 +4,13 @@ angular.module('pdFrontend')
   .service('pdFrontendCatalogApi', function ($http, pdConfig) {
     return {
       getFilters: function () {
-        return $http.get(pdConfig.apiEndpoint + 'catalog_filters', {tracker: 'commonLoadingTracker'})
+        return $http.get(pdConfig.apiEndpoint + 'catalog_filters')
           .then(function (resp) {
             return resp.data;
           });
       },
       getCategories: function () {
-        return $http.get(pdConfig.apiEndpoint + 'catalog/categories', {tracker: 'commonLoadingTracker'})
+        return $http.get(pdConfig.apiEndpoint + 'catalog/categories')
           .then(function (resp) {
             return resp.data.results;
           });
@@ -19,33 +19,29 @@ angular.module('pdFrontend')
         return $http.get(pdConfig.apiEndpoint + 'catalog/suppliers', {
           params: {
             categories: _categories
-          },
-          tracker: 'commonLoadingTracker'
+          }
         }).then(function (resp) {
           return resp.data.supplier;
         });
       },
       getProducts: function (paramsData) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/products', {
-          params: paramsData,
-          tracker: 'commonLoadingTracker'
+          params: paramsData
         }).then(function (resp) {
           return resp.data.results;
         });
       },
       getProduct: function (productId) {
-        return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId, {
-          tracker: 'commonLoadingTracker'
-        }).then(function (resp) {
-          return resp.data.results[0];
-        });
+        return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId)
+          .then(function (resp) {
+            return resp.data.results[0];
+          });
       },
       getPlaces: function (statuses) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/places', {
           params: {
             'filter[status]': _.isArray(statuses) ? statuses : [statuses]
-          },
-          tracker: 'commonLoadingTracker'
+          }
         }).then(function (response) {
           return response.data;
         });
@@ -115,11 +111,11 @@ angular.module('pdFrontend')
         getProduct: pdFrontendCatalogApi.getProduct,
         productsDataProvider: productsDataProvider,
         getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
-          return $q.all([user.getPlaces(), pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
+          return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
             .then(function (promiseData) {
               var points = [],
-                userPlacesData = promiseData[0].places || [],
-                suppliersData = promiseData[1];
+                userPlacesData = [],
+                suppliersData = promiseData[0];
 
               // Add user's places point
               _.forEach(userPlacesData, function (place) {
@@ -186,14 +182,6 @@ angular.module('pdFrontend')
                 SUPPLIER_YA_MARKER_UNCHECKED_PRESET :
                 SUPPLIER_YA_MARKER_CHECKED_PRESET);
           supplierGeoObject.properties.set('active', !supplierGeoObject.properties.get('active'));
-        },
-        getUsersPlacesBounds: function (usersPoints) {
-          return pdYandex.getBoundsByPoints(_.map(usersPoints, function (point) {
-            return {
-              latitude: point.location.latitude,
-              longitude: point.location.longitude
-            };
-          }));
         },
         filterSuppliersByCategories: function (geoObjects, categories) {
           return _.map(geoObjects, function (geoObject) {
@@ -270,10 +258,11 @@ angular.module('pdFrontend')
       };
     };
   })
-  .factory('CatalogMyPlaces', function (pdYandex, user, growl, $rootScope) {
+  .factory('CatalogMyPlaces', function (pdYandex, user, growl, $rootScope, $q) {
     return function () {
-      var MARKER_CURRENT_MARKER_PRESET = 'twirl#redIcon',
-        MARKER_PLACE_PRESET = 'twirl#greyIcon';
+      var MARKER_CURRENT_PRESET = 'twirl#redIcon',
+        MARKER_PLACE_PRESET = 'twirl#greyIcon',
+        MARKER_REGULAR_PLACE_PRESET = 'twirl#greyDotIcon';
       var currentPlaceGeoObject,
         placeFormError;
 
@@ -288,7 +277,7 @@ angular.module('pdFrontend')
               placeData: placeData || {}
             },
             options: {
-              preset: MARKER_CURRENT_MARKER_PRESET,
+              preset: MARKER_CURRENT_PRESET,
               draggable: true
             }
           };
@@ -309,27 +298,29 @@ angular.module('pdFrontend')
             }
           });
         },
-        getYaGeoObjectFromPlace = function (placeData) {
-          return {
-            properties: {
-              type: 'users_place',
-              placeData: placeData
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [placeData.location.longitude, placeData.location.latitude]
-            },
+        getRegularPlaceGeoObject = function (placeModel) {
+          return _.merge(createPlacemark(null, placeModel), {
             options: {
-              preset: MARKER_PLACE_PRESET,
-              visible: true
+              draggable: false,
+              preset: MARKER_REGULAR_PLACE_PRESET
             }
-          };
+          });
+        },
+        getCustomPlaceGeoObject = function (placeModel) {
+          return _.merge(createPlacemark(null, placeModel), {
+            options: {
+              draggable: false,
+              preset: MARKER_PLACE_PRESET
+            }
+          });
         },
         placesGeoObjects = [],
         loadMyPlaces = function () {
-          user.getCustomPlaces()
-            .then(function (places) {
-              placesGeoObjects = _.map(places, getYaGeoObjectFromPlace);
+          return $q.all([user.getPlaces(), user.getCustomPlaces()])
+            .then(function (result) {
+              placesGeoObjects = []
+                .concat(_.map(result[0].places || [], getRegularPlaceGeoObject))
+                .concat(_.map(result[1], getCustomPlaceGeoObject));
             });
         },
         findPlaceGeoObject = function (placeId) {
@@ -456,7 +447,17 @@ angular.module('pdFrontend')
         getPlaceFormError: function () {
           return placeFormError;
         },
-        isExistsUnsavedPlaces: user.isExistsUnsavedPlaces
+        isExistsUnsavedPlaces: user.isExistsUnsavedPlaces,
+        getPlacesBounds: function () {
+          return pdYandex.getBoundsByPoints(_.map(placesGeoObjects, function (placeGeoObjectModel) {
+            var placeModel = placeGeoObjectModel.properties.placeData;
+
+            return {
+              latitude: placeModel.location.latitude,
+              longitude: placeModel.location.longitude
+            };
+          }));
+        }
       };
     };
   })

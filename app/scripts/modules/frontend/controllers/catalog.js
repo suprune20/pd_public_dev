@@ -88,13 +88,20 @@ angular.module('pdFrontend')
     };
 
     $scope.mapInitialized = function (map) {
-      $scope.$watch('userPlaces', function (userPlaces) {
+      $scope.$watch(function () {
+        return $scope.userPlacesProvider.getPlacesGeoObjects();
+      }, function (userPlaces) {
         if (!userPlaces) {
           return;
         }
 
         if (userPlaces.length > 1) {
-          map.setBounds($scope.catalog.getUsersPlacesBounds(userPlaces));
+          map.setBounds($scope.userPlacesProvider.getPlacesBounds());
+        }
+        // Set initial map center
+        if (1 === userPlaces.length) {
+          var userPlaceLocation = userPlaces[0].location;
+          $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
         }
       });
     };
@@ -102,12 +109,11 @@ angular.module('pdFrontend')
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
       $scope.isLoadedGeoObjects = true;
       $scope.catalogGeoObjects = mapPoints.allPoints;
-      $scope.userPlaces = mapPoints.userPlacesPoints;
-      // Set initial map center
-      if (1 === $scope.userPlaces.length) {
-        var userPlaceLocation = $scope.userPlaces[0].location;
-        $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
-      }
+
+      // set visibility for catalog geoObjects by default
+      $scope.catalogGeoObjects.forEach(function (geoObject) {
+        geoObject.options.visible = $scope.catalogViewIsShown;
+      });
     });
     // Filtered markers by yandex map
     $scope.yaMapBoundsChange = function (event) {
@@ -164,7 +170,7 @@ angular.module('pdFrontend')
     };
 
     // Check custom place
-    $scope.catalogViewIsShown = true;
+    $scope.catalogViewIsShown = false;
     $scope.$watch('catalogViewIsShown', function (isShown) {
       $scope.catalogGeoObjects.forEach(function (geoObject) {
         geoObject.options.visible = isShown;
