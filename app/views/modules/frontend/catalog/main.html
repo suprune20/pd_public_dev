@@ -5,6 +5,8 @@
         ya-after-init="mapInitialized($target)"
         ya-event-boundschange="yaMapBoundsChange($event)"
         ya-event-click="userPlacesProvider.yaMapClickHandle($event)">
+  <pd-ya-map-sizer pd-ya-size="{{ catalogViewIsShown || catalogUnownedPlacesProvider.getSelectedPlacesGallery().length ? '23PartHeight' : 'full'}}"
+                   pd-ya-height-decrease="60"></pd-ya-map-sizer>
   <ya-toolbar ya-name="zoomControl" ya-options="{left: 250, top: 50}"></ya-toolbar>
   <ya-toolbar ya-name="typeSelector" ya-options="{top: 45, left: 298}"></ya-toolbar>
 
@@ -103,7 +105,8 @@
 </div>
 
 <div class="container">
-  <div class="row catalog-unowned-places-details-cont" ng-if="catalogUnownedPlacesProvider.getSelectedPlacesGallery()">
+  <div class="row catalog-unowned-places-details-cont"
+       ng-if="catalogUnownedPlacesProvider.getSelectedPlacesGallery().length">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Галерея неухоженных мест</h3>

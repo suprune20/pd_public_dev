@@ -85,4 +85,26 @@ angular.module('pdCommon')
       }
     };
   })
+  .directive('pdYaMapSizer', function ($window, $timeout) {
+    return {
+      restrict: 'E',
+      require: '^yaMap',
+      link: function (scope, element, attrs, yaMapCtrl) {
+        var mapContEl = yaMapCtrl.getMap().container.getElement();
+
+        attrs.$observe('pdYaSize', function (size) {
+          mapContEl.style.width = '100%';
+          if ('23PartHeight' === size) {
+            mapContEl.style.height = ($window.innerHeight * 2 / 3 - parseInt(attrs.pdYaHeightDecrease, 10) || 0) + 'px';
+          } else if ('full' === size) {
+            mapContEl.style.height = ($window.innerHeight - parseInt(attrs.pdYaHeightDecrease, 10) || 0) + 'px';
+          }
+
+          $timeout(function () {
+            yaMapCtrl.getMap().container.fitToViewport();
+          }, 50);
+        });
+      }
+    };
+  })
 ;
