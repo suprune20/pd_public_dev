@@ -229,7 +229,15 @@ angular.module('pdFrontend')
           ymaps.geoQuery(polygonGeoObject.getMap().geoObjects).searchIntersect(polygonGeoObject)
             .search('properties.type = "unidentified_place"')
             .each(function (geoObject) {
-              selectedPlacesGallery = selectedPlacesGallery.concat(geoObject.properties.get('pointData').photos);
+              var placeModel = geoObject.properties.get('pointData');
+              placeModel.photos.forEach(function (photoModel) {
+                photoModel.cemetery = {
+                  address: placeModel.cemetery.address,
+                  phones: placeModel.cemetery.phones
+                };
+                photoModel.placeAddress = placeModel.address;
+                selectedPlacesGallery.push(photoModel);
+              });
             });
         }
       };

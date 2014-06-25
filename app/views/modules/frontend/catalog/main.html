@@ -117,6 +117,18 @@
               pb-fancybox-gallery="item.photo|pdThumbnail:'600x800'">
             <div class="thumbnail">
               <img ng-src="{{item.photo}}" pd-thumb pd-thumb-size="500x300" />
+              <div class="caption">
+                <p><strong>{{item.placeAddress}}</strong></p>
+                <p>
+                  <small>
+                    Для того чтобы стать ответственным за это место захоронения обратитесь в администрацию кладбища:
+                    {{item.cemetery.address}}
+                    <span ng-show="item.cemetery.phones.length">
+                      , телефоны: <span ng-repeat="phone in item.cemetery.phones">{{phone}} <span ng-show="!$last">, </span></span>
+                    </span>
+                  </small>
+                </p>
+              </div>
             </div>
           </li>
         </pd-carousel>
