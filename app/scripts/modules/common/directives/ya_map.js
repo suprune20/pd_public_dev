@@ -76,9 +76,14 @@ angular.module('pdCommon')
             var results = this.getData().state.get('results'),
               result = results && results[0];
 
-            if(result) {
+            if (result) {
               result.options.set('preset', 'twirl#darkblueStretchyIcon');
+              result.options.set('openBalloonOnClick', false);
               result.properties.set('iconContent', result.properties.get('name'));
+              result.events.add('click', function () {
+                result.events.remove('click');
+                result.options.set('visible', false);
+              });
             }
           }
         };
