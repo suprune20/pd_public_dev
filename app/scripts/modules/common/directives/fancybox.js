@@ -1,19 +1,52 @@
 'use strict';
 
 angular.module('pdCommon')
-  .directive('pbFancybox', function () {
+//  .directive('pbFancybox', function () {
+//    return {
+//      restrict: 'AE',
+//      link: function (scope, iElement, iAttrs) {
+//        var isApplied = false;
+//
+//        iAttrs.$observe('href', function (hrefValue) {
+//          if (!hrefValue || isApplied) {
+//            return;
+//          }
+//
+//          iElement.fancybox();
+//          isApplied = true;
+//        });
+//      }
+//    };
+//  })
+  .directive('pdFancybox', function () {
     return {
-      restrict: 'AE',
-      link: function (scope, iElement, iAttrs) {
-        var isApplied = false;
-
-        iAttrs.$observe('href', function (hrefValue) {
-          if (!hrefValue || isApplied) {
-            return;
-          }
-
-          iElement.fancybox();
-          isApplied = true;
+      restrict: 'EA',
+      controller: function ($scope) {
+        this.setTitle = function (titleText) {
+          $scope.fancyboxTitle = titleText;
+        };
+      },
+      link: function (scope, element, attrs) {
+        element.on('click', function () {
+          console.log('click', attrs.pdFancybox, scope.fancyboxTitle);
+          $.fancybox.open([{
+            href: attrs.pdFancybox,
+            title: scope.fancyboxTitle
+          }]);
+        });
+      }
+    };
+  })
+  .directive('pdFancyboxTitle', function () {
+    return {
+      restrict: 'EA',
+      require:'^pdFancybox',
+      link: function (scope, element, attrs, pdFancyboxCtrl) {
+        element.css('display', 'none');
+        scope.$watch(function () {
+          return element.html();
+        }, function (titleContent) {
+          pdFancyboxCtrl.setTitle(titleContent);
         });
       }
     };
