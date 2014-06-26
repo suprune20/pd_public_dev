@@ -2,7 +2,7 @@
 
 angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
-                                       CatalogMyPlaces, auth) {
+                                       CatalogMyPlaces, auth, $timeout) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
@@ -96,10 +96,11 @@ angular.module('pdFrontend')
         }
 
         if (userPlaces.length > 1) {
-          map.setBounds($scope.userPlacesProvider.getPlacesBounds());
-        }
-        // Set initial map center
-        if (1 === userPlaces.length) {
+          // ToDo: check for needed $timeout, probably wrong in another place
+          $timeout(function () {
+            map.setBounds($scope.userPlacesProvider.getPlacesBounds());
+          }, 500);
+        } else if (1 === userPlaces.length) {
           var userPlaceLocation = userPlaces[0].properties.placeData.location;
           $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
         }
