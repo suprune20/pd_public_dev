@@ -6,8 +6,8 @@ angular.module('pdCommon')
     $scope.signup = function () {
       $scope.authProvider.signup()
         .then(function () {
-          growl.addSuccessMessage('Регистрация прошла успешно. Начните работу с поиска и добавления мест.');
-          $location.path('/map');
+          growl.addSuccessMessage('Регистрация прошла успешно');
+          $location.path('/');
         }, function (errorData) {
           $scope.errorMsg = errorData.message;
         });
