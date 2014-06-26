@@ -100,7 +100,7 @@ angular.module('pdFrontend')
         }
         // Set initial map center
         if (1 === userPlaces.length) {
-          var userPlaceLocation = userPlaces[0].location;
+          var userPlaceLocation = userPlaces[0].properties.placeData.location;
           $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
         }
       });
