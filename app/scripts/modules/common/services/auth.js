@@ -127,7 +127,7 @@ angular.module('pdCommon')
         return authStorage.getProfile().profile || {};
       },
       getUserOrganisation: function () {
-        return this.getUserProfile().organisation || {};
+        return authStorage.getProfile().organisation || {};
       },
       signup: function (signupModel) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signup', signupModel)

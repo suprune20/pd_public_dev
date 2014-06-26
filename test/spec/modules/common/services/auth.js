@@ -187,6 +187,22 @@ describe('Service: Auth', function () {
     });
   });
 
+  describe('getUserProfile method', function () {
+    it('should return profile data for current user from localstorage', function () {
+      storageMock.get.andReturn({'profile':{'username':'loru1','firstname':'Иван','middlename':'Иванович','photo':null,'mainPhone':null,'lastname':'Петров','email':'qq@mail.ru'},'organisation':{'location':{'coords':{'latitude':53.915809,'longitude':27.504815},'address':'улица Ленина, дом 53А, Калуга, Калужская область, Россия 248016'},'id':19,'name':'Рит_комп19'}});
+
+      expect(authService.getUserProfile()).toEqual({'username':'loru1','firstname':'Иван','middlename':'Иванович','photo':null,'mainPhone':null,'lastname':'Петров','email':'qq@mail.ru'});
+    });
+  });
+
+  describe('getUserOrganisation method', function () {
+    it('should return organisation data for current user from localstorage', function () {
+      storageMock.get.andReturn({'profile':{'username':'loru1','firstname':'Иван','middlename':'Иванович','photo':null,'mainPhone':null,'lastname':'Петров','email':'qq@mail.ru'},'organisation':{'location':{'coords':{'latitude':53.915809,'longitude':27.504815},'address':'улица Ленина, дом 53А, Калуга, Калужская область, Россия 248016'},'id':19,'name':'Рит_комп19'}});
+
+      expect(authService.getUserOrganisation()).toEqual({'location':{'coords':{'latitude':53.915809,'longitude':27.504815},'address':'улица Ленина, дом 53А, Калуга, Калужская область, Россия 248016'},'id':19,'name':'Рит_комп19'});
+    });
+  });
+
   describe('get role methods', function () {
     it('should false if current logged user has not client role', function () {
       storageMock.get.andReturn(null);
