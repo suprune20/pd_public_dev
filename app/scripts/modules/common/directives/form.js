@@ -28,6 +28,10 @@ angular.module('pdCommon')
       restrict: 'E',
       require: 'ngModel',
       templateUrl: 'views/modules/common/directives/pd_file_selector.html',
+      scope: {
+        pdMaxWidth: '@',
+        pdMaxHeight: '@'
+      },
       link: function (scope, element, attrs, ngModel) {
         if (!ngModel) {
           return;
@@ -44,13 +48,13 @@ angular.module('pdCommon')
           scope.isEmptyModel = !modelValue;
 
           if (_.has(attrs, 'pdAllowPreview')) {
-            var imagePreviewCont = element.find('.pd-file-selector-preview'),
-              addPreviewImage = function (imageSrc) {
-                imagePreviewCont.html(angular.element('<img src="' + imageSrc + '" />'));
+            var addPreviewImage = function (imageSrc) {
+                scope.imageSourceData = imageSrc;
               },
               clearPreview = function () {
-                imagePreviewCont.html('');
-              };
+                delete scope.imageSourceData;
+              }
+            ;
 
             if (modelValue instanceof File && /image\//.test(modelValue.type)) {
               fileReader.readAsDataURL(modelValue, scope)

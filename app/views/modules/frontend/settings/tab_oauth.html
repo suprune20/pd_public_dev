@@ -1,0 +1,20 @@
+<table class="table">
+  <tr ng-repeat="(providerId, providerTitle) in oauthProviders">
+    <td>{{providerTitle}}</td>
+    <td class="text-right">
+      <span ng-show="additionalSettingsData.oauthProviders[providerId].username">
+        подключен как <strong>{{additionalSettingsData.oauthProviders[providerId].username}}</strong>
+      </span>
+      <button ng-click="detachOAuthProvider(providerId)" class="btn btn-danger"
+              ng-show="additionalSettingsData.oauthProviders[providerId]">
+        <i class="glyphicon glyphicon-remove-circle"></i>
+        Отключить
+      </button>
+
+      <button ng-click="attachOAuthProvider(providerId)" class="btn btn-default"
+              ng-hide="additionalSettingsData.oauthProviders[providerId]">
+        Подключить
+      </button>
+    </td>
+  </tr>
+</table>

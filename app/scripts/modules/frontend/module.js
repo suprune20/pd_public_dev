@@ -5,17 +5,21 @@ angular.module('pdFrontend', [
     'pdCommon',
     'ui.select2',
     'infinite-scroll',
-    'yaMap'
+    'yaMap',
+    'mgcrea.ngStrap.datepicker'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/catalog', {
+  .config(function (authRouteProvider) {
+    authRouteProvider
+      .when('/map', {
         controller: 'CatalogCtrl',
         templateUrl: 'views/modules/frontend/catalog/main.html',
         reloadOnSearch: false,
-        title: 'Каталог',
-        secured: true,
-        menuConfig: 'cabinetMenu'
+        title: 'Карта мест захоронений',
+        secured: false,
+        menuConfig: 'cabinetMenu',
+        hideMainMenu: true,
+        hideRootContainerClass: true,
+        pageClass: 'map-page'
       })
       .when('/client-panel', {
         controller: 'ClientPanelCtrl',
@@ -23,15 +27,20 @@ angular.module('pdFrontend', [
         title: 'Панель клиента',
         secured: true,
         menuConfig: 'cabinetMenu'
-      })
+      }, 'ROLE_CLIENT')
       .when('/settings', {
         controller: 'PdFrontendSettingsCtrl',
         templateUrl: 'views/modules/frontend/settings/main.html',
         title: 'Настройки пользователя',
         secured: true,
         menuConfig: 'cabinetMenu',
-        pageClass: 'pd-frontend-settings-page'
-      })
+        pageClass: 'pd-frontend-settings-page',
+        resolve: {
+          additionalSettingsData: ['settingsProvider', function (settingsProvider) {
+            return settingsProvider;
+          }]
+        }
+      }, 'ROLE_CLIENT')
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, auth) {

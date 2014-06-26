@@ -4,7 +4,7 @@ angular.module('pdLoru', [
     'ngRoute',
     'pdCommon'
   ])
-  .config(function ($routeProvider) {
+  .config(function (authRouteProvider) {
     var routeConfig = {
       '': {
         templateUrl: 'views/modules/loru/main.html',
@@ -14,15 +14,21 @@ angular.module('pdLoru', [
         controller: 'LoruAdvertisementCtrl',
         templateUrl: 'views/modules/loru/productplaces/main.html',
         title: 'Реклама'
+      },
+      '/orgplaces': {
+        controller: 'LoruOrgPlacesCtrl',
+        templateUrl: 'views/modules/loru/orgplaces/main.html',
+        title: 'Места',
+        pageClass: 'loru-orgplaces'
       }
     };
 
     _.forEach(routeConfig, function (routeData, routeUri) {
-      $routeProvider
+      authRouteProvider
         .when('/loru' + routeUri, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, routeData || {}))
+        }, routeData || {}), 'ROLE_LORU')
       ;
     });
   })
@@ -48,6 +54,7 @@ angular.module('pdLoru', [
               hide: !userOrgId
             },
             {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
+            {link: '#/loru/orgplaces', title: 'Склады'},
             {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
             {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
             {class: 'divider'},

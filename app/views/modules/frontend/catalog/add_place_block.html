@@ -1,0 +1,64 @@
+<div ng-show="userPlacesProvider.getSelectedPlaceGeoObject()" class="edit-modal-cont" isolate-scrolling>
+  <form role="form" name="placeAddForm" novalidate>
+    <div class="alert alert-danger" ng-show="userPlacesProvider.getPlaceFormError()">
+      {{userPlacesProvider.getPlaceFormError()}}
+    </div>
+
+    <div class="form-group">
+      <label for="userPlaceAddress">Адрес</label>
+      <textarea class="form-control" id="userPlaceAddress" readonly
+                ng-model="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.address"></textarea>
+    </div>
+
+    <div class="form-group inner-forms-cont">
+      <label>Список усопших</label>
+
+      <div ng-repeat="deceased in userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.deadmens"
+           class="inner-form">
+        <div class="form-group">
+          <label for="deceasedLastname{{$index}}">Фамилия усопшего</label>
+          <input class="form-control" id="deceasedLastname{{$index}}" ng-model="deceased.lastname" required />
+        </div>
+        <div class="form-group">
+          <label for="deceasedFirstname{{$index}}">Имя усопшего</label>
+          <input class="form-control" id="deceasedFirstname{{$index}}" ng-model="deceased.firstname" required />
+        </div>
+        <div class="form-group">
+          <label for="deceasedMiddlename{{$index}}">Отчество усопшего</label>
+          <input class="form-control" id="deceasedMiddlename{{$index}}" ng-model="deceased.middlename" />
+        </div>
+        <div class="form-group">
+          <label for="deceasedDob{{$index}}">Дата рождения</label>
+          <input type="text" class="form-control" id="deceasedDob{{$index}}" ng-model="deceased.birthDate" bs-datepicker
+                 autoclose="true" container="body" />
+        </div>
+        <div class="form-group">
+          <label for="deceasedDod{{$index}}">Дата смерти</label>
+          <input type="text" class="form-control" id="deceasedDod{{$index}}" ng-model="deceased.deathDate" bs-datepicker
+                 autoclose="true" container="body" />
+        </div>
+
+        <div ng-show="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.deadmens.length > 1"
+             class="text-right">
+          <span class="btn btn-danger btn-xs" ng-click="userPlacesProvider.removeDeceased(deceased)">
+            <i class="glyphicon glyphicon-trash"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <span class="btn btn-default btn-xs" ng-click="userPlacesProvider.addDeceased()">Добавить усопшего</span>
+    </div>
+
+    <button type="submit" class="btn btn-success"
+            ng-disabled="placeAddForm.$invalid"
+            ng-hide="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.id"
+            ng-click="userPlacesProvider.addNewPlaceFromSelected()">Добавить</button>
+    <button type="submit" class="btn btn-success"
+            ng-disabled="placeAddForm.$invalid ||
+                !userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.deadmens.length"
+            ng-show="userPlacesProvider.getSelectedPlaceGeoObject().properties.placeData.id"
+            ng-click="userPlacesProvider.savePlaceFromSelected()">Сохранить</button>
+    <button class="btn btn-default" ng-click="userPlacesProvider.cancelEdit()">Отмена</button>
+  </form>
+</div>

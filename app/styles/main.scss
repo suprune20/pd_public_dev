@@ -12,11 +12,22 @@ $table-bg-active: darken(#f5f5f5, 10%);
 @import "partials/helpers";
 @import "partials/bootstrap_loading_block";
 @import "partials/growl";
+@import "partials/pd_carousel";
+@import "partials/map";
+@import "partials/form";
 @import "layout";
 @import "catalog";
 @import "client-panel";
 @import "signin";
 
+// Directives styles
+@import "directives/ya_pd_autocomplete_search";
+@import "directives/pd_file_selector";
+
 // Pages styles
 @import "pages/landing_page";
 @import "pages/pdFrontend/settings";
+@import "pages/pdOms/placesmap";
+@import "pages/pdLoru/orgplaces";
+@import "pages/pdFrontend/auth_modal";
+@import "pages/pdCommon/org_signup_page";

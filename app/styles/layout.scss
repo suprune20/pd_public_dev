@@ -20,3 +20,14 @@ form {
     }
   }
 }
+
+.terms-and-conditions-modal {
+  .modal-body {
+    p, h4 {
+      text-indent: 35px;
+    }
+    p {
+      text-align: justify;
+    }
+  }
+}

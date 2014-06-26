@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('pdCommon', [
+    'ngRoute',
     'pdConfig',
     'ui.bootstrap',
     'angularLocalStorage',
     'ajoslin.promise-tracker',
     'ivpusic.cookie',
     'angular-growl',
-    'angularFileUpload'
+    'angularFileUpload',
+    'checklist-model'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
@@ -31,4 +33,34 @@ angular.module('pdCommon', [
       }
     };
   })
+  // Route provider with check allowed roles
+  .provider('authRoute', ['$routeProvider', function ($routeProvider) {
+    return angular.extend({}, $routeProvider, {
+      when: function (path, route, allowedRoles) {
+        route.resolve = route.resolve || {};
+        angular.extend(route.resolve, { isAllowedAccess: ['$q', 'auth', function ($q, auth) {
+          var deferred = $q.defer();
+
+          if (!route.secured ||
+            // Check for "non" regular expr string: !ROLE
+            ((_.isString(allowedRoles) && '!' === allowedRoles[0]) ?
+              !auth.isContainsRole(allowedRoles.substring(1)) :
+              auth.isContainsRole(allowedRoles))
+          ) {
+            deferred.resolve();
+          } else {
+            deferred.reject({ accessDenied: true });
+          }
+
+          return deferred.promise;
+        }
+        ]});
+
+        // Call parent method
+        $routeProvider.when(path, route);
+
+        return this;
+      }
+    });
+  }])
 ;

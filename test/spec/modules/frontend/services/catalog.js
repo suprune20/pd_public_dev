@@ -3,9 +3,17 @@
 describe('Service: Catalog', function () {
   var $httpBackend,
     serverEndpointUrl,
-    catalogService;
+    catalogService,
+    userServiceMock;
 
-  beforeEach(module('pdFrontend'));
+  beforeEach(function () {
+    userServiceMock = {
+      getPlaces: jasmine.createSpy('user service getPlaces mock')
+    };
+  });
+  beforeEach(module('pdFrontend', function($provide) {
+    $provide.value('user', userServiceMock);
+  }));
   beforeEach(inject(function (_$httpBackend_, pdConfig, Catalog) {
     $httpBackend = _$httpBackend_;
     serverEndpointUrl = pdConfig.apiEndpoint;
@@ -32,7 +40,7 @@ describe('Service: Catalog', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
-    $httpBackend.expectGET(serverEndpointUrl + 'product_category').respond(200, {
+    $httpBackend.expectGET(serverEndpointUrl + 'catalog/categories').respond(200, {
       results: [
         {id: 1, name: 'category 1'}
       ]
@@ -48,7 +56,7 @@ describe('Service: Catalog', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
-    $httpBackend.expectGET(serverEndpointUrl + 'product?id=123').respond(200, {
+    $httpBackend.expectGET(serverEndpointUrl + 'catalog/products/123').respond(200, {
       results: [
         {id: 123, name: 'product 123'}
       ]
@@ -62,7 +70,7 @@ describe('Service: Catalog', function () {
 
   describe('products data provide', function () {
     it('should get products data with default pagination values', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
     });
@@ -70,19 +78,19 @@ describe('Service: Catalog', function () {
     it('should get products data with custom pagination values', inject(function (Catalog) {
       catalogService = new Catalog(1);
 
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=1&offset=0').respond(200, {results: [
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, {results: [
         {id: 1, name: 'product title'}
       ]});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=1&offset=1').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=1').respond(200, {results: []});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
     }));
 
     it('should get products data', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=15&offset=0').respond(200, {results: [
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: [
         {id: 1, name: 'product title'}
       ]});
       catalogService.productsDataProvider.getNextProducts();
@@ -92,7 +100,7 @@ describe('Service: Catalog', function () {
     });
 
     it('should set isNoMoreProducts flag', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
@@ -102,7 +110,7 @@ describe('Service: Catalog', function () {
     it('should not set isNoMoreProducts', inject(function (Catalog) {
       catalogService = new Catalog(1);
 
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=1&offset=0').respond(200, {results: [
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, {results: [
         {id: 1, name: 'product title'}
       ]});
       catalogService.productsDataProvider.getNextProducts();
@@ -112,7 +120,7 @@ describe('Service: Catalog', function () {
     }));
 
     it('should set isBusy flag to true', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
       catalogService.productsDataProvider.getNextProducts();
 
       expect(catalogService.productsDataProvider.isBusy()).toBeTruthy();
@@ -126,12 +134,168 @@ describe('Service: Catalog', function () {
         supplier: [1, 2]
       });
       $httpBackend
-        .expectGET(serverEndpointUrl + 'products?filter%5Bcategory%5D=123' +
+        .expectGET(serverEndpointUrl + 'catalog/products?filter%5Bcategory%5D=123' +
           '&filter%5Bsupplier%5D=1&filter%5Bsupplier%5D=2' +
           '&limit=15&offset=0')
         .respond(200, {results: []});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
     });
+  });
+
+  describe('getYaMapPoints method', function () {
+    it('should send requests for getting suppliers', function () {
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, {});
+      catalogService.getYaMapPoints();
+      $httpBackend.flush();
+    });
+
+    it('should return suppliers\'s places converted for yandex map geoobjects and ignore places without location and without categories', function () {
+      var suppliersData = {
+        supplier: [{
+          location: {
+            latitude: 43,
+            longitude: 54
+          },
+          categories: ['test'],
+          stores: [{
+            id: 1,
+            location: {
+              latitude: 43,
+              longitude: 54
+            }
+          }]
+        }, {
+          location: {
+            latitude: 43,
+            longitude: 54
+          },
+          categories: [],
+          stores: []
+        }, {
+          location: null,
+          categories: ['test'],
+          stores: [{
+            location: {
+              latitude: 43,
+              longitude: 54
+            }
+          }]
+        }]
+      };
+
+      userServiceMock.getPlaces.andReturn({});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, suppliersData);
+      catalogService.getYaMapPoints().then(function (mapPoints) {
+        expect(mapPoints.allPoints.length).toBe(1);
+        expect(mapPoints.allPoints[0].properties.pointData.id).toBe(1);
+        expect(mapPoints.allPoints[0].properties.pointData.categories).toEqual(suppliersData.supplier[0].categories);
+        expect(mapPoints.suppliersPoints.length).toBe(3);
+      });
+      $httpBackend.flush();
+    });
+  });
+
+  it('should filter suppliers by selected categories', function () {
+    var geoObjects = [{
+      properties: {
+        type: 'supplier_store_place',
+        pointData: {
+          categories: ['category1', 'category2']
+        },
+        active: true
+      },
+      options: {
+        preset: 'twirl#darkgreenDotIcon',
+        visible: true
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [3, 3]
+      }
+    }, {
+      properties: {
+        type: 'supplier_store_place',
+        pointData: {
+          categories: ['category2']
+        },
+        active: true
+      },
+      options: {
+        preset: 'twirl#darkgreenDotIcon',
+        visible: true
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [3, 3]
+      }
+    }, {
+      properties: {
+        type: 'supplier_store_place',
+        pointData: {
+          categories: ['category3']
+        },
+        active: true
+      },
+      options: {
+        preset: 'twirl#darkgreenDotIcon',
+        visible: true
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [3, 3]
+      }
+    }];
+
+    expect(catalogService.filterSuppliersByCategories(geoObjects, ['category2']))
+      .toEqual([{
+        properties: {
+          type: 'supplier_store_place',
+          pointData: {
+            categories: ['category1', 'category2']
+          },
+          active: true
+        },
+        options: {
+          preset: 'twirl#darkgreenDotIcon',
+          visible: true
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [3, 3]
+        }
+      }, {
+        properties: {
+          type: 'supplier_store_place',
+          pointData: {
+            categories: ['category2']
+          },
+          active: true
+        },
+        options: {
+          preset: 'twirl#darkgreenDotIcon',
+          visible: true
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [3, 3]
+        }
+      }, {
+        properties: {
+          type: 'supplier_store_place',
+          pointData: {
+            categories: ['category3']
+          },
+          active: true
+        },
+        options: {
+          preset: 'twirl#darkgreenDotIcon',
+          visible: false
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [3, 3]
+        }
+      }]);
   });
 });

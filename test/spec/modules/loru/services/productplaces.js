@@ -22,11 +22,19 @@ describe('Service: Loru advertisement', function () {
         {
           'availableOnPlaces': [],
           'id': 1,
-          'name': 'Product1'
+          'name': 'Product1',
+          category: {
+            id: 1,
+            name: 'category1'
+          }
         }, {
           'availableOnPlaces': [64],
           'id': 2,
-          'name': 'Product2'
+          'name': 'Product2',
+          category: {
+            id: 1,
+            name: 'category1'
+          }
         }
       ],
       places = [{
@@ -44,6 +52,27 @@ describe('Service: Loru advertisement', function () {
       expect(productsData.productsByPlaces).toEqual({
         1: {64: 'disable'},
         2: {64: 'enable'}
+      });
+      expect(productsData.productsByCategories).toEqual({
+        'category1': [
+          {
+            'availableOnPlaces': [],
+            'id': 1,
+            'name': 'Product1',
+            category: {
+              id: 1,
+              name: 'category1'
+            }
+          }, {
+            'availableOnPlaces': [64],
+            'id': 2,
+            'name': 'Product2',
+            category: {
+              id: 1,
+              name: 'category1'
+            }
+          }
+        ]
       });
     }, errorCallback);
     $httpBackend.flush();

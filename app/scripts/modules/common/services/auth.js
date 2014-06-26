@@ -1,84 +1,111 @@
 'use strict';
 
+/* jshint -W069 */
+
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, storage, ipCookie, $q, $rootScope) {
-    var getUserProfileData = function () {
-        return storage.get(pdConfig.AUTH_PROFILE_KEY) || {};
+  .service('auth', function ($http, pdConfig, authStorage, ipCookie, $q, $rootScope, oauthIO, $upload) {
+    var applySuccessSigninResponse = function (responseData) {
+        if (_.has(responseData, 'token')) {
+          authStorage.setApiAuthToken(responseData.token);
+        }
+
+        // Set session cookie for "old" django backend
+        if (_.has(responseData, 'sessionId')) {
+          ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
+        }
+
+        if (_.has(responseData, 'role')) {
+          responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
+          authStorage.setRoles(responseData.role);
+        }
+
+        // Save user's profile data into localstorage
+        var profileData = {};
+        profileData.profile = responseData.profile || {};
+        profileData.organisation = responseData.org || {};
+        authStorage.setProfile(profileData);
+
+        // Broadcast success signin event
+        $rootScope.$broadcast('auth.signin_success');
+
+        return responseData;
       },
-      signin = function (username, password, confirmTC) {
+      isAuthenticated = function () {
+        return authStorage.isAvailableAuthToken();
+      },
+      getRoles = function () {
+        return isAuthenticated() ? authStorage.getRoles() : ['AUTH_ROLE_ANONYMOUS'];
+      },
+      isContainsRole = function (role) {
+        return !!_.intersection(getRoles(), _.isArray(role) ? role : [role]).length;
+      }
+    ;
+
+    return {
+      signin: function (username, password, confirmTC, oauthData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
-            username: username,
-            password: password,
-            confirmTC: confirmTC ? true : undefined
-          }, {tracker: 'commonLoadingTracker'}).then(function (response) {
-            var responseData = response.data;
+          username: username,
+          password: password,
+          confirmTC: confirmTC ? true : undefined,
+          oauth: oauthData
+        }).then(function (response) {
+          return applySuccessSigninResponse(response.data);
+        }, function (response) {
+          var respData = response.data;
 
-            if (_.has(responseData, 'token')) {
-              storage.set(pdConfig.AUTH_TOKEN_KEY, responseData.token);
-            }
-
-            // Set session cookie for "old" django backend
-            if (_.has(responseData, 'sessionId')) {
-              ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
-            }
-
-            if (_.has(responseData, 'role')) {
-              responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
-              storage.set(pdConfig.AUTH_ROLES_KEY, responseData.role);
-            }
-
-            // Save user's profile data into localstorage
-            var profileData = {};
-            profileData.profile = responseData.profile || {};
-            profileData.organisation = responseData.org || {};
-            storage.set(pdConfig.AUTH_PROFILE_KEY, profileData);
-
-            // Broadcast success signin event
-            $rootScope.$broadcast('auth.signin_success');
-
-            return responseData;
-          }, function (errorResponse) {
-            var respData = errorResponse.data;
-            respData.errorCode = 'undefined_error';
-
-            if (400 === errorResponse.status) {
-              respData.errorCode = 'wrong_credentials';
-
-              if ('unconfirmed_tc' === respData.message) {
-                respData.errorCode = respData.message;
-              }
-            }
-
+          if (respData.errorCode) {
             return $q.reject(respData);
+          }
+
+          respData.errorCode = 'undefined_error';
+          if (400 === response.status) {
+            respData.errorCode = 'wrong_credentials';
+
+            if ('unconfirmed_tc' === respData.message) {
+              respData.errorCode = respData.message;
+            }
+          }
+
+          return $q.reject(respData);
+        });
+      },
+      signinOAuth: function (providerId) {
+        var self = this;
+        return oauthIO.popup(providerId)
+          .then(function (result) {
+            return self.signin(undefined, undefined, undefined, {
+              provider: providerId,
+              accessToken: result['access_token']
+            }).catch(function (errorData) {
+              errorData.oauthResult = result;
+
+              return $q.reject(errorData);
+            });
+          }, function () {
+            return $q.reject({
+              message: 'Ошибка OAuth провайдера ' + providerId
+            });
           });
       },
-      signout = function () {
-        return $http.post(pdConfig.apiEndpoint + 'auth/signout', {}, {tracker: 'commonLoadingTracker'})
+      signout: function () {
+        return $http.post(pdConfig.apiEndpoint + 'auth/signout')
           .finally(function () {
             ipCookie('pdsession', 'wrong_session', {domain: pdConfig.AUTH_COOKIE_DOMAIN});
-            storage.remove(pdConfig.AUTH_TOKEN_KEY);
-            storage.remove(pdConfig.AUTH_ROLES_KEY);
+            authStorage.clearAll();
             $rootScope.$broadcast('auth.signout');
           });
       },
-      isAuthenticated = function () {
-        return !!storage.get(pdConfig.AUTH_TOKEN_KEY);
+      isAuthenticated: isAuthenticated,
+      getAuthToken: function () {
+        return authStorage.getApiAuthToken();
       },
-      getAuthToken = function () {
-        return storage.get(pdConfig.AUTH_TOKEN_KEY);
-      },
-      getRoles = function () {
-        return storage.get(pdConfig.AUTH_ROLES_KEY);
-      },
-      getPasswordBySMS = function (username, captchaData) {
+      getRoles: getRoles,
+      getPasswordBySMS: function (username, captchaData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
           recaptchaData: captchaData
-        }, {tracker: 'commonLoadingTracker'}).then(function (responseData) {
-          return responseData.data;
-        }, function (errorResponseData) {
-          var responseData = errorResponseData.data;
-
+        }).catch(function (response) {
+          var responseData = response.data;
           if (!_.has(responseData, 'status') || !_.has(responseData, 'message')) {
             responseData.message = 'Неизвестная ошибка. Обратитесь к администрации сайта';
           }
@@ -86,57 +113,127 @@ angular.module('pdCommon')
           return $q.reject(responseData);
         });
       },
-      getUserProfile = function () {
-        return getUserProfileData().profile || {};
-      },
-      getUserOrganisation = function () {
-        return getUserProfileData().organisation || {};
-      },
-      isContainsRole = function (role) {
-        return _.contains(getRoles(), role);
-      },
-      isCurrentHasClientRole = function () {
+      isCurrentHasClientRole: function () {
         return isContainsRole('ROLE_CLIENT');
       },
-      isCurrentHasLoruRole = function () {
+      isCurrentHasLoruRole: function () {
         return isContainsRole('ROLE_LORU');
       },
-      isCurrentHasOmsRole = function () {
+      isCurrentHasOmsRole: function () {
         return isContainsRole('ROLE_OMS');
-      };
+      },
+      isContainsRole: isContainsRole,
+      getUserProfile: function () {
+        return authStorage.getProfile().profile || {};
+      },
+      getUserOrganisation: function () {
+        return authStorage.getProfile().organisation || {};
+      },
+      signup: function (signupModel) {
+        return $http.post(pdConfig.apiEndpoint + 'auth/signup', signupModel)
+          .then(function (response) {
+            return applySuccessSigninResponse(response.data);
+          });
+      },
+      organisationSignup: function (signupModel) {
+        var deferred = $q.defer(),
+          certificateFile = signupModel.certificatePhoto;
 
-    return {
-      signin: signin,
-      signout: signout,
-      isAuthenticated: isAuthenticated,
-      getAuthToken: getAuthToken,
-      getRoles: getRoles,
-      getPasswordBySMS: getPasswordBySMS,
-      isCurrentHasClientRole: isCurrentHasClientRole,
-      isCurrentHasLoruRole: isCurrentHasLoruRole,
-      isCurrentHasOmsRole: isCurrentHasOmsRole,
-      getUserProfile: getUserProfile,
-      getUserOrganisation: getUserOrganisation
+        delete signupModel.certificatePhoto;
+        $upload.upload({
+            url: pdConfig.apiEndpoint + 'org/signup',
+            tracker: 'commonLoadingTracker',
+            data: signupModel,
+            file: certificateFile,
+            fileFormDataName: 'certificatePhoto'
+          })
+          .then(function (response) {
+            deferred.resolve(applySuccessSigninResponse(response.data));
+          }, function (errorResponse) {
+            deferred.reject(errorResponse.data);
+          });
+
+        return deferred.promise;
+      }
     };
   })
-  .factory('authApiInterceptor', function ($q, $location, pdConfig, storage) {
+  .service('authStorage', function (storage) {
+    var API_AUTH_TOKEN = 'pd.auth.token',
+      AUTH_ROLES_KEY = 'pd.auth.roles',
+      AUTH_PROFILE_KEY = 'pd.auth.user.profile';
+
+    return {
+      setApiAuthToken: function (token) {
+        storage.set(API_AUTH_TOKEN, token);
+
+        return this;
+      },
+      getApiAuthToken: function () {
+        return storage.get(API_AUTH_TOKEN);
+      },
+      isAvailableAuthToken: function () {
+        return !!this.getApiAuthToken();
+      },
+      removeApiAuthToken: function () {
+        storage.remove(API_AUTH_TOKEN);
+
+        return this;
+      },
+      setRoles: function (roles) {
+        storage.set(AUTH_ROLES_KEY, roles);
+
+        return this;
+      },
+      getRoles: function () {
+        return storage.get(AUTH_ROLES_KEY);
+      },
+      removeRoles: function () {
+        storage.remove(AUTH_ROLES_KEY);
+
+        return this;
+      },
+      setProfile: function (profileData) {
+        storage.set(AUTH_PROFILE_KEY, profileData);
+
+        return this;
+      },
+      getProfile: function () {
+        return storage.get(AUTH_PROFILE_KEY) || {};
+      },
+      removeProfile: function () {
+        storage.remove(AUTH_PROFILE_KEY);
+
+        return this;
+      },
+      clearAll: function () {
+        this.removeApiAuthToken();
+        this.removeRoles();
+        this.removeProfile();
+
+        return this;
+      }
+    };
+  })
+  .factory('authApiInterceptor', function ($q, $location, pdConfig, authStorage) {
     var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);
 
     return {
       request: function (config) {
         // If access forbidden response from api then redirect to signin page
-        // ToDo: circular reference if use auth or security services
-        if (apiUrlRegexp.test(config.url) && !!storage.get(pdConfig.AUTH_TOKEN_KEY)) {
-          config.headers.Authorization = 'Token ' + storage.get(pdConfig.AUTH_TOKEN_KEY);
+        if (apiUrlRegexp.test(config.url) && authStorage.isAvailableAuthToken()) {
+          config.headers.Authorization = 'Token ' + authStorage.getApiAuthToken();
         }
 
         return config;
       },
       responseError: function (rejection) {
         // If access forbidden response from api then redirect to signin page
-        if (_.has(rejection.config, 'url') && apiUrlRegexp.test(rejection.config.url) && 403 === rejection.status) {
-          storage.remove(pdConfig.AUTH_TOKEN_KEY);
-          storage.remove(pdConfig.AUTH_ROLES_KEY);
+        if (_.has(rejection.config, 'url') &&
+          apiUrlRegexp.test(rejection.config.url) &&
+          403 === rejection.status &&
+          true !== rejection.config.notHandle403
+        ) {
+          authStorage.clearAll();
           $location.path('/');
         }
 

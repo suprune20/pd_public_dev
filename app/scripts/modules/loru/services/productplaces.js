@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('advertisement', function ($http, pdConfig, $q) {
+  .service('advertisement', function ($http, pdConfig, $q, pdLoruStoresApi) {
     var getProducts = function () {
         return $http.get(pdConfig.apiEndpoint + 'loru/products', {
           tracker: 'commonLoadingTracker'
@@ -60,7 +60,10 @@ angular.module('pdLoru')
             return {
               productsByPlaces: productsByPlaces,
               products: products,
-              places: places
+              places: places,
+              productsByCategories: _.groupBy(products, function (product) {
+                return product.category.name;
+              })
             };
           });
       }
@@ -77,6 +80,14 @@ angular.module('pdLoru')
         }).then(function (resp) {
           return resp.data.currentBalance[0];
         });
+      },
+      isExistsMyStores: function () {
+        return pdLoruStoresApi.getStores()
+          .then(function (storesData) {
+            if (!storesData.length) {
+              return $q.reject();
+            }
+          });
       }
     };
   })

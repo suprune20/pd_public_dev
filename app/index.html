@@ -31,7 +31,7 @@
         <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
       </div>
 
-      <div class="container">
+      <div ng-class="{'container': !hideRootContainerClass}">
         <!--[if lt IE 7]>
         <div class="alert alert-danger">
           <span class="glyphicon glyphicon-warning-sign"></span>
@@ -82,12 +82,25 @@
     <script src="bower_components/angular-growl/build/angular-growl.js"></script>
     <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
     <script src="bower_components/momentjs/moment.js"></script>
+    <script src="bower_components/bootstrap3-typeahead/bootstrap3-typeahead.js"></script>
+    <script src="bower_components/checklist-model/checklist-model.js"></script>
+    <script src="bower_components/jcarousel/dist/jquery.jcarousel.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/oauth-js/dist/oauth.min.js"></script>
     <!-- endbower -->
+    <script src="bower_components/angular-i18n/angular-locale_ru.js"></script>
     <script src="bower_components/select2/select2_locale_ru.js"></script>
     <script src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-yandex-map/example/ya-map.js"></script>
     <script src="bower_components/fancybox/source/jquery.fancybox.js"></script>
     <script src="bower_components/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
+
+    <script src="bower_components/angular-strap/dist/modules/date-parser.js"></script>
+    <script src="bower_components/angular-strap/dist/modules/dimensions.js"></script>
+    <script src="bower_components/angular-strap/dist/modules/tooltip.js"></script>
+    <script src="bower_components/angular-strap/dist/modules/tooltip.tpl.js"></script>
+    <script src="bower_components/angular-strap/dist/modules/datepicker.js"></script>
+    <script src="bower_components/angular-strap/dist/modules/datepicker.tpl.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -95,6 +108,7 @@
     <script src="scripts/config.js"></script>
     <script src="scripts/config_const.js"></script>
     <script src="scripts/controllers.js"></script>
+
     <script src="scripts/modules/common/module.js"></script>
     <script src="scripts/modules/common/directive_decorators.js"></script>
     <script src="scripts/modules/common/services/auth.js"></script>
@@ -105,26 +119,46 @@
     <script src="scripts/modules/common/services/api/feedback.js"></script>
     <script src="scripts/modules/common/services/thumbnailer.js"></script>
     <script src="scripts/modules/common/services/file_reader.js"></script>
+    <script src="scripts/modules/common/services/modal_notifications.js"></script>
+    <script src="scripts/modules/common/services/oauth.js"></script>
+    <script src="scripts/modules/common/services/pd_http.js"></script>
+    <script src="scripts/modules/common/services/data_providers/org_auth.js"></script>
     <script src="scripts/modules/common/directives/auth.js"></script>
     <script src="scripts/modules/common/directives/sticky_block.js"></script>
     <script src="scripts/modules/common/directives/images.js"></script>
     <script src="scripts/modules/common/directives/navigation.js"></script>
     <script src="scripts/modules/common/directives/form.js"></script>
     <script src="scripts/modules/common/directives/fancybox.js"></script>
+    <script src="scripts/modules/common/directives/ya_map.js"></script>
+    <script src="scripts/modules/common/directives/scroll.js"></script>
+    <script src="scripts/modules/common/directives/carousel.js"></script>
     <script src="scripts/modules/common/filters/default_value.js"></script>
     <script src="scripts/modules/common/filters/text_filters.js"></script>
     <script src="scripts/modules/common/filters/datetime.js"></script>
+    <script src="scripts/modules/common/filters/thumbnail.js"></script>
     <script src="scripts/modules/common/controllers/feedback.js"></script>
+    <script src="scripts/modules/common/controllers/org_auth.js"></script>
+
     <script src="scripts/modules/frontend/module.js"></script>
     <script src="scripts/modules/frontend/controllers/catalog.js"></script>
     <script src="scripts/modules/frontend/services/catalog.js"></script>
     <script src="scripts/modules/frontend/controllers/client_panel.js"></script>
     <script src="scripts/modules/frontend/controllers/settings.js"></script>
+    <script src="scripts/modules/frontend/controllers/auth.js"></script>
     <script src="scripts/modules/frontend/services/user.js"></script>
+    <script src="scripts/modules/frontend/services/settings.js"></script>
+
     <script src="scripts/modules/admin/module.js"></script>
+
     <script src="scripts/modules/loru/module.js"></script>
     <script src="scripts/modules/loru/controllers/productplaces.js"></script>
+    <script src="scripts/modules/loru/controllers/orgplaces.js"></script>
     <script src="scripts/modules/loru/services/productplaces.js"></script>
+    <script src="scripts/modules/loru/services/orgplaces.js"></script>
+
+    <script src="scripts/modules/oms/module.js"></script>
+    <script src="scripts/modules/oms/controllers/placesmap.js"></script>
+    <script src="scripts/modules/oms/services/placesmap.js"></script>
     <!-- endbuild -->
 
     <!-- Sentry logger -->

@@ -1,0 +1,29 @@
+.pd-ya-map {
+  .edit-modal-cont {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 300px;
+    background-color: #fff;
+    padding: 10px;
+    overflow-y: scroll;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .inner-forms-cont {
+      .inner-form {
+        padding: 0 0 5px 15px;
+        font-size: 12px;
+        border-top: solid 1px #a4a4a4;
+
+        &:first-of-type {
+          border-top: none;
+        }
+      }
+    }
+  }
+}
