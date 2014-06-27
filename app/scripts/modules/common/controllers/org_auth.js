@@ -5,8 +5,8 @@ angular.module('pdCommon')
     $scope.authProvider = new OrgAuthSignupModel($routeParams.orgType);
     $scope.signup = function () {
       $scope.authProvider.signup()
-        .then(function () {
-          growl.addSuccessMessage('Регистрация прошла успешно');
+        .then(function (responseData) {
+          growl.addSuccessMessage(responseData.message, {ttl: 20000});
           $location.path('/');
         }, function (errorData) {
           $scope.errorMsg = errorData.message;

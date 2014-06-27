@@ -115,7 +115,7 @@
 
     <div class="form-group has-feedback"
          ng-class="{'has-error': orgSignupForm.username.$dirty && orgSignupForm.username.$invalid}">
-      <label class="control-label" for="username">Имя пользователя <span class="form-require-mark">*</span></label>
+      <label class="control-label" for="username">Логин пользователя <span class="form-require-mark">*</span></label>
       <input name="username" id="username" ng-model="authProvider.getSignupModel().username" class="form-control"
              required />
     </div>
@@ -149,6 +149,30 @@
       </label>
       <input name="passwordConfirm" id="passwordConfirm" ng-model="authProvider.getSignupModel().passwordConfirm"
              type="password" class="form-control" required password-repeat="password" />
+    </div>
+
+    <div class="form-group has-feedback"
+         ng-class="{'has-error': orgSignupForm.userLastName.$dirty && orgSignupForm.userLastName.$invalid}">
+      <label class="control-label" for="userLastName">
+        Фамилия пользователя <span class="form-require-mark">*</span>
+      </label>
+      <input name="userLastName" id="userLastName" ng-model="authProvider.getSignupModel().userLastName"
+             class="form-control" required />
+    </div>
+
+    <div class="form-group has-feedback"
+         ng-class="{'has-error': orgSignupForm.userFirstName.$dirty && orgSignupForm.userFirstName.$invalid}">
+      <label class="control-label" for="userFirstName">
+        Имя пользователя <span class="form-require-mark">*</span>
+      </label>
+      <input name="userFirstName" id="userFirstName" ng-model="authProvider.getSignupModel().userFirstName"
+             class="form-control" required />
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="userMiddleName">Отчество пользователя</label>
+      <input name="userMiddleName" id="userMiddleName" ng-model="authProvider.getSignupModel().userMiddleName"
+             class="form-control" />
     </div>
 
     <div class="form-group has-feedback"

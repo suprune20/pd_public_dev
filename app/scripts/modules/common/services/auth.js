@@ -148,7 +148,7 @@ angular.module('pdCommon')
             fileFormDataName: 'certificatePhoto'
           })
           .then(function (response) {
-            deferred.resolve(applySuccessSigninResponse(response.data));
+            deferred.resolve(response.data);
           }, function (errorResponse) {
             deferred.reject(errorResponse.data);
           });
