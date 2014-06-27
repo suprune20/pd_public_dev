@@ -21,6 +21,8 @@ angular.module('pdCommon')
 
             this.form = angular.element(document.getElementsByClassName('form-search'))
               .on('submit', this.onSubmit);
+            this.searchBtn = this.form.find('.search-btn')
+              .on('click', this.onSubmit);
             this.field = angular.element(document.getElementsByClassName('search-query'))
               .on('change', this.onFieldChange)
               .typeahead({source: this.dataSource, items: 5, minLength: 3});
@@ -31,6 +33,7 @@ angular.module('pdCommon')
             this.getData().state.events.remove('change', this.onStateChange, this);
             this.field.off('**');
             this.form.off('submit', this.onSubmit);
+            this.searchBtn.off('click', this.onSubmit);
 
             var MySearchControlLayout = templateLayoutFactory.get('pdSearchTemplate');
             MySearchControlLayout.superclass.clear.call(this);
