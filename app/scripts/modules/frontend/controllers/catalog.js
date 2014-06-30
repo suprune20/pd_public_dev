@@ -192,16 +192,10 @@ angular.module('pdFrontend')
     $scope.userPlacesProvider = new CatalogMyPlaces();
 
     // Client signin modal
-    $scope.clientSignin = function () {
-      $modal.open({
-        templateUrl: 'views/modules/frontend/client_auth.modal.html',
-        controller: 'pdFrontendAuth',
-        windowClass: 'frontend-auth-modal'
-      }).result.then(function () {
-        loadCategories();
-        $scope.userPlacesProvider.loadMyPlaces();
-      });
-    };
+    $scope.$on('auth.signin_success', function () {
+      loadCategories();
+      $scope.userPlacesProvider.loadMyPlaces();
+    });
     $scope.clientSignout = function () {
       auth.signout().then(function () {
         loadCategories();

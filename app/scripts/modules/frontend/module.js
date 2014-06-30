@@ -16,9 +16,7 @@ angular.module('pdFrontend', [
         reloadOnSearch: false,
         title: 'Карта мест захоронений',
         secured: false,
-        menuConfig: 'cabinetMenu',
-        hideMainMenu: true,
-        hideRootContainerClass: true,
+        setFluidContainer: true,
         pageClass: 'map-page'
       })
       .when('/client-panel', {
