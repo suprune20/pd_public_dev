@@ -125,13 +125,16 @@ angular.module('pdApp', [
       // Set title for current page from routeProvider data
       $rootScope.title = currentRoute.title;
       // Set main menu items
-      mainMenuManager.setCurrentMenuConfig(currentRoute.menuConfig);
+      mainMenuManager.setCurrentMenuConfig(
+        currentRoute.menuConfig ? currentRoute.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
+      );
       // Set page class from route config
       $rootScope.pageClass = currentRoute.pageClass ?
         _.isString(currentRoute.pageClass) ?
           [currentRoute.pageClass] :
           currentRoute.pageClass :
         [];
+      $rootScope.setFluidContainer = !!currentRoute.setFluidContainer;
       // Hide/Show main menu by route param
       mainMenuManager.hide(currentRoute.hideMainMenu);
       if (true === currentRoute.hideMainMenu) {
@@ -147,6 +150,11 @@ angular.module('pdApp', [
         // Show access denied predefined page
         $location.path('/403');
       }
+    });
+
+    $rootScope.$on('auth.signin_success', function () {
+      // Update main menu config after signin
+      mainMenuManager.setCurrentMenuConfig(mainMenuManager.getMenuByRole(auth.getRoles()[0]));
     });
 
     $rootScope.redirectToBasePage = function () {
