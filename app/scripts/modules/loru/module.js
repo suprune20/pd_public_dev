@@ -33,35 +33,39 @@ angular.module('pdLoru', [
     });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
-    var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu');
+    var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
+      setupMenu = function () {
+        var userOrgId = auth.getUserOrganisation().id;
+
+        loruMenuConfig.setRightMenuItems([
+          {link: '#/loru/advertisement', title: 'Реклама'},
+          {
+            type: 'dropdown',
+            title: _.filter([auth.getUserProfile().lastname, (auth.getUserProfile().firstname || '')[0]], function (namePart) {
+              return !!namePart;
+            }).join(' '),
+            icon: 'glyphicon-user',
+            items: [
+              {
+                link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
+                title: 'Организация',
+                hide: !userOrgId
+              },
+              {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
+              {link: '#/loru/orgplaces', title: 'Склады'},
+              {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
+              {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
+              {class: 'divider'},
+              {link: '#/signout', title: 'Выйти'}
+            ]
+          }
+        ]);
+      };
 
     loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
     loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
 
-    $rootScope.$on('$routeChangeSuccess', function () {
-      var userOrgId = auth.getUserOrganisation().id;
-
-      loruMenuConfig.setRightMenuItems([
-        {link: '#/loru/advertisement', title: 'Реклама'},
-        {
-          type: 'dropdown',
-          title: auth.getUserProfile().lastname || '',
-          icon: 'glyphicon-user',
-          items: [
-            {
-              link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
-              title: 'Организация',
-              hide: !userOrgId
-            },
-            {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-            {link: '#/loru/orgplaces', title: 'Склады'},
-            {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
-            {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
-            {class: 'divider'},
-            {link: '#/signout', title: 'Выйти'}
-          ]
-        }
-      ]);
-    });
+    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;
