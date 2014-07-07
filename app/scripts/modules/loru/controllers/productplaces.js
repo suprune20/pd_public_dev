@@ -5,7 +5,7 @@ angular.module('pdLoru')
   .controller('LoruAdvertisementCtrl', function ($scope, $q, advertisement, objectsDiff, modalNotifications, $location) {
     // Check is exist my stores for show alert message
     advertisement.isExistsMyStores().catch(function () {
-      modalNotifications.confirm('У Вас не добавлено ниодного склада. Хотите добавить сейчас?', 'Отсутствуют склады')
+      modalNotifications.confirm('У Вас не добавлено ни одного склада. Хотите добавить сейчас?', 'Отсутствуют склады')
         .then(function () {
           $location.path('/loru/orgplaces');
         });
