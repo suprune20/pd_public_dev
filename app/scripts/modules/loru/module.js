@@ -41,9 +41,7 @@ angular.module('pdLoru', [
           {link: '#/loru/advertisement', title: 'Реклама'},
           {
             type: 'dropdown',
-            title: _.filter([auth.getUserProfile().lastname, (auth.getUserProfile().firstname || '')[0]], function (namePart) {
-              return !!namePart;
-            }).join(' '),
+            title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
               {

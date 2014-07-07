@@ -198,7 +198,17 @@ angular.module('pdCommon')
         return this;
       },
       getProfile: function () {
-        return storage.get(AUTH_PROFILE_KEY) || {};
+        var profile = storage.get(AUTH_PROFILE_KEY) || {profile: {}},
+          usernameParts = [
+            profile.profile.lastname,
+            (profile.profile.firstname ? profile.profile.firstname[0] + '.' : ''),
+            (profile.profile.middlename ? profile.profile.middlename[0] + '.' : '')
+          ];
+        profile.profile.shortFIO = _.filter(usernameParts, function (namePart) {
+          return !!namePart;
+        }).join(' ');
+
+        return profile;
       },
       removeProfile: function () {
         storage.remove(AUTH_PROFILE_KEY);

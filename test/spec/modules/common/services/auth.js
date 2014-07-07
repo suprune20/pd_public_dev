@@ -191,7 +191,16 @@ describe('Service: Auth', function () {
     it('should return profile data for current user from localstorage', function () {
       storageMock.get.andReturn({'profile':{'username':'loru1','firstname':'Иван','middlename':'Иванович','photo':null,'mainPhone':null,'lastname':'Петров','email':'qq@mail.ru'},'organisation':{'location':{'coords':{'latitude':53.915809,'longitude':27.504815},'address':'улица Ленина, дом 53А, Калуга, Калужская область, Россия 248016'},'id':19,'name':'Рит_комп19'}});
 
-      expect(authService.getUserProfile()).toEqual({'username':'loru1','firstname':'Иван','middlename':'Иванович','photo':null,'mainPhone':null,'lastname':'Петров','email':'qq@mail.ru'});
+      expect(authService.getUserProfile()).toEqual({
+        'username':'loru1',
+        'firstname':'Иван',
+        'middlename':'Иванович',
+        'photo':null,
+        'mainPhone':null,
+        'lastname':'Петров',
+        'email':'qq@mail.ru',
+        shortFIO: 'Петров И. И.'
+      });
     });
   });
 

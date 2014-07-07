@@ -47,9 +47,7 @@ angular.module('pdFrontend', [
         cabinetMenuConfig.setRightMenuItems([
           {
             type: 'dropdown',
-            title: _.filter([auth.getUserProfile().lastname, (auth.getUserProfile().firstname || '')[0]], function (namePart) {
-              return !!namePart;
-            }).join(' '),
+            title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
               {link: '#/settings', title: 'Настройки'},
