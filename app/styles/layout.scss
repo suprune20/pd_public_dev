@@ -31,3 +31,20 @@ form {
     }
   }
 }
+
+.navbar-default {
+  .navbar-nav {
+    .signin-btn {
+      background-color: $brand-success;
+      color: #fff;
+
+      &:hover {
+        background-color: darken($brand-success, 5%);
+        color: #fff;
+      }
+      &:active {
+        background-color: darken($brand-success, 10%);
+      }
+    }
+  }
+}

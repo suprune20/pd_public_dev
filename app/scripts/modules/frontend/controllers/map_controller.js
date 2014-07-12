@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
+  .controller('MapCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
                                        CatalogMyPlaces, auth, $timeout) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
@@ -9,7 +9,7 @@ angular.module('pdFrontend')
 
         // Open modal for product details
         $modal.open({
-          templateUrl: 'views/modules/frontend/catalog/product.details.modal.html',
+          templateUrl: 'views/modules/frontend/map/product.details.modal.html',
           windowClass: 'catalog-product-modal',
           resolve: {
             productData: function () {

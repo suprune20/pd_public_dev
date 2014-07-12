@@ -36,10 +36,12 @@ angular.module('pdApp', [
     });
     $routeProvider
       .when('/', {
-        controller: 'LandingPageCtrl',
-        templateUrl: 'views/landing_page.html',
-        hideMainMenu: true,
-        pageClass: 'landing-page'
+        controller: 'CatalogCtrl',
+        templateUrl: 'views/modules/frontend/catalog/main.html',
+        reloadOnSearch: false,
+        title: 'Каталог',
+        pageClass: 'catalog-page',
+        setFluidContainer: true
       })
       .when('/register', {
         controller: 'CommonOrgSignupCtrl',
@@ -89,17 +91,6 @@ angular.module('pdApp', [
       }
     };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
-//    $rootScope.$on('auth.signout', function () {
-//      $location.path('/');
-//    });
-
-//    $rootScope.$on('$locationChangeStart', function (event, nextUrl) {
-//      // Redirect to oms site
-//      if (auth.isAuthenticated() && auth.isCurrentHasOmsRole() && !/\/signout$/.test(nextUrl)) {
-//        $window.location.href = pdConfig.backendUrl;
-//        event.preventDefault();
-//      }
-//    });
 
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       if (currentRoute.absoluteRedirectTo) {
@@ -141,9 +132,9 @@ angular.module('pdApp', [
         $rootScope.addPageClass('hide-main-menu');
       }
 
-      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
-        $rootScope.redirectToBasePage();
-      }
+//      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
+//        $rootScope.redirectToBasePage();
+//      }
     });
     $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
       if (rejection && true === rejection.accessDenied) {
@@ -155,6 +146,10 @@ angular.module('pdApp', [
     $rootScope.$on('auth.signin_success', function () {
       // Update main menu config after signin
       mainMenuManager.setCurrentMenuConfig(mainMenuManager.getMenuByRole(auth.getRoles()[0]));
+      // Redirect after login for LORU/OMS
+      if (auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()) {
+        $rootScope.redirectToBasePage();
+      }
     });
 
     $rootScope.redirectToBasePage = function () {

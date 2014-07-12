@@ -104,7 +104,9 @@ angular.module('pdCommon')
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
           recaptchaData: captchaData
-        }).catch(function (response) {
+        }).then(function (successResponse) {
+          return successResponse.data;
+        }, function (response) {
           var responseData = response.data;
           if (!_.has(responseData, 'status') || !_.has(responseData, 'message')) {
             responseData.message = 'Неизвестная ошибка. Обратитесь к администрации сайта';

@@ -1,4 +1,4 @@
-.org-signup-page {
+form[name=orgSignupForm] {
   ya-map {
     height: 300px;
     width: 100%;
@@ -16,11 +16,8 @@
       }
     }
   }
-
-  .form-signup {
-    .bank-account-form {
-      display: block;
-      padding-bottom: 15px;
-    }
+  .bank-account-form {
+    display: block;
+    padding-bottom: 15px;
   }
 }

@@ -1,4 +1,4 @@
-.map-page {
+.catalog-bc {
   .catalog-filters-panel {
     &.pb-sticky-block {
       position: fixed;
@@ -40,7 +40,6 @@
   .catalog-places-map {
     display:block;
     position: relative;
-    margin-top: 50px;
 
     .catalog-places-map-categories-filter {
       position: absolute;
@@ -90,4 +89,13 @@
     top: 45px;
     right: 5px;
   }
+}
+
+.catalog-page {
+  @extend .catalog-bc
+}
+
+// ToDo: Break compatibility for map page
+.map-page {
+  @extend .catalog-bc;
 }

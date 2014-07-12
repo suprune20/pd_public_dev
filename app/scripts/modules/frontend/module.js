@@ -11,8 +11,8 @@ angular.module('pdFrontend', [
   .config(function (authRouteProvider) {
     authRouteProvider
       .when('/map', {
-        controller: 'CatalogCtrl',
-        templateUrl: 'views/modules/frontend/catalog/main.html',
+        controller: 'MapCtrl',
+        templateUrl: 'views/modules/frontend/map/main.html',
         reloadOnSearch: false,
         title: 'Карта мест захоронений',
         secured: false,
