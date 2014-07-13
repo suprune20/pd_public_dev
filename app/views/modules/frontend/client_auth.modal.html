@@ -16,21 +16,20 @@
                  placeholder="Логин" required autofocus tabindex="1" />
           <input name="password" ng-model="signinModel.password" type="password" class="form-control"
                  placeholder="Пароль" required tabindex="2" />
-          <button type="submit" tabindex="3"
-                  class="btn btn-lg btn-primary btn-block"
+          <button type="submit" tabindex="3" class="btn btn-lg btn-primary btn-block"
                   ng-disabled="clientLoginForm.$invalid">Войти</button>
         </form>
       </div>
-      <div class="text-center">
+      <div class="text-center margin-top-15">
         <a href="" ng-click="openRestorePasswordPopup()" class="text-info" tabindex="4">
           <i class="glyphicon glyphicon-info-sign"></i> Восстановить пароль
         </a>
       </div>
     </tab>
 
-    <tab heading="Регистрация">
-      <div class="row">
-        <div class="col-xs-12" ng-include="'views/modules/common/partials/org_signup_form_partial.html'"></div>
+    <tab heading="Регистрация" class="row">
+      <div class="col-xs-12">
+        <div ng-include="'views/modules/common/partials/org_signup_form_partial.html'"></div>
       </div>
     </tab>
   </tabset>

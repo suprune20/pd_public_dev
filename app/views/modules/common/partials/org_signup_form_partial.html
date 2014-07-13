@@ -50,15 +50,11 @@
 
   <div class="form-group has-feedback"
        ng-class="{'has-error': orgSignupForm.orgFullName.$dirty && orgSignupForm.orgFullName.$invalid}">
-    <label class="control-label" for="orgFullName">Полное наименование организации</label>
-    <input name="orgFullName" id="orgFullName" ng-model="authProvider.getSignupModel().orgFullName"
+    <label class="control-label" for="orgFullName">
+      Полное наименование организации <span class="form-require-mark">*</span>
+    </label>
+    <input name="orgFullName" id="orgFullName" ng-model="authProvider.getSignupModel().orgFullName" required
            class="form-control" />
-  </div>
-
-  <div class="form-group" ng-show="authProvider.getOrgTypes()">
-    <label class="control-label" for="orgType">Тип организации <span class="form-require-mark">*</span></label>
-    <select name="orgType" id="orgType" ng-model="authProvider.getSignupModel().orgType" class="form-control"
-            ng-options="type as title for (type, title) in authProvider.getOrgTypes()"></select>
   </div>
 
   <div class="form-group has-feedback"
@@ -66,12 +62,8 @@
     <label class="control-label" for="registredOfficeAddress">
       Юридический адрес <span class="form-require-mark">*</span>
     </label>
-    <textarea name="registredOfficeAddress" id="registredOfficeAddress" class="form-control" required
-              ng-model="authProvider.getSignupModel().registredOffice.address"
-              ng-readonly="!authProvider.getSignupModel().registredOffice.address"></textarea>
 
-    <ya-map class="margin-top-15"
-            ya-zoom="10"
+    <ya-map ya-zoom="10"
             ya-options="{maxZoom: 18}"
             ya-event-click="authProvider.yaMapOfficeClickHandle($event)">
       <ya-toolbar ya-name="zoomControl" ya-options="{left: 10}"></ya-toolbar>
@@ -81,6 +73,9 @@
       <ya-geo-object ya-source="authProvider.getOfficeGeoObject()"
                      ya-event-dragend="authProvider.officeGeoObjectDragendHandler($event)"></ya-geo-object>
     </ya-map>
+    <textarea name="registredOfficeAddress" id="registredOfficeAddress" class="form-control margin-top-15" required
+              ng-model="authProvider.getSignupModel().registredOffice.address"
+              ng-readonly="!authProvider.getSignupModel().registredOffice.address"></textarea>
   </div>
 
   <div class="form-group has-feedback"
