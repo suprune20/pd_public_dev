@@ -39,6 +39,7 @@ angular.module('pdLoru', [
 
         loruMenuConfig.setRightMenuItems([
           {link: '#/loru/advertisement', title: 'Реклама'},
+          {link: '#/', title: 'Каталог'},
           {
             type: 'dropdown',
             title: auth.getUserProfile().shortFIO,
