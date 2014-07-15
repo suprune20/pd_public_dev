@@ -11,14 +11,12 @@ angular.module('pdFrontend', [
   .config(function (authRouteProvider) {
     authRouteProvider
       .when('/map', {
-        controller: 'CatalogCtrl',
-        templateUrl: 'views/modules/frontend/catalog/main.html',
+        controller: 'MapCtrl',
+        templateUrl: 'views/modules/frontend/map/main.html',
         reloadOnSearch: false,
         title: 'Карта мест захоронений',
         secured: false,
-        menuConfig: 'cabinetMenu',
-        hideMainMenu: true,
-        hideRootContainerClass: true,
+        setFluidContainer: true,
         pageClass: 'map-page'
       })
       .when('/client-panel', {
@@ -44,22 +42,24 @@ angular.module('pdFrontend', [
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, auth) {
-    var cabinetMenuConfig = mainMenuManager.addMenuConfig('cabinetMenu');
+    var cabinetMenuConfig = mainMenuManager.addMenuConfig('cabinetMenu'),
+      setupMenu = function () {
+        cabinetMenuConfig.setRightMenuItems([
+          {
+            type: 'dropdown',
+            title: auth.getUserProfile().shortFIO,
+            icon: 'glyphicon-user',
+            items: [
+              {link: '#/settings', title: 'Настройки'},
+              {class: 'divider'},
+              {link: '#/signout', title: 'Выйти'}
+            ]
+          }
+        ]);
+      };
     cabinetMenuConfig.setMainMenuItems(pdConfig.menuConfigs.cabinetMenu.items);
 
-    $rootScope.$on('$routeChangeSuccess', function () {
-      cabinetMenuConfig.setRightMenuItems([
-        {
-          type: 'dropdown',
-          title: auth.getUserProfile().lastname || '',
-          icon: 'glyphicon-user',
-          items: [
-            {link: '#/settings', title: 'Настройки'},
-            {class: 'divider'},
-            {link: '#/signout', title: 'Выйти'}
-          ]
-        }
-      ]);
-    });
+    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;

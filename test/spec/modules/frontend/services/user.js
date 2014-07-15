@@ -144,7 +144,8 @@ describe('Service: User', function () {
       $httpBackend.expectPUT(serverEndpointUrl + 'settings').respond(200, {});
       userService.saveSettings({mainPhone: 'mainPhoneNumber'})
         .then(function () {
-          expect(storageMock.set).toHaveBeenCalledWith(jasmine.any(String), {profile: {mainPhone: 'mainPhoneNumber'}});
+          expect(storageMock.set)
+            .toHaveBeenCalledWith(jasmine.any(String), {profile: {shortFIO: '', mainPhone: 'mainPhoneNumber'}});
         });
       $httpBackend.flush();
     });

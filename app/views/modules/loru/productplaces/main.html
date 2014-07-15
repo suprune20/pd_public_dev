@@ -10,15 +10,15 @@
         <th class="text-right">
           <ul class="list-unstyled">
             <li>Название площадки:</li>
-            <li>Стоимость ежедневного списания:</li>
-            <li>Стоимость разового списания:</li>
+            <!--<li>Стоимость ежедневного списания:</li>-->
+            <!--<li>Стоимость разового списания:</li>-->
           </ul>
         </th>
         <th ng-repeat="place in places" style="min-width: 135px;">
           <ul class="list-unstyled">
             <li>{{place.name}}</li>
-            <li>{{place.costForEnable}} {{place.currency.shortName}}</li>
-            <li>{{place.costForUp}} {{place.currency.shortName}}</li>
+            <!--<li>{{place.costForEnable}} {{place.currency.shortName}}</li>-->
+            <!--<li>{{place.costForUp}} {{place.currency.shortName}}</li>-->
           </ul>
         </th>
       </tr>
@@ -59,21 +59,21 @@
                     btn-radio="'enable'">
               <span class="glyphicon glyphicon-ok"></span>
             </button>
-            <div class="btn-group"
-                 ng-init="isDisabledUp = newProductsStates[product.id][place.id] === 'disable' ||
-                                            isChangedProductInPlace(product.id, place.id, 'enable')"
-                 ng-attr-title="{{isDisabledUp ?
-                                    'Обновление публикации возможно только для уже опубликованного товара' :
-                                    ''}}">
-              <button type="button"
-                      class="btn btn-default"
-                      ng-model="newProductsStates[product.id][place.id]"
-                      ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"
-                      btn-radio="'up'"
-                      ng-disabled="isDisabledUp">
-                <span class="glyphicon glyphicon-arrow-up"></span>
-              </button>
-            </div>
+            <!--<div class="btn-group"-->
+                 <!--ng-init="isDisabledUp = newProductsStates[product.id][place.id] === 'disable' ||-->
+                                            <!--isChangedProductInPlace(product.id, place.id, 'enable')"-->
+                 <!--ng-attr-title="{{isDisabledUp ?-->
+                                    <!--'Обновление публикации возможно только для уже опубликованного товара' :-->
+                                    <!--''}}">-->
+              <!--<button type="button"-->
+                      <!--class="btn btn-default"-->
+                      <!--ng-model="newProductsStates[product.id][place.id]"-->
+                      <!--ng-class="{'btn-primary': newProductsStates[product.id][place.id] === 'up'}"-->
+                      <!--btn-radio="'up'"-->
+                      <!--ng-disabled="isDisabledUp">-->
+                <!--<span class="glyphicon glyphicon-arrow-up"></span>-->
+              <!--</button>-->
+            <!--</div>-->
           </div>
         </td>
       </tr>
@@ -94,17 +94,17 @@
             ng-disabled="!changedProducts.length">Сохранить</button>
   </div>
   <div class="col-xs-12 col-sm-5 col-md-4">
-    <ul class="list-unstyled">
-      <li>
-        Сумма ежедневного списания: <strong>{{totalEnabled|toFixed:2}}</strong> {{balanceData.currency.shortName}}
-      </li>
-      <li>
-        Сумма разового списания: <strong>{{totalUpped|toFixed:2}}</strong> {{balanceData.currency.shortName}}
-      </li>
-      <li ng-show="balanceData">
-        Баланс: <strong>{{balanceData.amount}}</strong>
-        {{balanceData.currency.shortName}} (<strong>~{{balanceData.availablePeriod|default:'0'}}</strong> дн.)
-      </li>
-    </ul>
+    <!--<ul class="list-unstyled">-->
+      <!--<li>-->
+        <!--Сумма ежедневного списания: <strong>{{totalEnabled|toFixed:2}}</strong> {{balanceData.currency.shortName}}-->
+      <!--</li>-->
+      <!--<li>-->
+        <!--Сумма разового списания: <strong>{{totalUpped|toFixed:2}}</strong> {{balanceData.currency.shortName}}-->
+      <!--</li>-->
+      <!--<li ng-show="balanceData">-->
+        <!--Баланс: <strong>{{balanceData.amount}}</strong>-->
+        <!--{{balanceData.currency.shortName}} (<strong>~{{balanceData.availablePeriod|default:'0'}}</strong> дн.)-->
+      <!--</li>-->
+    <!--</ul>-->
   </div>
 </script>

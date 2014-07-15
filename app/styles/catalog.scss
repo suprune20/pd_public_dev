@@ -1,16 +1,8 @@
-.map-page {
-  .navbar-brand {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: #5e5e5e;
-    background: rgba(255,255,255,0.4);
-  }
-
+.catalog-bc {
   .catalog-filters-panel {
     &.pb-sticky-block {
       position: fixed;
-      top: 0;
+      top: 50px;
       left: 0;
       right: 0;
 
@@ -97,4 +89,13 @@
     top: 45px;
     right: 5px;
   }
+}
+
+.catalog-page {
+  @extend .catalog-bc
+}
+
+// ToDo: Break compatibility for map page
+.map-page {
+  @extend .catalog-bc;
 }

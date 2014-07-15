@@ -104,7 +104,9 @@ angular.module('pdCommon')
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
           recaptchaData: captchaData
-        }).catch(function (response) {
+        }).then(function (successResponse) {
+          return successResponse.data;
+        }, function (response) {
           var responseData = response.data;
           if (!_.has(responseData, 'status') || !_.has(responseData, 'message')) {
             responseData.message = 'Неизвестная ошибка. Обратитесь к администрации сайта';
@@ -148,7 +150,7 @@ angular.module('pdCommon')
             fileFormDataName: 'certificatePhoto'
           })
           .then(function (response) {
-            deferred.resolve(applySuccessSigninResponse(response.data));
+            deferred.resolve(response.data);
           }, function (errorResponse) {
             deferred.reject(errorResponse.data);
           });
@@ -198,7 +200,17 @@ angular.module('pdCommon')
         return this;
       },
       getProfile: function () {
-        return storage.get(AUTH_PROFILE_KEY) || {};
+        var profile = storage.get(AUTH_PROFILE_KEY) || {profile: {}},
+          usernameParts = [
+            profile.profile.lastname,
+            (profile.profile.firstname ? profile.profile.firstname[0] + '.' : ''),
+            (profile.profile.middlename ? profile.profile.middlename[0] + '.' : '')
+          ];
+        profile.profile.shortFIO = _.filter(usernameParts, function (namePart) {
+          return !!namePart;
+        }).join(' ');
+
+        return profile;
       },
       removeProfile: function () {
         storage.remove(AUTH_PROFILE_KEY);

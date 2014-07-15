@@ -1,242 +1,116 @@
-<ya-map class="catalog-places-map pd-ya-map"
-        ya-center="{{mapCenterPoint}}"
-        ya-zoom="10"
-        ya-options="{maxZoom: 18}"
-        ya-after-init="mapInitialized($target)"
-        ya-event-boundschange="yaMapBoundsChange($event)"
-        ya-event-click="userPlacesProvider.yaMapClickHandle($event)">
-  <pd-ya-map-sizer pd-ya-size="{{ catalogViewIsShown || catalogUnownedPlacesProvider.getSelectedPlacesGallery().length ? '23PartHeight' : 'full'}}"
-                   pd-ya-height-decrease="60"></pd-ya-map-sizer>
-  <ya-toolbar ya-name="zoomControl" ya-options="{left: 250, top: 50}"></ya-toolbar>
-  <ya-toolbar ya-name="typeSelector" ya-options="{top: 45, left: 298}"></ya-toolbar>
-
-  <pd-ya-search-toolbar ya-options="{left: 220}"></pd-ya-search-toolbar>
-
-  <!-- Include button for add user's place -->
-  <ya-template-layout ya-key="addPlaceBtnTemplate">
-    <div class="btn btn-primary">
-      <span class="glyphicon glyphicon-map-marker"></span>
-      Добавить место
-    </div>
-  </ya-template-layout>
-  <ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">
-    <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
-                ya-visible="{{!security.isAuthenticated() || security.isCurrentHasClientRole()}}"
-                ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
-  </ya-toolbar>
-  <!-- End include button for add user's place -->
-
-  <!-- Suppliers and user's markers -->
-  <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
-    <ya-geo-object ng-repeat="point in catalogGeoObjects"
-                   ya-source="point"
-                   ya-event-click="markerClick($event)"></ya-geo-object>
-  </ya-collection>
-  <!-- End suppliers and user's markers -->
-
-  <!-- Unowned places markers and polygon -->
-  <ya-collection>
-    <ya-geo-object ng-repeat="point in catalogUnownedPlacesProvider.getPlacesGeoObjects()"
-                   ya-source="point"></ya-geo-object>
-  </ya-collection>
-  <ya-geo-object ya-source="catalogUnownedPlacesProvider.selectorPolygonGeoObject"
-                 ya-draw="{{isAllowDrawUnownedPlaces}}"
-                 ya-event-geometrychange="catalogUnownedPlacesProvider.filterPlacesBySelectorYaHandler($event)"></ya-geo-object>
-  <!-- End unowned places -->
-
-  <!-- User's places -->
-  <ya-collection>
-    <ya-geo-object ya-source="userPlacesProvider.getSelectedPlaceGeoObject()"
-                   ya-event-dragend="userPlacesProvider.selectedGeoObjectDragendHandler($event)"></ya-geo-object>
-    <ya-geo-object ng-repeat="point in userPlacesProvider.getPlacesGeoObjects()" ya-source="point"
-                   ya-event-click="userPlacesProvider.editPlaceGeoObject($event)"></ya-geo-object>
-  </ya-collection>
-  <!-- End user's places -->
-
-  <a class="navbar-brand" href="#/">Похоронное дело</a>
-  <div class="additional-controls-cont">
-    <div class="btn-group">
-      <label class="btn btn-primary" ng-model="catalogViewIsShown" btn-checkbox>Каталог</label>
-      <label class="btn btn-primary" ng-model="unownedPlacesViewIsShown" btn-checkbox>Неухоженные места</label>
-    </div>
-    <br/>
-    <button type="button" class="btn btn-default draw-polygon-places-btn" ng-init="isAllowDrawUnownedPlaces = false"
-            ng-model="isAllowDrawUnownedPlaces" btn-checkbox ng-show="unownedPlacesViewIsShown">
-      <i class="glyphicon glyphicon-pencil"></i> Выделить места
-    </button>
-  </div>
-  <div class="map-signin-signout-btn-cont">
-    <button class="btn btn-success" ng-hide="security.isAuthenticated()" ng-click="clientSignin()">
-      <i class="glyphicon glyphicon-log-in"></i> Войти
-    </button>
-    <button class="btn btn-success" ng-show="security.isAuthenticated()" ng-click="clientSignout()">
-      <i class="glyphicon glyphicon-log-out"></i> Выйти
-    </button>
-  </div>
-
-  <div ng-show="categoriesFilter.length" ng-if="catalogViewIsShown" class="catalog-places-map-categories-filter"
-       isolate-scrolling>
-    <ul class="list-unstyled">
-      <li>
-        <label>
-          <input type="checkbox" ng-model="flags.selectAllCategories" />
-          <small>выбрать/отменить все</small>
-        </label>
-      </li>
-      <li ng-repeat="category in categoriesFilter">
-        <label ng-class="{'text-muted': -1 === visibleSuppliersCategories.indexOf(category.id)}">
-          <input type="checkbox"
-                 checklist-model="filters.category"
-                 checklist-value="category.id"
-                 ng-disabled="-1 === visibleSuppliersCategories.indexOf(category.id)" />
-          {{category.name}}
-        </label>
-      </li>
-    </ul>
-  </div>
-
-  <ng-include src="'views/modules/frontend/catalog/add_place_block.html'"></ng-include>
-</ya-map>
-
-<div class="alert alert-warning alert-dismissable unsaved-places-alert"
-     ng-show="userPlacesProvider.isExistsUnsavedPlaces()">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <a href="" ng-click="clientSignin()">Зарегистрируйтесь</a> для сохранения Ваших данных
-</div>
-
-<div class="container">
-  <div class="row catalog-unowned-places-details-cont"
-       ng-if="catalogUnownedPlacesProvider.getSelectedPlacesGallery().length">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Галерея неухоженных мест</h3>
+<div class="row margin-top-15">
+  <div class="col-xs-2">
+    <form role="form">
+      <div class="form-group">
+        <input type="number" class="form-control" placeholder="Цена от" min="0" ng-model="filters.price_from" />
       </div>
-      <div class="panel-body">
-        <pd-carousel pd-carousel-responsive>
-          <li ng-repeat="item in catalogUnownedPlacesProvider.getSelectedPlacesGallery()"
-              pd-fancybox="{{item.photo|pdThumbnail:'600x800'}}">
-            <div class="thumbnail">
-              <img ng-src="{{item.photo}}" pd-thumb pd-thumb-size="500x300" />
-            </div>
-            <pd-fancybox-title>
-              <p><strong>{{item.placeAddress}}</strong></p>
-              <p>
-                <small>
-                  Для того чтобы стать ответственным за это место захоронения обратитесь в администрацию кладбища: <br>
-                  {{item.cemetery.address}}
-                    <span ng-show="item.cemetery.phones.length">
-                      , телефоны: <span ng-repeat="phone in item.cemetery.phones">{{phone}} <span ng-show="!$last">, </span></span>
-                    </span>
-                </small>
-              </p>
-            </pd-fancybox-title>
-          </li>
-        </pd-carousel>
+      <div class="form-group">
+        <input type="number" class="form-control" placeholder="Цена до" min="0" ng-model="filters.price_to" />
       </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary" ng-click="applyFilters()">
+          Применить
+        </button>
+      </div>
+    </form>
+
+    <div ng-show="categoriesFilter.length">
+      <ul class="list-unstyled">
+        <li>
+          <label>
+            <input type="checkbox" ng-model="flags.selectAllCategories" />
+            <small>выбрать/отменить все</small>
+          </label>
+        </li>
+        <li ng-repeat="category in categoriesFilter">
+          <label ng-class="{'text-muted': -1 === visibleSuppliersCategories.indexOf(category.id)}">
+            <input type="checkbox"
+                   checklist-model="filters.category"
+                   checklist-value="category.id"
+                   ng-disabled="-1 === visibleSuppliersCategories.indexOf(category.id)" />
+            {{category.name}}
+          </label>
+        </li>
+      </ul>
     </div>
   </div>
+  <div class="col-xs-10">
+    <div class="row">
+      <div class="col-xs-12">
+        <ya-map class=""
+                ya-center="{{mapCenterPoint}}"
+                ya-zoom="11"
+                ya-options="{maxZoom: 18}"
+                ya-event-boundschange="yaMapBoundsChange($event)" style="width: 100%; display: block;">
+          <pd-ya-map-sizer pd-ya-size="23PartHeight"
+          pd-ya-height-decrease="110"></pd-ya-map-sizer>
+          <ya-toolbar ya-name="zoomControl" ya-options="{left: 5, top: 80}"></ya-toolbar>
+          <ya-toolbar ya-name="typeSelector" ya-options="{left: 3, top: 45}"></ya-toolbar>
 
-  <div class="row" ng-if="catalogViewIsShown">
-    <div class="panel panel-default catalog-filters-panel" pb-sticky-block>
-      <div class="panel-body row">
-        <form class="form-inline row" role="form">
-          <div class="col-md-2 col-xs-11"
-               ng-class="{'col-md-offset-2': !(catalogViewIsShown && !security.isAuthenticated())}">
-            <span ng-click="toggleProductsOrder('date')" class="pointer-cursor col-xs-2 col-md-6">
-              Дата <i class="glyphicon"
-                      ng-class="{
-                        'glyphicon-sort-by-attributes': 'asc' === orders.date,
-                        'glyphicon-sort-by-attributes-alt': 'desc' === orders.date,
-                        'glyphicon-sort': undefined === order.date
-                      }"></i>
-            </span>
-            <span ng-click="toggleProductsOrder('price')" class="pointer-cursor col-xs-2 col-md-6">
-              Цена <i class="glyphicon"
-                      ng-class="{
-                        'glyphicon-sort-by-attributes': 'asc' === orders.price,
-                        'glyphicon-sort-by-attributes-alt': 'desc' === orders.price,
-                        'glyphicon-sort': undefined === order.price
-                      }"></i>
-            </span>
-          </div>
-          <div class="clearfix visible-xs visible-sm margin-bottom-15"></div>
-          <div class="col-sm-12 col-md-7">
-            <div class="form-group col-xs-6 col-sm-4">
-              <input type="number" class="form-control" placeholder="Цена от" min="0" ng-model="filters.price_from" />
-            </div>
-            <div class="form-group col-xs-6 col-sm-4">
-              <input type="number" class="form-control" placeholder="Цена до" min="0" ng-model="filters.price_to" />
-            </div>
-            <div class="clearfix visible-xs"></div>
-            <div class="col-xs-5 col-xs-offset-7 col-sm-4 col-sm-offset-0 btn-group">
-              <button type="submit" class="btn btn-primary" ng-click="applyFilters(applyFilters)">
-                Применить
-              </button>
-              <button class="btn btn-warning" ng-click="clearFilters()">
-                <span class="glyphicon glyphicon-remove-circle"></span>
-              </button>
-            </div>
-          </div>
-          <div class="clearfix visible-xs visible-sm margin-bottom-15"></div>
-          <div class="col-md-3">
-            <div class="col-xs-12">
-              <a href="#/register?orgType=loru" class="btn btn-success"
-                 ng-show="catalogViewIsShown && !security.isAuthenticated()">
-                Регистрация поставщиков
-              </a>
-            </div>
-          </div>
-        </form>
+          <pd-ya-search-toolbar ya-options="{left: 5}"></pd-ya-search-toolbar>
+
+          <!-- Suppliers and user's markers -->
+          <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
+            <ya-geo-object ng-repeat="point in catalogGeoObjects"
+                           ya-source="point"
+                           ya-event-click="markerClick($event)"></ya-geo-object>
+          </ya-collection>
+          <!-- End suppliers and user's markers -->
+        </ya-map>
       </div>
     </div>
 
-    <div class="catalog-products-list"
-         infinite-scroll="catalog.productsDataProvider.getNextProducts()"
-         infinite-scroll-disabled="catalog.productsDataProvider.isBusy()">
-      <div ng-repeat="product in catalog.productsDataProvider.getProducts()"
-           class="catalog-product-item"
-           ng-click="openProductDetailsModal(product.id)">
+    <div class="row margin-top-15">
+      <div class="col-xs-12">
+        <div class="catalog-products-list"
+             infinite-scroll="catalog.productsDataProvider.getNextProducts()"
+             infinite-scroll-disabled="catalog.productsDataProvider.isBusy()">
+          <div ng-repeat="product in catalog.productsDataProvider.getProducts()"
+               class="catalog-product-item"
+               ng-click="openProductDetailsModal(product.id)">
 
-        <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
+            <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
 
-        <div class="media">
-          <div class="pull-left">
-            <img class="img-thumbnail media-object product-photo"
-                 ng-src="{{product.photo}}"
-                 pd-thumb
-                 pd-thumb-size=100x100
-                 default-image="http://placehold.it/100x100" />
+            <div class="media">
+              <div class="pull-left">
+                <img class="img-thumbnail media-object product-photo"
+                     ng-src="{{product.photo}}"
+                     pd-thumb
+                     pd-thumb-size=100x100
+                     default-image="http://placehold.it/100x100" />
+              </div>
+              <div class="media-body">
+                <dl>
+                  <dt ng-show="product.sku">Артикул</dt>
+                  <dd ng-show="product.sku">{{product.sku}}</dd>
+                  <dt ng-show="product.description">Описание</dt>
+                  <dd ng-show="product.description">{{product.description}}</dd>
+                  <dt>Поставщик</dt>
+                  <dd>{{product.supplier}}</dd>
+                  <dt>Цена</dt>
+                  <dd>{{product.price}}</dd>
+                  <dt>Валюта</dt>
+                  <dd>{{product.currency}}</dd>
+                  <dt ng-show="product.measure">Оплата за</dt>
+                  <dd ng-show="product.measure">{{product.measure}}</dd>
+                </dl>
+              </div>
+            </div>
           </div>
-          <div class="media-body">
-            <dl>
-              <dt ng-show="product.sku">Артикул</dt>
-              <dd ng-show="product.sku">{{product.sku}}</dd>
-              <dt ng-show="product.description">Описание</dt>
-              <dd ng-show="product.description">{{product.description}}</dd>
-              <dt>Поставщик</dt>
-              <dd>{{product.supplier}}</dd>
-              <dt>Цена</dt>
-              <dd>{{product.price}}</dd>
-              <dt>Валюта</dt>
-              <dd>{{product.currency}}</dd>
-              <dt ng-show="product.measure">Оплата за</dt>
-              <dd ng-show="product.measure">{{product.measure}}</dd>
-            </dl>
+
+          <div class="alert alert-info" ng-show="catalog.productsDataProvider.isBusy()">
+            <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка ...
+          </div>
+          <div class="alert alert-info"
+               ng-show="catalog.productsDataProvider.getProducts().length && catalog.productsDataProvider.isNoMoreProducts()">
+            <span class="glyphicon glyphicon-ban-circle"></span> Нет предложений продуктов и услуг в этой местности
+          </div>
+          <div class="alert alert-warning" ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount">
+            <span class="glyphicon glyphicon-ban-circle"></span>
+            В данном регионе поставщики товаров и услуг не зарегистрированы.
+            Нажмите <a href="#/register?orgType=loru">"Регистрация поставщиков"</a> чтобы зарегистрироваться.
           </div>
         </div>
-      </div>
-
-      <div class="alert alert-info" ng-show="catalog.productsDataProvider.isBusy()">
-        <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка ...
-      </div>
-      <div class="alert alert-info"
-           ng-show="catalog.productsDataProvider.getProducts().length && catalog.productsDataProvider.isNoMoreProducts()">
-        <span class="glyphicon glyphicon-ban-circle"></span> Нет предложений продуктов и услуг в этой местности
-      </div>
-      <div class="alert alert-warning" ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount">
-        <span class="glyphicon glyphicon-ban-circle"></span>
-        В данном регионе поставщики товаров и услуг не зарегистрированы.
-        Нажмите <a href="#/register?orgType=loru">"Регистрация поставщиков"</a> чтобы зарегистрироваться.
       </div>
     </div>
   </div>

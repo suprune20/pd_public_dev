@@ -1,7 +1,8 @@
 <ya-map class="inventory-map fullview-header-footer"
         ng-if="placesGeoObjects"
         ya-zoom="10"
-        ya-options="{maxZoom: 18}">
+        ya-options="{maxZoom: 18}"
+        ya-behaviors="scrollZoom drag dblClickZoom">
   <ya-toolbar ya-name="zoomControl"></ya-toolbar>
   <ya-toolbar ya-name="typeSelector"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 350, top: 15}"></pd-ya-search-toolbar>

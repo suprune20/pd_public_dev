@@ -31,7 +31,7 @@
         <span class="glyphicon glyphicon-refresh animated-rotate"></span> Загрузка данных...
       </div>
 
-      <div ng-class="{'container': !hideRootContainerClass}">
+      <div ng-class="{'container': !setFluidContainer, 'container-fluid': setFluidContainer}">
         <!--[if lt IE 7]>
         <div class="alert alert-danger">
           <span class="glyphicon glyphicon-warning-sign"></span>
@@ -140,11 +140,15 @@
     <script src="scripts/modules/common/controllers/org_auth.js"></script>
 
     <script src="scripts/modules/frontend/module.js"></script>
-    <script src="scripts/modules/frontend/controllers/catalog.js"></script>
-    <script src="scripts/modules/frontend/services/catalog.js"></script>
-    <script src="scripts/modules/frontend/controllers/client_panel.js"></script>
-    <script src="scripts/modules/frontend/controllers/settings.js"></script>
-    <script src="scripts/modules/frontend/controllers/auth.js"></script>
+    <script src="scripts/modules/frontend/controllers/catalog_controller.js"></script>
+    <script src="scripts/modules/frontend/controllers/map_controller.js"></script>
+    <script src="scripts/modules/frontend/controllers/client_panel_controller.js"></script>
+    <script src="scripts/modules/frontend/controllers/settings_controller.js"></script>
+    <script src="scripts/modules/frontend/controllers/auth_controller.js"></script>
+    <script src="scripts/modules/frontend/services/catalog_service.js"></script>
+    <script src="scripts/modules/frontend/services/unowned_places_service.js"></script>
+    <script src="scripts/modules/frontend/services/places_service.js"></script>
+    <script src="scripts/modules/frontend/services/api/catalog_api_service.js"></script>
     <script src="scripts/modules/frontend/services/user.js"></script>
     <script src="scripts/modules/frontend/services/settings.js"></script>
 

@@ -17,6 +17,10 @@ body {
     }
   }
 
+  >.container-fluid {
+    padding-top: 50px;
+  }
+
   // Remove container top padding when navbar is hidden
   .navbar {
     &.ng-hide {

@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, Catalog, CatalogUnownedPlaces,
-                                       CatalogMyPlaces, auth, $timeout) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth, growl) {
+    // Show helper notificator for old users
+    // ToDo: remove from few days
+    growl.addInfoMessage('Уважаемые пользователи, у нас изменился внешний вид первой страницы. Для входа в систему нажмите "Войти" в правом верхнем углу.', {ttl: 15000});
+
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
@@ -64,7 +67,7 @@ angular.module('pdFrontend')
     $scope.filters = {};
     $scope.orders = {};
     $scope.flags = {};
-    $scope.catalog = new Catalog();
+    $scope.catalog = new CatalogRefactored();
     // Get filters data
     loadCategories().then(function () {
       $scope.flags.selectAllCategories = true;
@@ -87,25 +90,6 @@ angular.module('pdFrontend')
       $scope.catalog.productsDataProvider.applyFilters($scope.filters);
     };
 
-    $scope.mapInitialized = function (map) {
-      $scope.$watch(function () {
-        return $scope.userPlacesProvider.getPlacesGeoObjects();
-      }, function (userPlaces) {
-        if (!userPlaces) {
-          return;
-        }
-
-        if (userPlaces.length > 1) {
-          // ToDo: check for needed $timeout, probably wrong in another place
-          $timeout(function () {
-            map.setBounds($scope.userPlacesProvider.getPlacesBounds());
-          }, 500);
-        } else if (1 === userPlaces.length) {
-          var userPlaceLocation = userPlaces[0].properties.placeData.location;
-          $scope.mapCenterPoint = [userPlaceLocation.longitude, userPlaceLocation.latitude];
-        }
-      });
-    };
     // Get yandex map markers data (user's places, suppliers locations, etc.)
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
       $scope.isLoadedGeoObjects = true;
@@ -162,50 +146,15 @@ angular.module('pdFrontend')
     }, function () {
       suppliersFilterDependsCategories();
     });
-    // Toggle order control
-    $scope.toggleProductsOrder = function (orderAttr) {
-      var toggleValues = [undefined, 'asc', 'desc'];
-
-      $scope.orders[orderAttr] = toggleValues[(toggleValues.indexOf($scope.orders[orderAttr]) % toggleValues.length) + 1];
-      $scope.applyFilters();
-    };
-
-    // Check custom place
-    $scope.catalogViewIsShown = false;
-    $scope.$watch('catalogViewIsShown', function (isShown) {
-      $scope.catalogGeoObjects.forEach(function (geoObject) {
-        geoObject.options.visible = isShown;
-      });
-
-      if (isShown) {
-        suppliersFilterDependsCategories();
-      }
-    });
-
-    // Unidentified places section
-    $scope.unownedPlacesViewIsShown = false;
-    $scope.$watch('unownedPlacesViewIsShown', function (isShown) {
-      $scope.catalogUnownedPlacesProvider = isShown ? new CatalogUnownedPlaces() : null;
-    });
-
-    // My places
-    $scope.userPlacesProvider = new CatalogMyPlaces();
 
     // Client signin modal
-    $scope.clientSignin = function () {
-      $modal.open({
-        templateUrl: 'views/modules/frontend/client_auth.modal.html',
-        controller: 'pdFrontendAuth',
-        windowClass: 'frontend-auth-modal'
-      }).result.then(function () {
-        loadCategories();
-        $scope.userPlacesProvider.loadMyPlaces();
-      });
-    };
+    // ToDo: Move to header controller module
+    $scope.$on('auth.signin_success', function () {
+      loadCategories();
+    });
     $scope.clientSignout = function () {
       auth.signout().then(function () {
         loadCategories();
-        $scope.userPlacesProvider.loadMyPlaces();
       });
     };
   })

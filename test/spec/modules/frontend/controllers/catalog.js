@@ -86,7 +86,7 @@ describe('Controller: CatalogCtrl', function () {
         $location: $locationMock,
         $routeParams: $routeParamsMock,
         $modal: $modalMock,
-        Catalog: catalogMock
+        CatalogRefactored: catalogMock
       });
     }));
 
@@ -118,7 +118,7 @@ describe('Controller: CatalogCtrl', function () {
         $location: $locationMock,
         $routeParams: {productId: 123},
         $modal: $modalMock,
-        Catalog: catalogMock
+        CatalogRefactored: catalogMock
       });
     }));
 

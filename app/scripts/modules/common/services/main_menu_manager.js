@@ -70,7 +70,19 @@ angular.module('pdCommon')
       getRightMenuItems: getRightMenuItems,
       getClasses: getClasses,
       addMenuConfig: addMenuConfig,
-      setCurrentMenuConfig: setCurrentMenuConfig
+      setCurrentMenuConfig: setCurrentMenuConfig,
+      getMenuByRole: function (role) {
+        switch (role) {
+          case 'ROLE_OMS':
+            return 'omsMenu';
+          case 'ROLE_LORU':
+            return 'loruMenu';
+          case 'ROLE_CLIENT':
+            return 'cabinetMenu';
+        }
+
+        return 'emptyMenu';
+      }
     };
   })
 ;
