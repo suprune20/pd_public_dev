@@ -32,7 +32,7 @@ angular.module('pdLoru', [
       ;
     });
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth) {
+  .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
       setupMenu = function () {
         var userOrgId = auth.getUserOrganisation().id;
@@ -66,5 +66,18 @@ angular.module('pdLoru', [
 
     $rootScope.$on('$routeChangeSuccess', setupMenu);
     $rootScope.$on('auth.signin_success', setupMenu);
+    // Show notification about learn "How add advert"
+    $rootScope.$on('auth.signin_success', function () {
+      if (!auth.isCurrentHasLoruRole()) {
+        return;
+      }
+
+      var tutorialLink = pdConfig.backendUrl + 'tutorial#chapter2';
+      growl.addInfoMessage(
+        'Уважаемый пользователь, посмотрите, пожалуйста, наше обучающее видео "<a href="' +
+          tutorialLink + '">Как разместить рекламу"</a>',
+        {enableHtml: true, ttl: 15000}
+      );
+    });
   })
 ;

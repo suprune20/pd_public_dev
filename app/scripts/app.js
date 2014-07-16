@@ -177,6 +177,8 @@ angular.module('pdApp', [
       isCurrentHasOmsRole: auth.isCurrentHasOmsRole,
       isAuthenticated: auth.isAuthenticated
     };
+    // Save top-level domain
+    $rootScope.topLevelDomain = _.last($window.location.hostname.split('.')).toLowerCase();
 
     // Set oauth providers key/title object for templates
     $rootScope.oauthProviders = pdConfig.oauthProviders;
