@@ -91,20 +91,31 @@ angular.module('pdCommon')
       link: function (scope, iElement, iAttrs, modelCtrl) {
         var otherInput = iElement.inheritedData('$formController')[iAttrs.passwordRepeat];
 
-        modelCtrl.$parsers.push(function (value) {
-          if (value === otherInput.$viewValue) {
-            modelCtrl.$setValidity('passwordRepeat', true);
-
-            return value;
+        scope.$watch(function () {
+          return otherInput.$modelValue;
+        }, function (newValue) {
+          if (modelCtrl && modelCtrl.$modelValue) {
+            if (newValue === modelCtrl.$modelValue) {
+              modelCtrl.$setValidity('passwordRepeat', true);
+            } else {
+              modelCtrl.$setValidity('passwordRepeat', false);
+            }
           }
-
-          modelCtrl.$setValidity('passwordRepeat', false);
         });
 
-        otherInput.$parsers.push(function (value) {
-          modelCtrl.$setValidity('passwordRepeat', value === modelCtrl.$viewValue);
-
-          return value;
+        modelCtrl.$parsers.push(function(viewValue) {
+          if (viewValue) {
+            if (viewValue === otherInput.$modelValue) {
+              modelCtrl.$setValidity('passwordRepeat', true);
+              return viewValue;
+            } else {
+              modelCtrl.$setValidity('passwordRepeat', false);
+              return undefined;
+            }
+          } else {
+            modelCtrl.$setValidity('passwordRepeat', true);
+            return viewValue;
+          }
         });
       }
     };

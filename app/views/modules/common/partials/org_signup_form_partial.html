@@ -44,16 +44,7 @@
       Краткое наименование организации <span class="form-require-mark">*</span>
     </label>
     <input name="orgName" id="orgName" ng-model="authProvider.getSignupModel().orgName" class="form-control"
-           required autofocus />
-  </div>
-
-  <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.orgFullName.$dirty && orgSignupForm.orgFullName.$invalid}">
-    <label class="control-label" for="orgFullName">
-      Полное наименование организации <span class="form-require-mark">*</span>
-    </label>
-    <input name="orgFullName" id="orgFullName" ng-model="authProvider.getSignupModel().orgFullName" required
-           class="form-control" />
+           required autofocus maxlength="5" />
   </div>
 
   <div class="form-group has-feedback"
@@ -77,43 +68,11 @@
               ng-readonly="!authProvider.getSignupModel().registredOffice.address"></textarea>
   </div>
 
-  <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.directorFullname.$dirty && orgSignupForm.directorFullname.$invalid}">
-    <label class="control-label" for="directorFullname">
-      ФИО директора (в родительном падеже) <span class="form-require-mark">*</span>
-    </label>
-    <input name="directorFullname" id="directorFullname" ng-model="authProvider.getSignupModel().directorFullname"
-           class="form-control" required placeholder="Иванова Петра Петровича" />
-  </div>
-
-  <div class="form-group has-feedback" ng-init="authProvider.getSignupModel().directorPowerSource = 'charter'"
-       ng-class="{'has-error': orgSignupForm.directorPowerSource.$dirty && orgSignupForm.directorPowerSource.$invalid}">
-    <label class="control-label" for="directorPowerSource">
-      Основание действия регистрирующего лица <span class="form-require-mark">*</span>
-    </label>
-    <select name="directorPowerSource" id="directorPowerSource" class="form-control"
-            ng-model="authProvider.getSignupModel().directorPowerSource"
-            ng-options="source as title for (source, title) in authProvider.getDirectorPowerSources()"></select>
-  </div>
-
-  <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.tin.$dirty && orgSignupForm.tin.$invalid}">
-    <label class="control-label" for="tin">
-      {{'by' === topLevelDomain ? 'УНП' : 'ИНН'}} <span class="form-require-mark">*</span>
-    </label>
-    <input name="tin" id="tin" ng-model="authProvider.getSignupModel().tin" class="form-control" required />
-  </div>
-
-  <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.OGRN.$dirty && orgSignupForm.OGRN.$invalid}">
-    <label class="control-label" for="OGRN">
-      {{'by' === topLevelDomain ? 'ОКПО' : 'ОГРН'}} <span class="form-require-mark">*</span>
-    </label>
-    <input name="OGRN" id="OGRN" ng-model="authProvider.getSignupModel().OGRN" class="form-control" required />
-  </div>
-
   <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.email.$dirty && orgSignupForm.email.$invalid}">
     <label class="control-label" for="email">Email <span class="form-require-mark">*</span></label>
     <input name="email" id="email" ng-model="authProvider.getSignupModel().email" class="form-control" required
-           type="email" />
+           type="email" ng-pattern="EMAIL_REGEXP" />
+    <span class="help-block" ng-show="orgSignupForm.email.$error.pattern">Неверный формат email</span>
   </div>
 
   <div class="form-group has-feedback" ng-init="authProvider.getSignupModel().phones = [{phone:''}]">
@@ -149,7 +108,10 @@
        ng-class="{'has-error': orgSignupForm.username.$dirty && orgSignupForm.username.$invalid}">
     <label class="control-label" for="username">Логин пользователя <span class="form-require-mark">*</span></label>
     <input name="username" id="username" ng-model="authProvider.getSignupModel().username" class="form-control"
-           required />
+           required ng-pattern="/^[A-Za-z0-9@_-]+$/" />
+    <span class="help-block" ng-show="orgSignupForm.username.$error.pattern">
+      Разрешены символы: A-Z, a-z, 0-9, @, _, -
+    </span>
   </div>
 
   <div class="form-group has-feedback"
@@ -181,6 +143,10 @@
     </label>
     <input name="passwordConfirm" id="passwordConfirm" ng-model="authProvider.getSignupModel().passwordConfirm"
            type="password" class="form-control" required password-repeat="password" />
+    <span class="help-block"
+          ng-show="orgSignupForm.passwordConfirm.$dirty && orgSignupForm.passwordConfirm.$error.passwordRepeat">
+      Неверно введен повтор пароля
+    </span>
   </div>
 
   <div class="form-group has-feedback"
@@ -214,31 +180,6 @@
     </label>
     <pd-file-selector pd-allow-preview ng-model="authProvider.getSignupModel().certificatePhoto"
                       name="certificatePhoto" required pd-max-height="150px"></pd-file-selector>
-  </div>
-
-  <div class="form-group" ng-init="authProvider.getSignupModel().bankAccounts = [{}]">
-    <label>Банковские реквизиты</label>
-
-    <div class="form-group">
-      <label for="bankName">Наименование банка <span class="form-require-mark">*</span></label>
-      <input class="form-control" ng-model="authProvider.getSignupModel().bankAccounts[0].name"
-             id="bankName" name="bankName" required />
-    </div>
-    <div class="form-group">
-      <label for="bankPaymentAccount">Расчетный/лицевой счет <span class="form-require-mark">*</span></label>
-      <input class="form-control" ng-model="authProvider.getSignupModel().bankAccounts[0].account"
-             id="bankPaymentAccount" name="bankPaymentAccount" required />
-    </div>
-    <div class="form-group">
-      <label for="bankBik">БИК <span class="form-require-mark">*</span></label>
-      <input class="form-control" ng-model="authProvider.getSignupModel().bankAccounts[0].bik" id="bankBik"
-             name="bankBik" required />
-    </div>
-    <div class="form-group">
-      <label for="bankAddress">Юридический адрес <span class="form-require-mark">*</span></label>
-      <input class="form-control" ng-model="authProvider.getSignupModel().bankAccounts[0].correspondent"
-             id="bankAddress" name="bankAddress" required />
-    </div>
   </div>
 
   <div class="form-group">

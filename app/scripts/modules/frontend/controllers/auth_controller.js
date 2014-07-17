@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('pdFrontendAuth', function ($scope, auth, $modal, $modalInstance, growl, OrgAuthSignupModel) {
+  .controller('pdFrontendAuth', function ($scope, auth, $modal, $modalInstance, growl, OrgAuthSignupModel,
+                                          vcRecaptchaService) {
     var showTCModal = function () {
         $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
           .result.then(function () {
@@ -55,6 +56,7 @@ angular.module('pdFrontend')
           growl.addSuccessMessage(responseData.message, {ttl: 20000});
           $modalInstance.close();
         }, function (errorData) {
+          vcRecaptchaService.reload();
           $scope.errorMsg = errorData.message;
         });
     };

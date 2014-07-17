@@ -11,6 +11,7 @@ angular.module('pdCommon')
           $modal.open({
             templateUrl: 'views/modules/frontend/client_auth.modal.html',
             controller: 'pdFrontendAuth',
+            backdrop: 'static',
             windowClass: 'frontend-auth-modal'
           });
         };
