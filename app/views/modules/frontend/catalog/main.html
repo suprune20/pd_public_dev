@@ -105,18 +105,17 @@
                ng-show="catalog.productsDataProvider.getProducts().length && catalog.productsDataProvider.isNoMoreProducts()">
             <span class="glyphicon glyphicon-ban-circle"></span> Нет предложений продуктов и услуг в этой местности
           </div>
-          <div class="alert alert-warning" ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount">
-            <div ng-hide="security.isAuthenticated()">
-              <span class="glyphicon glyphicon-ban-circle"></span>
-              В данном регионе поставщики товаров и услуг не зарегистрированы.
-              Нажмите <a href="#/register?orgType=loru">"Регистрация поставщиков"</a>, чтобы зарегистрироваться.
-            </div>
-
-            <div ng-show="security.isCurrentHasLoruRole()">
-              <i class="glyphicon glyphicon-info-sign"></i>
-              В данном регионе нет опубликованных товаров и услуг. Опубликуйте ваши товары и услуги на форме
-              <a href="#/loru/advertisement">Реклама</a>
-            </div>
+          <div class="alert alert-warning"
+               ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount && !security.isAuthenticated()">
+            <span class="glyphicon glyphicon-ban-circle"></span>
+            В данном регионе поставщики товаров и услуг не зарегистрированы.
+            Нажмите <a href="#!/register?orgType=loru">"Регистрация поставщиков"</a>, чтобы зарегистрироваться.
+          </div>
+          <div class="alert alert-warning"
+               ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount && security.isCurrentHasLoruRole()">
+            <i class="glyphicon glyphicon-info-sign"></i>
+            В данном регионе нет опубликованных товаров и услуг. Опубликуйте ваши товары и услуги на форме
+            <a href="#!/loru/advertisement">Реклама</a>
           </div>
         </div>
       </div>
