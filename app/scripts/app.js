@@ -11,7 +11,8 @@ angular.module('pdApp', [
     'pdOms',
     'pdConfig',
     'vcRecaptcha',
-    'ngRaven'
+    'ngRaven',
+    'seo'
   ])
   .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider) {
     $locationProvider.hashPrefix('!');
@@ -22,6 +23,7 @@ angular.module('pdApp', [
     RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
     $httpProvider.interceptors.push('httpErrorsInterceptor');
+    $httpProvider.interceptors.push('seoSnapshotReadyInterceptor');
     // Set interceptor into first position in interceptors
     $httpProvider.interceptors.unshift(function () {
       return {
