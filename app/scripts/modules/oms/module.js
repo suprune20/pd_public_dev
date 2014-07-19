@@ -42,7 +42,7 @@ angular.module('pdOms', [
             title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
-              {link: '#/oms/placesmap', title: 'Карта захоронений'},
+              {link: '#!/oms/placesmap', title: 'Карта захоронений'},
               {link: serverConfig.serverHost + 'loruregistry', title: 'Реестр ЛОРУ'},
               {
                 link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
@@ -52,7 +52,7 @@ angular.module('pdOms', [
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '#/signout', title: 'Выйти'}
+              {link: '#!/signout', title: 'Выйти'}
             ]
           }
         ]);

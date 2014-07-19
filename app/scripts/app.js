@@ -13,7 +13,9 @@ angular.module('pdApp', [
     'vcRecaptcha',
     'ngRaven'
   ])
-  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider) {
+    $locationProvider.hashPrefix('!');
+
     oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 

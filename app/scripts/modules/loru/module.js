@@ -38,8 +38,8 @@ angular.module('pdLoru', [
         var userOrgId = auth.getUserOrganisation().id;
 
         loruMenuConfig.setRightMenuItems([
-          {link: '#/loru/advertisement', title: 'Реклама'},
-          {link: '#/', title: 'Каталог'},
+          {link: '#!/loru/advertisement', title: 'Реклама'},
+          {link: '#!/', title: 'Каталог'},
           {
             type: 'dropdown',
             title: auth.getUserProfile().shortFIO,
@@ -51,11 +51,11 @@ angular.module('pdLoru', [
                 hide: !userOrgId
               },
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-              {link: '#/loru/orgplaces', title: 'Склады'},
+              {link: '#!/loru/orgplaces', title: 'Склады'},
               {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '#/signout', title: 'Выйти'}
+              {link: '#!/signout', title: 'Выйти'}
             ]
           }
         ]);
