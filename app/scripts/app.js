@@ -78,7 +78,7 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider) {
     // Add empty menu config
     mainMenuManager.addMenuConfig('emptyMenu');
 
@@ -95,6 +95,8 @@ angular.module('pdApp', [
       }
     };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
+    // setup seo provider
+    $rootScope.seo = seoProvider;
 
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       if (currentRoute.absoluteRedirectTo) {
@@ -118,7 +120,7 @@ angular.module('pdApp', [
       }
 
       // Set title for current page from routeProvider data
-      $rootScope.title = currentRoute.title;
+      $rootScope.seo.setTitle(currentRoute.title);
       // Set main menu items
       mainMenuManager.setCurrentMenuConfig(
         currentRoute.menuConfig ? currentRoute.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])

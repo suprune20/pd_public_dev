@@ -19,4 +19,16 @@ angular.module('pdCommon')
       }
     };
   })
+  .service('seoProvider', function () {
+    var title;
+
+    return {
+      setTitle: function (titleValue) {
+        title = titleValue;
+      },
+      getTitle: function () {
+        return title;
+      }
+    };
+  })
 ;
