@@ -1,58 +1,67 @@
-<div class="modal-header">
-  <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
-  <h4 class="modal-title">{{productData.name}}</h4>
-</div>
+<div itemscope itemtype="http://schema.org/Product">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" itemprop="name">{{productData.name}}</h4>
+  </div>
 
-<div class="modal-body">
-  <div class="media product-image-media">
-    <div class="pull-left">
-      <img class="img-thumbnail media-object"
-           ng-src="{{productData.photo}}"
-           pd-thumb
-           pd-thumb-size="200x200"
-           default-image="http://placehold.it/200x200" />
+  <div class="modal-body">
+    <div class="media product-image-media">
+      <div class="pull-left">
+        <img class="img-thumbnail media-object"
+             ng-src="{{productData.photo}}"
+             pd-thumb
+             pd-thumb-size="200x200"
+             default-image="http://placehold.it/200x200" itemprop="image" />
+      </div>
+      <div class="media-body">
+        <dl>
+          <dt ng-show="productData.category">Категория</dt>
+          <dd ng-show="productData.category">{{productData.category}}</dd>
+          <dt ng-show="productData.sku">Артикул</dt>
+          <dd ng-show="productData.sku" itemprop="sku">{{productData.sku}}</dd>
+        </dl>
+        <dl itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <dt>Цена</dt>
+          <dd itemprop="price">{{productData.price}}</dd>
+          <dt>Валюта</dt>
+          <dd itemprop="priceCurrency">{{productData.currency|money2iso}}</dd>
+          <dt ng-show="productData.measure">Оплата за</dt>
+          <dd ng-show="productData.measure">{{productData.measure}}</dd>
+        </dl>
+      </div>
     </div>
-    <div class="media-body">
-      <dl>
-        <dt ng-show="productData.category">Категория</dt>
-        <dd ng-show="productData.category">{{productData.category}}</dd>
-        <dt ng-show="productData.sku">Артикул</dt>
-        <dd ng-show="productData.sku">{{productData.sku}}</dd>
-        <dt>Цена</dt>
-        <dd>{{productData.price}}</dd>
-        <dt>Валюта</dt>
-        <dd>{{productData.currency}}</dd>
-        <dt ng-show="productData.measure">Оплата за</dt>
-        <dd ng-show="productData.measure">{{productData.measure}}</dd>
-      </dl>
+
+    <div class="panel panel-default" ng-show="productData.description">
+      <div class="panel-body" itemprop="description">
+        {{productData.description}}
+      </div>
+    </div>
+
+    <div class="panel panel-default reset-margin" ng-if="productData.supplier"
+         itemprop="manufacturer" itemscope itemtype="http://schema.org/Organization">
+      <div class="panel-heading">Поставщик</div>
+      <div class="panel-body">
+        <dl>
+          <dt>Название</dt>
+          <dd itemprop="name">{{productData.supplier.name}}</dd>
+          <dt>Адрес</dt>
+          <dd itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <span itemprop="streetAddress">{{productData.supplier.address}}</span>
+          </dd>
+          <dt ng-if="productData.supplier.phone">Телефон</dt>
+          <dd ng-if="productData.supplier.phone" itemprop="telephone">{{productData.supplier.phone}}</dd>
+          <dt>Время работы</dt>
+          <dd>{{productData.supplier.worktime|default:'-'}}</dd>
+          <dt ng-if="productData.supplier.site">Сайт производителя</dt>
+          <dd ng-if="productData.supplier.site" itemprop="url">
+            <a ng-href="{{productData.supplier.site}}" target="_blank">{{productData.supplier.site}}</a>
+          </dd>
+        </dl>
+      </div>
     </div>
   </div>
 
-  <div class="panel panel-default" ng-if="productData.description">
-    <div class="panel-body">
-      {{productData.description}}
-    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">Закрыть</button>
   </div>
-
-  <div class="panel panel-default reset-margin" ng-if="productData.supplier">
-    <div class="panel-heading">Поставщик</div>
-    <div class="panel-body">
-      <dl>
-        <dt>Название</dt>
-        <dd>{{productData.supplier.name}}</dd>
-        <dt>Адрес</dt>
-        <dd>{{productData.supplier.address}}</dd>
-        <dt>Телефон</dt>
-        <dd>{{productData.supplier.phone|default:'-'}}</dd>
-        <dt>Время работы</dt>
-        <dd>{{productData.supplier.worktime|default:'-'}}</dd>
-        <dt>Сайт производителя</dt>
-        <dd>{{productData.supplier.site|default:'-'}}</dd>
-      </dl>
-    </div>
-  </div>
-</div>
-
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-click="cancel()">Закрыть</button>
 </div>
