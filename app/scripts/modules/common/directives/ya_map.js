@@ -14,16 +14,17 @@ angular.module('pdCommon')
           build: function () {
             var MySearchControlLayout = templateLayoutFactory.get('pdSearchTemplate');
             MySearchControlLayout.superclass.build.call(this);
+            var formElement = MySearchControlLayout.superclass.getParentElement.call(this);
 
             this.onSubmit = ymaps.util.bind(this.onSubmit, this);
             this.onFieldChange = ymaps.util.bind(this.onFieldChange, this);
             this.dataSource = ymaps.util.bind(this.dataSource, this);
 
-            this.form = angular.element(document.getElementsByClassName('form-search'))
+            this.form = angular.element(formElement.getElementsByClassName('form-search'))
               .on('submit', this.onSubmit);
             this.searchBtn = this.form.find('.search-btn')
               .on('click', this.onSubmit);
-            this.field = angular.element(document.getElementsByClassName('search-query'))
+            this.field = angular.element(formElement.getElementsByClassName('search-query'))
               .on('change', this.onFieldChange)
               .typeahead({source: this.dataSource, items: 5, minLength: 3});
 

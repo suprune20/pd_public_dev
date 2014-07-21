@@ -65,7 +65,7 @@ angular.module('pdCommon')
           return signupModel;
         },
         generatePassword: function () {
-          var generatedStr = Math.random().toString(36).substring(2);
+          var generatedStr = Math.random().toString(36).substring(2, 9);
 
           signupModel.password = generatedStr;
           signupModel.passwordConfirm = generatedStr;
