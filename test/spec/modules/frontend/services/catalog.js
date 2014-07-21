@@ -64,7 +64,7 @@ describe('Service: Catalog', function () {
     catalogService.getProduct(123).then(successCallback, errorCallback);
     $httpBackend.flush();
 
-    expect(successCallback).toHaveBeenCalledWith({id: 123, name: 'product 123'});
+    expect(successCallback).toHaveBeenCalledWith({id: 123, name: 'product 123', sku: 'pd123'});
     expect(errorCallback).not.toHaveBeenCalled();
   });
 
@@ -96,7 +96,7 @@ describe('Service: Catalog', function () {
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
-      expect(catalogService.productsDataProvider.getProducts()).toEqual([{id: 1, name: 'product title'}]);
+      expect(catalogService.productsDataProvider.getProducts()).toEqual([{id: 1, name: 'product title', sku: 'pd1'}]);
     });
 
     it('should set isNoMoreProducts flag', function () {
