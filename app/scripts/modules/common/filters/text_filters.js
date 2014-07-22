@@ -10,4 +10,9 @@ angular.module('pdCommon')
       return value;
     };
   })
+  .filter('substring', function () {
+    return function (value, substringStart, substringEnd) {
+      return value.substring(substringStart, substringEnd);
+    };
+  })
 ;

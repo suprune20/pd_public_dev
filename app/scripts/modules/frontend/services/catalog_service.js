@@ -22,7 +22,8 @@ angular.module('pdFrontend')
           isBusy = true;
           pdFrontendCatalogApi.getProducts(_.merge(filtersData || {}, {
             limit: productsCountPerRequest,
-            offset: products.length
+            offset: products.length,
+            'order[date]': 'asc'
           }))
             .then(function (productsData) {
               isBusy = false;

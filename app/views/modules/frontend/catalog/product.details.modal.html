@@ -22,7 +22,11 @@
         </dl>
         <dl itemprop="offers" itemscope itemtype="http://schema.org/Offer">
           <dt>Цена</dt>
-          <dd itemprop="price">{{productData.price}}</dd>
+          <dd>
+            {{productData.price|numeralFormat:'0,0'}} руб.
+            <small ng-show="productData.price%1">{{productData.price|numeralFormat:'.00'|substring:1}} коп.</small>
+            <meta itemprop="price" content="{{productData.price}}" />
+          </dd>
           <dt>Валюта</dt>
           <dd itemprop="priceCurrency">{{productData.currency|money2iso}}</dd>
           <dt ng-show="productData.measure">Оплата за</dt>

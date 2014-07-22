@@ -188,5 +188,8 @@ angular.module('pdApp', [
 
     // Set oauth providers key/title object for templates
     $rootScope.oauthProviders = pdConfig.oauthProviders;
+
+    // set numeral language format config
+    $window.numeral.language('ru');
   })
 ;
