@@ -86,7 +86,10 @@
                   <dt>Поставщик</dt>
                   <dd>{{product.supplier}}</dd>
                   <dt>Цена</dt>
-                  <dd>{{product.price}}</dd>
+                  <dd>
+                    {{product.price|numeralFormat:'0,0'}} руб.
+                    <small ng-show="product.price%1">{{product.price|numeralFormat:'.00'|substring:1}} коп.</small>
+                  </dd>
                   <dt>Валюта</dt>
                   <dd>{{product.currency}}</dd>
                   <dt ng-show="product.measure">Оплата за</dt>
