@@ -19,7 +19,10 @@
         <dt ng-show="productData.sku">Артикул</dt>
         <dd ng-show="productData.sku">{{productData.sku}}</dd>
         <dt>Цена</dt>
-        <dd>{{productData.price}}</dd>
+        <dd>
+          {{productData.price|numeralFormat:'0,0'}} руб.
+          <small ng-show="productData.price%1">{{productData.price|numeralFormat:'.00'|substring:1}} коп.</small>
+        </dd>
         <dt>Валюта</dt>
         <dd>{{productData.currency}}</dd>
         <dt ng-show="productData.measure">Оплата за</dt>
