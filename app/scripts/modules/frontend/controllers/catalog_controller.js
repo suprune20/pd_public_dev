@@ -2,12 +2,6 @@
 
 angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth, growl) {
-    // Show helper notificator for old non-authorized users
-    // ToDo: remove from few days
-    if (!auth.isAuthenticated()) {
-      growl.addInfoMessage('Уважаемые пользователи, у нас изменился внешний вид первой страницы. Для входа в систему нажмите "Войти" в правом верхнем углу.', {ttl: 15000});
-    }
-
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         var productData = $scope.catalog.getProduct(productId);
