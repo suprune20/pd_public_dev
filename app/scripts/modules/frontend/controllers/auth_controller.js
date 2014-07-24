@@ -3,25 +3,12 @@
 angular.module('pdFrontend')
   .controller('pdFrontendAuth', function ($scope, auth, $modal, $modalInstance, growl, OrgAuthSignupModel,
                                           vcRecaptchaService) {
-    var showTCModal = function () {
-        $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
-          .result.then(function () {
-            $scope.signin(_.merge($scope.signinModel, {confirmTC: true}));
-          }, function () {
-            $scope.signinModel = {};
-          });
-      },
-      successSigninCb = function () {
-        $modalInstance.close();
-        growl.addSuccessMessage('Вы успешно авторизировались');
-      }
-    ;
-
-    // Set initial models
     $scope.signinModel = {};
     $scope.signin = function (signinModel) {
       auth.signin(signinModel.username, signinModel.password, signinModel.confirmTC)
-        .then(successSigninCb, function (errorData) {
+        .then(function () {
+          $modalInstance.close();
+        }, function (errorData) {
           if ('wrong_credentials' === errorData.errorCode) {
             $scope.formErrorMessage = 'Неверный логин/номер телефона или пароль';
             return;
@@ -29,7 +16,12 @@ angular.module('pdFrontend')
 
           // T&C hasn't been confirmed - show popup
           if ('unconfirmed_tc' === errorData.errorCode) {
-            showTCModal();
+            $modal.open({templateUrl: 'views/terms_and_conditions.modal.html'})
+              .result.then(function () {
+                $scope.signin(_.merge($scope.signinModel, { confirmTC: true }));
+              }, function () {
+                $scope.signinModel = {};
+              });
             return;
           }
 
@@ -44,7 +36,6 @@ angular.module('pdFrontend')
       auth.signup($scope.signupModel)
         .then(function () {
           $modalInstance.close();
-          growl.addSuccessMessage('Вы успешно зарегистрировались в системе');
         }, function (errorData) {
           $scope.signupErrorMsg = errorData.message;
         });
@@ -67,12 +58,7 @@ angular.module('pdFrontend')
         resolve: {
           signinScope: function () { return $scope; }
         },
-        controller: ['$scope', '$modalInstance', 'signinScope', 'vcRecaptchaService', function (
-          $scope,
-          $modalInstance,
-          signinScope,
-          vcRecaptchaService
-        ) {
+        controller: function ($scope, $modalInstance, signinScope, vcRecaptchaService) {
           $scope.restoreModel = {
             username: signinScope.signinModel.username || ''
           };
@@ -88,7 +74,7 @@ angular.module('pdFrontend')
                 $scope.restoreErrorMessage = errorData.message;
               });
           };
-        }]
+        }
       });
     };
   })
