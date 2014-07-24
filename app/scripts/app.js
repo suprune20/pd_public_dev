@@ -150,6 +150,20 @@ angular.module('pdApp', [
     });
 
     $rootScope.$on('auth.signin_success', function () {
+      if ($rootScope.redirectUrl) {
+        var redirectUrl = $rootScope.redirectUrl;
+        $rootScope.redirectUrl = null;
+        $location.search('redirect_url', null);
+
+        if (/^https?:\/\//.test(redirectUrl)) {
+          $window.location.href = redirectUrl;
+          return;
+        }
+
+        $location.path(redirectUrl);
+        return;
+      }
+
       // Update main menu config after signin
       mainMenuManager.setCurrentMenuConfig(mainMenuManager.getMenuByRole(auth.getRoles()[0]));
       // Redirect after login for LORU/OMS
