@@ -11,15 +11,19 @@ angular.module('pdApp', [
     'pdOms',
     'pdConfig',
     'vcRecaptcha',
-    'ngRaven'
+    'ngRaven',
+    'seo'
   ])
-  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider) {
+    $locationProvider.hashPrefix('!');
+
     oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 
     RavenProvider.development(ravenDevelopment);
     $httpProvider.interceptors.push('authApiInterceptor');
     $httpProvider.interceptors.push('httpErrorsInterceptor');
+    $httpProvider.interceptors.push('seoSnapshotReadyInterceptor');
     // Set interceptor into first position in interceptors
     $httpProvider.interceptors.unshift(function () {
       return {
@@ -74,7 +78,7 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider) {
     // Add empty menu config
     mainMenuManager.addMenuConfig('emptyMenu');
 
@@ -91,6 +95,8 @@ angular.module('pdApp', [
       }
     };
     $rootScope.recaptchaPublicKey = pdConfig.recaptchaPubKey;
+    // setup seo provider
+    $rootScope.seo = seoProvider;
 
     $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
       if (currentRoute.absoluteRedirectTo) {
@@ -114,7 +120,7 @@ angular.module('pdApp', [
       }
 
       // Set title for current page from routeProvider data
-      $rootScope.title = currentRoute.title;
+      $rootScope.seo.setTitle(currentRoute.title);
       // Set main menu items
       mainMenuManager.setCurrentMenuConfig(
         currentRoute.menuConfig ? currentRoute.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
@@ -144,6 +150,20 @@ angular.module('pdApp', [
     });
 
     $rootScope.$on('auth.signin_success', function () {
+      if ($rootScope.redirectUrl) {
+        var redirectUrl = $rootScope.redirectUrl;
+        $rootScope.redirectUrl = null;
+        $location.search('redirect_url', null);
+
+        if (/^https?:\/\//.test(redirectUrl)) {
+          $window.location.href = redirectUrl;
+          return;
+        }
+
+        $location.path(redirectUrl);
+        return;
+      }
+
       // Update main menu config after signin
       mainMenuManager.setCurrentMenuConfig(mainMenuManager.getMenuByRole(auth.getRoles()[0]));
       // Redirect after login for LORU/OMS

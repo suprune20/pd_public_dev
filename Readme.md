@@ -91,3 +91,12 @@ git push origin prod
 ```
 * заходим в jenkins (k.pohoronnoedelo.ru:8080) и запускаем задачу **pohoronnoe delo prod**. Если все прошло успешно, то
 поздравляю, продакшн сервер обновился :)
+
+## SEO
+
+Для генерации снапшотов для поисковых пауков используется PhantomJS.
+Веб сервер проксирует запросы с GET параметром ** _escaped_fragment_ ** к локально запущеному серверу PhantomJS:
+```
+phantomjs --disk-cache=no app/bower_components/angular-seo/angular-seo-server.js 8888 http://localhost/index.html
+phantomjs --disk-cache=no app/bower_components/angular-seo/angular-seo-server.js 8888 file:///path/to/index.html
+```

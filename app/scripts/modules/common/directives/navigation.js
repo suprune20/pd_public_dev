@@ -6,7 +6,14 @@ angular.module('pdCommon')
       restrict: 'EA',
       replace: true,
       templateUrl: 'views/modules/common/directives/main_menu.html',
-      controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+      controller: function ($scope) {
+        // watch exists redirectUrl param in url for auto open login modal window
+        $scope.$watch('redirectUrl', function (redirectUrl) {
+          if (redirectUrl) {
+            $scope.signinModal();
+          }
+        });
+
         $scope.signinModal = function () {
           $modal.open({
             templateUrl: 'views/modules/frontend/client_auth.modal.html',
@@ -15,7 +22,7 @@ angular.module('pdCommon')
             windowClass: 'frontend-auth-modal'
           });
         };
-      }],
+      },
       link: function (scope) {
         scope.menuManager = mainMenuManager;
         scope.$watch(function () {

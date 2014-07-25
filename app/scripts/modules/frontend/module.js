@@ -50,9 +50,9 @@ angular.module('pdFrontend', [
             title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
-              {link: '#/settings', title: 'Настройки'},
+              {link: '#!/settings', title: 'Настройки'},
               {class: 'divider'},
-              {link: '#/signout', title: 'Выйти'}
+              {link: '#!/signout', title: 'Выйти'}
             ]
           }
         ]);

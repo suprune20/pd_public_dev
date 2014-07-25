@@ -541,3 +541,11 @@ FileETag None
 # <IfModule mod_headers.c>
 #    Header set Connection Keep-Alive
 # </IfModule>
+
+# Proxy for generation search snapshots by phantomjs
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{QUERY_STRING} ^_escaped_fragment_=/?(.*)$
+  RewriteRule  (.*)  http://localhost:8888/$1  [P,L]
+</IfModule>

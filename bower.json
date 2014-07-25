@@ -32,6 +32,7 @@
     "angular-strap": "2.0.2",
     "angular-i18n": "1.2.17",
     "oauth-js": "0.2.0",
+    "angular-seo": "https://github.com/c0rrupt/angular-seo.git#55c68f4a97cb506be456ee7ed11462d4148bd7fb",
     "numeral": "1.5.3"
   },
   "devDependencies": {

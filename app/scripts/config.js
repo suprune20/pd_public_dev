@@ -30,8 +30,8 @@ angular.module('pdConfig', [])
         emptyMenu: { items: [] },
         cabinetMenu: {
           items:[
-            {link: '#/client-panel', title: 'Кабинет ответственного'},
-            {link: '#/map', title: 'Карта мест захоронений'}
+            {link: '#!/client-panel', title: 'Кабинет ответственного'},
+            {link: '#!/map', title: 'Карта мест захоронений'}
           ]
         },
         adminMenu: {

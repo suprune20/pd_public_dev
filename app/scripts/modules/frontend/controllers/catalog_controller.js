@@ -4,7 +4,8 @@ angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth, growl) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
-        var productData = $scope.catalog.getProduct(productId);
+        // set page title (SEO) for restore after close
+        var savedTitle = $scope.seo.getTitle();
 
         // Open modal for product details
         $modal.open({
@@ -12,19 +13,20 @@ angular.module('pdFrontend')
           windowClass: 'catalog-product-modal',
           resolve: {
             productData: function () {
-              return productData;
+              return $scope.catalog.getProduct(productId);
             }
           },
-          controller: ['$scope', '$modalInstance', 'productData',
-            function ($scope, $modalInstance, productData) {
+          controller: ['$scope', 'productData',
+            function ($scope, productData) {
+              // set product name into page title
+              $scope.seo.setTitle(productData.name);
               $scope.productData = productData;
-              $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-              };
             }
           ]
         }).result.catch(function () {
             $location.search('productId', null);
+            // restore page title
+            $scope.seo.setTitle(savedTitle);
           });
       },
       suppliersInTheBounds = [],

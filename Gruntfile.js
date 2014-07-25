@@ -169,6 +169,11 @@ module.exports = function (grunt) {
         exclude: [
           'bower_components/respond/dest/respond.src.js',
           'bower_components/ng-file-upload/angular-file-upload-shim.js',
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/angular/angular.js',
+          'bower_components/angular-route/angular-route.js',
+          'bower_components/angular-sanitize/angular-sanitize.js',
+          'bower_components/angular-animate/angular-animate.js',
           // Use custom modules instead of full lib
           'bower_components/angular-strap/dist/angular-strap.min.js',
           'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
@@ -286,7 +291,7 @@ module.exports = function (grunt) {
 
     // Allow the use of non-minsafe AngularJS files. Automatically makes it
     // minsafe compatible so Uglify does not destroy the ng references
-    ngmin: {
+    ngAnnotate: {
       dist: {
         files: [{
           expand: true,
@@ -515,7 +520,7 @@ module.exports = function (grunt) {
       'autoprefixer',
       'ngtemplates',
       'concat',
-      'ngmin',
+      'ngAnnotate',
       'copy:dist',
       'cdnify',
       'processhtml:' + target,

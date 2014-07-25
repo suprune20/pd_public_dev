@@ -27,14 +27,23 @@ angular.module('pdFrontend')
       getProducts: function (paramsData) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/products', {
           params: paramsData
-        }).then(function (resp) {
-          return resp.data.results;
+        }).then(function (response) {
+          return _.map(response.data.results, function (productModel) {
+            productModel.sku = productModel.sku ? productModel.sku : productModel.id;
+            productModel.sku = 'pd' + productModel.sku;
+
+            return productModel;
+          });
         });
       },
       getProduct: function (productId) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId)
-          .then(function (resp) {
-            return resp.data.results[0];
+          .then(function (response) {
+            var productModel = response.data.results[0];
+            productModel.sku = productModel.sku ? productModel.sku : productModel.id;
+            productModel.sku = 'pd' + productModel.sku;
+
+            return productModel;
           });
       },
       getPlaces: function (statuses) {
