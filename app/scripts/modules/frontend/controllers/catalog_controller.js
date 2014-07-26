@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth, growl) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth) {
     var openProductDetailsModal = function (productId) {
         $location.search('productId', productId);
         // set page title (SEO) for restore after close

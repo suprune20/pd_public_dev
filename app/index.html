@@ -2,6 +2,8 @@
 <html ng-app="pdApp">
   <head>
     <meta charset="utf-8">
+    <base href="/">
+    <meta name="fragment" content="!"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title ng-bind-template="Похоронное Дело {{ seo.getTitle() ? '- ' + seo.getTitle() : '' }}">Похоронное дело</title>
     <meta name="description" content="">
@@ -21,6 +23,17 @@
     <!-- endbuild -->
 
     <link rel="icon" type="image/png" href="favicon.png" />
+
+    <script>
+      // Redirect all links (with # for new links)
+      if (window.history && window.history.pushState) {
+        console.log('asdasd');
+        var matchedHash = window.location.hash.match(/^#\/?(%2F)?(.*)/);
+        if (matchedHash) {
+          window.location.replace('/' + matchedHash[2]);
+        }
+      }
+    </script>
   </head>
   <body ng-class="pageClass">
     <div class="wrap">
