@@ -27,8 +27,7 @@
     <script>
       // Redirect all links (with # for new links)
       if (window.history && window.history.pushState) {
-        console.log('asdasd');
-        var matchedHash = window.location.hash.match(/^#\/?(%2F)?(.*)/);
+        var matchedHash = window.location.hash.match(/^#(\/|%2F)(.*)/);
         if (matchedHash) {
           window.location.replace('/' + matchedHash[2]);
         }
