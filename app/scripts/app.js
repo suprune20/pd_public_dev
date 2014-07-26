@@ -15,6 +15,8 @@ angular.module('pdApp', [
     'seo'
   ])
   .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider) {
+    // use the HTML5 History API
+    $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
 
     oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
