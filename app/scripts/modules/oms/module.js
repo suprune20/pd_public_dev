@@ -6,14 +6,16 @@ angular.module('pdOms', [
 ])
   .config(function (authRouteProvider) {
     var routeConfig = {
-      '/': {
+      'oms': {
+        url: '/oms',
         resolve: {
           redirect: ['$window', 'pdConfig', function ($window, pdConfig) {
             $window.location.href = pdConfig.backendUrl;
           }]
         }
       },
-      '/placesmap': {
+      'oms.placesmap': {
+        url: '/placesmap',
         controller: 'OmsPlacesMapCtrl',
         templateUrl: 'views/modules/oms/placesmap/main.html',
         title: 'Инвентаризация',
@@ -21,12 +23,12 @@ angular.module('pdOms', [
       }
     };
 
-    _.forEach(routeConfig, function (routeData, routeUri) {
+    _.forEach(routeConfig, function (stateParams, stateName) {
       authRouteProvider
-        .when('/oms' + routeUri, _.merge({
+        .state(stateName, _.merge({
           secured: true,
           menuConfig: 'omsMenu'
-        }, routeData || {}), 'ROLE_OMS')
+        }, stateParams || {}), 'ROLE_OMS')
       ;
     });
   })

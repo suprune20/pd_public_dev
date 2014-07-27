@@ -14,7 +14,8 @@ angular.module('pdApp', [
     'ngRaven',
     'seo'
   ])
-  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider) {
+  .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider,
+                    $stateProvider, $urlRouterProvider) {
     // use the HTML5 History API
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
@@ -40,16 +41,11 @@ angular.module('pdApp', [
         }
       };
     });
-    $routeProvider
-      .when('/', {
-        controller: 'CatalogCtrl',
-        templateUrl: 'views/modules/frontend/catalog/main.html',
-        reloadOnSearch: false,
-        title: 'Каталог',
-        pageClass: 'catalog-page',
-        setFluidContainer: true
-      })
-      .when('/register', {
+
+    $urlRouterProvider.otherwise('/404');
+    $stateProvider
+      .state('register', {
+        url: '/register',
         controller: 'CommonOrgSignupCtrl',
         templateUrl: 'views/modules/common/org_auth/signup.html',
         title: 'Регистрация поставщика',
@@ -57,30 +53,34 @@ angular.module('pdApp', [
         menuConfig: 'emptyMenu',
         pageClass: 'org-signup-page'
       })
-      .when('/signout', {
+      .state('signout', {
+        url: '/signout',
         resolve: {
           signout: ['auth', '$location', function (auth, $location) {
             auth.signout().then(function () { $location.path('/'); });
           }]
         }
       })
-      .when('/useragreement', {
+      .state('useragreement', {
+        url: '/useragreement',
         templateUrl: 'views/terms_and_conditions.text.html',
         title: 'Пользовательское соглашение'
       })
-      .when('/403', {
+      .state('403', {
+        url: '/403',
         templateUrl: 'views/403.html',
         menuConfig: 'emptyMenu',
         title: 403
       })
-      .otherwise({
+      .state('404', {
+        url: '/404',
         templateUrl: 'views/404.html',
         menuConfig: 'emptyMenu',
         title: 404
       })
     ;
   })
-  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider, $state) {
     // Add empty menu config
     mainMenuManager.addMenuConfig('emptyMenu');
 
@@ -100,54 +100,55 @@ angular.module('pdApp', [
     // setup seo provider
     $rootScope.seo = seoProvider;
 
-    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute) {
-      if (currentRoute.absoluteRedirectTo) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+      if (toState.absoluteRedirectTo) {
+        event.preventDefault();
         // ToDo: Finish redirection to absolute url
-        // $window.location.href = currentRoute.absoluteRedirectTo;
+        $window.location.href = toState.absoluteRedirectTo;
         return;
       }
+
       // Remove "container" class from root block
-      $rootScope.hideRootContainerClass = currentRoute.hideRootContainerClass;
+      $rootScope.hideRootContainerClass = toState.hideRootContainerClass;
       // Save url for redirect after success login (external links) (get param redirect_url)
       $rootScope.redirectUrl = $rootScope.redirectUrl ?
         $rootScope.redirectUrl :
-        currentRoute.params.redirectUrl || null;
+        toStateParams.redirectUrl || null;
 
       // Check for secured url and available for current logged in user
-      if (!security.isAvailableUrl(currentRoute.originalPath)) {
+      if (!security.isAvailableUrl(toState.originalPath)) {
         // Save path for redirect after login (internal paths)
-        $rootScope.redirectUrl = currentRoute.originalPath;
+        $rootScope.redirectUrl = toState.originalPath;
         $location.path('/');
         return;
       }
 
       // Set title for current page from routeProvider data
-      $rootScope.seo.setTitle(currentRoute.title);
+      $rootScope.seo.setTitle(toState.title);
       // Set main menu items
       mainMenuManager.setCurrentMenuConfig(
-        currentRoute.menuConfig ? currentRoute.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
+        toState.menuConfig ? toState.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
       );
       // Set page class from route config
-      $rootScope.pageClass = currentRoute.pageClass ?
-        _.isString(currentRoute.pageClass) ?
-          [currentRoute.pageClass] :
-          currentRoute.pageClass :
+      $rootScope.pageClass = toState.pageClass ?
+        _.isString(toState.pageClass) ?
+          [toState.pageClass] :
+          toState.pageClass :
         [];
-      $rootScope.setFluidContainer = !!currentRoute.setFluidContainer;
+      $rootScope.setFluidContainer = !!toState.setFluidContainer;
       // Hide/Show main menu by route param
-      mainMenuManager.hide(currentRoute.hideMainMenu);
-      if (true === currentRoute.hideMainMenu) {
+      mainMenuManager.hide(toState.hideMainMenu);
+      if (true === toState.hideMainMenu) {
         $rootScope.addPageClass('hide-main-menu');
       }
-
-//      if ('/' === currentRoute.originalPath && auth.isAuthenticated()) {
-//        $rootScope.redirectToBasePage();
-//      }
     });
-    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+
+    // handle error access
+    $rootScope.$on('$stateChangeError', function(event, toState, toStateParams, fromState, fromStateParams, rejection) {
       if (rejection && true === rejection.accessDenied) {
+        event.preventDefault();
         // Show access denied predefined page
-        $location.path('/403');
+        $state.go('403');
       }
     });
 
@@ -207,5 +208,8 @@ angular.module('pdApp', [
 
     // set numeral language format config
     $window.numeral.language('ru');
+
+    // share $state object for templates and child scopes
+    $rootScope.$state = $state;
   })
 ;

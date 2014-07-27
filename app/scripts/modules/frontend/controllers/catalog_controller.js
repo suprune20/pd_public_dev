@@ -2,34 +2,7 @@
 
 angular.module('pdFrontend')
   .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth) {
-    var openProductDetailsModal = function (productId) {
-        $location.search('productId', productId);
-        // set page title (SEO) for restore after close
-        var savedTitle = $scope.seo.getTitle();
-
-        // Open modal for product details
-        $modal.open({
-          templateUrl: 'views/modules/frontend/catalog/product.details.modal.html',
-          windowClass: 'catalog-product-modal',
-          resolve: {
-            productData: function () {
-              return $scope.catalog.getProduct(productId);
-            }
-          },
-          controller: ['$scope', 'productData',
-            function ($scope, productData) {
-              // set product name into page title
-              $scope.seo.setTitle(productData.name);
-              $scope.productData = productData;
-            }
-          ]
-        }).result.catch(function () {
-            $location.search('productId', null);
-            // restore page title
-            $scope.seo.setTitle(savedTitle);
-          });
-      },
-      suppliersInTheBounds = [],
+    var suppliersInTheBounds = [],
       getSuppliersGeoobjects = function (yaMap) {
         return ymaps
           .geoQuery(yaMap.geoObjects)
@@ -71,12 +44,6 @@ angular.module('pdFrontend')
       $scope.flags.selectAllCategories = true;
     });
 
-    // Restore product modal details from query params
-    if (_.has($routeParams, 'productId')) {
-      openProductDetailsModal($routeParams.productId);
-    }
-
-    $scope.openProductDetailsModal = openProductDetailsModal;
     $scope.applyFilters = function () {
       $scope.catalog.productsDataProvider.applyFilters($scope.filters, $scope.orders);
     };
