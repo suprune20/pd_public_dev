@@ -177,7 +177,7 @@ angular.module('pdApp', [
 
     $rootScope.redirectToBasePage = function () {
       if (auth.isCurrentHasOmsRole()) {
-        $location.path('/oms');
+        $window.location.href = pdConfig.backendUrl;
         return;
       }
 

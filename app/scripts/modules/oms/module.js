@@ -8,11 +8,7 @@ angular.module('pdOms', [
     var routeConfig = {
       'oms': {
         url: '/oms',
-        resolve: {
-          redirect: ['$window', 'pdConfig', function ($window, pdConfig) {
-            $window.location.href = pdConfig.backendUrl;
-          }]
-        }
+        template: '<ui-view/>'
       },
       'oms.placesmap': {
         url: '/placesmap',
@@ -62,7 +58,7 @@ angular.module('pdOms', [
 
     omsMenuConfig.setMainMenuItems(pdConfig.menuConfigs.omsMenu.items);
     omsMenuConfig.setMenuClass(pdConfig.menuConfigs.omsMenu.navbarClasses);
-    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', setupMenu);
     $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;
