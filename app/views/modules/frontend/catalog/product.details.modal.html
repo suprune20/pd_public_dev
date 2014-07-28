@@ -11,7 +11,9 @@
              ng-src="{{productData.photo}}"
              pd-thumb
              pd-thumb-size="200x200"
-             default-image="http://placehold.it/200x200" itemprop="image" />
+             default-image="http://placehold.it/200x200"
+             ng-attr-alt="{{productData.name}}"
+             itemprop="image" />
       </div>
       <div class="media-body">
         <dl>

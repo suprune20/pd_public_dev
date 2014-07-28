@@ -20,14 +20,31 @@ angular.module('pdCommon')
     };
   })
   .service('seoProvider', function () {
-    var title;
+    var title,
+      description,
+      keywords;
 
     return {
       setTitle: function (titleValue) {
         title = titleValue;
+        return this;
       },
       getTitle: function () {
         return title;
+      },
+      setDescription: function (descriptionText) {
+        description = descriptionText;
+        return this;
+      },
+      getDescription: function () {
+        return description;
+      },
+      setKeywords: function (keywordsText) {
+        keywords = keywordsText;
+        return this;
+      },
+      getKeywords: function () {
+        return keywords;
       }
     };
   })

@@ -15,12 +15,14 @@ angular.module('pdFrontend')
       },
       controller: function ($scope, productData) {
         // set product name into page title
-        $scope.seo.setTitle(productData.name);
+        $scope.seo
+          .setTitle(productData.name)
+          .setDescription(productData.name + '. ' + productData.description);
         $scope.productData = productData;
       }
     }).result.catch(function () {
         $state.go('catalog');
-        // restore page title
+        // restore page seo data
         $scope.seo.setTitle(savedTitle);
       });
   })
