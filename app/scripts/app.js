@@ -123,8 +123,12 @@ angular.module('pdApp', [
         return;
       }
 
-      // Set title for current page from routeProvider data
+      // Set seo data for current page from routeProvider data
+      var toStateSeoData = toState.seo || {};
       $rootScope.seo.setTitle(toState.title);
+      $rootScope.seo.setDescription(toStateSeoData.description);
+      $rootScope.seo.setKeywords(toStateSeoData.keywords);
+
       // Set main menu items
       mainMenuManager.setCurrentMenuConfig(
         toState.menuConfig ? toState.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
