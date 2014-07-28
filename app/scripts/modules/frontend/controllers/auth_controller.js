@@ -58,23 +58,25 @@ angular.module('pdFrontend')
         resolve: {
           signinScope: function () { return $scope; }
         },
-        controller: function ($scope, $modalInstance, signinScope, vcRecaptchaService) {
-          $scope.restoreModel = {
-            username: signinScope.signinModel.username || ''
-          };
-          $scope.getPasswordBySms = function (username, captchaData) {
-            auth.getPasswordBySMS(username, captchaData)
-              .then(function (responseData) {
-                if ('success' === responseData.status && _.has(responseData, 'message')) {
-                  signinScope.formSuccessMessage = responseData.message;
-                  $modalInstance.close();
-                }
-              }, function (errorData) {
-                vcRecaptchaService.reload();
-                $scope.restoreErrorMessage = errorData.message;
-              });
-          };
-        }
+        controller: ['$scope', '$modalInstance', 'signinScope', 'vcRecaptchaService',
+          function ($scope, $modalInstance, signinScope, vcRecaptchaService) {
+            $scope.restoreModel = {
+              username: signinScope.signinModel.username || ''
+            };
+            $scope.getPasswordBySms = function (username, captchaData) {
+              auth.getPasswordBySMS(username, captchaData)
+                .then(function (responseData) {
+                  if ('success' === responseData.status && _.has(responseData, 'message')) {
+                    signinScope.formSuccessMessage = responseData.message;
+                    $modalInstance.close();
+                  }
+                }, function (errorData) {
+                  vcRecaptchaService.reload();
+                  $scope.restoreErrorMessage = errorData.message;
+                });
+            };
+          }
+        ]
       });
     };
   })
