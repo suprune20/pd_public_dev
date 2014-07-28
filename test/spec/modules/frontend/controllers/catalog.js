@@ -110,25 +110,4 @@ describe('Controller: CatalogCtrl', function () {
       expect(scope.catalog.productsDataProvider.applyFilters).toHaveBeenCalledWith({});
     });
   });
-
-  describe('modal', function () {
-    beforeEach(inject(function ($controller) {
-      scope.seo =  {
-        getTitle: jasmine.createSpy()
-      };
-      $controller('CatalogCtrl', {
-        $scope: scope,
-        $location: $locationMock,
-        $routeParams: {productId: 123},
-        $modal: $modalMock,
-        CatalogRefactored: catalogMock
-      });
-    }));
-
-    it('should restore modal product details window', function () {
-      expect($modalMock.open).toHaveBeenCalled();
-      expect($locationMock.search).toHaveBeenCalledWith('productId', 123);
-//      expect(scope.catalog.getProduct).toHaveBeenCalledWith(123);
-    });
-  });
 });

@@ -10,7 +10,23 @@ angular.module('pdFrontend', [
   ])
   .config(function (authRouteProvider) {
     authRouteProvider
-      .when('/map', {
+      .state('catalog', {
+        url: '/?redirectUrl',
+        controller: 'CatalogCtrl',
+        templateUrl: 'views/modules/frontend/catalog/main.html',
+        reloadOnSearch: false,
+        title: 'Каталог ритуальных товаров и услуг',
+        pageClass: 'catalog-page',
+        setFluidContainer: true
+      })
+      .state('catalog.product', {
+        url: 'product/:productId',
+        controller: 'CatalogProductCtrl',
+        pageClass: 'catalog-page',
+        setFluidContainer: true
+      })
+      .state('map', {
+        url: '/map',
         controller: 'MapCtrl',
         templateUrl: 'views/modules/frontend/map/main.html',
         reloadOnSearch: false,
@@ -19,14 +35,16 @@ angular.module('pdFrontend', [
         setFluidContainer: true,
         pageClass: 'map-page'
       })
-      .when('/client-panel', {
+      .state('clientPanel', {
+        url: '/client-panel',
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
         secured: true,
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
-      .when('/settings', {
+      .state('settings', {
+        url: '/settings',
         controller: 'PdFrontendSettingsCtrl',
         templateUrl: 'views/modules/frontend/settings/main.html',
         title: 'Настройки пользователя',
@@ -34,9 +52,9 @@ angular.module('pdFrontend', [
         menuConfig: 'cabinetMenu',
         pageClass: 'pd-frontend-settings-page',
         resolve: {
-          additionalSettingsData: ['settingsProvider', function (settingsProvider) {
+          additionalSettingsData: function (settingsProvider) {
             return settingsProvider;
-          }]
+          }
         }
       }, 'ROLE_CLIENT')
     ;
@@ -59,7 +77,7 @@ angular.module('pdFrontend', [
       };
     cabinetMenuConfig.setMainMenuItems(pdConfig.menuConfigs.cabinetMenu.items);
 
-    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', setupMenu);
     $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;

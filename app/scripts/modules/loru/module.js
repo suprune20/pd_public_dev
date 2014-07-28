@@ -6,16 +6,18 @@ angular.module('pdLoru', [
   ])
   .config(function (authRouteProvider) {
     var routeConfig = {
-      '': {
-        templateUrl: 'views/modules/loru/main.html',
-        title: 'Loru'
+      'loru': {
+        url: '/loru',
+        template: '<ui-view><h1>Loru</h1></ui-view>'
       },
-      '/advertisement': {
+      'loru.advertisement': {
+        url: '/advertisement',
         controller: 'LoruAdvertisementCtrl',
         templateUrl: 'views/modules/loru/productplaces/main.html',
         title: 'Реклама'
       },
-      '/orgplaces': {
+      'loru.orgplaces': {
+        url: '/orgplaces',
         controller: 'LoruOrgPlacesCtrl',
         templateUrl: 'views/modules/loru/orgplaces/main.html',
         title: 'Места',
@@ -23,13 +25,12 @@ angular.module('pdLoru', [
       }
     };
 
-    _.forEach(routeConfig, function (routeData, routeUri) {
+    _.forEach(routeConfig, function (stateParams, stateName) {
       authRouteProvider
-        .when('/loru' + routeUri, _.merge({
+        .state(stateName, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, routeData || {}), 'ROLE_LORU')
-      ;
+        }, stateParams || {}), 'ROLE_LORU');
     });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
@@ -64,7 +65,7 @@ angular.module('pdLoru', [
     loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
     loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
 
-    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', setupMenu);
     $rootScope.$on('auth.signin_success', setupMenu);
     // Show notification about learn "How add advert"
     $rootScope.$on('auth.signin_success', function () {

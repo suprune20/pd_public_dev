@@ -6,14 +6,12 @@ angular.module('pdOms', [
 ])
   .config(function (authRouteProvider) {
     var routeConfig = {
-      '/': {
-        resolve: {
-          redirect: ['$window', 'pdConfig', function ($window, pdConfig) {
-            $window.location.href = pdConfig.backendUrl;
-          }]
-        }
+      'oms': {
+        url: '/oms',
+        template: '<ui-view/>'
       },
-      '/placesmap': {
+      'oms.placesmap': {
+        url: '/placesmap',
         controller: 'OmsPlacesMapCtrl',
         templateUrl: 'views/modules/oms/placesmap/main.html',
         title: 'Инвентаризация',
@@ -21,12 +19,12 @@ angular.module('pdOms', [
       }
     };
 
-    _.forEach(routeConfig, function (routeData, routeUri) {
+    _.forEach(routeConfig, function (stateParams, stateName) {
       authRouteProvider
-        .when('/oms' + routeUri, _.merge({
+        .state(stateName, _.merge({
           secured: true,
           menuConfig: 'omsMenu'
-        }, routeData || {}), 'ROLE_OMS')
+        }, stateParams || {}), 'ROLE_OMS')
       ;
     });
   })
@@ -60,7 +58,7 @@ angular.module('pdOms', [
 
     omsMenuConfig.setMainMenuItems(pdConfig.menuConfigs.omsMenu.items);
     omsMenuConfig.setMenuClass(pdConfig.menuConfigs.omsMenu.navbarClasses);
-    $rootScope.$on('$routeChangeSuccess', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', setupMenu);
     $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;

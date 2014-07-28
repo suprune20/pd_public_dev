@@ -9,7 +9,8 @@ angular.module('pdCommon', [
     'ivpusic.cookie',
     'angular-growl',
     'angularFileUpload',
-    'checklist-model'
+    'checklist-model',
+    'ui.router'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
@@ -34,9 +35,9 @@ angular.module('pdCommon', [
     };
   })
   // Route provider with check allowed roles
-  .provider('authRoute', ['$routeProvider', function ($routeProvider) {
-    return angular.extend({}, $routeProvider, {
-      when: function (path, route, allowedRoles) {
+  .provider('authRoute', function ($stateProvider) {
+    return angular.extend({}, $stateProvider, {
+      state: function (name, route, allowedRoles) {
         route.resolve = route.resolve || {};
         angular.extend(route.resolve, { isAllowedAccess: ['$q', 'auth', function ($q, auth) {
           var deferred = $q.defer();
@@ -57,10 +58,10 @@ angular.module('pdCommon', [
         ]});
 
         // Call parent method
-        $routeProvider.when(path, route);
+        $stateProvider.state(name, route);
 
         return this;
       }
     });
-  }])
+  })
 ;
