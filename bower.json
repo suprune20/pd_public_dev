@@ -11,7 +11,7 @@
     "bootstrap-sass-official": "3.1.1",
     "respond": "1.4.2",
     "angular-ui-select2": "0.0.5",
-    "nginfinitescroll": "1.1.1",
+    "nginfinitescroll": "1.1.2",
     "angular-bootstrap": "0.10.0",
     "lodash": "2.4.1",
     "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#03184e14a2cfd43d082690a690a0b4fb087aaadd",
