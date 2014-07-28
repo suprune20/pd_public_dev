@@ -65,13 +65,27 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: '0.0.0.0',
-        livereload: 35729
+        livereload: 35729,
+        middleware: function (connect, options) {
+          var optBase = (typeof options.base === 'string') ? [options.base] : options.base;
+
+          return [require('connect-modrewrite')(['!(\\..+)$ / [L]'])]
+            .concat(optBase.map(function (path) {
+              if (path.indexOf('rewrite|') === -1) {
+                return connect.static(path);
+              } else {
+                path = path.replace(/\\/g, '/').split('|');
+                return  connect().use(path[1], connect.static(path[2]));
+              }
+            }));
+        }
       },
       livereload: {
         options: {
           open: true,
           base: [
             '.tmp',
+            'rewrite|/bower_components|./bower_components',
             '<%= yeoman.app %>'
           ]
         }
@@ -304,9 +318,6 @@ module.exports = function (grunt) {
 
     // Replace Google CDN references
     cdnify: {
-      options: {
-        cdn: require('google-cdn-data')
-      },
       dist: {
         html: ['<%= yeoman.dist %>/*.html']
       }
@@ -336,9 +347,9 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }]
       },
-      configDev: {files:[{src:'<%= yeoman.app %>/scripts/config_dev_const.js', dest:'.tmp/scripts/config_const.js'}]},
-      configPd3: {files:[{src:'<%= yeoman.app %>/scripts/config_pd3_const.js', dest:'.tmp/scripts/config_const.js'}]},
-      configProd: {files:[{src:'<%= yeoman.app %>/scripts/config_prod_const.js', dest:'.tmp/scripts/config_const.js'}]}
+      configDev: {files:[{src:'<%= yeoman.app %>/scripts/config/dev_const.js', dest:'.tmp/scripts/config_const.js'}]},
+      configPd3: {files:[{src:'<%= yeoman.app %>/scripts/config/pd3_const.js', dest:'.tmp/scripts/config_const.js'}]},
+      configProd: {files:[{src:'<%= yeoman.app %>/scripts/config/prod_const.js', dest:'.tmp/scripts/config_const.js'}]}
     },
 
     // Run some tasks in parallel to speed up the build process
