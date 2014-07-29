@@ -115,14 +115,6 @@ angular.module('pdApp', [
         $rootScope.redirectUrl :
         toStateParams.redirectUrl || null;
 
-      // Check for secured url and available for current logged in user
-      if (!security.isAvailableUrl(toState.originalPath)) {
-        // Save path for redirect after login (internal paths)
-        $rootScope.redirectUrl = toState.originalPath;
-        $location.path('/');
-        return;
-      }
-
       // Set seo data for current page from routeProvider data
       var toStateSeoData = toState.seo || {};
       $rootScope.seo.setTitle(toState.title);
@@ -149,10 +141,16 @@ angular.module('pdApp', [
 
     // handle error access
     $rootScope.$on('$stateChangeError', function(event, toState, toStateParams, fromState, fromStateParams, rejection) {
-      if (rejection && true === rejection.accessDenied) {
+      if (rejection.accessDenied) {
         event.preventDefault();
-        // Show access denied predefined page
-        $state.go('403');
+
+        if (auth.isAuthenticated()) {
+          // Show access denied predefined page
+          $state.go('403');
+        } else {
+          $rootScope.redirectUrl = toState.url;
+          $state.go('catalog');
+        }
       }
     });
 
@@ -160,7 +158,7 @@ angular.module('pdApp', [
       if ($rootScope.redirectUrl) {
         var redirectUrl = $rootScope.redirectUrl;
         $rootScope.redirectUrl = null;
-        $location.search('redirect_url', null);
+        $location.search('redirectUrl', null);
 
         if (/^https?:\/\//.test(redirectUrl)) {
           $window.location.href = redirectUrl;
