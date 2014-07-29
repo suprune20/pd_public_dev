@@ -17,12 +17,20 @@ angular.module('pdFrontend')
         // Filter for non editors geo objects
         getSuppliersGeoobjects(yaMap)
           .search('properties.active = true')
+          .search('options.visible = true')
           .each(function (geoObject) {
             $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
             $scope.visibleSuppliersCategories.push(geoObject.properties.get('pointData.categories'));
           });
         $scope.visibleSuppliersCategories = _.union.apply(null, $scope.visibleSuppliersCategories);
-        suppliersInTheBounds = _.clone($scope.filters.supplierStore);
+
+        // calculate suppliers in bounds
+        suppliersInTheBounds = [];
+        getSuppliersGeoobjects(yaMap)
+          .search('properties.active = true')
+          .each(function (geoObject) {
+            suppliersInTheBounds.push(geoObject.properties.get('pointData').id);
+          });
 
         $scope.applyFilters();
       },
@@ -59,11 +67,6 @@ angular.module('pdFrontend')
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
       $scope.isLoadedGeoObjects = true;
       $scope.catalogGeoObjects = mapPoints.allPoints;
-
-      // set visibility for catalog geoObjects by default
-      $scope.catalogGeoObjects.forEach(function (geoObject) {
-        geoObject.options.visible = $scope.catalogViewIsShown;
-      });
     });
     // Filtered markers by yandex map
     $scope.yaMapBoundsChange = function (event) {
