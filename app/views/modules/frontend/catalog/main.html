@@ -82,8 +82,6 @@
               </div>
               <div class="media-body">
                 <dl>
-                  <dt ng-show="product.sku">Артикул</dt>
-                  <dd ng-show="product.sku">{{product.sku}}</dd>
                   <dt>Поставщик</dt>
                   <dd>{{product.supplier}}</dd>
                   <dt>Цена</dt>
@@ -105,7 +103,9 @@
           </div>
           <div class="alert alert-info"
                ng-show="catalog.productsDataProvider.getProducts().length && catalog.productsDataProvider.isNoMoreProducts()">
-            <span class="glyphicon glyphicon-ban-circle"></span> Нет предложений продуктов и услуг в этой местности
+            <span class="glyphicon glyphicon-ban-circle"></span>
+            &nbsp;
+            Показаны все предложения товаров и услуг для выбранной местности
           </div>
           <div class="alert alert-warning"
                ng-show="isLoadedGeoObjects && !allSuppliersInTheBoundsCount && !security.isAuthenticated()">

@@ -2,9 +2,6 @@
 
 angular.module('pdFrontend')
   .controller('CatalogProductCtrl', function ($scope, $modal, $state) {
-    // set page title (SEO) for restore after close
-    var savedTitle = $scope.seo.getTitle();
-
     $modal.open({
       templateUrl: 'views/modules/frontend/catalog/product.details.modal.html',
       windowClass: 'catalog-product-modal',
@@ -22,8 +19,6 @@ angular.module('pdFrontend')
       }
     }).result.catch(function () {
         $state.go('catalog');
-        // restore page seo data
-        $scope.seo.setTitle(savedTitle);
       });
   })
 ;
