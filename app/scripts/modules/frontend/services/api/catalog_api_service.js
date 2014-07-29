@@ -21,14 +21,20 @@ angular.module('pdFrontend')
             categories: _categories
           }
         }).then(function (resp) {
-          return resp.data.supplier;
+          return resp.data;
         });
+      },
+      getSupplier: function (supplierSlug) {
+        return $http.get(pdConfig.apiEndpoint + 'catalog/suppliers/' + supplierSlug)
+          .then(function (response) {
+            return response.data;
+          });
       },
       getProducts: function (paramsData) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/products', {
           params: paramsData
         }).then(function (response) {
-          return _.map(response.data.results, function (productModel) {
+          return _.map(response.data, function (productModel) {
             productModel.sku = productModel.sku ? productModel.sku : productModel.id;
             productModel.sku = 'pd' + productModel.sku;
 
@@ -39,7 +45,7 @@ angular.module('pdFrontend')
       getProduct: function (productId) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/products/' + productId)
           .then(function (response) {
-            var productModel = response.data.results[0];
+            var productModel = response.data;
             productModel.sku = productModel.sku ? productModel.sku : productModel.id;
             productModel.sku = 'pd' + productModel.sku;
 

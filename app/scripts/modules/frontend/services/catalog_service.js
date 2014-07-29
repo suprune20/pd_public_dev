@@ -63,6 +63,7 @@ angular.module('pdFrontend')
         getFilters: pdFrontendCatalogApi.getFilters,
         getCategories: pdFrontendCatalogApi.getCategories,
         getProduct: pdFrontendCatalogApi.getProduct,
+        getSupplier: pdFrontendCatalogApi.getSupplier,
         productsDataProvider: productsDataProvider,
         getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
           return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])

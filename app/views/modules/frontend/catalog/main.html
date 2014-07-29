@@ -37,9 +37,7 @@
   <div class="col-xs-10">
     <div class="row">
       <div class="col-xs-12">
-        <ya-map class=""
-                ya-center="{{mapCenterPoint}}"
-                ya-zoom="11"
+        <ya-map ya-zoom="11"
                 ya-options="{maxZoom: 18}"
                 ya-event-boundschange="yaMapBoundsChange($event)" style="width: 100%; display: block;">
           <pd-ya-map-sizer pd-ya-size="23PartHeight"
@@ -83,7 +81,12 @@
               <div class="media-body">
                 <dl>
                   <dt>Поставщик</dt>
-                  <dd>{{product.supplier}}</dd>
+                  <dd>
+                    <a href="" ui-sref="catalog.supplier({supplierId: product.supplier.slug})"
+                       ng-click="$event.stopPropagation()">
+                      {{product.supplier.name}}
+                    </a>
+                  </dd>
                   <dt>Цена</dt>
                   <dd>
                     {{product.price|numeralFormat:'0,0'}} руб.

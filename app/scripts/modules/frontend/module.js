@@ -31,6 +31,12 @@ angular.module('pdFrontend', [
         pageClass: 'catalog-page',
         setFluidContainer: true
       })
+      .state('catalog.supplier', {
+        url: 'suppliers/:supplierId',
+        controller: 'CatalogSupplierCtrl',
+        pageClass: 'catalog-page',
+        setFluidContainer: true
+      })
       .state('map', {
         url: '/map',
         controller: 'MapCtrl',

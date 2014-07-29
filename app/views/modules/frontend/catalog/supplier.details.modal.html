@@ -1,0 +1,82 @@
+<div itemscope itemtype="http://schema.org/Organization">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" itemprop="name">{{supplierData.name}}</h4>
+  </div>
+
+  <div class="modal-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <dl>
+          <dt ng-if="supplierData.fullname">Полное наименование</dt>
+          <dd ng-if="supplierData.fullname" itemprop="alternateName">{{supplierData.fullname}}</dd>
+          <dt>Адрес</dt>
+          <dd itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <span itemprop="streetAddress">{{supplierData.address}}</span>
+          </dd>
+          <dt ng-if="supplierData.phones.length">Телефоны</dt>
+          <dd ng-if="supplierData.phones.length">
+            <ul class="list-unstyled">
+              <li ng-repeat="phoneNumber in supplierData.phones" itemprop="telephone">{{phoneNumber}}</li>
+            </ul>
+          </dd>
+          <dt ng-if="supplierData.fax">Факс</dt>
+          <dd ng-if="supplierData.fax" itemprop="faxNumber">{{supplierData.fax}}</dd>
+          <dt>Время работы</dt>
+          <dd>{{supplierData.worktime|default:'-'}}</dd>
+          <dt ng-if="supplierData.site">Сайт производителя</dt>
+          <dd ng-if="supplierData.site" itemprop="url">
+            <a ng-href="{{supplierData.site}}" target="_blank">{{supplierData.site}}</a>
+          </dd>
+          <dt ng-if="supplierData.email">E-mail</dt>
+          <dd ng-if="supplierData.email" itemprop="email">{{supplierData.email}}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="panel panel-default" ng-if="supplierData.stores.length">
+      <div class="panel-heading">Карта магазинов</div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <ya-map ya-zoom="11"
+                    ya-options="{maxZoom: 18}"
+                    style="width: 100%; height: 250px; display: block;">
+              <ya-toolbar ya-name="zoomControl" ya-options="{left: 5, top: 40}"></ya-toolbar>
+              <ya-toolbar ya-name="typeSelector" ya-options="{left: 3, top: 5}"></ya-toolbar>
+
+              <ya-collection show-all="true">
+                <ya-geo-object ng-repeat="point in supplierData.storesGeoObjects" ya-source="point"></ya-geo-object>
+              </ya-collection>
+            </ya-map>
+          </div>
+        </div>
+
+        <div itemprop="hasPOS" itemscope itemtype="http://schema.org/Place"
+              ng-repeat="storeData in supplierData.stores">
+          <meta itemprop="name" ng-attr-content="{{storeData.name}}" />
+          <div ng-repeat="phoneNumber in supplierData.phones">
+            <meta itemprop="telephone" ng-attr-content="{{phoneNumber}}" />
+          </div>
+          <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <meta itemprop="streetAddress" ng-attr-content="{{storeData.address}}" />
+          </div>
+          <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+            <meta itemprop="latitude" ng-attr-content="{{storeData.location.latitude}}" />
+            <meta itemprop="longitude" ng-attr-content="{{storeData.location.longitude}}" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default" ng-show="supplierData.description">
+      <div class="panel-body" itemprop="description">
+        {{supplierData.description}}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Закрыть</button>
+  </div>
+</div>
