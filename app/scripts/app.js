@@ -140,7 +140,13 @@ angular.module('pdApp', [
     });
 
     $rootScope.$on('$stateChangeSuccess', function () {
-      $window.ga('send', 'pageview', $location.path());
+      // Hit analytics tracking events after change state
+      if ($window.ga) {
+        $window.ga('send', 'pageview', $location.path());
+      }
+      if ($window.yaCounter25697954) {
+        $window.yaCounter25697954.hit($location.path());
+      }
     });
 
     // handle error access
