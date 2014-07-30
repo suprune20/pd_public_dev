@@ -459,6 +459,29 @@ module.exports = function (grunt) {
 //      }
 //    },
 
+    robotstxt: {
+      prod: {
+        dest: '<%= yeoman.dist %>',
+        policy: [
+          {
+            ua: '*',
+            disallow: [
+              '/signout',
+              '/loru/',
+              '/*_escaped_fragment_'
+            ]
+          }
+        ]
+      },
+      dev: {
+        dest: '<%= yeoman.dist %>',
+        policy: [{
+          ua: '*',
+          disallow: '/'
+        }]
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -542,7 +565,8 @@ module.exports = function (grunt) {
       'uglify',
       'rev',
       'usemin',
-      'htmlmin'
+      'htmlmin',
+      'robotstxt:' + ('prod' === target ? 'prod' : 'dev')
     ]);
   });
 
