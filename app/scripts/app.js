@@ -139,6 +139,10 @@ angular.module('pdApp', [
       }
     });
 
+    $rootScope.$on('$stateChangeSuccess', function () {
+      $window.ga('send', 'pageview', $location.path());
+    });
+
     // handle error access
     $rootScope.$on('$stateChangeError', function(event, toState, toStateParams, fromState, fromStateParams, rejection) {
       if (rejection.accessDenied) {
