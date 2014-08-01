@@ -39,17 +39,18 @@
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.orgName.$dirty && orgSignupForm.orgName.$invalid}">
-    <label class="control-label" for="orgName">
+       ng-class="{'has-error': orgSignupForm.orgName.$invalid, 'has-success': orgSignupForm.orgName.$valid}">
+    <label for="orgName">
       Краткое наименование организации <span class="form-require-mark">*</span>
     </label>
     <input name="orgName" id="orgName" ng-model="authProvider.getSignupModel().orgName" class="form-control"
            required autofocus />
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': orgSignupForm.orgName.$invalid, 'glyphicon-ok': orgSignupForm.orgName.$valid}"></span>
   </div>
 
-  <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.registredOfficeAddress.$dirty && orgSignupForm.registredOfficeAddress.$invalid}">
-    <label class="control-label" for="registredOfficeAddress">
+  <div class="form-group">
+    <label for="registredOfficeAddress">
       Юридический адрес <span class="form-require-mark">*</span>
     </label>
 
@@ -63,25 +64,40 @@
       <ya-geo-object ya-source="authProvider.getOfficeGeoObject()"
                      ya-event-dragend="authProvider.officeGeoObjectDragendHandler($event)"></ya-geo-object>
     </ya-map>
-    <textarea name="registredOfficeAddress" id="registredOfficeAddress" class="form-control margin-top-15" required
-              ng-model="authProvider.getSignupModel().registredOffice.address"
-              ng-readonly="!authProvider.getSignupModel().registredOffice.address"></textarea>
+
+    <div class="has-feedback"
+         ng-class="{
+        'has-error': orgSignupForm.registredOfficeAddress.$invalid,
+        'has-success': orgSignupForm.registredOfficeAddress.$valid
+    }">
+      <textarea name="registredOfficeAddress" id="registredOfficeAddress" class="form-control margin-top-15" required
+                ng-model="authProvider.getSignupModel().registredOffice.address"
+                ng-readonly="!authProvider.getSignupModel().registredOffice.address"></textarea>
+      <span class="glyphicon form-control-feedback"
+            ng-class="{
+             'glyphicon-remove': orgSignupForm.registredOfficeAddress.$invalid,
+             'glyphicon-ok': orgSignupForm.registredOfficeAddress.$valid
+           }"></span>
+    </div>
   </div>
 
-  <div class="form-group has-feedback" ng-class="{'has-error': orgSignupForm.email.$dirty && orgSignupForm.email.$invalid}">
-    <label class="control-label" for="email">Email <span class="form-require-mark">*</span></label>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': orgSignupForm.email.$invalid, 'has-success': orgSignupForm.email.$valid}">
+    <label for="email">Email <span class="form-require-mark">*</span></label>
     <input name="email" id="email" ng-model="authProvider.getSignupModel().email" class="form-control" required
            type="email" ng-pattern="EMAIL_REGEXP" />
-    <span class="help-block" ng-show="orgSignupForm.email.$error.pattern">Неверный формат email</span>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': orgSignupForm.email.$invalid, 'glyphicon-ok': orgSignupForm.email.$valid}"></span>
   </div>
 
   <div class="form-group has-feedback" ng-init="authProvider.getSignupModel().phones = [{phone:''}]">
-    <label class="control-label">Телефон(ы) <span class="form-require-mark">*</span></label>
+    <label>Телефон(ы) <span class="form-require-mark">*</span></label>
 
     <div ng-repeat="phoneItem in authProvider.getSignupModel().phones" class="margin-bottom-15 has-feedback"
          ng-class="{
                 'input-group': authProvider.getSignupModel().phones.length > 1,
-                'has-error': orgSignupForm.phones_{{$index}}.$dirty && orgSignupForm.phones_{{$index}}.$invalid
+                'has-error': orgSignupForm.phones_{{$index}}.$invalid,
+                'has-success': orgSignupForm.phones_{{$index}}.$valid
              }">
       <input class="form-control" ng-model="phoneItem.phone" required name="phones_{{$index}}">
       <span class="input-group-btn" ng-hide="1 === authProvider.getSignupModel().phones.length">
@@ -105,18 +121,20 @@
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.username.$dirty && orgSignupForm.username.$invalid}">
-    <label class="control-label" for="username">Логин пользователя <span class="form-require-mark">*</span></label>
+       ng-class="{'has-error': orgSignupForm.username.$invalid, 'has-success': orgSignupForm.username.$valid}">
+    <label for="username">Логин пользователя <span class="form-require-mark">*</span></label>
     <input name="username" id="username" ng-model="authProvider.getSignupModel().username" class="form-control"
            required ng-pattern="/^[A-Za-z0-9@_-]+$/" />
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': orgSignupForm.username.$invalid, 'glyphicon-ok': orgSignupForm.username.$valid}"></span>
     <span class="help-block" ng-show="orgSignupForm.username.$error.pattern">
       Разрешены символы: A-Z, a-z, 0-9, @, _, -
     </span>
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.password.$dirty && orgSignupForm.password.$invalid}">
-    <label class="control-label" for="password">Пароль <span class="form-require-mark">*</span></label>
+       ng-class="{'has-error': orgSignupForm.password.$invalid, 'has-success': orgSignupForm.password.$valid}">
+    <label for="password">Пароль <span class="form-require-mark">*</span></label>
 
     <div class="alert alert-warning"ng-show="showGeneratedPassword">
       Сгенерированный пароль: <strong>{{authProvider.getSignupModel().password}}</strong>
@@ -137,12 +155,14 @@
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.passwordConfirm.$dirty && orgSignupForm.passwordConfirm.$invalid}">
-    <label class="control-label" for="passwordConfirm">
+       ng-class="{'has-error': orgSignupForm.passwordConfirm.$invalid, 'has-success': orgSignupForm.passwordConfirm.$valid}">
+    <label for="passwordConfirm">
       Повторите пароль <span class="form-require-mark">*</span>
     </label>
     <input name="passwordConfirm" id="passwordConfirm" ng-model="authProvider.getSignupModel().passwordConfirm"
            type="password" class="form-control" required password-repeat="password" />
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': orgSignupForm.passwordConfirm.$invalid, 'glyphicon-ok': orgSignupForm.passwordConfirm.$valid}"></span>
     <span class="help-block"
           ng-show="orgSignupForm.passwordConfirm.$dirty && orgSignupForm.passwordConfirm.$error.passwordRepeat">
       Неверно введен повтор пароля
@@ -150,19 +170,29 @@
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.userLastName.$dirty && orgSignupForm.userLastName.$invalid}">
-    <label class="control-label" for="userLastName">
+       ng-class="{'has-error': orgSignupForm.userLastName.$invalid, 'has-success': orgSignupForm.userLastName.$valid}">
+    <label for="userLastName">
       Фамилия пользователя <span class="form-require-mark">*</span>
     </label>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{
+            'glyphicon-remove': orgSignupForm.userLastName.$invalid,
+            'glyphicon-ok': orgSignupForm.userLastName.$valid
+          }"></span>
     <input name="userLastName" id="userLastName" ng-model="authProvider.getSignupModel().userLastName"
            class="form-control" required />
   </div>
 
   <div class="form-group has-feedback"
-       ng-class="{'has-error': orgSignupForm.userFirstName.$dirty && orgSignupForm.userFirstName.$invalid}">
-    <label class="control-label" for="userFirstName">
+       ng-class="{'has-error': orgSignupForm.userFirstName.$invalid, 'has-success': orgSignupForm.userFirstName.$valid}">
+    <label for="userFirstName">
       Имя пользователя <span class="form-require-mark">*</span>
     </label>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{
+            'glyphicon-remove': orgSignupForm.userFirstName.$invalid,
+            'glyphicon-ok': orgSignupForm.userFirstName.$valid
+          }"></span>
     <input name="userFirstName" id="userFirstName" ng-model="authProvider.getSignupModel().userFirstName"
            class="form-control" required />
   </div>
