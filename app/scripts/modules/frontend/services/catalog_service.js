@@ -88,10 +88,10 @@ angular.module('pdFrontend')
                     properties: {
                       type: 'supplier_store_place',
                       pointData: storeData,
-                      active: true
+                      active: false
                     },
                     options: {
-                      preset: SUPPLIER_YA_MARKER_CHECKED_PRESET,
+                      preset: SUPPLIER_YA_MARKER_UNCHECKED_PRESET,
                       visible: true
                     },
                     geometry: {

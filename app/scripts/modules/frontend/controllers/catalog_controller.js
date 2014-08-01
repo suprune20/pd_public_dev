@@ -14,9 +14,18 @@ angular.module('pdFrontend')
         // Select only suppliers markers and filter by them
         $scope.filters.supplierStore = [];
         $scope.visibleSuppliersCategories = [];
-        // Filter for non editors geo objects
-        getSuppliersGeoobjects(yaMap)
+        var activeInBoundsStoresCount = getSuppliersGeoobjects(yaMap)
           .search('properties.active = true')
+          .search('options.visible = true')
+          .getLength();
+        var suppliersGeoObjectsResult = getSuppliersGeoobjects(yaMap)
+        if (activeInBoundsStoresCount) {
+          suppliersGeoObjectsResult = suppliersGeoObjectsResult
+            .search('properties.active = true');
+        }
+
+        // Filter for non editors geo objects
+        suppliersGeoObjectsResult
           .search('options.visible = true')
           .each(function (geoObject) {
             $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
@@ -26,8 +35,7 @@ angular.module('pdFrontend')
 
         // calculate suppliers in bounds
         suppliersInTheBounds = [];
-        getSuppliersGeoobjects(yaMap)
-          .search('properties.active = true')
+        suppliersGeoObjectsResult
           .each(function (geoObject) {
             suppliersInTheBounds.push(geoObject.properties.get('pointData').id);
           });
