@@ -51,6 +51,7 @@
           <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
             <ya-geo-object ng-repeat="point in catalogGeoObjects"
                            ya-source="point"
+                           ya-event-propertieschange="geoObjectPropertiesChanged($event)"
                            ya-event-click="markerClick($event)"></ya-geo-object>
           </ya-collection>
           <!-- End suppliers and user's markers -->
