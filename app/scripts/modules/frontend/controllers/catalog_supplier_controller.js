@@ -29,7 +29,10 @@ angular.module('pdFrontend')
         });
       }
     }).result.catch(function () {
+      // Redirect to catalog state only if modal has been closed manually
+      if ('catalog.supplier' === $state.current.name) {
         $state.go('catalog');
-      });
+      }
+    });
   })
 ;
