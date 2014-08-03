@@ -27,7 +27,6 @@ angular.module('pdFrontend')
         $scope.visibleSuppliersCategories = [];
         // Filter for non editors geo objects
         getSuppliersGeoObjectsResult(yaMap)
-          .search('options.visible = true')
           .each(function (geoObject) {
             $scope.visibleSuppliersCategories.push(geoObject.properties.get('pointData.categories'));
           });
