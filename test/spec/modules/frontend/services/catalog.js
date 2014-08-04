@@ -56,11 +56,7 @@ describe('Service: Catalog', function () {
     var successCallback = jasmine.createSpy('success callback'),
       errorCallback = jasmine.createSpy('error callback');
 
-    $httpBackend.expectGET(serverEndpointUrl + 'catalog/products/123').respond(200, {
-      results: [
-        {id: 123, name: 'product 123'}
-      ]
-    });
+    $httpBackend.expectGET(serverEndpointUrl + 'catalog/products/123').respond(200, {id: 123, name: 'product 123'});
     catalogService.getProduct(123).then(successCallback, errorCallback);
     $httpBackend.flush();
 
@@ -70,7 +66,7 @@ describe('Service: Catalog', function () {
 
   describe('products data provide', function () {
     it('should get products data with default pagination values', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
     });
@@ -78,21 +74,23 @@ describe('Service: Catalog', function () {
     it('should get products data with custom pagination values', inject(function (Catalog) {
       catalogService = new Catalog(1);
 
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, {results: [
-        {id: 1, name: 'product title'}
-      ]});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, [{
+        id: 1,
+        name: 'product title'
+      }]);
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=1').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=1').respond(200, {});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
     }));
 
     it('should get products data', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: [
-        {id: 1, name: 'product title'}
-      ]});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, [{
+        id: 1,
+        name: 'product title'
+      }]);
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
@@ -100,7 +98,7 @@ describe('Service: Catalog', function () {
     });
 
     it('should set isNoMoreProducts flag', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {});
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
@@ -110,9 +108,10 @@ describe('Service: Catalog', function () {
     it('should not set isNoMoreProducts', inject(function (Catalog) {
       catalogService = new Catalog(1);
 
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, {results: [
-        {id: 1, name: 'product title'}
-      ]});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=1&offset=0').respond(200, {
+        id: 1,
+        name: 'product title'
+      });
       catalogService.productsDataProvider.getNextProducts();
       $httpBackend.flush();
 
@@ -120,7 +119,7 @@ describe('Service: Catalog', function () {
     }));
 
     it('should set isBusy flag to true', function () {
-      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {results: []});
+      $httpBackend.expectGET(serverEndpointUrl + 'catalog/products?limit=15&offset=0').respond(200, {});
       catalogService.productsDataProvider.getNextProducts();
 
       expect(catalogService.productsDataProvider.isBusy()).toBeTruthy();
@@ -151,8 +150,8 @@ describe('Service: Catalog', function () {
     });
 
     it('should return suppliers\'s places converted for yandex map geoobjects and ignore places without location and without categories', function () {
-      var suppliersData = {
-        supplier: [{
+      var suppliersData = [
+        {
           location: {
             latitude: 43,
             longitude: 54
@@ -181,15 +180,15 @@ describe('Service: Catalog', function () {
               longitude: 54
             }
           }]
-        }]
-      };
+        }
+      ];
 
       userServiceMock.getPlaces.andReturn({});
       $httpBackend.expectGET(serverEndpointUrl + 'catalog/suppliers').respond(200, suppliersData);
       catalogService.getYaMapPoints().then(function (mapPoints) {
         expect(mapPoints.allPoints.length).toBe(1);
         expect(mapPoints.allPoints[0].properties.pointData.id).toBe(1);
-        expect(mapPoints.allPoints[0].properties.pointData.categories).toEqual(suppliersData.supplier[0].categories);
+        expect(mapPoints.allPoints[0].properties.pointData.categories).toEqual(suppliersData[0].categories);
         expect(mapPoints.suppliersPoints.length).toBe(3);
       });
       $httpBackend.flush();

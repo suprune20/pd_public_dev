@@ -63,6 +63,7 @@ angular.module('pdFrontend')
         getFilters: pdFrontendCatalogApi.getFilters,
         getCategories: pdFrontendCatalogApi.getCategories,
         getProduct: pdFrontendCatalogApi.getProduct,
+        getSupplier: pdFrontendCatalogApi.getSupplier,
         productsDataProvider: productsDataProvider,
         getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
           return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
@@ -87,10 +88,10 @@ angular.module('pdFrontend')
                     properties: {
                       type: 'supplier_store_place',
                       pointData: storeData,
-                      active: true
+                      active: false
                     },
                     options: {
-                      preset: SUPPLIER_YA_MARKER_CHECKED_PRESET,
+                      preset: SUPPLIER_YA_MARKER_UNCHECKED_PRESET,
                       visible: true
                     },
                     geometry: {

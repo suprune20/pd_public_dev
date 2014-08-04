@@ -10,26 +10,45 @@ angular.module('pdFrontend')
           .searchIntersect(yaMap)
         ;
       },
-      applySuppliersFilterByMap = function (yaMap) {
-        // Select only suppliers markers and filter by them
-        $scope.filters.supplierStore = [];
-        $scope.visibleSuppliersCategories = [];
-        // Filter for non editors geo objects
-        getSuppliersGeoobjects(yaMap)
+      getSuppliersGeoObjectsResult = function (yaMap) {
+        var activeInBoundsStoresCount = getSuppliersGeoobjects(yaMap)
           .search('properties.active = true')
           .search('options.visible = true')
+          .getLength();
+        var suppliersGeoObjectsResult = getSuppliersGeoobjects(yaMap);
+        if (activeInBoundsStoresCount) {
+          suppliersGeoObjectsResult = suppliersGeoObjectsResult
+            .search('properties.active = true');
+        }
+
+        return suppliersGeoObjectsResult;
+      },
+      filterCategoriesBySuppliers = function (yaMap) {
+        $scope.visibleSuppliersCategories = [];
+        // Filter for non editors geo objects
+        getSuppliersGeoObjectsResult(yaMap)
           .each(function (geoObject) {
-            $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
             $scope.visibleSuppliersCategories.push(geoObject.properties.get('pointData.categories'));
           });
         $scope.visibleSuppliersCategories = _.union.apply(null, $scope.visibleSuppliersCategories);
-
-        // calculate suppliers in bounds
+      },
+      updateSuppliersInBounds = function (yaMap) {
         suppliersInTheBounds = [];
-        getSuppliersGeoobjects(yaMap)
-          .search('properties.active = true')
+        getSuppliersGeoObjectsResult(yaMap)
           .each(function (geoObject) {
             suppliersInTheBounds.push(geoObject.properties.get('pointData').id);
+          });
+      },
+      applySuppliersFilterByMap = function (yaMap) {
+        filterCategoriesBySuppliers(yaMap);
+        updateSuppliersInBounds(yaMap);
+        // Select only suppliers markers and filter by them
+        $scope.filters.supplierStore = [];
+        // Filter for non editors geo objects
+        getSuppliersGeoObjectsResult(yaMap)
+          .search('options.visible = true')
+          .each(function (geoObject) {
+            $scope.filters.supplierStore.push(geoObject.properties.get('pointData').id);
           });
 
         $scope.applyFilters();
@@ -85,6 +104,11 @@ angular.module('pdFrontend')
         applySuppliersFilterByMap(marker.getMap());
       }
     };
+
+    $scope.geoObjectPropertiesChanged = function (event) {
+      filterCategoriesBySuppliers(event.get('target').getMap());
+    };
+
     // Toggle select/unselect all categories filter
     $scope.$watch(function () {
       return $scope.flags.selectAllCategories;

@@ -350,6 +350,12 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }]
       },
+      seo: {
+        files: [{
+          src: '<%= yeoman.dist %>/index.html',
+          dest: '<%= yeoman.dist %>/index_seo.html'
+        }]
+      },
       configDev: {files:[{src:'<%= yeoman.app %>/scripts/config/dev_const.js', dest:'.tmp/scripts/config_const.js'}]},
       configPd3: {files:[{src:'<%= yeoman.app %>/scripts/config/pd3_const.js', dest:'.tmp/scripts/config_const.js'}]},
       configProd: {files:[{src:'<%= yeoman.app %>/scripts/config/prod_const.js', dest:'.tmp/scripts/config_const.js'}]}
@@ -484,6 +490,21 @@ module.exports = function (grunt) {
       }
     },
 
+    'dom_munger': {
+      seo: {
+        options: {
+          remove: 'meta[name=fragment]',
+          append: [
+            {
+              selector: 'body',
+              html: '<script>angular.module("pdApp").config(function ($locationProvider) {$locationProvider.html5Mode(false);})</script>'
+            }
+          ]
+        },
+        src: '<%= yeoman.dist %>/index_seo.html'
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -550,7 +571,7 @@ module.exports = function (grunt) {
       target = 'pd3';
     }
 
-    grunt.task.run([
+    var tasksList = [
       'clean:dist',
       'bowerInstall',
       'useminPrepare',
@@ -569,7 +590,13 @@ module.exports = function (grunt) {
       'usemin',
       'htmlmin',
       'robotstxt:' + ('prod' === target ? 'prod' : 'dev')
-    ]);
+    ];
+    if ('prod' === target) {
+      tasksList.push('copy:seo');
+      tasksList.push('dom_munger:seo');
+    }
+
+    grunt.task.run(tasksList);
   });
 
   grunt.registerTask('default', [

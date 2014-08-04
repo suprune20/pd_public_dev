@@ -80,7 +80,8 @@ angular.module('pdApp', [
       })
     ;
   })
-  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider, $state) {
+  .run(function ($rootScope, $location, $window, security, pdConfig, mainMenuManager, auth, seoProvider, $state,
+                 $modalStack) {
     // Add empty menu config
     mainMenuManager.addMenuConfig('emptyMenu');
 
@@ -147,6 +148,9 @@ angular.module('pdApp', [
       if ($window.yaCounter25697954) {
         $window.yaCounter25697954.hit($location.path());
       }
+
+      // Close all previous opened modals
+      $modalStack.dismissAll();
     });
 
     // handle error access

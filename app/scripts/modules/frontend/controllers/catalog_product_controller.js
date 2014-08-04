@@ -18,7 +18,10 @@ angular.module('pdFrontend')
         $scope.productData = productData;
       }
     }).result.catch(function () {
+      // redirect only if current product details state and has been closed manually
+      if ('catalog.product' === $state.current.name) {
         $state.go('catalog');
-      });
+      }
+    });
   })
 ;
