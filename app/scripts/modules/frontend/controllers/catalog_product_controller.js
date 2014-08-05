@@ -13,8 +13,8 @@ angular.module('pdFrontend')
       controller: function ($scope, productData) {
         // set product name into page title
         $scope.seo
-          .setTitle(productData.name)
-          .setDescription(productData.name + '. ' + productData.description);
+          .setTitle(productData.name + ' - ' + productData.category)
+          .setDescription(productData.name + '. ' + (productData.description || productData.supplier.address));
         $scope.productData = productData;
       }
     }).result.catch(function () {

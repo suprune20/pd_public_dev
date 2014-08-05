@@ -476,7 +476,9 @@ module.exports = function (grunt) {
             ua: '*',
             disallow: [
               '/signout',
-              '/loru/'
+              '/loru/',
+              '/register',
+              '*_escaped_fragment_=/'
             ]
           }
         ]

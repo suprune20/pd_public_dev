@@ -92,7 +92,21 @@
 }
 
 .catalog-page {
-  @extend .catalog-bc
+  @extend .catalog-bc;
+
+  .catalog-filters-cont {
+    .catalog-filters-categories-cont {
+      .toggle-components-btn {
+        position: absolute;
+        right: 0;
+      }
+      .categories-list {
+        li:first-child {
+          padding-right: 25px;
+        }
+      }
+    }
+  }
 }
 
 // ToDo: Break compatibility for map page

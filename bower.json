@@ -14,7 +14,7 @@
     "nginfinitescroll": "1.1.2",
     "angular-bootstrap": "0.10.0",
     "lodash": "2.4.1",
-    "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#1cbb69f480f08554b4059c6e937c02edcca015b2",
+    "angular-yandex-map": "https://github.com/c0rrupt/angular-yandex-map.git#2ec92124e308858567b345b2e0e101d6f35d6e04",
     "angularLocalStorage": "0.1.7",
     "angular-recaptcha": "0.0.7",
     "angular-cookie": "92292c9815e4ec7230a705b5f1d0212a2badd557",
