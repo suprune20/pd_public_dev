@@ -139,6 +139,12 @@ angular.module('pdFrontend')
       suppliersFilterDependsCategories();
     });
 
+    $scope.$watchCollection(function () {
+      return $scope.filters['componenets_only'];
+    }, function () {
+      $scope.applyFilters();
+    });
+
     // Client signin modal
     // ToDo: Move to header controller module
     $scope.$on('auth.signin_success', function () {
