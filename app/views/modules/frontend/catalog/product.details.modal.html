@@ -12,7 +12,7 @@
              pd-thumb
              pd-thumb-size="200x200"
              default-image="http://placehold.it/200x200"
-             ng-attr-alt="{{productData.name}}"
+             ng-attr-alt="{{productData.name}} - {{productData.category}}"
              itemprop="image" />
       </div>
       <div class="media-body">
@@ -58,8 +58,12 @@
           <dd itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
             <span itemprop="streetAddress">{{productData.supplier.address}}</span>
           </dd>
-          <dt ng-if="productData.supplier.phone">Телефон</dt>
-          <dd ng-if="productData.supplier.phone" itemprop="telephone">{{productData.supplier.phone}}</dd>
+          <dt ng-if="productData.supplier.phones">Телефоны</dt>
+          <dd ng-if="productData.supplier.phones">
+            <ul class="list-unstyled padding-left-15">
+              <li ng-repeat="phoneNumber in productData.supplier.phones" itemprop="telephone">{{phoneNumber}}</li>
+            </ul>
+          </dd>
           <dt>Время работы</dt>
           <dd>{{productData.supplier.worktime|default:'-'}}</dd>
           <dt ng-if="productData.supplier.site">Сайт производителя</dt>
