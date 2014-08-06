@@ -16,6 +16,11 @@ angular.module('pdCommon')
 
         if (_.has(responseData, 'role')) {
           responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
+          // Add role supervisor
+          if (responseData.isSupervisor) {
+            responseData.role.push('ROLE_SUPERVISOR');
+          }
+
           authStorage.setRoles(responseData.role);
         }
 
@@ -123,6 +128,9 @@ angular.module('pdCommon')
       },
       isCurrentHasOmsRole: function () {
         return isContainsRole('ROLE_OMS');
+      },
+      isCurrentHasSupervisorRole: function () {
+        return isContainsRole('ROLE_SUPERVISOR');
       },
       isContainsRole: isContainsRole,
       getUserProfile: function () {

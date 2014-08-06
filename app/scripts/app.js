@@ -214,6 +214,7 @@ angular.module('pdApp', [
       isCurrentHasClientRole: auth.isCurrentHasClientRole,
       isCurrentHasLoruRole: auth.isCurrentHasLoruRole,
       isCurrentHasOmsRole: auth.isCurrentHasOmsRole,
+      isCurrentHasSupervisorRole: auth.isCurrentHasSupervisorRole,
       isAuthenticated: auth.isAuthenticated
     };
     // Save top-level domain
