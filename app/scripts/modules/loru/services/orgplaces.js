@@ -37,13 +37,14 @@ angular.module('pdLoru')
         originaSelectedStoreGeoObject = null;
 
       var convertYaGeoObject2Store = function (geoObject) {
-          return _.merge(geoObject.properties.placeData, {
-            phones: _.pluck(geoObject.properties.placeData.phones, 'phone'),
-            location: {
-              longitude: geoObject.geometry.coordinates[0],
-              latitude: geoObject.geometry.coordinates[1]
-            }
-          });
+          var storeData = _.clone(geoObject.properties.placeData);
+          storeData.phones = _(geoObject.properties.placeData.phones).pluck('phone').filter().value();
+          storeData.location = {
+            longitude: geoObject.geometry.coordinates[0],
+            latitude: geoObject.geometry.coordinates[1]
+          };
+
+          return storeData;
         },
         prepareStoreData = function (storeData) {
           storeData.phones = _.map(storeData.phones, function (phoneNumber) {
@@ -154,7 +155,7 @@ angular.module('pdLoru')
           return pdLoruStoresApi.addStore(convertYaGeoObject2Store(selectedPlaceGeoObject))
             .then(function (addedGeoObject) {
               selectedPlaceGeoObject = null;
-              storesGeoObjects.push(getYaGeoObjectFromStore(addedGeoObject));
+              storesGeoObjects.push(getYaGeoObjectFromStore(prepareStoreData(addedGeoObject)));
 
               return addedGeoObject;
             });
