@@ -17,25 +17,29 @@
   <div ng-show="pdLoruPlaces.getSelectedPlaceGeoObject()" class="edit-modal-cont">
     <form role="form" name="placeEditAddForm" novalidate>
       <div class="form-group has-feedback"
-           ng-class="{'has-error': placeEditAddForm.orgPlaceName.$dirty && placeEditAddForm.orgPlaceName.$invalid}">
+           ng-class="{'has-error': placeEditAddForm.orgPlaceName.$invalid, 'has-success': placeEditAddForm.orgPlaceName.$valid}">
         <label for="orgPlaceName">Название</label>
         <input class="form-control" id="orgPlaceName" placeholder="Введите название" required
                name="orgPlaceName"
                ng-model="pdLoruPlaces.getSelectedPlaceGeoObject().properties.placeData.name">
-        <span class="glyphicon glyphicon-remove form-control-feedback"
-              ng-show="placeEditAddForm.orgPlaceName.$dirty && placeEditAddForm.orgPlaceName.$invalid"></span>
+
+        <span class="glyphicon form-control-feedback"
+              ng-class="{'glyphicon-remove': placeEditAddForm.orgPlaceName.$invalid, 'glyphicon-ok': placeEditAddForm.orgPlaceName.$valid}"></span>
       </div>
+
       <div class="form-group">
         <label for="orgPlaceAddress">Адрес</label>
         <textarea class="form-control" id="orgPlaceAddress" readonly
                   ng-model="pdLoruPlaces.getSelectedPlaceGeoObject().properties.placeData.address"></textarea>
       </div>
+
       <div class="form-group">
         <label>Телефоны</label>
 
-        <div class="input-group margin-bottom-15"
+        <div class="input-group has-feedback margin-bottom-15"
+             ng-class="{'has-error': placeEditAddForm.phone_{{$index}}.$invalid}"
              ng-repeat="phoneObj in pdLoruPlaces.getSelectedPlaceGeoObject().properties.placeData.phones">
-          <input class="form-control" ng-model="phoneObj.phone" required ng-pattern="/^\d{10,12}$/">
+          <input class="form-control" ng-model="phoneObj.phone" ng-pattern="/^\d{10,12}$/" name="phone_{{$index}}">
           <span class="input-group-btn">
             <button class="btn btn-danger" type="button"
                     ng-click="pdLoruPlaces.removePhoneFromSelectedStore(phoneObj)">

@@ -30,6 +30,12 @@
           </dd>
           <dt ng-if="supplierData.email">E-mail</dt>
           <dd ng-if="supplierData.email" itemprop="email">{{supplierData.email}}</dd>
+          <dt>Категории товаров</dt>
+          <dd>
+            <ul>
+              <li ng-repeat="category in supplierData.categories">{{category.title}}</li>
+            </ul>
+          </dd>
         </dl>
       </div>
     </div>
