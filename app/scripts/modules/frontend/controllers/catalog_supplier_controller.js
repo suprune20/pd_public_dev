@@ -16,10 +16,11 @@ angular.module('pdFrontend')
           .setTitle(supplierData.name)
           .setDescription(supplierData.name + '. ' + supplierData.description || '');
         $scope.supplierData = supplierData;
-        $scope.supplierData.storesGeoObjects = _.map(supplierData.stores, function (storeModel) {
+        $scope.supplierData.storesGeoObjects = _.map(supplierData.stores, function (storeModel, index) {
           return {
             properties: {
-              pointData: storeModel
+              pointData: storeModel,
+              iconContent: index + 1
             },
             geometry: {
               type: 'Point',

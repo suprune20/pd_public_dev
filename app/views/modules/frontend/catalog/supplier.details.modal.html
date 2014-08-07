@@ -40,7 +40,13 @@
       </div>
     </div>
 
-    <div class="panel panel-default" ng-if="supplierData.stores.length">
+    <div class="panel panel-default" ng-show="supplierData.description">
+      <div class="panel-body" itemprop="description">
+        {{supplierData.description}}
+      </div>
+    </div>
+
+    <div class="panel panel-default no-bottom-margin" ng-if="supplierData.stores.length">
       <div class="panel-heading">Карта магазинов</div>
       <div class="panel-body">
         <div class="row">
@@ -58,26 +64,31 @@
           </div>
         </div>
 
-        <div itemprop="hasPOS" itemscope itemtype="http://schema.org/Place"
-              ng-repeat="storeData in supplierData.stores">
-          <meta itemprop="name" ng-attr-content="{{storeData.name}}" />
-          <div ng-repeat="phoneNumber in supplierData.phones">
-            <meta itemprop="telephone" ng-attr-content="{{phoneNumber}}" />
-          </div>
-          <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-            <meta itemprop="streetAddress" ng-attr-content="{{storeData.address}}" />
-          </div>
-          <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
-            <meta itemprop="latitude" ng-attr-content="{{storeData.location.latitude}}" />
-            <meta itemprop="longitude" ng-attr-content="{{storeData.location.longitude}}" />
+        <div class="list-group no-bottom-margin">
+          <div class="list-group-item no-bottom-margin" itemprop="hasPOS" itemscope itemtype="http://schema.org/Place"
+               ng-repeat="storeData in supplierData.stores">
+            <h5 class="list-group-item-heading">
+              {{$index + 1}}. <span itemprop="name">{{storeData.name}}</span>
+            </h5>
+            <dl class="no-bottom-margin">
+              <dt>Адрес</dt>
+              <dd itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                <span itemprop="streetAddress">{{storeData.address}}</span>
+              </dd>
+              <dt ng-show="storeData.phones.length">Телефоны</dt>
+              <dd ng-show="storeData.phones.length">
+                <ul class="list-unstyled no-bottom-margin">
+                  <li ng-repeat="phoneNumber in storeData.phones" itemprop="telephone">{{phoneNumber}}</li>
+                </ul>
+              </dd>
+            </dl>
+
+            <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+              <meta itemprop="latitude" ng-attr-content="{{storeData.location.latitude}}" />
+              <meta itemprop="longitude" ng-attr-content="{{storeData.location.longitude}}" />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="panel panel-default" ng-show="supplierData.description">
-      <div class="panel-body" itemprop="description">
-        {{supplierData.description}}
       </div>
     </div>
   </div>
