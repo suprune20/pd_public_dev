@@ -47,7 +47,7 @@
          itemprop="manufacturer" itemscope itemtype="http://schema.org/Organization">
       <div class="panel-heading">Поставщик</div>
       <div class="panel-body">
-        <dl>
+        <dl class="no-bottom-margin">
           <dt>Название</dt>
           <dd>
             <a href="" ui-sref="catalog.supplier({supplierId: productData.supplier.slug})" itemprop="name">
@@ -69,6 +69,31 @@
           <dt ng-if="productData.supplier.site">Сайт производителя</dt>
           <dd ng-if="productData.supplier.site" itemprop="url">
             <a ng-href="{{productData.supplier.site}}" target="_blank">{{productData.supplier.site}}</a>
+          </dd>
+          <dt>Магазины</dt>
+          <dd>
+            <ul>
+              <li itemprop="hasPOS" itemscope itemtype="http://schema.org/Place"
+                   ng-repeat="storeData in productData.supplier.stores">
+                <strong itemprop="name">{{storeData.name}}</strong>
+                <p class="no-bottom-margin" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                  <span itemprop="streetAddress">{{storeData.address}}</span>
+                </p>
+                <dl class="no-bottom-margin">
+                  <dt ng-show="storeData.phones.length">Телефоны</dt>
+                  <dd ng-show="storeData.phones.length">
+                    <ul class="list-unstyled no-bottom-margin">
+                      <li ng-repeat="phoneNumber in storeData.phones" itemprop="telephone">{{phoneNumber}}</li>
+                    </ul>
+                  </dd>
+                </dl>
+
+                <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+                  <meta itemprop="latitude" ng-attr-content="{{storeData.location.latitude}}" />
+                  <meta itemprop="longitude" ng-attr-content="{{storeData.location.longitude}}" />
+                </div>
+              </li>
+            </ul>
           </dd>
         </dl>
       </div>
