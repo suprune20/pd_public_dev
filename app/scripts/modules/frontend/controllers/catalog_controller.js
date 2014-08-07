@@ -1,3 +1,5 @@
+/* jshint -W069 */
+
 'use strict';
 
 angular.module('pdFrontend')
@@ -140,7 +142,7 @@ angular.module('pdFrontend')
     });
 
     $scope.$watchCollection(function () {
-      return $scope.filters['componenets_only'];
+      return $scope.filters['components_only'];
     }, function () {
       $scope.applyFilters();
     });

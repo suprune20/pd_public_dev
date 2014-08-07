@@ -15,9 +15,9 @@
     </form>
 
     <div ng-show="categoriesFilter.length" class="margin-top-15 catalog-filters-categories-cont">
-      <button type="button" class="btn btn-info btn-sm toggle-components-btn" ng-model="filters.componenets_only"
-              btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-init="filters.componenets_only = 1"
-              ng-attr-title="{{ filters.componenets_only ? 'Скрыть' : 'Показать' }} комплектующие"
+      <button type="button" class="btn btn-info btn-sm toggle-components-btn" ng-model="filters.components_only"
+              btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-init="filters.components_only = 1"
+              ng-attr-title="{{ filters.components_only ? 'Скрыть' : 'Показать' }} комплектующие"
               ng-show="security.isCurrentHasLoruRole() || security.isCurrentHasSupervisorRole()">
         <i class="glyphicon glyphicon-wrench"></i>
       </button>
