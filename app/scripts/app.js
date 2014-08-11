@@ -48,6 +48,21 @@ angular.module('pdApp', [
         url: '/register',
         controller: 'CommonOrgSignupCtrl',
         templateUrl: 'views/modules/common/org_auth/signup.html',
+        data: {
+          orgType: 'loru'
+        },
+        title: 'Регистрация поставщика',
+        secured: false,
+        menuConfig: 'emptyMenu',
+        pageClass: 'org-signup-page'
+      })
+      .state('registerOms', {
+        url: '/register_oms',
+        controller: 'CommonOrgSignupCtrl',
+        templateUrl: 'views/modules/common/org_auth/signup.html',
+        data: {
+          orgType: 'oms'
+        },
         title: 'Регистрация поставщика',
         secured: false,
         menuConfig: 'emptyMenu',
