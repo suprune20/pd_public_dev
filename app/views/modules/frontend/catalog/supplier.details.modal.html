@@ -24,9 +24,9 @@
           <dd ng-if="supplierData.fax" itemprop="faxNumber">{{supplierData.fax}}</dd>
           <dt>Время работы</dt>
           <dd>{{supplierData.worktime|default:'-'}}</dd>
-          <dt ng-if="supplierData.site">Сайт производителя</dt>
+          <dt ng-if="supplierData.site"></dt>
           <dd ng-if="supplierData.site" itemprop="url">
-            <a ng-href="{{supplierData.site}}" target="_blank">{{supplierData.site}}</a>
+            <a ng-href="{{supplierData.site}}" target="_blank">Сайт производителя</a>
           </dd>
           <dt ng-if="supplierData.email">E-mail</dt>
           <dd ng-if="supplierData.email" itemprop="email">{{supplierData.email}}</dd>
