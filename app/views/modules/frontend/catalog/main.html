@@ -17,9 +17,10 @@
     <div ng-show="categoriesFilter.length" class="margin-top-15 catalog-filters-categories-cont">
       <button type="button" class="btn btn-info btn-sm toggle-components-btn" ng-model="filters.components_only"
               btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-init="filters.components_only = 1"
-              ng-attr-title="{{ filters.components_only ? 'Скрыть' : 'Показать' }} комплектующие"
               ng-show="security.isCurrentHasLoruRole() || security.isCurrentHasSupervisorRole()">
         <i class="glyphicon glyphicon-wrench"></i>
+        <span ng-show="filters.components_only">Откл. комплектующие</span>
+        <span ng-hide="filters.components_only">Вкл. комплектующие</span>
       </button>
       <ul class="list-unstyled categories-list">
         <li>
