@@ -25,6 +25,9 @@
     vertical-align: top;
     cursor: pointer;
 
+    .media-heading {
+      color: $link-color;
+    }
     .product-photo {
       float: left;
       margin-right: 10px;
