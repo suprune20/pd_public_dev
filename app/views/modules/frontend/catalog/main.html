@@ -85,7 +85,8 @@
                      pd-thumb
                      pd-thumb-size=100x100
                      default-image="http://placehold.it/100x100"
-                     ng-attr-alt="{{product.name}}" />
+                     ng-attr-alt="{{product.name}}"
+                     pd-fancybox="{{product.photo|pdThumbnail:'700x700'}}" />
               </div>
               <div class="media-body">
                 <dl>

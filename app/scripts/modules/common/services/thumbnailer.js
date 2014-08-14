@@ -3,6 +3,10 @@
 angular.module('pdCommon')
   .service('pdThumbnailer', function (pdConfig) {
     var getThumbnailUrl = function (imageUrl, size, method) {
+        if (!imageUrl) {
+          return null;
+        }
+
         var thumbSize = size || '120x100',
           thumbMethod = method || 'crop',
           baseUrlRegexp = new RegExp('^' + pdConfig.imageThumbnailerConfig.baseUrl),
