@@ -8,7 +8,7 @@ angular.module('pdLoru', [
     var routeConfig = {
       'loru': {
         url: '/loru',
-        template: '<ui-view><h1>Loru</h1></ui-view>'
+        template: '<ui-view><h1>Рабочее место пользователя</h1></ui-view>'
       },
       'loru.advertisement': {
         url: '/advertisement',
