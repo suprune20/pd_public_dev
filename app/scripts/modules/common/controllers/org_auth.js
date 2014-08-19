@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('pdCommon')
-  .controller('CommonOrgSignupCtrl', function ($scope, OrgAuthSignupModel, $location, growl, $routeParams,
-                                               vcRecaptchaService) {
-    $scope.authProvider = new OrgAuthSignupModel($routeParams.orgType);
+  .controller('CommonOrgSignupCtrl', function ($scope, OrgAuthSignupModel, $location, growl, $state, vcRecaptchaService) {
+    $scope.authProvider = new OrgAuthSignupModel($state.current.data.orgType);
     $scope.signup = function () {
       $scope.authProvider.signup()
         .then(function (responseData) {

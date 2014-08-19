@@ -8,7 +8,7 @@ angular.module('pdLoru', [
     var routeConfig = {
       'loru': {
         url: '/loru',
-        template: '<ui-view><h1>Loru</h1></ui-view>'
+        template: '<ui-view><h1>Рабочее место пользователя</h1></ui-view>'
       },
       'loru.advertisement': {
         url: '/advertisement',
@@ -22,6 +22,23 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/orgplaces/main.html',
         title: 'Места',
         pageClass: 'loru-orgplaces'
+      },
+
+      'loru.optplace': {
+        url: '/optmarketplace',
+        template: '<ui-view></ui-view>'
+      },
+      'loru.optplace.supplier': {
+        url: '/suppliers/:supplierId',
+        resolve: {
+          supplierStoreData: function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }
+        },
+        controller: function ($scope, supplierStoreData) {
+          $scope.supplierStoreData = supplierStoreData;
+        },
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
       }
     };
 

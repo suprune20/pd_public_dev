@@ -60,6 +60,13 @@ angular.module('pdFrontend')
           .then(function (categories) {
             $scope.categoriesFilter = categories;
           });
+      },
+      showHideOptProducts = function (isShown) {
+        _.map($scope.catalogGeoObjects, function (geoObject) {
+          geoObject.options.visible = isShown ?
+            geoObject.properties.pointData.hasComponents :
+            !geoObject.properties.pointData.hasComponents;
+        });
       }
     ;
 
@@ -88,6 +95,7 @@ angular.module('pdFrontend')
     $scope.catalog.getYaMapPoints().then(function (mapPoints) {
       $scope.isLoadedGeoObjects = true;
       $scope.catalogGeoObjects = mapPoints.allPoints;
+      showHideOptProducts($scope.filters['components_only']);
     });
     // Filtered markers by yandex map
     $scope.yaMapBoundsChange = function (event) {
@@ -143,7 +151,8 @@ angular.module('pdFrontend')
 
     $scope.$watchCollection(function () {
       return $scope.filters['components_only'];
-    }, function () {
+    }, function (showOpt) {
+      showHideOptProducts(showOpt);
       $scope.applyFilters();
     });
 

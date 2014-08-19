@@ -1,0 +1,32 @@
+<h1>Оптовый магазин поставщика</h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Артикул</th>
+    <th>Фото</th>
+    <th>Название</th>
+    <th>Цена</th>
+    <th>Количество в корзине</th>
+    <th>Стоимость</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="product in supplierStoreData">
+    <td>{{product.sku}}</td>
+    <td>
+      <img ng-src="{{product.photo}}" class="img-thumbnail thumbnail-50 scale-image scale-image-6"
+           ng-show="product.photo" />
+    </td>
+    <td>
+      {{product.name}}
+      <p><small class="">{{product.description}}</small></p>
+    </td>
+    <td>
+      {{product.price}} {{product.currency}} <small>(за {{product.measure}})</small>
+    </td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table>

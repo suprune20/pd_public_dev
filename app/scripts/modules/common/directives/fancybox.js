@@ -27,12 +27,21 @@ angular.module('pdCommon')
         };
       },
       link: function (scope, element, attrs) {
-        element.on('click', function () {
-          console.log('click', attrs.pdFancybox, scope.fancyboxTitle);
+        if (!attrs.pdFancybox) {
+          return;
+        }
+
+        element.on('click', function (event) {
           $.fancybox.open([{
             href: attrs.pdFancybox,
-            title: scope.fancyboxTitle
+            title: scope.fancyboxTitle,
+            helpers: {
+              overlay: {
+                locked: false
+              }
+            }
           }]);
+          event.stopPropagation();
         });
       }
     };

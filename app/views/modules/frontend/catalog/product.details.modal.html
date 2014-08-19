@@ -66,9 +66,9 @@
           </dd>
           <dt>Время работы</dt>
           <dd>{{productData.supplier.worktime|default:'-'}}</dd>
-          <dt ng-if="productData.supplier.site">Сайт производителя</dt>
+          <dt ng-if="productData.supplier.site"></dt>
           <dd ng-if="productData.supplier.site" itemprop="url">
-            <a ng-href="{{productData.supplier.site}}" target="_blank">{{productData.supplier.site}}</a>
+            <a ng-href="{{productData.supplier.site}}" target="_blank">Сайт производителя</a>
           </dd>
           <dt>Магазины</dt>
           <dd>
