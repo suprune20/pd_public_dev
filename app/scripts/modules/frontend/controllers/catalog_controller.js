@@ -66,11 +66,22 @@ angular.module('pdFrontend')
           return;
         }
 
-        _.map($scope.catalogGeoObjects, function (geoObject) {
-          geoObject.options.visible = isShown ?
-            geoObject.properties.pointData.hasComponents :
-            !geoObject.properties.pointData.hasComponents;
-        });
+        $scope.filters.supplierStore = _($scope.catalogGeoObjects)
+          .map(function (geoObject) {
+            geoObject.options.visible = isShown ?
+              geoObject.properties.pointData.hasComponents :
+              !geoObject.properties.pointData.hasComponents;
+            return geoObject;
+          })
+          .filter(function (geoObject) {
+            return geoObject.options.visible;
+          })
+          .map(function (geoObject) {
+            return geoObject.properties.pointData.id;
+          })
+          .intersection(suppliersInTheBounds)
+          .value()
+        ;
       }
     ;
 
