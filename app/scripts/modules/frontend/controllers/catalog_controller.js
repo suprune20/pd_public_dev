@@ -62,7 +62,7 @@ angular.module('pdFrontend')
           });
       },
       showHideOptProducts = function (isShown) {
-        if (!($scope.security.isCurrentHasLoruRole() || $scope.security.isCurrentHasSupervisorRole)) {
+        if (_.isUndefined(isShown)) {
           return;
         }
 
