@@ -1,0 +1,12 @@
+.scale-image {
+  transition: all .3s ease;
+
+  &.scale-image-6:hover {
+    transform: scale(6);
+  }
+}
+
+.thumbnail-50 {
+  max-width: 50px;
+  max-height: 50px;
+}
