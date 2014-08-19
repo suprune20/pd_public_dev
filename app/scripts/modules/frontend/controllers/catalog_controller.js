@@ -62,6 +62,10 @@ angular.module('pdFrontend')
           });
       },
       showHideOptProducts = function (isShown) {
+        if (!($scope.security.isCurrentHasLoruRole() || $scope.security.isCurrentHasSupervisorRole)) {
+          return;
+        }
+
         _.map($scope.catalogGeoObjects, function (geoObject) {
           geoObject.options.visible = isShown ?
             geoObject.properties.pointData.hasComponents :
