@@ -31,13 +31,13 @@ angular.module('pdLoru', [
       'loru.optplace.supplier': {
         url: '/suppliers/:supplierId',
         resolve: {
-          supplierStoreData: function (optMarketplace, $stateParams) {
+          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
             return optMarketplace.getSupplierStore($stateParams.supplierId);
-          }
+          }]
         },
-        controller: function ($scope, supplierStoreData) {
+        controller: ['$scope', 'supplierStoreData', function ($scope, supplierStoreData) {
           $scope.supplierStoreData = supplierStoreData;
-        },
+        }],
         templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
       }
     };
