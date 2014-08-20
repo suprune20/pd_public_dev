@@ -15,7 +15,8 @@
   <tr ng-repeat="product in supplierStoreData">
     <td>{{product.sku}}</td>
     <td>
-      <img ng-src="{{product.photo}}" class="img-thumbnail thumbnail-50 scale-image scale-image-6"
+      <img ng-src="{{product.photo|pdThumbnail:'200x200'}}"
+           class="img-thumbnail thumbnail-50 scale-image scale-image-6"
            ng-show="product.photo" />
     </td>
     <td>
