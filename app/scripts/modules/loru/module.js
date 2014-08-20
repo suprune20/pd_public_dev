@@ -22,23 +22,6 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/orgplaces/main.html',
         title: 'Места',
         pageClass: 'loru-orgplaces'
-      },
-
-      'loru.optplace': {
-        url: '/optmarketplace',
-        template: '<ui-view></ui-view>'
-      },
-      'loru.optplace.supplier': {
-        url: '/suppliers/:supplierId',
-        resolve: {
-          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore($stateParams.supplierId);
-          }]
-        },
-        controller: ['$scope', 'supplierStoreData', function ($scope, supplierStoreData) {
-          $scope.supplierStoreData = supplierStoreData;
-        }],
-        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
       }
     };
 
@@ -49,6 +32,22 @@ angular.module('pdLoru', [
           menuConfig: 'loruMenu'
         }, stateParams || {}), 'ROLE_LORU');
     });
+
+    authRouteProvider
+      .state('supplierPrice', {
+        url: '/price/:supplierId',
+        secured: true,
+        resolve: {
+          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }]
+        },
+        controller: ['$scope', 'supplierStoreData', function ($scope, supplierStoreData) {
+          $scope.supplierStoreData = supplierStoreData;
+        }],
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+    ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
