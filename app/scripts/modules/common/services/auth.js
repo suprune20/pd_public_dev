@@ -47,7 +47,7 @@ angular.module('pdCommon')
     ;
 
     return {
-      signin: function (username, password, confirmTC, oauthData) {
+      signin: function (username, password, confirmTC, oauthData, Raven) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
           username: username,
           password: password,
@@ -56,8 +56,10 @@ angular.module('pdCommon')
         }).then(function (response) {
           return applySuccessSigninResponse(response.data);
         }, function (response) {
-          var respData = response.data;
+          // ToDo: remove after catch weird error then signin in some clients
+          Raven.captureMessage('Signin server error', response);
 
+          var respData = response.data;
           if (respData.errorCode) {
             return $q.reject(respData);
           }
