@@ -153,6 +153,9 @@ angular.module('pdApp', [
       if (true === toState.hideMainMenu) {
         $rootScope.addPageClass('hide-main-menu');
       }
+
+      // Reset prerender status code to 200 (SEO)
+      $rootScope.seo.setStatusCode(200);
     });
 
     $rootScope.$on('$stateChangeSuccess', function () {
