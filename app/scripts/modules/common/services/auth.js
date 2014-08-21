@@ -3,7 +3,7 @@
 /* jshint -W069 */
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, authStorage, ipCookie, $q, $rootScope, oauthIO, $upload) {
+  .service('auth', function ($http, pdConfig, authStorage, ipCookie, $q, $rootScope, oauthIO, $upload, Raven) {
     var applySuccessSigninResponse = function (responseData) {
         if (_.has(responseData, 'token')) {
           authStorage.setApiAuthToken(responseData.token);
@@ -47,7 +47,7 @@ angular.module('pdCommon')
     ;
 
     return {
-      signin: function (username, password, confirmTC, oauthData, Raven) {
+      signin: function (username, password, confirmTC, oauthData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
           username: username,
           password: password,
