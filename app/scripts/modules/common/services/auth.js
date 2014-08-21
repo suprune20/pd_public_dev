@@ -57,7 +57,7 @@ angular.module('pdCommon')
           return applySuccessSigninResponse(response.data);
         }, function (response) {
           // ToDo: remove after catch weird error then signin in some clients
-          Raven.captureMessage('Signin server error', response);
+          Raven.captureMessage('Signin server error', {extra: response});
 
           var respData = response.data;
           if (respData.errorCode) {
