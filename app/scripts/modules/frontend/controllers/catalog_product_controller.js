@@ -17,11 +17,15 @@ angular.module('pdFrontend')
           .setDescription(productData.name + '. ' + (productData.description || productData.supplier.address));
         $scope.productData = productData;
       }
-    }).result.catch(function () {
-      // redirect only if current product details state and has been closed manually
-      if ('catalog.product' === $state.current.name) {
-        $state.go('catalog');
-      }
-    });
+    }).result.then(function () {
+        // redirect only if current product details state and has been closed manually
+        if ('catalog.product' === $state.current.name) {
+          $state.go('catalog');
+        }
+      }, function (rejection) {
+        if (404 === rejection.status) {
+          $scope.seo.setStatusCode(404);
+        }
+      });
   })
 ;

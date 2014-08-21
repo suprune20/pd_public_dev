@@ -22,7 +22,8 @@ angular.module('pdCommon')
   .service('seoProvider', function () {
     var title,
       description,
-      keywords;
+      keywords,
+      statusCode = 200;
 
     return {
       setTitle: function (titleValue) {
@@ -45,6 +46,12 @@ angular.module('pdCommon')
       },
       getKeywords: function () {
         return keywords;
+      },
+      getStatusCode: function () {
+        return statusCode;
+      },
+      setStatusCode: function (code) {
+        statusCode = code;
       }
     };
   })
