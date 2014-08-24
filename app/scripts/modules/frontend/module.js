@@ -26,7 +26,7 @@ angular.module('pdFrontend', [
         }
       })
       .state('catalog.product', {
-        url: 'product/:productId',
+        url: 'product/:productId?showOptPrice',
         controller: 'CatalogProductCtrl',
         pageClass: 'catalog-page',
         setFluidContainer: true

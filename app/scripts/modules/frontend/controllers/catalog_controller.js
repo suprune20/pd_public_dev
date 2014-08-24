@@ -171,6 +171,13 @@ angular.module('pdFrontend')
       $scope.applyFilters();
     });
 
+    // Open product details modal window
+    $scope.openProductDetailsModal = function (productSlug) {
+      var stateParams = {productId: productSlug};
+      stateParams = $scope.filters['components_only'] ? _.merge(stateParams, {showOptPrice: true}) : stateParams;
+      $scope.$state.go('catalog.product', stateParams);
+    };
+
     // Client signin modal
     // ToDo: Move to header controller module
     $scope.$on('auth.signin_success', function () {
