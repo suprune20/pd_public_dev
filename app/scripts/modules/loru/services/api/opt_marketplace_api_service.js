@@ -6,6 +6,12 @@ angular.module('pdLoru')
       getSupplierStore: function (supplierId) {
         return $http.get(pdConfig.apiEndpoint + 'optplaces/suppliers/' + supplierId + '/products')
           .then(function (response) { return response.data; });
+      },
+      postOrder: function (productsData, commentText) {
+        return $http.post(pdConfig.apiEndpoint + 'optplaces/orders', {
+          products: productsData,
+          comment: commentText
+        });
       }
     };
   })

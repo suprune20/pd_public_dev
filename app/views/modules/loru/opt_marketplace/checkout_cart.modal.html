@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Форма одобрения заказа</h4>
+</div>
+
+<div class="modal-body">
+  <table class="table table-condensed">
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Стоимость</th>
+      <th>Количество</th>
+      <th>Сумма</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="cartItem in cart.getItems()">
+      <td>{{cartItem.product.name}}</td>
+      <td>{{cartItem.product.price}} {{cartItem.product.currency}}</td>
+      <td>{{cartItem.qty}}</td>
+      <td>{{cartItem.qty * cartItem.product.price|toFixed:2}} {{cartItem.product.currency}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="3"></td>
+      <td><strong>Итого: {{cart.getTotalPrice()|toFixed:2}}</strong></td>
+    </tr>
+    </tfoot>
+  </table>
+  <div class="form-group">
+    <label for="comment">Комментарий</label>
+    <textarea id="comment" ng-model="comment" ng-change="cart.setComment(comment)" class="form-control"></textarea>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="checkout()">Заказать</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Отмена</button>
+</div>

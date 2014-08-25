@@ -40,11 +40,12 @@ angular.module('pdLoru', [
         resolve: {
           supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
             return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
           }]
         },
-        controller: ['$scope', 'supplierStoreData', function ($scope, supplierStoreData) {
-          $scope.supplierStoreData = supplierStoreData;
-        }],
+        controller: 'OptMarketplacePriceCtrl',
         templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
     ;
