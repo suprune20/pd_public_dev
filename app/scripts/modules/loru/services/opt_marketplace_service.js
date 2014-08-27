@@ -2,9 +2,22 @@
 
 angular.module('pdLoru')
   .service('optMarketplace', function (optMarketPlaceApi) {
+    var statusesLabels = {
+      posted: 'Размещен',
+      confirmed: 'Подтвержден',
+      shipped: 'Отправлен',
+      accepted: 'Принят'
+    };
+
     return {
       getSupplierStore: function (supplierId) {
         return optMarketPlaceApi.getSupplierStore(supplierId);
+      },
+      getMyOrders: function () {
+        return optMarketPlaceApi.getMyOrders();
+      },
+      getStatusLabel: function (statusId) {
+        return statusesLabels[statusId];
       }
     };
   })

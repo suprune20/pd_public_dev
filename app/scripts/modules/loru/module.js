@@ -22,6 +22,22 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/orgplaces/main.html',
         title: 'Места',
         pageClass: 'loru-orgplaces'
+      },
+      'loru.optmarketplace': {
+        abstract: true,
+        url: '/opt-marketplace',
+        template: '<ui-view/>'
+      },
+      'loru.optmarketplace.myOrders': {
+        url: '/my-orders',
+        templateUrl: 'views/modules/loru/opt_marketplace/my_orders.html',
+        controller: 'OptMarketplaceMyOrdersCtrl',
+        title: 'Мои заказы',
+        resolve: {
+          ordersCollection: ['optMarketplace', function (optMarketplace) {
+            return optMarketplace.getMyOrders();
+          }]
+        }
       }
     };
 
@@ -30,7 +46,7 @@ angular.module('pdLoru', [
         .state(stateName, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, stateParams || {}), 'ROLE_LORU');
+        }, stateParams || {}), ['ROLE_LORU', 'ROLE_SUPERVISOR']);
     });
 
     authRouteProvider

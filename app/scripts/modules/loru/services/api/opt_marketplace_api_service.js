@@ -12,6 +12,10 @@ angular.module('pdLoru')
           products: productsData,
           comment: commentText
         });
+      },
+      getMyOrders: function () {
+        return $http.get(pdConfig.apiEndpoint + 'optplaces/orders')
+          .then(function (response) { return response.data; });
       }
     };
   })
