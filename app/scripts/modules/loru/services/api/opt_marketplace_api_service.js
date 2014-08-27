@@ -13,8 +13,18 @@ angular.module('pdLoru')
           comment: commentText
         });
       },
+      saveOrder: function (orderId, productsData, commentText) {
+        return $http.put(pdConfig.apiEndpoint + 'optplaces/orders/' + orderId, {
+          products: productsData,
+          comment: commentText
+        });
+      },
       getMyOrders: function () {
         return $http.get(pdConfig.apiEndpoint + 'optplaces/orders')
+          .then(function (response) { return response.data; });
+      },
+      getOrder: function (id) {
+        return $http.get(pdConfig.apiEndpoint + 'optplaces/orders/' + id)
           .then(function (response) { return response.data; });
       }
     };

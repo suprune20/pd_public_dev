@@ -4,6 +4,10 @@ angular.module('pdLoru')
   .controller('OptMarketplacePriceCtrl', function ($scope, supplierStoreData, cart, $modal, growl) {
     $scope.supplierStoreData = supplierStoreData;
     $scope.cart = cart;
+    $scope.formData = {
+      showAll: true,
+      quantities: {}
+    };
     $scope.checkout = function () {
       $modal.open({
         templateUrl: 'views/modules/loru/opt_marketplace/checkout_cart.modal.html',
@@ -15,7 +19,7 @@ angular.module('pdLoru')
         }
       }).result.then(function () {
           // clear selected quantities of products
-          $scope.quantities = {};
+          $scope.formData.quantities = {};
           growl.addSuccessMessage('Ваш заказ был успешно добавлен');
         });
     };

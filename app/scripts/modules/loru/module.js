@@ -38,6 +38,23 @@ angular.module('pdLoru', [
             return optMarketplace.getMyOrders();
           }]
         }
+      },
+      'loru.optmarketplace.orderEdit': {
+        url: '/order/:orderId/:supplierId',
+        templateUrl: 'views/modules/loru/opt_marketplace/order_edit.html',
+        controller: 'OptMarketplaceOrderEditCtrl',
+        title: 'Редактирование заказа',
+        resolve: {
+          order: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getOrder($stateParams.orderId);
+          }],
+          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }]
+        }
       }
     };
 

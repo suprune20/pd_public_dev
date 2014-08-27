@@ -1,0 +1,55 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th colspan="5" class="text-right">
+      <button class="btn btn-success" ng-click="checkout()" ng-show="cart.getCount()">
+        <i class="glyphicon glyphicon-shopping-cart"></i>
+        Заказать
+      </button>
+      <button class="btn btn-default" title="Показать все или только корзину"
+              ng-click="formData.showAll = !formData.showAll" ng-show="cart.getCount()">
+        <i class="glyphicon glyphicon-list-alt"></i>
+        Все/Корзина
+      </button>
+    </th>
+    <th>Итого: {{cart.getTotalPrice()|toFixed:2}}</th>
+  </tr>
+  <tr>
+    <th>Артикул</th>
+    <th>Фото</th>
+    <th>Название</th>
+    <th>Цена</th>
+    <th>Количество в корзине</th>
+    <th>Стоимость</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="product in supplierStoreData" ng-show="formData.showAll || formData.quantities[product.id]">
+    <td>{{product.sku}}</td>
+    <td>
+      <img ng-src="{{product.photo|pdThumbnail:'200x200'}}"
+           class="img-thumbnail thumbnail-50 scale-image scale-image-6"
+           ng-show="product.photo" />
+    </td>
+    <td>
+      {{product.name}}
+      <p><small class="">{{product.description}}</small></p>
+    </td>
+    <td>
+      {{product.price}} {{product.currency}} <small>(за {{product.measure}})</small>
+    </td>
+    <td>
+      <div class="form-group" ng-class="{ 'has-error': optMarketplace.product_qty_{{$index}}.$invalid }">
+        <input id="product_qty_{{$index}}" ng-model="formData.quantities[product.id]" type="text" class="form-control"
+               name="product_qty_{{$index}}" ng-change="cart.addProduct(product, formData.quantities[product.id])"
+               ng-pattern="/^\d+$/">
+      </div>
+    </td>
+    <td>
+        <span ng-show="product.price * formData.quantities[product.id]">
+          {{product.price * formData.quantities[product.id]|toFixed:2}} {{product.currency}}
+        </span>
+    </td>
+  </tr>
+  </tbody>
+</table>

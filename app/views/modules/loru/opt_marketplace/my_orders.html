@@ -9,6 +9,7 @@
     <th>Количество позиций</th>
     <th>Сумма</th>
     <th>Статус</th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -19,6 +20,12 @@
     <td>{{order.itemsCount}}</td>
     <td>{{order.totalPrice}}</td>
     <td>{{order.status|orderStatusLabel}}</td>
+    <td>
+      <a ui-sref="loru.optmarketplace.orderEdit({orderId: order.id, supplierId: order.supplier.id})"
+         class="btn btn-info btn-sm">
+        Редактировать
+      </a>
+    </td>
   </tr>
   </tbody>
 </table>

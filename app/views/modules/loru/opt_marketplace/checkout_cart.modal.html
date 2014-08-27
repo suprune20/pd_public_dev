@@ -3,7 +3,7 @@
   <h4 class="modal-title">Форма одобрения заказа</h4>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" ng-init="comment = cart.getComment()">
   <table class="table table-condensed">
     <thead>
     <tr>
@@ -35,6 +35,9 @@
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" ng-click="checkout()">Заказать</button>
+  <button type="button" class="btn btn-primary" ng-click="checkout()">
+    <span ng-hide="isEdit">Заказать</span>
+    <span ng-show="isEdit">Сохранить</span>
+  </button>
   <button type="button" class="btn btn-default" ng-click="$dismiss()">Отмена</button>
 </div>

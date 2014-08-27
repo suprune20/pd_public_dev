@@ -16,6 +16,9 @@ angular.module('pdLoru')
       getMyOrders: function () {
         return optMarketPlaceApi.getMyOrders();
       },
+      getOrder: function (id) {
+        return optMarketPlaceApi.getOrder(id);
+      },
       getStatusLabel: function (statusId) {
         return statusesLabels[statusId];
       }
@@ -25,6 +28,18 @@ angular.module('pdLoru')
     return function () {
       var productsInCart = {},
         comment;
+      var getPreparedCartData = function () {
+        return _.map(productsInCart, function (item) {
+          return {
+            id: item.product.id,
+            count: item.qty
+          };
+        });
+      };
+      var clearCart = function () {
+        productsInCart = {};
+        comment = '';
+      };
 
       return {
         getItems: function () {
@@ -55,20 +70,20 @@ angular.module('pdLoru')
         setComment: function (commentText) {
           comment = commentText;
         },
+        getComment: function () {
+          return comment;
+        },
         checkout: function () {
-          var checkoutProductsData = _.map(productsInCart, function (item) {
-            return {
-              id: item.product.id,
-              count: item.qty
-            };
-          });
-
-          return optMarketPlaceApi.postOrder(checkoutProductsData, comment)
-            .then(function () {
-              // clear cart data after success checkout
-              productsInCart = {};
-              comment = '';
-            });
+          return optMarketPlaceApi.postOrder(getPreparedCartData(), comment).then(clearCart);
+        },
+        saveOrderChanges: function (orderId) {
+          return optMarketPlaceApi.saveOrder(orderId, getPreparedCartData(), comment).then(clearCart);
+        },
+        restoreData: function (cartData, productsCollection) {
+          _.each(cartData.products, function (cartItem) {
+            this.addProduct(_.find(productsCollection, {id: cartItem.id}), cartItem.count);
+          }, this);
+          this.setComment(cartData.comment);
         }
       };
     };
