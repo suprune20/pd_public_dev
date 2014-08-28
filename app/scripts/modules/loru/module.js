@@ -28,8 +28,21 @@ angular.module('pdLoru', [
         url: '/opt-marketplace',
         template: '<ui-view/>'
       },
-      'loru.optmarketplace.myOrders': {
-        url: '/my-orders',
+      'price': {
+        url: '/price/:supplierId',
+        resolve: {
+          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }]
+        },
+        controller: 'OptMarketplacePriceCtrl',
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
+      },
+      'price.orders': {
+        url: '/orders',
         templateUrl: 'views/modules/loru/opt_marketplace/my_orders.html',
         controller: 'OptMarketplaceMyOrdersCtrl',
         title: 'Мои заказы',
@@ -39,8 +52,8 @@ angular.module('pdLoru', [
           }]
         }
       },
-      'loru.optmarketplace.orderEdit': {
-        url: '/order/:orderId/:supplierId',
+      'price.order': {
+        url: '/order/:orderId',
         templateUrl: 'views/modules/loru/opt_marketplace/order_edit.html',
         controller: 'OptMarketplaceOrderEditCtrl',
         title: 'Редактирование заказа',
@@ -65,23 +78,6 @@ angular.module('pdLoru', [
           menuConfig: 'loruMenu'
         }, stateParams || {}), ['ROLE_LORU', 'ROLE_SUPERVISOR']);
     });
-
-    authRouteProvider
-      .state('supplierPrice', {
-        url: '/price/:supplierId',
-        secured: true,
-        resolve: {
-          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore($stateParams.supplierId);
-          }],
-          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
-            return new OptMarketplaceCart();
-          }]
-        },
-        controller: 'OptMarketplacePriceCtrl',
-        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
-      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
-    ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
