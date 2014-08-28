@@ -4,8 +4,9 @@ angular.module('pdLoru')
   .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
   })
-  .controller('OptMarketplaceOrderEditCtrl', function ($scope, order, supplierStore, cart, $modal, growl) {
-    $scope.supplierStoreData = supplierStore;
+  .controller('OptMarketplaceOrderEditCtrl', function ($scope, order, supplierStore, categories, cart, $modal, growl) {
+    $scope.supplierStore = supplierStore;
+    $scope.categories = categories;
 
     $scope.formData = {
       showAll: false,
@@ -16,7 +17,7 @@ angular.module('pdLoru')
       $scope.formData.quantities[orderItem.id] = orderItem.count;
     });
     // restore cart state from exists
-    cart.restoreData(order, supplierStore);
+    cart.restoreData(order, supplierStore.getStoreProducts());
     $scope.cart = cart;
 
     $scope.checkout = function () {
@@ -32,6 +33,18 @@ angular.module('pdLoru')
       }).result.then(function () {
           growl.addSuccessMessage('Изменения в Вашем заказе были успешно сохранены');
         });
+    };
+
+    // ToDo: remove duplicate code
+    // Store filters
+    $scope.filters = {
+      category: []
+    };
+    $scope.applyFilter = function () {
+      var filters = _.cloneDeep($scope.filters);
+      // clean categories filter
+      filters.category = _.filter(filters.category);
+      supplierStore.loadStoreData(filters);
     };
   })
 ;

@@ -3,9 +3,10 @@
 angular.module('pdLoru')
   .service('optMarketPlaceApi', function ($http, pdConfig) {
     return {
-      getSupplierStore: function (supplierId) {
-        return $http.get(pdConfig.apiEndpoint + 'optplaces/suppliers/' + supplierId + '/products')
-          .then(function (response) { return response.data; });
+      getSupplierStore: function (supplierId, paramsData) {
+        return $http.get(pdConfig.apiEndpoint + 'optplaces/suppliers/' + supplierId + '/products', {
+          params: paramsData
+        }).then(function (response) { return response.data; });
       },
       postOrder: function (productsData, commentText) {
         return $http.post(pdConfig.apiEndpoint + 'optplaces/orders', {

@@ -31,11 +31,14 @@ angular.module('pdLoru', [
       'price': {
         url: '/price/:supplierId',
         resolve: {
-          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
             return optMarketplace.getSupplierStore($stateParams.supplierId);
           }],
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
           }]
         },
         controller: 'OptMarketplacePriceCtrl',
@@ -66,6 +69,9 @@ angular.module('pdLoru', [
           }],
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
           }]
         }
       }

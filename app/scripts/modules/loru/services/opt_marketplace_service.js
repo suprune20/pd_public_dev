@@ -9,9 +9,33 @@ angular.module('pdLoru')
       accepted: 'Принят'
     };
 
+    var SupplierStore = function (supplierId) {
+      var _storeData;
+
+      var loadStoreData = function (filters) {
+        // Prepare query params from filters
+        var params = {};
+        _.forEach(filters, function (value, filterName) {
+          params['filters[' + filterName + ']'] = value;
+        });
+
+        return optMarketPlaceApi.getSupplierStore(supplierId, params)
+          .then(function (storeData) { _storeData = storeData; });
+      };
+
+      return loadStoreData().then(function () {
+        return {
+          getStoreProducts: function () {
+            return _storeData;
+          },
+          loadStoreData: loadStoreData
+        };
+      });
+    };
+
     return {
       getSupplierStore: function (supplierId) {
-        return optMarketPlaceApi.getSupplierStore(supplierId);
+        return new SupplierStore(supplierId);
       },
       getMyOrders: function () {
         return optMarketPlaceApi.getMyOrders();
