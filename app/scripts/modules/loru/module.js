@@ -23,11 +23,35 @@ angular.module('pdLoru', [
         title: 'Места',
         pageClass: 'loru-orgplaces'
       },
-      'loru.optmarketplace': {
+
+      // PRODUCTS MANAGEMENT
+      'loru.products': {
+        url: '/products',
         abstract: true,
-        url: '/opt-marketplace',
         template: '<ui-view/>'
       },
+      'loru.products.list': {
+        url: '',
+        resolve: {
+          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }]
+        },
+        controller: 'LoruProductsListCtrl',
+        templateUrl: 'views/modules/loru/products/list.html',
+        title: 'Список товаров и услуг'
+      },
+      'loru.products.edit': {
+        url: '/:productId',
+        resolve: {
+          product: ['$stateParams', 'loruProducts', function ($stateParams, loruProducts) {
+            return loruProducts.getProduct($stateParams.productId);
+          }]
+        },
+        controller: 'LoruProductEditCtrl',
+        templateUrl: 'views/modules/loru/products/edit.html',
+        title: 'Редактирование товара/услуги'
+      },
+
+      // PRICE
       'price': {
         url: '/price/:supplierId',
         resolve: {

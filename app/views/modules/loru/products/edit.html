@@ -1,0 +1,18 @@
+<h1>Редактирование товара/услуги "{{product.name}}"</h1>
+
+<form role="form" name="productForm">
+  <div class="form-group">
+    <label for="name">Название</label>
+    <input type="text" class="form-control" id="name" ng-model="product.name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="description">Описание</label>
+    <textarea class="form-control" id="description" ng-model="product.description" name="description"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="measurementUnit">Единица измерения</label>
+    <input type="text" class="form-control" id="measurementUnit" ng-model="product.measurementUnit"
+           name="measurementUnit">
+  </div>
+  <button type="submit" class="btn btn-default">Сохранить</button>
+</form>
