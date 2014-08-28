@@ -73,16 +73,15 @@ angular.module('pdFrontend')
 
               // Add suppliers places points
               _.forEach(suppliersData, function (supplier) {
-                if (!supplier.location || !supplier.stores.length) {
-                  return;
-                }
-
-                // ToDo: now removed suppliers without categories
-                if (!supplier.categories.length) {
+                if (!supplier.categories.length || !supplier.stores.length) {
                   return;
                 }
 
                 supplier.stores.forEach(function (storeData) {
+                  if (!storeData.location) {
+                    return;
+                  }
+
                   storeData.categories = supplier.categories;
                   points.push({
                     properties: {
