@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('LoruProductsCtrl', function ($scope, products) {
+  .controller('LoruProductsListCtrl', function ($scope, products) {
     $scope.products = products;
   })
   .controller('LoruProductEditCtrl', function ($scope, productsTypes, categories, product, loruProductsApi, growl) {
