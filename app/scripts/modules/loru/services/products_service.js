@@ -8,6 +8,12 @@ angular.module('pdLoru')
       },
       getProduct: function (productId) {
         return loruProductsApi.getProduct(productId);
+      },
+      addProduct: function (productModel) {
+        return loruProductsApi.addProduct(productModel);
+      },
+      saveProduct: function (productModel) {
+        return loruProductsApi.saveProduct(productModel);
       }
     };
   })

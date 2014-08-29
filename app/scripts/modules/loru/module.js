@@ -39,11 +39,31 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/products/list.html',
         title: 'Список товаров и услуг'
       },
+      'loru.products.add': {
+        url: '/create',
+        resolve: {
+          productsTypes: ['loruProductsApi', function (loruProductsApi) {
+            return loruProductsApi.getProductsTypes();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
+        },
+        controller: 'LoruProductAddCtrl',
+        templateUrl: 'views/modules/loru/products/add.html',
+        title: 'Добавление товара/услуги'
+      },
       'loru.products.edit': {
         url: '/:productId',
         resolve: {
           product: ['$stateParams', 'loruProducts', function ($stateParams, loruProducts) {
             return loruProducts.getProduct($stateParams.productId);
+          }],
+          productsTypes: ['loruProductsApi', function (loruProductsApi) {
+            return loruProductsApi.getProductsTypes();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
           }]
         },
         controller: 'LoruProductEditCtrl',
