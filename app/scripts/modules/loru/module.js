@@ -87,37 +87,6 @@ angular.module('pdLoru', [
         },
         controller: 'OptMarketplacePriceCtrl',
         templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
-      },
-      'price.orders': {
-        url: '/orders',
-        templateUrl: 'views/modules/loru/opt_marketplace/my_orders.html',
-        controller: 'OptMarketplaceMyOrdersCtrl',
-        title: 'Мои заказы',
-        resolve: {
-          ordersCollection: ['optMarketplace', function (optMarketplace) {
-            return optMarketplace.getMyOrders();
-          }]
-        }
-      },
-      'price.order': {
-        url: '/order/:orderId',
-        templateUrl: 'views/modules/loru/opt_marketplace/order_edit.html',
-        controller: 'OptMarketplaceOrderEditCtrl',
-        title: 'Редактирование заказа',
-        resolve: {
-          order: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getOrder($stateParams.orderId);
-          }],
-          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore($stateParams.supplierId);
-          }],
-          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
-            return new OptMarketplaceCart();
-          }],
-          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
-            return pdFrontendCatalogApi.getCategories();
-          }]
-        }
       }
     };
 
@@ -128,6 +97,50 @@ angular.module('pdLoru', [
           menuConfig: 'loruMenu'
         }, stateParams || {}), ['ROLE_LORU', 'ROLE_SUPERVISOR']);
     });
+
+    authRouteProvider
+      .state('orders', {
+        url: '/orders',
+        secured: true,
+        templateUrl: 'views/modules/loru/opt_marketplace/my_orders.html',
+        controller: 'OptMarketplaceMyOrdersCtrl',
+        title: 'Мои заказы',
+        resolve: {
+          ordersCollection: ['optMarketplace', function (optMarketplace) {
+            return optMarketplace.getMyOrders();
+          }]
+        }
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+      .state('order', {
+        url: '/order/:orderId',
+        secured: true,
+        templateUrl: 'views/modules/loru/opt_marketplace/order_edit.html',
+        controller: 'OptMarketplaceOrderEditCtrl',
+        title: 'Редактирование заказа',
+        resolve: {
+          pageData: ['optMarketplace', 'pdFrontendCatalogApi', '$stateParams', '$q',
+            function (optMarketplace, pdFrontendCatalogApi, $stateParams, $q) {
+              return $q.all([optMarketplace.getOrder($stateParams.orderId), pdFrontendCatalogApi.getCategories()])
+                .then(function (results) {
+                  var orderModel = results[0];
+
+                  return optMarketplace.getSupplierStore(orderModel.supplierId)
+                    .then(function (supplierStoreData) {
+                      return {
+                        order: orderModel,
+                        categories: results[1],
+                        supplierStore: supplierStoreData
+                      };
+                    });
+                });
+            }
+          ],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }]
+        }
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+    ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),

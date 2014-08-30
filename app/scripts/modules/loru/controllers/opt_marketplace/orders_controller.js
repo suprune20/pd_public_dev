@@ -4,20 +4,20 @@ angular.module('pdLoru')
   .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
   })
-  .controller('OptMarketplaceOrderEditCtrl', function ($scope, order, supplierStore, categories, cart, $modal, growl) {
-    $scope.supplierStore = supplierStore;
-    $scope.categories = categories;
+  .controller('OptMarketplaceOrderEditCtrl', function ($scope, pageData, cart, $modal, growl) {
+    $scope.supplierStore = pageData.supplierStore;
+    $scope.categories = pageData.categories;
 
     $scope.formData = {
       showAll: false,
       quantities: {}
     };
     // restore quantity of products
-    _.each(order.products, function (orderItem) {
+    _.each(pageData.order.products, function (orderItem) {
       $scope.formData.quantities[orderItem.id] = orderItem.count;
     });
     // restore cart state from exists
-    cart.restoreData(order, supplierStore.getStoreProducts());
+    cart.restoreData(pageData.order, pageData.supplierStore.getStoreProducts());
     $scope.cart = cart;
 
     $scope.checkout = function () {
@@ -44,7 +44,7 @@ angular.module('pdLoru')
       var filters = _.cloneDeep($scope.filters);
       // clean categories filter
       filters.category = _.filter(filters.category);
-      supplierStore.loadStoreData(filters);
+      pageData.supplierStore.loadStoreData(filters);
     };
   })
 ;
