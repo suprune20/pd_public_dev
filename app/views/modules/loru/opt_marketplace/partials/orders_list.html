@@ -32,6 +32,7 @@
           <th>Цена</th>
           <th>Количество в корзине</th>
           <th>Стоимость</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -58,9 +59,15 @@
             </div>
           </td>
           <td>
-        <span ng-show="product.price * formData.quantities[product.id]">
-          {{product.price * formData.quantities[product.id]|toFixed:2}} {{product.currency}}
-        </span>
+            <span ng-show="product.price * formData.quantities[product.id]">
+              {{product.price * formData.quantities[product.id]|toFixed:2}} {{product.currency}}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-xs" ng-show="formData.quantities[product.id]"
+                    ng-click="formData.quantities[product.id] = ''; cart.removeProduct(product)">
+              Удалить
+            </button>
           </td>
         </tr>
         </tbody>
