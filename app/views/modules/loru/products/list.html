@@ -6,7 +6,6 @@
     <th>Артикул</th>
     <th>Название</th>
     <th>Тип</th>
-    <th>Категория</th>
     <th>Ед. измерения</th>
     <th title="Продукт будет отмечен в Заказе по-умолчанию">По умолчанию</th>
     <th>Цена розничная</th>
@@ -22,7 +21,6 @@
     <td>{{product.sku}}</td>
     <td>{{product.name}}</td>
     <td>{{product.type.name}}</td>
-    <td>{{product.category.name}}</td>
     <td>{{product.measurementUnit}}</td>
     <td>{{product.isDefault ? 'да' : 'нет'}}</td>
     <td>{{product.retailPrice|toFixed:2}}</td>
@@ -43,3 +41,5 @@
   </tr>
   </tbody>
 </table>
+
+<a ui-sref="loru.products.add" class="btn btn-default">Добавить</a>
