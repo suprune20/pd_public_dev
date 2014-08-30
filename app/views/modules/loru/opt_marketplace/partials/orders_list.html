@@ -9,16 +9,16 @@
   <div class="clearfix visible-xs visible-sm"></div>
   <div class="col-xs-12 col-md-9 col-lg-10">
     <ng-form name="optMarketplace">
-      <table class="table table-striped">
+      <table class="table table-striped table-opt-marketplace-products">
         <thead>
-        <tr>
+        <tr pb-sticky-block>
           <th colspan="5" class="text-right">
-            <button class="btn btn-success" ng-click="checkout()" ng-show="cart.getCount()">
+            <button class="btn btn-success" ng-click="checkout()" ng-disabled="!cart.getCount()">
               <i class="glyphicon glyphicon-shopping-cart"></i>
               Заказать
             </button>
             <button class="btn btn-default" title="Показать все или только корзину"
-                    ng-click="formData.showAll = !formData.showAll" ng-show="cart.getCount()">
+                    ng-click="formData.showAll = !formData.showAll" ng-disabled="!cart.getCount()">
               <i class="glyphicon glyphicon-list-alt"></i>
               Все/Корзина
             </button>
