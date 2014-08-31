@@ -13,6 +13,17 @@ angular.module('pdLoru')
       filters.category = _.filter(filters.category);
       loruProducts.getProducts(filters).then(function (products) { $scope.products = products; });
     };
+    $scope.updateProductVisibility = function (product) {
+      var updateModel = _.transform(product, function (result, value, key) {
+        if (_.contains(['id', 'isShownInRetailCatalog', 'isShownInTradeCatalog'], key)) {
+          result[key] = value;
+          return result;
+        }
+      }, {});
+      $scope.disabledVisibilityControls = true;
+      loruProducts.saveProduct(updateModel)
+        .finally(function () { $scope.disabledVisibilityControls = false; });
+    };
   })
   .controller('LoruProductEditCtrl', function ($scope, productsTypes, categories, product, loruProductsApi, growl) {
     $scope.types = productsTypes;

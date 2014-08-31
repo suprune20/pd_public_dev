@@ -2,7 +2,7 @@
 
 angular.module('pdLoru')
   .service('loruProductsApi', function ($http, pdConfig, $q, $upload) {
-    var uploadProductData = function (_productModel, url) {
+    var uploadProductData = function (_productModel, url, config) {
       var deferred = $q.defer(),
         productModel = _.cloneDeep(_productModel),
         photoFile = productModel.photo;
@@ -11,11 +11,11 @@ angular.module('pdLoru')
       delete productModel.id;
       delete productModel.photo;
       // Prepare upload data
-      var uploadData = {
+      var uploadData = _.merge(config || {}, {
         url: url,
         tracker: 'commonLoadingTracker',
         data: productModel
-      };
+      });
       if (photoFile && !/^https?:\/\//.test(photoFile)) {
         uploadData.file = photoFile;
         uploadData.fileFormDataName = 'photo';
@@ -53,7 +53,11 @@ angular.module('pdLoru')
           return $q.reject();
         }
 
-        return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products/' + productModel.id);
+        return uploadProductData(
+          productModel,
+          pdConfig.apiEndpoint + 'loru/products/' + productModel.id,
+          { method: 'PUT' }
+        );
       },
       getProductsTypes: function () {
         return $http.get(pdConfig.apiEndpoint + 'loru/products_types')

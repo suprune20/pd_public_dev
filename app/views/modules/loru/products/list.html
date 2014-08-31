@@ -36,10 +36,12 @@
         <td>{{product.retailPrice|toFixed:2}}</td>
         <td>{{product.traidPrice|toFixed:2}}</td>
         <td>
-          <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog" />
+          <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog"
+                 ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
         </td>
         <td>
-          <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog" />
+          <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog"
+                 ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
         </td>
         <td>
           <img ng-src="{{product.imageUrl|pdThumbnail:'200x200'}}" ng-show="product.imageUrl"
