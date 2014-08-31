@@ -1,45 +1,57 @@
 <h1>Список товаров и услуг</h1>
 
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th>Артикул</th>
-    <th>Название</th>
-    <th>Тип</th>
-    <th>Ед. измерения</th>
-    <th title="Продукт будет отмечен в Заказе по-умолчанию">По умолчанию</th>
-    <th>Цена розничная</th>
-    <th>Цена оптовая</th>
-    <th>Показ в публичном каталоге</th>
-    <th>Показ в оптовом каталоге</th>
-    <th>Изображение</th>
-    <th></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr ng-repeat="product in products">
-    <td>{{product.sku}}</td>
-    <td>{{product.name}}</td>
-    <td>{{product.type.name}}</td>
-    <td>{{product.measurementUnit}}</td>
-    <td>{{product.isDefault ? 'да' : 'нет'}}</td>
-    <td>{{product.retailPrice|toFixed:2}}</td>
-    <td>{{product.traidPrice|toFixed:2}}</td>
-    <td>
-      <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog" />
-    </td>
-    <td>
-      <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog" />
-    </td>
-    <td>
-      <img ng-src="{{product.imageUrl|pdThumbnail:'200x200'}}" ng-show="product.imageUrl"
-           class="img-thumbnail thumbnail-50 scale-image scale-image-6"/>
-    </td>
-    <td>
-      <a ui-sref="loru.products.edit({productId: product.id})" class="btn btn-info btn-sm">Редактировать</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-xs-12 col-md-3 col-lg-2">
+    <label ng-repeat="category in categories" class="show">
+      <input type="checkbox" ng-model="filters.category[$index]" ng-true-value="{{category.id}}"
+             ng-change="applyFilter()">
+      {{category.name}}
+    </label>
+  </div>
+  <div class="clearfix visible-xs visible-sm"></div>
+  <div class="col-xs-12 col-md-9 col-lg-10">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Артикул</th>
+        <th>Название</th>
+        <th>Тип</th>
+        <th>Ед. измерения</th>
+        <th title="Продукт будет отмечен в Заказе по-умолчанию">По умолчанию</th>
+        <th>Цена розничная</th>
+        <th>Цена оптовая</th>
+        <th>Показ в публичном каталоге</th>
+        <th>Показ в оптовом каталоге</th>
+        <th>Изображение</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="product in products">
+        <td>{{product.sku}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.type.name}}</td>
+        <td>{{product.measurementUnit}}</td>
+        <td>{{product.isDefault ? 'да' : 'нет'}}</td>
+        <td>{{product.retailPrice|toFixed:2}}</td>
+        <td>{{product.traidPrice|toFixed:2}}</td>
+        <td>
+          <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog" />
+        </td>
+        <td>
+          <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog" />
+        </td>
+        <td>
+          <img ng-src="{{product.imageUrl|pdThumbnail:'200x200'}}" ng-show="product.imageUrl"
+               class="img-thumbnail thumbnail-50 scale-image scale-image-6"/>
+        </td>
+        <td>
+          <a ui-sref="loru.products.edit({productId: product.id})" class="btn btn-info btn-sm">Редактировать</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-<a ui-sref="loru.products.add" class="btn btn-default">Добавить</a>
+    <a ui-sref="loru.products.add" class="btn btn-default">Добавить</a>
+  </div>
+</div>

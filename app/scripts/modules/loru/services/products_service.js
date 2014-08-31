@@ -3,8 +3,8 @@
 angular.module('pdLoru')
   .service('loruProducts', function (loruProductsApi) {
     return {
-      getProducts: function () {
-        return loruProductsApi.getProducts();
+      getProducts: function (filters) {
+        return loruProductsApi.getProducts(filters);
       },
       getProduct: function (productId) {
         return loruProductsApi.getProduct(productId);

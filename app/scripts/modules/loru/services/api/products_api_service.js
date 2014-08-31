@@ -32,8 +32,13 @@ angular.module('pdLoru')
     };
 
     return {
-      getProducts: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products')
+      getProducts: function (filters) {
+        var params = {};
+        _.forEach(filters, function (value, filterName) {
+          params['filter[' + filterName + ']'] = value;
+        });
+
+        return $http.get(pdConfig.apiEndpoint + 'loru/products', {params: params})
           .then(function (response) { return response.data; });
       },
       getProduct: function (productId) {

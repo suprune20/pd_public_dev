@@ -33,11 +33,15 @@ angular.module('pdLoru', [
       'loru.products.list': {
         url: '',
         resolve: {
-          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }]
+          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
         },
         controller: 'LoruProductsListCtrl',
         templateUrl: 'views/modules/loru/products/list.html',
-        title: 'Список товаров и услуг'
+        title: 'Список товаров и услуг',
+        setFluidContainer: true
       },
       'loru.products.add': {
         url: '/create',
