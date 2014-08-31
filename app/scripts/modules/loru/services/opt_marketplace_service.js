@@ -16,7 +16,7 @@ angular.module('pdLoru')
         // Prepare query params from filters
         var params = {};
         _.forEach(filters, function (value, filterName) {
-          params['filters[' + filterName + ']'] = value;
+          params['filter[' + filterName + ']'] = value;
         });
 
         return optMarketPlaceApi.getSupplierStore(supplierId, params)
