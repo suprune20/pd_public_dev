@@ -169,6 +169,9 @@ angular.module('pdLoru', [
               {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
+              {link: '#!/price/' + userOrgId, title: 'Оптовый заказ'},
+              {link: '#!/orders', title: 'Архив заказов'},
+              {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]
           }
