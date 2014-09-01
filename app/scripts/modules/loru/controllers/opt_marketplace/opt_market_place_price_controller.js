@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('OptMarketplacePriceCtrl', function ($scope, supplierStore, cart, categories, $modal, growl) {
+  .controller('OptMarketplacePriceCtrl', function ($scope, supplierStore, supplierDetails, cart, categories, $modal,
+                                                   growl) {
     $scope.supplierStore = supplierStore;
+    $scope.supplier = supplierDetails;
     $scope.categories = categories;
     $scope.cart = cart;
     $scope.formData = {

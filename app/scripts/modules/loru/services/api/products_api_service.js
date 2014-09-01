@@ -38,15 +38,15 @@ angular.module('pdLoru')
           params['filter[' + filterName + ']'] = value;
         });
 
-        return $http.get(pdConfig.apiEndpoint + 'loru/products', {params: params})
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products', {params: params})
           .then(function (response) { return response.data; });
       },
       getProduct: function (productId) {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products/' + productId)
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products/' + productId)
           .then(function (response) { return response.data; });
       },
       addProduct: function (productModel) {
-        return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products');
+        return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products_management/products');
       },
       saveProduct: function (productModel) {
         if (!_.has(productModel, 'id')) {
@@ -55,12 +55,12 @@ angular.module('pdLoru')
 
         return uploadProductData(
           productModel,
-          pdConfig.apiEndpoint + 'loru/products/' + productModel.id,
+          pdConfig.apiEndpoint + 'loru/products_management/products/' + productModel.id,
           { method: 'PUT' }
         );
       },
       getProductsTypes: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products_types')
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products_types')
           .then(function (response) { return response.data; });
       }
     };

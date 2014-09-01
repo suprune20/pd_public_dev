@@ -87,6 +87,9 @@ angular.module('pdLoru', [
           }],
           categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
             return pdFrontendCatalogApi.getCategories();
+          }],
+          supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplier($stateParams.supplierId);
           }]
         },
         controller: 'OptMarketplacePriceCtrl',

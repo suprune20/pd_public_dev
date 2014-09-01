@@ -37,6 +37,9 @@ angular.module('pdLoru')
       getSupplierStore: function (supplierId) {
         return new SupplierStore(supplierId);
       },
+      getSupplier: function (supplierId) {
+        return optMarketPlaceApi.getSupplier(supplierId);
+      },
       getMyOrders: function () {
         return optMarketPlaceApi.getMyOrders();
       },

@@ -1,3 +1,7 @@
-<h1>Редактирование заказа</h1>
+<h1>Редактирование заказа <small>{{order.number}}</small></h1>
+<h3 ng-show="order.supplier && order.customer">
+  <small>поставщик</small> {{order.supplier.shortName}}, {{order.supplier.phone}}
+  <small>покупатель</small> {{order.customer.shortName}}, {{order.customer.phone}}
+</h3>
 
 <ng-include src="'views/modules/loru/opt_marketplace/partials/orders_list.html'"></ng-include>

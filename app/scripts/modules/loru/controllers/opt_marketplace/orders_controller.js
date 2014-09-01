@@ -7,6 +7,7 @@ angular.module('pdLoru')
   .controller('OptMarketplaceOrderEditCtrl', function ($scope, pageData, cart, $modal, growl) {
     $scope.supplierStore = pageData.supplierStore;
     $scope.categories = pageData.categories;
+    $scope.order = pageData.order;
 
     $scope.formData = {
       showAll: false,
