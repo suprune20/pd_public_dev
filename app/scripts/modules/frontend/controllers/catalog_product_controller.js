@@ -7,7 +7,12 @@ angular.module('pdFrontend')
       windowClass: 'catalog-product-modal',
       resolve: {
         productData: function () {
-          return $scope.catalog.getProduct($state.params.productId);
+          return $scope.catalog.getProduct($state.params.productId)
+            .then(function (productData) {
+              productData.price = $state.params.showOptPrice ? productData.priceWholesale : productData.price;
+
+              return productData;
+            });
         }
       },
       controller: function ($scope, productData) {
@@ -17,14 +22,14 @@ angular.module('pdFrontend')
           .setDescription(productData.name + '. ' + (productData.description || productData.supplier.address));
         $scope.productData = productData;
       }
-    }).result.then(function () {
-        // redirect only if current product details state and has been closed manually
+    }).result.catch(function (rejection) {
+        if (rejection && 404 === rejection.status) {
+          $scope.seo.setStatusCode(404);
+          return;
+        }
+
         if ('catalog.product' === $state.current.name) {
           $state.go('catalog');
-        }
-      }, function (rejection) {
-        if (404 === rejection.status) {
-          $scope.seo.setStatusCode(404);
         }
       });
   })

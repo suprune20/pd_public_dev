@@ -76,8 +76,7 @@
              infinite-scroll="catalog.productsDataProvider.getNextProducts()"
              infinite-scroll-disabled="catalog.productsDataProvider.isBusy() || catalog.productsDataProvider.isNoMoreProducts()">
           <div ng-repeat="product in catalog.productsDataProvider.getProducts()"
-               class="catalog-product-item"
-               ng-click="$state.go('catalog.product', {productId: product.slug})">
+               class="catalog-product-item" ng-click="openProductDetailsModal(product.slug)">
 
             <h4 class="media-heading" ng-show="product.name">{{product.name}}</h4>
 
@@ -95,7 +94,7 @@
                 <dl>
                   <dt>Поставщик</dt>
                   <dd>
-                    <a href="" ui-sref="catalog.supplier({supplierId: product.supplier.slug})"
+                    <a ui-sref="catalog.supplier({supplierId: product.supplier.slug})"
                        ng-click="$event.stopPropagation()">
                       {{product.supplier.name}}
                     </a>

@@ -22,6 +22,75 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/orgplaces/main.html',
         title: 'Места',
         pageClass: 'loru-orgplaces'
+      },
+
+      // PRODUCTS MANAGEMENT
+      'loru.products': {
+        url: '/products',
+        abstract: true,
+        template: '<ui-view/>'
+      },
+      'loru.products.list': {
+        url: '',
+        resolve: {
+          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
+        },
+        controller: 'LoruProductsListCtrl',
+        templateUrl: 'views/modules/loru/products/list.html',
+        title: 'Список товаров и услуг',
+        setFluidContainer: true
+      },
+      'loru.products.add': {
+        url: '/create',
+        resolve: {
+          productsTypes: ['loruProductsApi', function (loruProductsApi) {
+            return loruProductsApi.getProductsTypes();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
+        },
+        controller: 'LoruProductAddCtrl',
+        templateUrl: 'views/modules/loru/products/add.html',
+        title: 'Добавление товара/услуги'
+      },
+      'loru.products.edit': {
+        url: '/:productId',
+        resolve: {
+          product: ['$stateParams', 'loruProducts', function ($stateParams, loruProducts) {
+            return loruProducts.getProduct($stateParams.productId);
+          }],
+          productsTypes: ['loruProductsApi', function (loruProductsApi) {
+            return loruProductsApi.getProductsTypes();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
+        },
+        controller: 'LoruProductEditCtrl',
+        templateUrl: 'views/modules/loru/products/edit.html',
+        title: 'Редактирование товара/услуги'
+      },
+
+      // PRICE
+      'price': {
+        url: '/price/:supplierId',
+        resolve: {
+          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          }],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }],
+          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
+            return pdFrontendCatalogApi.getCategories();
+          }]
+        },
+        controller: 'OptMarketplacePriceCtrl',
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
       }
     };
 
@@ -30,22 +99,50 @@ angular.module('pdLoru', [
         .state(stateName, _.merge({
           secured: true,
           menuConfig: 'loruMenu'
-        }, stateParams || {}), 'ROLE_LORU');
+        }, stateParams || {}), ['ROLE_LORU', 'ROLE_SUPERVISOR']);
     });
 
     authRouteProvider
-      .state('supplierPrice', {
-        url: '/price/:supplierId',
+      .state('orders', {
+        url: '/orders',
         secured: true,
+        templateUrl: 'views/modules/loru/opt_marketplace/my_orders.html',
+        controller: 'OptMarketplaceMyOrdersCtrl',
+        title: 'Мои заказы',
         resolve: {
-          supplierStoreData: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore($stateParams.supplierId);
+          ordersCollection: ['optMarketplace', function (optMarketplace) {
+            return optMarketplace.getMyOrders();
           }]
-        },
-        controller: ['$scope', 'supplierStoreData', function ($scope, supplierStoreData) {
-          $scope.supplierStoreData = supplierStoreData;
-        }],
-        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
+        }
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+      .state('order', {
+        url: '/order/:orderId',
+        secured: true,
+        templateUrl: 'views/modules/loru/opt_marketplace/order_edit.html',
+        controller: 'OptMarketplaceOrderEditCtrl',
+        title: 'Редактирование заказа',
+        resolve: {
+          pageData: ['optMarketplace', 'pdFrontendCatalogApi', '$stateParams', '$q',
+            function (optMarketplace, pdFrontendCatalogApi, $stateParams, $q) {
+              return $q.all([optMarketplace.getOrder($stateParams.orderId), pdFrontendCatalogApi.getCategories()])
+                .then(function (results) {
+                  var orderModel = results[0];
+
+                  return optMarketplace.getSupplierStore(orderModel.supplierId)
+                    .then(function (supplierStoreData) {
+                      return {
+                        order: orderModel,
+                        categories: results[1],
+                        supplierStore: supplierStoreData
+                      };
+                    });
+                });
+            }
+          ],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }]
+        }
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
     ;
   })
@@ -71,6 +168,9 @@ angular.module('pdLoru', [
               {link: '#!/loru/orgplaces', title: 'Склады'},
               {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
+              {class: 'divider'},
+              {link: '#!/price/' + userOrgId, title: 'Оптовый заказ'},
+              {link: '#!/orders', title: 'Архив заказов'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]

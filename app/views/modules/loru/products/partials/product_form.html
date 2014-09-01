@@ -1,0 +1,95 @@
+<form role="form" name="productForm" novalidate class="col-md-8 col-md-offset-2">
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': productForm.name.$invalid, 'has-success': productForm.name.$valid}">
+    <label for="name">Название</label>
+    <input type="text" class="form-control" id="name" ng-model="product.name" name="name" required>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': productForm.name.$invalid, 'glyphicon-ok': productForm.name.$valid}"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': productForm.description.$invalid, 'has-success': productForm.description.$valid}">
+    <label for="description">Описание</label>
+    <textarea class="form-control" id="description" ng-model="product.description" name="description"
+              required=""></textarea>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': productForm.description.$invalid, 'glyphicon-ok': productForm.description.$valid}"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': productForm.measurementUnit.$invalid, 'has-success': productForm.measurementUnit.$valid}">
+    <label for="measurementUnit">Единица измерения</label>
+    <input type="text" class="form-control" id="measurementUnit" ng-model="product.measurementUnit"
+           name="measurementUnit" required>
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': productForm.measurementUnit.$invalid, 'glyphicon-ok': productForm.measurementUnit.$valid}"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': productForm.retailPrice.$invalid, 'has-success': productForm.retailPrice.$valid}">
+    <label for="retailPrice">Цена розничная</label>
+    <input type="text" class="form-control" id="retailPrice" ng-model="product.retailPrice" name="retailPrice"
+           required ng-pattern="/^\d+\.?\d*$/">
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': productForm.retailPrice.$invalid, 'glyphicon-ok': productForm.retailPrice.$valid}"></span>
+  </div>
+
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': productForm.tradePrice.$invalid, 'has-success': productForm.tradePrice.$valid}">
+    <label for="tradePrice">Цена оптовая</label>
+    <input type="text" class="form-control" id="tradePrice" ng-model="product.tradePrice" name="tradePrice"
+           required ng-pattern="/^\d+\.?\d*$/">
+    <span class="glyphicon form-control-feedback"
+          ng-class="{'glyphicon-remove': productForm.tradePrice.$invalid, 'glyphicon-ok': productForm.tradePrice.$valid}"></span>
+  </div>
+
+  <div class="form-group">
+    <label for="type">Тип</label>
+    <select class="form-control" id="type" ng-model="product.typeId" name="type"
+            ng-options="type.id as type.name for type in types"></select>
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="byDefault" ng-model="product.isDefault" name="byDefault">
+      По умолчанию
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" for="photo">Фото</label>
+    <pd-file-selector pd-allow-preview ng-model="product.photo" name="photo" id="photo"
+                      pd-max-height="150px"></pd-file-selector>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Категория</label>
+    <select class="form-control" id="category" ng-model="product.categoryId" name="category"
+            ng-options="category.id as category.name for category in categories"></select>
+  </div>
+
+  <div class="form-group">
+    <label for="sku">Артикул</label>
+    <input type="text" class="form-control" id="sku" ng-model="product.sku" name="sku">
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog"
+             name="isShownInRetailCatalog">
+      Показать в публичном каталоге
+    </label>
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog"
+             name="isShownInTradeCatalog">
+      Показать в оптовом каталоге
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-default" ng-click="saveProduct()" ng-disabled="productForm.$invalid">
+    Сохранить
+  </button>
+</form>

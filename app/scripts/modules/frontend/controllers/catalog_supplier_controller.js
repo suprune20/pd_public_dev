@@ -29,14 +29,15 @@ angular.module('pdFrontend')
           };
         });
       }
-    }).result.then(function () {
+    }).result.catch(function (rejection) {
+        if (rejection && 404 === rejection.status) {
+          $scope.seo.setStatusCode(404);
+          return;
+        }
+
         // Redirect to catalog state only if modal has been closed manually
         if ('catalog.supplier' === $state.current.name) {
           $state.go('catalog');
-        }
-      }, function (rejection) {
-        if (404 === rejection.status) {
-          $scope.seo.setStatusCode(404);
         }
       });
   })
