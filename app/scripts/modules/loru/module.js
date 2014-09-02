@@ -86,7 +86,10 @@ angular.module('pdLoru', [
             return new OptMarketplaceCart();
           }],
           categories: ['pdFrontendCatalogApi', '$stateParams', function (pdFrontendCatalogApi, $stateParams) {
-            return pdFrontendCatalogApi.getCategories({supplier: $stateParams.supplierId});
+            return pdFrontendCatalogApi.getCategories({
+              supplier: $stateParams.supplierId,
+              onlyOpt: true
+            });
           }],
           supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
             return optMarketplace.getSupplier($stateParams.supplierId);
@@ -131,7 +134,10 @@ angular.module('pdLoru', [
                 .then(function (orderModel) {
                   return $q.all([
                     optMarketplace.getSupplierStore(orderModel.supplier.id),
-                    pdFrontendCatalogApi.getCategories({supplier: orderModel.supplier.id})
+                    pdFrontendCatalogApi.getCategories({
+                      supplier: orderModel.supplier.id,
+                      onlyOpt: true
+                    })
                   ]).then(function (results) {
                       return {
                         order: orderModel,
