@@ -131,7 +131,7 @@ angular.module('pdLoru', [
                 .then(function (results) {
                   var orderModel = results[0];
 
-                  return optMarketplace.getSupplierStore(orderModel.supplierId)
+                  return optMarketplace.getSupplierStore(orderModel.supplier.id)
                     .then(function (supplierStoreData) {
                       return {
                         order: orderModel,
