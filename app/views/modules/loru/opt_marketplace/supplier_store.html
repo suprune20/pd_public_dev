@@ -1,6 +1,6 @@
 <ui-view>
   <h1>Оптовый магазин поставщика</h1>
-  <h3>{{supplier.shortName}}, {{supplier.phoneNumber}}</h3>
+  <h3>{{supplier.shortName}}, {{supplier.phones|array2string}}</h3>
 
   <ng-include src="'views/modules/loru/opt_marketplace/partials/orders_list.html'"></ng-include>
 </ui-view>
