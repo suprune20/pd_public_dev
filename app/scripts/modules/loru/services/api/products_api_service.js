@@ -66,7 +66,7 @@ angular.module('pdLoru')
         );
       },
       getProductsTypes: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products_types')
+        return $http.get(pdConfig.apiEndpoint + 'loru/product_types')
           .then(function (response) { return response.data; });
       }
     };
