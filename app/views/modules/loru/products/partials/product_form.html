@@ -58,7 +58,7 @@
 
   <div class="form-group">
     <label class="control-label" for="photo">Фото</label>
-    <pd-file-selector pd-allow-preview ng-model="product.photo" name="photo" id="photo"
+    <pd-file-selector pd-allow-preview ng-model="product.image" name="photo" id="photo"
                       pd-max-height="150px"></pd-file-selector>
   </div>
 
@@ -89,7 +89,8 @@
     </label>
   </div>
 
-  <button type="submit" class="btn btn-default" ng-click="saveProduct()" ng-disabled="productForm.$invalid">
+  <button type="submit" class="btn btn-default btn-primary" ng-click="saveProduct()" ng-disabled="productForm.$invalid">
     Сохранить
   </button>
+  <a ui-sref="loru.products.list" class="btn btn-default">Отмена</a>
 </form>

@@ -5,11 +5,11 @@ angular.module('pdLoru')
     var uploadProductData = function (_productModel, url, config) {
       var deferred = $q.defer(),
         productModel = _.cloneDeep(_productModel),
-        photoFile = productModel.photo;
+        photoFile = productModel.image;
 
       // Clear model before sending
       delete productModel.id;
-      delete productModel.photo;
+      delete productModel.image;
       // Prepare upload data
       var uploadData = _.merge(config || {}, {
         url: url,
@@ -18,7 +18,7 @@ angular.module('pdLoru')
       });
       if (photoFile && !/^https?:\/\//.test(photoFile)) {
         uploadData.file = photoFile;
-        uploadData.fileFormDataName = 'photo';
+        uploadData.fileFormDataName = 'image';
       }
 
       $upload.upload(uploadData)
@@ -43,7 +43,13 @@ angular.module('pdLoru')
       },
       getProduct: function (productId) {
         return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products/' + productId)
-          .then(function (response) { return response.data; });
+          .then(function (response) {
+            var productModel = response.data;
+            productModel.image = productModel.imageUrl;
+            delete productModel.imageUrl;
+
+            return productModel;
+          });
       },
       addProduct: function (productModel) {
         return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products_management/products');
@@ -60,7 +66,7 @@ angular.module('pdLoru')
         );
       },
       getProductsTypes: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products_types')
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_types')
           .then(function (response) { return response.data; });
       }
     };
