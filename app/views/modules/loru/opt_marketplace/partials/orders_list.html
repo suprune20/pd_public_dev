@@ -13,6 +13,15 @@
         <thead>
         <tr pb-sticky-block>
           <th colspan="5" class="text-right">
+            <form class="form-inline col-xs-6" role="form">
+              <div class="form-group has-feedback">
+                <label class="control-label" for="search">Поиск</label>
+                <input type="text" class="form-control" ng-model="searchPredicate" id="search">
+                <span class="glyphicon glyphicon-remove form-control-feedback pointer-cursor" ng-show="searchPredicate"
+                      ng-click="searchPredicate = ''"></span>
+              </div>
+            </form>
+
             <button class="btn btn-success" ng-click="checkout()" ng-disabled="!cart.getCount()">
               <i class="glyphicon glyphicon-shopping-cart"></i>
               Заказать
@@ -36,7 +45,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="product in supplierStore.getStoreProducts()"
+        <tr ng-repeat="product in supplierStore.getStoreProducts()|filter:searchPredicate"
             ng-show="formData.showAll || formData.quantities[product.id]">
           <td>{{product.sku}}</td>
           <td>
