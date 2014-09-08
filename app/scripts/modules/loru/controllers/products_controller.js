@@ -31,7 +31,10 @@ angular.module('pdLoru')
     $scope.product = product;
     $scope.saveProduct = function () {
       loruProductsApi.saveProduct($scope.product)
-        .then(function () { growl.addSuccessMessage('Товар был успешно сохранен'); });
+        .then(function () {
+          growl.addSuccessMessage('Товар был успешно сохранен');
+          $scope.$state.go('loru.products.list');
+        });
     };
   })
   .controller('LoruProductAddCtrl', function ($scope, productsTypes, categories, loruProductsApi, growl) {
@@ -43,7 +46,10 @@ angular.module('pdLoru')
     };
     $scope.saveProduct = function () {
       loruProductsApi.addProduct($scope.product)
-        .then(function () { growl.addSuccessMessage('Товар был успешно добавлен'); });
+        .then(function () {
+          growl.addSuccessMessage('Товар был успешно добавлен');
+          $scope.$state.go('loru.products.list');
+        });
     };
   })
 ;

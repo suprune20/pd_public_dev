@@ -1,0 +1,12 @@
+.pb-sticky-block {
+  &.under-navbar {
+    position: fixed;
+    top: $navbar-height;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: gray 1px solid;
+    z-index: 9999;
+    padding: 10px;
+  }
+}

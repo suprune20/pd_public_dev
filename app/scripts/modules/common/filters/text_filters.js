@@ -15,4 +15,11 @@ angular.module('pdCommon')
       return value.substring(substringStart, substringEnd);
     };
   })
+  .filter('array2string', function () {
+    return function (value, separator) {
+      value = _.isArray(value) ? value : [value];
+
+      return value.join(separator || ', ');
+    };
+  })
 ;

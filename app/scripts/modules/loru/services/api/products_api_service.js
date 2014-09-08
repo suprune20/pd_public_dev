@@ -5,11 +5,11 @@ angular.module('pdLoru')
     var uploadProductData = function (_productModel, url, config) {
       var deferred = $q.defer(),
         productModel = _.cloneDeep(_productModel),
-        photoFile = productModel.photo;
+        photoFile = productModel.image;
 
       // Clear model before sending
       delete productModel.id;
-      delete productModel.photo;
+      delete productModel.image;
       // Prepare upload data
       var uploadData = _.merge(config || {}, {
         url: url,
@@ -18,7 +18,7 @@ angular.module('pdLoru')
       });
       if (photoFile && !/^https?:\/\//.test(photoFile)) {
         uploadData.file = photoFile;
-        uploadData.fileFormDataName = 'photo';
+        uploadData.fileFormDataName = 'image';
       }
 
       $upload.upload(uploadData)
@@ -38,15 +38,21 @@ angular.module('pdLoru')
           params['filter[' + filterName + ']'] = value;
         });
 
-        return $http.get(pdConfig.apiEndpoint + 'loru/products', {params: params})
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products', {params: params})
           .then(function (response) { return response.data; });
       },
       getProduct: function (productId) {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products/' + productId)
-          .then(function (response) { return response.data; });
+        return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products/' + productId)
+          .then(function (response) {
+            var productModel = response.data;
+            productModel.image = productModel.imageUrl;
+            delete productModel.imageUrl;
+
+            return productModel;
+          });
       },
       addProduct: function (productModel) {
-        return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products');
+        return uploadProductData(productModel, pdConfig.apiEndpoint + 'loru/products_management/products');
       },
       saveProduct: function (productModel) {
         if (!_.has(productModel, 'id')) {
@@ -55,12 +61,12 @@ angular.module('pdLoru')
 
         return uploadProductData(
           productModel,
-          pdConfig.apiEndpoint + 'loru/products/' + productModel.id,
+          pdConfig.apiEndpoint + 'loru/products_management/products/' + productModel.id,
           { method: 'PUT' }
         );
       },
       getProductsTypes: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/products_types')
+        return $http.get(pdConfig.apiEndpoint + 'loru/product_types')
           .then(function (response) { return response.data; });
       }
     };

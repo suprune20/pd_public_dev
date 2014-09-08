@@ -9,9 +9,15 @@ angular.module('pdFrontend')
             return resp.data;
           });
       },
-      getCategories: function () {
-        return $http.get(pdConfig.apiEndpoint + 'catalog/categories')
-          .then(function (resp) {
+      getCategories: function (filters) {
+        var params = {};
+        _.forEach(filters, function (value, filterName) {
+          params['filter[' + filterName + ']'] = value;
+        });
+
+        return $http.get(pdConfig.apiEndpoint + 'catalog/categories', {
+          params: params
+        }).then(function (resp) {
             return resp.data.results;
           });
       },

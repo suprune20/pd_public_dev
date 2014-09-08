@@ -85,8 +85,14 @@ angular.module('pdLoru', [
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
           }],
-          categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
-            return pdFrontendCatalogApi.getCategories();
+          categories: ['pdFrontendCatalogApi', '$stateParams', function (pdFrontendCatalogApi, $stateParams) {
+            return pdFrontendCatalogApi.getCategories({
+              supplier: $stateParams.supplierId,
+              onlyOpt: true
+            });
+          }],
+          supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplier($stateParams.supplierId);
           }]
         },
         controller: 'OptMarketplacePriceCtrl',
@@ -124,16 +130,19 @@ angular.module('pdLoru', [
         resolve: {
           pageData: ['optMarketplace', 'pdFrontendCatalogApi', '$stateParams', '$q',
             function (optMarketplace, pdFrontendCatalogApi, $stateParams, $q) {
-              return $q.all([optMarketplace.getOrder($stateParams.orderId), pdFrontendCatalogApi.getCategories()])
-                .then(function (results) {
-                  var orderModel = results[0];
-
-                  return optMarketplace.getSupplierStore(orderModel.supplierId)
-                    .then(function (supplierStoreData) {
+              return optMarketplace.getOrder($stateParams.orderId)
+                .then(function (orderModel) {
+                  return $q.all([
+                    optMarketplace.getSupplierStore(orderModel.supplier.id),
+                    pdFrontendCatalogApi.getCategories({
+                      supplier: orderModel.supplier.id,
+                      onlyOpt: true
+                    })
+                  ]).then(function (results) {
                       return {
                         order: orderModel,
                         categories: results[1],
-                        supplierStore: supplierStoreData
+                        supplierStore: results[0]
                       };
                     });
                 });
