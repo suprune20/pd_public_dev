@@ -175,7 +175,7 @@ angular.module('pdLoru', [
               },
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
               {link: '#!/loru/orgplaces', title: 'Склады'},
-              {link: serverConfig.serverHost + 'manage/product', title: 'Товары и услуги'},
+              {link: '/loru/products', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
               {link: '#!/price/' + userOrgId, title: 'Оптовый заказ'},
