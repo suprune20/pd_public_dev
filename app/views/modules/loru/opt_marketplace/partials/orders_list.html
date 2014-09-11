@@ -7,7 +7,8 @@
     </label>
   </div>
   <div class="clearfix visible-xs visible-sm"></div>
-  <div class="col-xs-12 col-md-9 col-lg-10">
+  <div class="col-xs-12 col-md-9 col-lg-10"
+       ng-init="limitProducts = 40" infinite-scroll='limitProducts = limitProducts + 40' infinite-scroll-distance='2'>
     <ng-form name="optMarketplace">
       <table class="table table-striped table-opt-marketplace-products">
         <thead>
@@ -45,20 +46,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="product in supplierStore.getStoreProducts()|filter:searchPredicate"
-            ng-show="formData.showAll || formData.quantities[product.id]">
-          <td>{{product.sku}}</td>
+        <tr ng-repeat="product in supplierStore.getStoreProducts()|limitTo:limitProducts|filter:searchPredicate track by product.id"
+            ng-show="formData.showAll || formData.quantities[product.id]" bindonce>
+          <td bo-bind="product.sku"></td>
           <td>
-            <img ng-src="{{product.photo|pdThumbnail:'200x200'}}"
+            <img bo-src="product.photo|pdThumbnail:'200x200'"
                  class="img-thumbnail thumbnail-50 scale-image scale-image-6"
-                 ng-show="product.photo" />
+                 bo-show="product.photo" />
           </td>
           <td>
-            {{product.name}}
-            <p><small class="">{{product.description}}</small></p>
+            <span bo-bind="product.name"></span>
+            <p><small bo-bind="product.description"></small></p>
           </td>
           <td>
-            {{product.price}} {{product.currency}} <small>(за {{product.measure}})</small>
+            <span bo-text="product.price"></span> <span bo-text="product.currency"></span>
+            <small>(за <span bo-text="product.measure"></span>)</small>
           </td>
           <td>
             <div class="form-group" ng-class="{ 'has-error': optMarketplace.product_qty_{{$index}}.$invalid }">
@@ -69,7 +71,7 @@
           </td>
           <td>
             <span ng-show="product.price * formData.quantities[product.id]">
-              {{product.price * formData.quantities[product.id]|toFixed:2}} {{product.currency}}
+              {{product.price * formData.quantities[product.id]|toFixed:2}} <span bo-text="product.currency"></span>
             </span>
           </td>
           <td>

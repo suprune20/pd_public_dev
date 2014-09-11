@@ -34,7 +34,8 @@
     "oauth-js": "0.2.0",
     "angular-seo": "https://github.com/c0rrupt/angular-seo.git#55c68f4a97cb506be456ee7ed11462d4148bd7fb",
     "numeral": "1.5.3",
-    "angular-ui-router": "0.2.10"
+    "angular-ui-router": "0.2.10",
+    "angular-bindonce": "0.3.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.21",

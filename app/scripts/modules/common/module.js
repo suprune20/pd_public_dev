@@ -10,7 +10,8 @@ angular.module('pdCommon', [
     'angular-growl',
     'angularFileUpload',
     'checklist-model',
-    'ui.router'
+    'ui.router',
+    'pasvaz.bindonce'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
