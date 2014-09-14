@@ -37,6 +37,7 @@ module.exports = function(config) {
       'app/bower_components/angular-strap/dist/modules/datepicker.js',
       'app/bower_components/angular-strap/dist/modules/datepicker.tpl.js',
       'app/bower_components/oauth-js/dist/oauth.js',
+      'app/bower_components/angular-bindonce/bindonce.js',
       'app/scripts/modules/admin/module.js',
       'app/scripts/modules/frontend/module.js',
       'app/scripts/modules/loru/module.js',
