@@ -77,11 +77,17 @@ angular.module('pdLoru', [
 
       // PRICE
       'price': {
-        url: '/price/:supplierId',
+        url: '/price/:supplierId?category',
         resolve: {
           supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore($stateParams.supplierId);
+            return optMarketplace.getSupplierStore(
+              $stateParams.supplierId,
+              $stateParams.category ? {category: $stateParams.category.split(',')} : null
+            );
           }],
+          selectedCategoriesFilter: function ($stateParams) {
+            return $stateParams.category ? $stateParams.category.split(',') : [];
+          },
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
           }],
@@ -96,7 +102,8 @@ angular.module('pdLoru', [
           }]
         },
         controller: 'OptMarketplacePriceCtrl',
-        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html'
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html',
+        reloadOnSearch: false
       }
     };
 
