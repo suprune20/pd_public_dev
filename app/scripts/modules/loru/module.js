@@ -85,9 +85,9 @@ angular.module('pdLoru', [
               $stateParams.category ? {category: $stateParams.category.split(',')} : null
             );
           }],
-          selectedCategoriesFilter: function ($stateParams) {
+          selectedCategoriesFilter: ['$stateParams', function ($stateParams) {
             return $stateParams.category ? $stateParams.category.split(',') : [];
-          },
+          }],
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
           }],
