@@ -18,7 +18,8 @@
     </label>
   </div>
   <div class="clearfix visible-xs visible-sm"></div>
-  <div class="col-xs-12 col-md-9 col-lg-10">
+  <div class="col-xs-12 col-md-9 col-lg-10"
+       ng-init="limitProducts = 40" infinite-scroll='limitProducts = limitProducts + 40' infinite-scroll-distance='2'>
     <table class="table table-striped">
       <thead>
       <tr>
@@ -36,14 +37,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="product in products">
-        <td>{{product.sku}}</td>
-        <td>{{product.name}}</td>
-        <td>{{product.type.name}}</td>
-        <td>{{product.measurementUnit}}</td>
-        <td>{{product.isDefault ? 'да' : 'нет'}}</td>
-        <td>{{product.retailPrice}}</td>
-        <td>{{product.tradePrice}}</td>
+      <tr ng-repeat="product in products|limitTo:limitProducts" bindonce>
+        <td bo-text="product.sku"></td>
+        <td bo-text="product.name"></td>
+        <td bo-text="product.type.name"></td>
+        <td bo-text="product.measurementUnit"></td>
+        <td bo-bind="product.isDefault ? 'да' : 'нет'"></td>
+        <td bo-text="product.retailPrice"></td>
+        <td bo-text="product.tradePrice"></td>
         <td>
           <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog"
                  ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
@@ -53,7 +54,7 @@
                  ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
         </td>
         <td>
-          <img ng-src="{{product.imageUrl|pdThumbnail:'200x200'}}" ng-show="product.imageUrl"
+          <img bo-src="product.imageUrl|pdThumbnail:'200x200'" bo-show="product.imageUrl"
                class="img-thumbnail thumbnail-50 scale-image scale-image-6"/>
         </td>
         <td>
