@@ -2,7 +2,7 @@
 
 angular.module('pdLoru')
   .controller('OptMarketplacePriceCtrl', function ($scope, supplierStore, supplierDetails, cart, categories, $modal,
-                                                   growl) {
+                                                   growl, selectedCategoriesFilter, $location) {
     $scope.supplierStore = supplierStore;
     $scope.supplier = supplierDetails;
     $scope.categories = categories;
@@ -29,8 +29,22 @@ angular.module('pdLoru')
 
     // Store filters
     $scope.filters = {
-      category: []
+      // Restore categories filter from query params
+      category: _.map(categories, function (category) {
+        return _.contains(selectedCategoriesFilter, category.id.toString()) ? category.id.toString() : null;
+      })
     };
+    // Change query params in browser address line
+    $scope.$watch(function () {
+      return $scope.filters.category;
+    }, function (categories) {
+      if (!categories.length) {
+        return;
+      }
+
+      $location.search({category: _.filter(categories)});
+    }, true);
+
     $scope.applyFilter = function () {
       var filters = _.cloneDeep($scope.filters);
       // clean categories filter

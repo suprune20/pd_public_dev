@@ -9,7 +9,7 @@ angular.module('pdLoru')
       accepted: 'Принят'
     };
 
-    var SupplierStore = function (supplierId) {
+    var SupplierStore = function (supplierId, filters) {
       var _storeData;
 
       var loadStoreData = function (filters) {
@@ -23,7 +23,7 @@ angular.module('pdLoru')
           .then(function (storeData) { _storeData = storeData; });
       };
 
-      return loadStoreData().then(function () {
+      return loadStoreData(filters).then(function () {
         return {
           getStoreProducts: function () {
             return _storeData;
@@ -34,8 +34,8 @@ angular.module('pdLoru')
     };
 
     return {
-      getSupplierStore: function (supplierId) {
-        return new SupplierStore(supplierId);
+      getSupplierStore: function (supplierId, filters) {
+        return new SupplierStore(supplierId, filters);
       },
       getSupplier: function (supplierId) {
         return optMarketPlaceApi.getSupplier(supplierId);

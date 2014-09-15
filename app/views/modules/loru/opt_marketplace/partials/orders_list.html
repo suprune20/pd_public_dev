@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="product in supplierStore.getStoreProducts()|limitTo:limitProducts|filter:searchPredicate track by product.id"
+        <tr ng-repeat="product in supplierStore.getStoreProducts()|filter:searchPredicate|limitTo:limitProducts track by product.id"
             ng-show="formData.showAll || formData.quantities[product.id]" bindonce>
           <td bo-bind="product.sku"></td>
           <td>
