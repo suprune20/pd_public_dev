@@ -57,13 +57,11 @@ angular.module('pdLoru')
       productNameQuery: ''
     };
     $scope.search = function (product) {
-      // search only if entered > 2 symbols
-      //if ($scope.searchData.productNameQuery.length < 3) {
-      //  return true;
-      //}
+      var searchQuery = $scope.searchData.productNameQuery.toLowerCase();
 
-      return angular.lowercase(product.name).indexOf($scope.searchData.productNameQuery) !== -1 ||
-        angular.lowercase(product.description).indexOf($scope.searchData.productNameQuery) !== -1;
+      return _.contains(product.name.toLowerCase(), searchQuery) ||
+        _.contains(product.description.toLowerCase(), searchQuery) ||
+        _.contains(product.sku.toLowerCase(), searchQuery);
     };
   })
 ;
