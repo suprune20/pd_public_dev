@@ -73,37 +73,6 @@ angular.module('pdLoru', [
         controller: 'LoruProductEditCtrl',
         templateUrl: 'views/modules/loru/products/edit.html',
         title: 'Редактирование товара/услуги'
-      },
-
-      // PRICE
-      'price': {
-        url: '/price/:supplierId?category',
-        resolve: {
-          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplierStore(
-              $stateParams.supplierId,
-              $stateParams.category ? {category: $stateParams.category.split(',')} : null
-            );
-          }],
-          selectedCategoriesFilter: ['$stateParams', function ($stateParams) {
-            return $stateParams.category ? $stateParams.category.split(',') : [];
-          }],
-          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
-            return new OptMarketplaceCart();
-          }],
-          categories: ['pdFrontendCatalogApi', '$stateParams', function (pdFrontendCatalogApi, $stateParams) {
-            return pdFrontendCatalogApi.getCategories({
-              supplier: $stateParams.supplierId,
-              onlyOpt: true
-            });
-          }],
-          supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
-            return optMarketplace.getSupplier($stateParams.supplierId);
-          }]
-        },
-        controller: 'OptMarketplacePriceCtrl',
-        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html',
-        reloadOnSearch: false
       }
     };
 
@@ -161,6 +130,38 @@ angular.module('pdLoru', [
         }
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
     ;
+
+    // PRICE
+    authRouteProvider
+      .state('price', {
+        url: '/price/:supplierId?category',
+        resolve: {
+          supplierStore: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplierStore(
+              $stateParams.supplierId,
+              $stateParams.category ? {category: $stateParams.category.split(',')} : null
+            );
+          }],
+          selectedCategoriesFilter: ['$stateParams', function ($stateParams) {
+            return $stateParams.category ? $stateParams.category.split(',') : [];
+          }],
+          cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
+            return new OptMarketplaceCart();
+          }],
+          categories: ['pdFrontendCatalogApi', '$stateParams', function (pdFrontendCatalogApi, $stateParams) {
+            return pdFrontendCatalogApi.getCategories({
+              supplier: $stateParams.supplierId,
+              onlyOpt: true
+            });
+          }],
+          supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
+            return optMarketplace.getSupplier($stateParams.supplierId);
+          }]
+        },
+        controller: 'OptMarketplacePriceCtrl',
+        templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html',
+        reloadOnSearch: false
+      });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
