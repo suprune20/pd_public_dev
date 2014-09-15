@@ -51,5 +51,19 @@ angular.module('pdLoru')
       filters.category = _.filter(filters.category);
       supplierStore.loadStoreData(filters);
     };
+
+    // Search products callback
+    $scope.searchData = {
+      productNameQuery: ''
+    };
+    $scope.search = function (product) {
+      // search only if entered > 2 symbols
+      //if ($scope.searchData.productNameQuery.length < 3) {
+      //  return true;
+      //}
+
+      return angular.lowercase(product.name).indexOf($scope.searchData.productNameQuery) !== -1 ||
+        angular.lowercase(product.description).indexOf($scope.searchData.productNameQuery) !== -1;
+    };
   })
 ;

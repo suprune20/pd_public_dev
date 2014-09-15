@@ -17,9 +17,9 @@
             <form class="form-inline col-xs-6" role="form">
               <div class="form-group has-feedback">
                 <label class="control-label" for="search">Поиск</label>
-                <input type="text" class="form-control" ng-model="searchPredicate" id="search">
-                <span class="glyphicon glyphicon-remove form-control-feedback pointer-cursor" ng-show="searchPredicate"
-                      ng-click="searchPredicate = ''"></span>
+                <input type="text" class="form-control" ng-model="searchData.productNameQuery" id="search">
+                <span class="glyphicon glyphicon-remove form-control-feedback pointer-cursor"
+                      ng-show="searchData.productNameQuery" ng-click="searchData.productNameQuery = ''"></span>
               </div>
             </form>
 
@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="product in supplierStore.getStoreProducts()|filter:searchPredicate|limitTo:limitProducts track by product.id"
+        <tr ng-repeat="product in supplierStore.getStoreProducts()|filter:search|limitTo:limitProducts track by product.id"
             ng-show="formData.showAll || formData.quantities[product.id]" bindonce>
           <td bo-bind="product.sku"></td>
           <td>
