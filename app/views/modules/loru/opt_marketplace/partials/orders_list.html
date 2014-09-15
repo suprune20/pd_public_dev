@@ -17,7 +17,8 @@
             <form class="form-inline col-xs-6" role="form">
               <div class="form-group has-feedback">
                 <label class="control-label" for="search">Поиск</label>
-                <input type="text" class="form-control" ng-model="searchData.productNameQuery" id="search">
+                <input type="text" class="form-control" ng-model="searchData.productNameQuery" id="search"
+                       ng-change="limitProducts = 40">
                 <span class="glyphicon glyphicon-remove form-control-feedback pointer-cursor"
                       ng-show="searchData.productNameQuery" ng-click="searchData.productNameQuery = ''"></span>
               </div>
