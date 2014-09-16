@@ -156,6 +156,9 @@ angular.module('pdLoru', [
           }],
           supplierDetails: ['optMarketplace', '$stateParams', function (optMarketplace, $stateParams) {
             return optMarketplace.getSupplier($stateParams.supplierId);
+          }],
+          suppliers: ['optMarketplace', function (optMarketplace) {
+            return optMarketplace.getSuppliers();
           }]
         },
         controller: 'OptMarketplacePriceCtrl',

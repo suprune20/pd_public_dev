@@ -4,6 +4,7 @@
 </div>
 
 <div class="modal-body" ng-init="comment = cart.getComment()">
+  <h5>Покупатель: <u>{{cart.getCustomer().name || loggedUserOrganisation.name}}</u></h5>
   <table class="table table-condensed">
     <thead>
     <tr>

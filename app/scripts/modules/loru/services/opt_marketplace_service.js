@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('optMarketplace', function (optMarketPlaceApi) {
+  .service('optMarketplace', function (optMarketPlaceApi, auth) {
     var statusesLabels = {
       posted: 'Размещен',
       confirmed: 'Подтвержден',
@@ -40,6 +40,14 @@ angular.module('pdLoru')
       getSupplier: function (supplierId) {
         return optMarketPlaceApi.getSupplier(supplierId);
       },
+      getSuppliers: function () {
+        // do not send request to server if not authenticated
+        if (!auth.isAuthenticated()) {
+          return [];
+        }
+
+        return optMarketPlaceApi.getSuppliers();
+      },
       getMyOrders: function () {
         return optMarketPlaceApi.getMyOrders();
       },
@@ -54,6 +62,7 @@ angular.module('pdLoru')
   .factory('OptMarketplaceCart', function (optMarketPlaceApi) {
     return function () {
       var productsInCart = {},
+        customer = {},
         comment;
       var getPreparedCartData = function () {
         return _.map(productsInCart, function (item) {
@@ -66,6 +75,7 @@ angular.module('pdLoru')
       var clearCart = function () {
         productsInCart = {};
         comment = '';
+        customer = {};
       };
 
       return {
@@ -100,8 +110,17 @@ angular.module('pdLoru')
         getComment: function () {
           return comment;
         },
+        setCustomer: function (customerModel) {
+          customer = customerModel;
+        },
+        getCustomer: function () {
+          return customer;
+        },
+        clearCustomer: function () {
+          customer = {};
+        },
         checkout: function () {
-          return optMarketPlaceApi.postOrder(getPreparedCartData(), comment).then(clearCart);
+          return optMarketPlaceApi.postOrder(getPreparedCartData(), comment, customer).then(clearCart);
         },
         saveOrderChanges: function (orderId) {
           return optMarketPlaceApi.saveOrder(orderId, getPreparedCartData(), comment).then(clearCart);
@@ -111,6 +130,9 @@ angular.module('pdLoru')
             this.addProduct(_.find(productsCollection, {id: cartItem.id}), cartItem.count);
           }, this);
           this.setComment(cartData.comment);
+
+          cartData.customer.name = cartData.customer.shortName;
+          this.setCustomer(cartData.customer);
         }
       };
     };
