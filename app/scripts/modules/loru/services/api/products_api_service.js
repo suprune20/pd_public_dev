@@ -10,6 +10,9 @@ angular.module('pdLoru')
       // Clear model before sending
       delete productModel.id;
       delete productModel.image;
+      // Default values for prices attributes
+      productModel.retailPrice = productModel.retailPrice || 0;
+      productModel.tradePrice = productModel.tradePrice || 0;
       // Prepare upload data
       var uploadData = _.merge(config || {}, {
         url: url,
@@ -47,6 +50,8 @@ angular.module('pdLoru')
             var productModel = response.data;
             productModel.image = productModel.imageUrl;
             delete productModel.imageUrl;
+            productModel.retailPrice = parseFloat(productModel.retailPrice) || '';
+            productModel.tradePrice = parseFloat(productModel.retailPrice) || '';
 
             return productModel;
           });
