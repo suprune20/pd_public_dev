@@ -11,11 +11,13 @@ angular.module('pdLoru')
 
     $scope.formData = {
       showAll: false,
-      quantities: {}
+      quantities: {},
+      comment: {}
     };
     // restore quantity of products
     _.each(pageData.order.products, function (orderItem) {
       $scope.formData.quantities[orderItem.id] = orderItem.count;
+      $scope.formData.comment[orderItem.id] = orderItem.comment;
     });
     // restore cart state from exists
     cart.restoreData(pageData.order, pageData.supplierStore.getStoreProducts());
@@ -33,6 +35,7 @@ angular.module('pdLoru')
         }
       }).result.then(function () {
           growl.addSuccessMessage('Изменения в Вашем заказе были успешно сохранены');
+          $scope.$state.go('orders');
         });
     };
 

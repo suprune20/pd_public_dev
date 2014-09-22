@@ -13,7 +13,7 @@
       <table class="table table-striped table-opt-marketplace-products">
         <thead>
         <tr pb-sticky-block>
-          <th colspan="5" class="text-right">
+          <th ng-attr-colspan="{{ cart.getCount() ? 7 : 5 }}" class="text-right">
             <form class="form-inline col-xs-6" role="form">
               <div class="form-group has-feedback">
                 <label class="control-label" for="search">Поиск</label>
@@ -43,7 +43,8 @@
           <th>Цена</th>
           <th>Количество в корзине</th>
           <th>Стоимость</th>
-          <th></th>
+          <th ng-show="cart.getCount()">Комментарий</th>
+          <th ng-show="cart.getCount()"></th>
         </tr>
         </thead>
         <tbody>
@@ -64,7 +65,7 @@
             <small>(за <span bo-text="product.measure"></span>)</small>
           </td>
           <td>
-            <div class="form-group" ng-class="{ 'has-error': optMarketplace.product_qty_{{$index}}.$invalid }">
+            <div class="form-group" ng-class="{'has-error': optMarketplace.product_qty_{{$index}}.$invalid}">
               <input id="product_qty_{{$index}}" ng-model="formData.quantities[product.id]" type="text" class="form-control"
                      name="product_qty_{{$index}}" ng-change="cart.addProduct(product, formData.quantities[product.id])"
                      ng-pattern="/^\d+$/">
@@ -75,7 +76,15 @@
               {{product.price * formData.quantities[product.id]|toFixed:2}} <span bo-text="product.currency"></span>
             </span>
           </td>
-          <td>
+          <td ng-show="cart.getCount()">
+            <div class="form-group" ng-show="formData.quantities[product.id]"
+                 ng-class="{'has-error': optMarketplace.product_comment_{{ $index }}.$invalid}">
+              <input ng-model="formData.comment[product.id]" name="product_comment_{{ $index }}"
+                     placeholder="Комментарий" class="form-control"
+                     ng-change="cart.setProductComment(product.id, formData.comment[product.id])">
+            </div>
+          </td>
+          <td ng-show="cart.getCount()">
             <button class="btn btn-danger btn-xs" ng-show="formData.quantities[product.id]"
                     ng-click="formData.quantities[product.id] = ''; cart.removeProduct(product)">
               Удалить

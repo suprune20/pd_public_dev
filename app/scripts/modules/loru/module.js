@@ -95,7 +95,8 @@ angular.module('pdLoru', [
           ordersCollection: ['optMarketplace', function (optMarketplace) {
             return optMarketplace.getMyOrders();
           }]
-        }
+        },
+        setFluidContainer: true
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
       .state('order', {
         url: '/order/:orderId',
@@ -127,7 +128,8 @@ angular.module('pdLoru', [
           cart: ['OptMarketplaceCart', function (OptMarketplaceCart) {
             return new OptMarketplaceCart();
           }]
-        }
+        },
+        setFluidContainer: true
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
     ;
 
@@ -163,7 +165,8 @@ angular.module('pdLoru', [
         },
         controller: 'OptMarketplacePriceCtrl',
         templateUrl: 'views/modules/loru/opt_marketplace/supplier_store.html',
-        reloadOnSearch: false
+        reloadOnSearch: false,
+        setFluidContainer: true
       });
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
