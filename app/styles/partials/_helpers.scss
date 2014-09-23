@@ -12,6 +12,17 @@
     padding-#{$paddingPosition}: 0;
   }
 }
+.margin-right-15 {
+  margin-right: 15px;
+}
+.margin-top-bottom-5 {
+  margin: 5px 0;
+}
+
+// widths
+.width-250 {
+  width: 250px!important;
+}
 
 .reset-padding {
   padding: 0;

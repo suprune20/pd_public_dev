@@ -14,10 +14,17 @@ angular.module('pdLoru')
             return response.data;
           });
       },
-      postOrder: function (productsData, commentText) {
+      getSuppliers: function () {
+        return $http.get(pdConfig.apiEndpoint + 'optplaces/suppliers')
+          .then(function (response) {
+            return response.data;
+          });
+      },
+      postOrder: function (productsData, commentText, customer) {
         return $http.post(pdConfig.apiEndpoint + 'optplaces/orders', {
           products: productsData,
-          comment: commentText
+          comment: commentText,
+          customer: customer
         });
       },
       saveOrder: function (orderId, productsData, commentText) {

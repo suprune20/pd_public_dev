@@ -95,17 +95,20 @@
 
     <div ng-repeat="phoneItem in authProvider.getSignupModel().phones" class="margin-bottom-15 has-feedback"
          ng-class="{
-                'input-group': authProvider.getSignupModel().phones.length > 1,
                 'has-error': orgSignupForm.phones_{{$index}}.$invalid,
                 'has-success': orgSignupForm.phones_{{$index}}.$valid
              }">
-      <input class="form-control" ng-model="phoneItem.phone" required name="phones_{{$index}}">
-      <span class="input-group-btn" ng-hide="1 === authProvider.getSignupModel().phones.length">
-        <button class="btn btn-default" type="button"
-                ng-click="authProvider.getSignupModel().phones.splice($index, 1)">
-          <i class="glyphicon glyphicon-remove"></i>
-        </button>
-      </span>
+      <div ng-class="{'input-group': authProvider.getSignupModel().phones.length > 1}">
+        <input class="form-control" ng-model="phoneItem.phone" required name="phones_{{$index}}"
+               ng-pattern="/^\+?\d{5,}$/">
+        <span class="input-group-btn" ng-hide="1 === authProvider.getSignupModel().phones.length">
+          <button class="btn btn-default" type="button"
+                  ng-click="authProvider.getSignupModel().phones.splice($index, 1)">
+            <i class="glyphicon glyphicon-remove"></i>
+          </button>
+        </span>
+      </div>
+      <span class="help-block">Пример: +71234567890</span>
     </div>
 
     <div class="text-right">

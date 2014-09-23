@@ -2,9 +2,11 @@
 
 angular.module('pdLoru')
   .controller('OptMarketplacePriceCtrl', function ($scope, supplierStore, supplierDetails, cart, categories, $modal,
-                                                   growl, selectedCategoriesFilter, $location) {
+                                                   growl, selectedCategoriesFilter, $location, auth, suppliers) {
+    $scope.loggedUserOrganisation = auth.getUserOrganisation();
     $scope.supplierStore = supplierStore;
     $scope.supplier = supplierDetails;
+    $scope.suppliersCollection = suppliers;
     $scope.categories = categories;
     $scope.cart = cart;
     $scope.formData = {
@@ -16,6 +18,7 @@ angular.module('pdLoru')
         templateUrl: 'views/modules/loru/opt_marketplace/checkout_cart.modal.html',
         controller: function ($scope, $modalInstance) {
           $scope.cart = cart;
+          $scope.loggedUserOrganisation = auth.getUserOrganisation();
           $scope.checkout = function () {
             cart.checkout().then(function () { $modalInstance.close(); });
           };
@@ -50,6 +53,18 @@ angular.module('pdLoru')
       // clean categories filter
       filters.category = _.filter(filters.category);
       supplierStore.loadStoreData(filters);
+    };
+
+    // Search products callback
+    $scope.searchData = {
+      productNameQuery: ''
+    };
+    $scope.search = function (product) {
+      var searchQuery = $scope.searchData.productNameQuery.toLowerCase();
+
+      return _.contains(product.name.toLowerCase(), searchQuery) ||
+        _.contains(product.description.toLowerCase(), searchQuery) ||
+        _.contains(product.sku.toLowerCase(), searchQuery);
     };
   })
 ;
