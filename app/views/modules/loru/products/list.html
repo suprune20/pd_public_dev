@@ -12,7 +12,7 @@
 <div class="row">
   <div class="col-xs-12 col-md-3 col-lg-2">
     <label ng-repeat="category in categories" class="show">
-      <input type="checkbox" ng-model="filters.category[$index]" ng-true-value="{{category.id}}"
+      <input type="checkbox" ng-model="filters.selectedCategories[$index]" ng-true-value="{{category.id}}"
              ng-change="applyFilter()">
       {{category.name}}
     </label>
@@ -43,15 +43,19 @@
         <td bo-text="product.type.name"></td>
         <td bo-text="product.measurementUnit"></td>
         <td bo-bind="product.isDefault ? 'да' : 'нет'"></td>
-        <td bo-text="product.retailPrice"></td>
-        <td bo-text="product.tradePrice"></td>
+        <td bo-text="product.retailPrice|default:'-'"></td>
+        <td bo-text="product.tradePrice|default:'-'"></td>
         <td>
           <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog"
-                 ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
+                 ng-disabled="disabledVisibilityControls || !product.retailPrice"
+                 ng-change="updateProductVisibility(product)"
+                 ng-attr-title="{{ !product.retailPrice ? 'Для публикации необходимо указать цену' : '' }}" />
         </td>
         <td>
           <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog"
-                 ng-disabled="disabledVisibilityControls" ng-change="updateProductVisibility(product)" />
+                 ng-disabled="disabledVisibilityControls || !product.tradePrice"
+                 ng-change="updateProductVisibility(product)"
+                 ng-attr-title="{{ !product.tradePrice ? 'Для публикации необходимо указать цену' : '' }}" />
         </td>
         <td>
           <img bo-src="product.imageUrl|pdThumbnail:'200x200'" bo-show="product.imageUrl"

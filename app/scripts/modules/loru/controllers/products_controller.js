@@ -1,18 +1,15 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('LoruProductsListCtrl', function ($scope, products, categories, loruProducts) {
-    $scope.products = products;
+  .controller('LoruProductsListCtrl', function ($scope, categories, loruProducts) {
     $scope.categories = categories;
-    $scope.filters = {
-      category: []
-    };
     $scope.applyFilter = function () {
       var filters = _.cloneDeep($scope.filters);
       // clean categories filter
-      filters.category = _.filter(filters.category);
+      filters.category = _.filter(filters.selectedCategories);
       loruProducts.getProducts(filters).then(function (products) { $scope.products = products; });
     };
+    $scope.applyFilter();
     $scope.updateProductVisibility = function (product) {
       var updateModel = _.transform(product, function (result, value, key) {
         if (_.contains(['id', 'isShownInRetailCatalog', 'isShownInTradeCatalog'], key)) {

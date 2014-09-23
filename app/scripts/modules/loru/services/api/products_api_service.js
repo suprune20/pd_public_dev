@@ -42,7 +42,14 @@ angular.module('pdLoru')
         });
 
         return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products', {params: params})
-          .then(function (response) { return response.data; });
+          .then(function (response) {
+            return _.map(response.data, function (product) {
+              product.retailPrice = parseFloat(product.retailPrice) || null;
+              product.tradePrice = parseFloat(product.tradePrice) || null;
+
+              return product;
+            });
+          });
       },
       getProduct: function (productId) {
         return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products/' + productId)
@@ -51,7 +58,7 @@ angular.module('pdLoru')
             productModel.image = productModel.imageUrl;
             delete productModel.imageUrl;
             productModel.retailPrice = parseFloat(productModel.retailPrice) || '';
-            productModel.tradePrice = parseFloat(productModel.retailPrice) || '';
+            productModel.tradePrice = parseFloat(productModel.tradePrice) || '';
 
             return productModel;
           });

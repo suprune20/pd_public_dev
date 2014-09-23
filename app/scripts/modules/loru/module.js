@@ -28,12 +28,16 @@ angular.module('pdLoru', [
       'loru.products': {
         url: '/products',
         abstract: true,
-        template: '<ui-view/>'
+        template: '<ui-view/>',
+        controller: ['$scope', function ($scope) {
+          $scope.filters = {
+            selectedCategories: {}
+          };
+        }]
       },
       'loru.products.list': {
         url: '',
         resolve: {
-          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }],
           categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
             return pdFrontendCatalogApi.getCategories();
           }]
