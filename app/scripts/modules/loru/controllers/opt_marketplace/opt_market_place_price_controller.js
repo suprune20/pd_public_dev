@@ -11,7 +11,8 @@ angular.module('pdLoru')
     $scope.cart = cart;
     $scope.formData = {
       showAll: true,
-      quantities: {}
+      quantities: {},
+      comment: {}
     };
     $scope.checkout = function () {
       $modal.open({
