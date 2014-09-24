@@ -10,9 +10,14 @@ angular.module('pdLoru')
       // Clear model before sending
       delete productModel.id;
       delete productModel.image;
-      // Default values for prices attributes
-      productModel.retailPrice = productModel.retailPrice || 0;
-      productModel.tradePrice = productModel.tradePrice || 0;
+      // Default values for prices attributes if has been set
+      if (_.has(productModel, 'retailPrice')) {
+        productModel.retailPrice = productModel.retailPrice || 0;
+      }
+      if (_.has(productModel, 'tradePrice')) {
+        productModel.tradePrice = productModel.tradePrice || 0;
+      }
+
       // Prepare upload data
       var uploadData = _.merge(config || {}, {
         url: url,
