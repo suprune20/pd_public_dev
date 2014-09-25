@@ -43,18 +43,28 @@
         <td bo-text="product.type.name"></td>
         <td bo-text="product.measurementUnit"></td>
         <td bo-bind="product.isDefault ? 'да' : 'нет'"></td>
-        <td bo-text="product.retailPrice|default:'-'"></td>
-        <td bo-text="product.tradePrice|default:'-'"></td>
+        <td>
+          <a href="#" editable-number="product.retailPrice" e-min="0.01" e-step="0.01"
+             onaftersave="updateProduct(product)">
+            {{ product.retailPrice || '-' }}
+          </a>
+        </td>
+        <td>
+          <a href="#" editable-number="product.tradePrice" e-min="0.01" e-step="0.01"
+             onaftersave="updateProduct(product)">
+            {{ product.tradePrice || '-' }}
+          </a>
+        </td>
         <td>
           <input type="checkbox" name="isShownInRetailCatalog" ng-model="product.isShownInRetailCatalog"
                  ng-disabled="disabledVisibilityControls || !product.retailPrice"
-                 ng-change="updateProductVisibility(product)"
+                 ng-change="updateProduct(product)"
                  ng-attr-title="{{ !product.retailPrice ? 'Для публикации необходимо указать цену' : '' }}" />
         </td>
         <td>
           <input type="checkbox" name="isShownInTradeCatalog" ng-model="product.isShownInTradeCatalog"
                  ng-disabled="disabledVisibilityControls || !product.tradePrice"
-                 ng-change="updateProductVisibility(product)"
+                 ng-change="updateProduct(product)"
                  ng-attr-title="{{ !product.tradePrice ? 'Для публикации необходимо указать цену' : '' }}" />
         </td>
         <td>
