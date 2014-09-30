@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('CatalogRefactored', function ($q, user, pdYandex, pdFrontendCatalogApi) {
+  .factory('CatalogRefactored', function ($q, user, pdYandex, pdFrontendCatalogApi, auth) {
     return function (productsCountPerRequest) {
       var SUPPLIER_YA_MARKER_CHECKED_PRESET = 'twirl#greyDotIcon',
         SUPPLIER_YA_MARKER_UNCHECKED_PRESET = 'twirl#greyIcon';
@@ -63,7 +63,13 @@ angular.module('pdFrontend')
         getFilters: pdFrontendCatalogApi.getFilters,
         getCategories: pdFrontendCatalogApi.getCategories,
         getProduct: pdFrontendCatalogApi.getProduct,
-        getSupplier: pdFrontendCatalogApi.getSupplier,
+        getSupplier: function (supplierId) {
+          return pdFrontendCatalogApi.getSupplier(supplierId)
+            .then(function (supplierData) {
+              supplierData.isOwner = supplierData.id === auth.getUserOrganisation().id;
+              return supplierData;
+            });
+        },
         productsDataProvider: productsDataProvider,
         getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
           return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])

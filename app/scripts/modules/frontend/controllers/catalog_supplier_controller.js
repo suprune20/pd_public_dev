@@ -10,7 +10,7 @@ angular.module('pdFrontend')
           return $scope.catalog.getSupplier($state.params.supplierId);
         }
       },
-      controller: function ($scope, supplierData) {
+      controller: function ($scope, supplierData, pdLoruSupplier) {
         // set product name into page title
         $scope.seo
           .setTitle(supplierData.name)
@@ -28,6 +28,16 @@ angular.module('pdFrontend')
             }
           };
         });
+
+        // Favorites management
+        $scope.addToFavorite = function (supplierId) {
+          pdLoruSupplier.addSupplierToFavorite(supplierId)
+            .then(function () { $scope.supplierData.isFavorite = true; });
+        };
+        $scope.removeFromFavorites = function (supplierId) {
+          pdLoruSupplier.removeSupplierFromFavorites(supplierId)
+            .then(function () { $scope.supplierData.isFavorite = false; });
+        };
       }
     }).result.catch(function (rejection) {
         if (rejection && 404 === rejection.status) {

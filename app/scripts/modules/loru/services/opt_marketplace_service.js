@@ -38,7 +38,12 @@ angular.module('pdLoru')
         return new SupplierStore(supplierId, filters);
       },
       getSupplier: function (supplierId) {
-        return optMarketPlaceApi.getSupplier(supplierId);
+        return optMarketPlaceApi.getSupplier(supplierId)
+          .then(function (supplierData) {
+            supplierData.isOwner = supplierData.id === auth.getUserOrganisation().id;
+
+            return supplierData;
+          });
       },
       getSuppliers: function () {
         // do not send request to server if not authenticated
