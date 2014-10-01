@@ -32,11 +32,17 @@ angular.module('pdFrontend')
         // Favorites management
         $scope.addToFavorite = function (supplierId) {
           pdLoruSupplier.addSupplierToFavorite(supplierId)
-            .then(function () { $scope.supplierData.isFavorite = true; });
+            .then(function () {
+              $scope.supplierData.isFavorite = true;
+              $scope.updateLoruFavoritesMenu();
+            });
         };
         $scope.removeFromFavorites = function (supplierId) {
           pdLoruSupplier.removeSupplierFromFavorites(supplierId)
-            .then(function () { $scope.supplierData.isFavorite = false; });
+            .then(function () {
+              $scope.supplierData.isFavorite = false;
+              $scope.updateLoruFavoritesMenu();
+            });
         };
       }
     }).result.catch(function (rejection) {

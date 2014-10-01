@@ -29,10 +29,17 @@
             &nbsp;<b class="caret"></b>
           </a>
           <ul class="dropdown-menu" ng-switch-when="dropdown">
-            <li active-link ng-repeat="subitem in item.items" ng-class="subitem.class">
+            <li active-link ng-repeat="subitem in item.items"
+                ng-class="{'{{ subitem.class }}': true, 'dropdown-submenu': subitem.items.length}">
               <a ng-href="{{subitem.link}}" ng-if="!('divider' === subitem.class || subitem.hide)">
                 {{subitem.title}}
               </a>
+
+              <ul class="dropdown-menu" ng-show="subitem.items.length">
+                <li ng-repeat="item in subitem.items">
+                  <a ng-href="{{item.link}}">{{item.title}}</a>
+                </li>
+              </ul>
             </li>
           </ul>
         </li>

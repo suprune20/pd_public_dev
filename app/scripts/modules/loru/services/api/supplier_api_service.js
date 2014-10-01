@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('pdLoruSupplierApi', function ($http, pdConfig, $q) {
+  .service('pdLoruSupplierApi', function ($http, pdConfig) {
     return {
       addFavoriteSupplier: function (supplierId) {
         return $http.post(pdConfig.apiEndpoint + 'loru/favorite_suppliers/' + supplierId);
@@ -11,9 +11,7 @@ angular.module('pdLoru')
       },
       getFavoriteSuppliers: function () {
         return $http.get(pdConfig.apiEndpoint + 'loru/favorite_suppliers')
-          .then(function (response) {
-            return response.data;
-          });
+          .then(function (response) { return response.data; });
       }
     };
   })

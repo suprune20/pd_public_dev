@@ -72,11 +72,17 @@ angular.module('pdLoru')
     // Favorites management
     $scope.addToFavorite = function (supplierId) {
       pdLoruSupplier.addSupplierToFavorite(supplierId)
-        .then(function () { $scope.supplier.isFavorite = true; });
+        .then(function () {
+          $scope.supplier.isFavorite = true;
+          $scope.updateLoruFavoritesMenu();
+        });
     };
     $scope.removeFromFavorites = function (supplierId) {
       pdLoruSupplier.removeSupplierFromFavorites(supplierId)
-        .then(function () { $scope.supplier.isFavorite = false; });
+        .then(function () {
+          $scope.supplier.isFavorite = false;
+          $scope.updateLoruFavoritesMenu();
+        });
     };
   })
 ;

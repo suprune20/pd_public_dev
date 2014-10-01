@@ -14,6 +14,9 @@ angular.module('pdLoru')
           .then(function () {
             growl.addSuccessMessage('Поставщик удален из избранных');
           });
+      },
+      getFavoritesSuppliers: function () {
+        return pdLoruSupplierApi.getFavoriteSuppliers();
       }
     };
   })
