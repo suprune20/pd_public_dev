@@ -230,8 +230,13 @@ angular.module('pdLoru', [
     loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
     loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
 
-    $rootScope.$on('$stateChangeSuccess', setupMenu);
-    $rootScope.$on('auth.signin_success', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', function () {
+      if (!auth.isCurrentHasLoruRole()) {
+        return;
+      }
+
+      $rootScope.updateLoruFavoritesMenu();
+    });
     // Show notification about learn "How add advert"
     $rootScope.$on('auth.signin_success', function () {
       if (!auth.isCurrentHasLoruRole()) {
