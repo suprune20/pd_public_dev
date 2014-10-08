@@ -46,6 +46,12 @@ angular.module('pdFrontend')
             isNoProducts = false;
             filtersData = {};
             _.forEach(_filtersData_, function (value, key) {
+              console.log(key, value);
+              if ('components_only' === key) {
+                key = 'productType';
+                value = value ? 'opt' : 'retail';
+              }
+
               filtersData['filter[' + key + ']'] = value;
             });
             _.forEach(_ordersData, function (value, orderAttr) {
