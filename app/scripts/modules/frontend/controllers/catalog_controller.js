@@ -70,7 +70,7 @@ angular.module('pdFrontend')
           .map(function (geoObject) {
             geoObject.options.visible = isShown ?
               geoObject.properties.pointData.hasComponents :
-              !geoObject.properties.pointData.hasComponents;
+              true;
             return geoObject;
           })
           .filter(function (geoObject) {

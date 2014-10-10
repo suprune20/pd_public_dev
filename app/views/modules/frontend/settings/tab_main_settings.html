@@ -1,84 +1,82 @@
-<div class="row">
-  <form name="settingsForm" role="form" ng-submit="save()" class="col-md-10 col-md-offset-1">
-    <ul class="list-unstyled alert alert-danger" ng-show="errorData">
-      <li ng-repeat="error in errorData.message">{{ error }}</li>
-    </ul>
+<form name="settingsForm" role="form" ng-submit="save()" class="col-md-10 col-md-offset-1">
+  <ul class="list-unstyled alert alert-danger" ng-show="errorData">
+    <li ng-repeat="error in errorData.message">{{ error }}</li>
+  </ul>
 
-    <div class="form-group">
-      <label class="control-label">ФИО</label>
-      <p class="form-control-static">
-        {{ settingsData.lastname }} {{ settingsData.firstname }} {{ settingsData.middlename }}
-      </p>
-    </div>
+  <div class="form-group">
+    <label class="control-label">ФИО</label>
+    <p class="form-control-static">
+      {{ settingsData.lastname }} {{ settingsData.firstname }} {{ settingsData.middlename }}
+    </p>
+  </div>
 
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid}">
-      <label for="mainPhone">Телефон для входа</label>
-      <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа (79019030523)"
-             name="mainPhone" ng-model="settingsData.mainPhone" required ng-pattern="/^\d{10,12}$/">
-    <span class="glyphicon glyphicon-remove form-control-feedback"
-          ng-show="settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid"></span>
-    </div>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid}">
+    <label for="mainPhone">Телефон для входа</label>
+    <input type="text" class="form-control" id="mainPhone" placeholder="Введите телефон для входа (79019030523)"
+           name="mainPhone" ng-model="settingsData.mainPhone" required ng-pattern="/^\d{10,12}$/">
+  <span class="glyphicon glyphicon-remove form-control-feedback"
+        ng-show="settingsForm.mainPhone.$dirty && settingsForm.mainPhone.$invalid"></span>
+  </div>
 
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': settingsForm.email.$dirty && settingsForm.email.$invalid}">
-      <label for="email">Email для уведомлений</label>
-      <input type="email" class="form-control" id="email" placeholder="my.email@site.com"
-             name="email" ng-model="settingsData.email" ng-pattern="EMAIL_REGEXP">
-    <span class="glyphicon glyphicon-remove form-control-feedback"
-          ng-show="settingsForm.email.$dirty && settingsForm.email.$invalid"></span>
-    </div>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.email.$dirty && settingsForm.email.$invalid}">
+    <label for="email">Email для уведомлений</label>
+    <input type="email" class="form-control" id="email" placeholder="my.email@site.com"
+           name="email" ng-model="settingsData.email" ng-pattern="EMAIL_REGEXP">
+  <span class="glyphicon glyphicon-remove form-control-feedback"
+        ng-show="settingsForm.email.$dirty && settingsForm.email.$invalid"></span>
+  </div>
 
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': settingsForm.$dirty && settingsForm.oldPassword.$invalid}">
-      <label for="mainPhone">Текущий пароль</label>
-      <input type="password" class="form-control" id="oldPassword" placeholder="Введите текущий пароль"
-             name="oldPassword" ng-model="settingsData.oldPassword" ng-required="settingsData.newPassword">
-    <span class="glyphicon glyphicon-remove form-control-feedback"
-          ng-show="settingsForm.$dirty && settingsForm.oldPassword.$invalid"></span>
-      <!-- Chrome autofill workaround: duplicate password field - hidden -->
-      <input type="password" name="oldPassword" class="hidden">
-    </div>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.oldPassword.$invalid}">
+    <label for="mainPhone">Текущий пароль</label>
+    <input type="password" class="form-control" id="oldPassword" placeholder="Введите текущий пароль"
+           name="oldPassword" ng-model="settingsData.oldPassword" ng-required="settingsData.newPassword">
+  <span class="glyphicon glyphicon-remove form-control-feedback"
+        ng-show="settingsForm.$dirty && settingsForm.oldPassword.$invalid"></span>
+    <!-- Chrome autofill workaround: duplicate password field - hidden -->
+    <input type="password" name="oldPassword" class="hidden">
+  </div>
 
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': settingsForm.$dirty && settingsForm.newPassword.$invalid}">
-      <label for="mainPhone">Новый пароль</label>
-      <input type="password" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
-             name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword"
-             ng-maxlength="50" ng-minlength="8" />
-    <span class="glyphicon glyphicon-remove form-control-feedback"
-          ng-show="settingsForm.$dirty && settingsForm.newPassword.$invalid"></span>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.newPassword.$invalid}">
+    <label for="mainPhone">Новый пароль</label>
+    <input type="password" class="form-control" id="newPassword" placeholder="Введите новый пароль для изменения"
+           name="newPassword" ng-model="settingsData.newPassword" ng-required="settingsData.oldPassword"
+           ng-maxlength="50" ng-minlength="8" />
+  <span class="glyphicon glyphicon-remove form-control-feedback"
+        ng-show="settingsForm.$dirty && settingsForm.newPassword.$invalid"></span>
 
-    <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.minlength">
-      Минимальная длина нового пароля 8 символов
-    </span>
-    <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.maxlength">
-      Максимальная длина нового пароля 50 символов
-    </span>
-    </div>
+  <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.minlength">
+    Минимальная длина нового пароля 8 символов
+  </span>
+  <span class="help-block" ng-show="settingsForm.newPassword.$invalid && settingsForm.newPassword.$error.maxlength">
+    Максимальная длина нового пароля 50 символов
+  </span>
+  </div>
 
-    <div class="form-group has-feedback"
-         ng-class="{'has-error': settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid}">
-      <label for="mainPhone">Повторите новый пароль</label>
-      <input type="password" class="form-control" id="repeatNewPassword" placeholder="Повторите новый пароль для изменения"
-             name="repeatNewPassword" password-repeat="newPassword" ng-model="settingsData.confirmPassword" />
-    <span class="glyphicon glyphicon-remove form-control-feedback"
-          ng-show="settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid"></span>
+  <div class="form-group has-feedback"
+       ng-class="{'has-error': settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid}">
+    <label for="mainPhone">Повторите новый пароль</label>
+    <input type="password" class="form-control" id="repeatNewPassword" placeholder="Повторите новый пароль для изменения"
+           name="repeatNewPassword" password-repeat="newPassword" ng-model="settingsData.confirmPassword" />
+  <span class="glyphicon glyphicon-remove form-control-feedback"
+        ng-show="settingsForm.$dirty && settingsForm.repeatNewPassword.$invalid"></span>
 
-    <span ng-show="settingsForm.repeatNewPassword.$invalid && settingsForm.repeatNewPassword.$error.passwordRepeat"
-          class="help-block">
-      Пароли не совпадают
-    </span>
-    </div>
+  <span ng-show="settingsForm.repeatNewPassword.$invalid && settingsForm.repeatNewPassword.$error.passwordRepeat"
+        class="help-block">
+    Пароли не совпадают
+  </span>
+  </div>
 
-    <!--<div class="form-group">-->
-    <!--<label>Фото</label>-->
-    <!--<pd-file-selector pd-allow-preview ng-model="settingsData.userPhoto"></pd-file-selector>-->
-    <!--</div>-->
+  <!--<div class="form-group">-->
+  <!--<label>Фото</label>-->
+  <!--<pd-file-selector pd-allow-preview ng-model="settingsData.userPhoto"></pd-file-selector>-->
+  <!--</div>-->
 
-    <div class="form-group">
-      <button type="submit" class="btn btn-default" ng-disabled="settingsForm.$invalid">Сохранить</button>
-      <button type="button" class="btn btn-danger" ng-click="removeAccount()">Удалить аккаунт</button>
-    </div>
-  </form>
-</div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="settingsForm.$invalid">Сохранить</button>
+    <button type="button" class="btn btn-danger" ng-click="removeAccount()">Удалить аккаунт</button>
+  </div>
+</form>

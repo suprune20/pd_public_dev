@@ -11,13 +11,15 @@ angular.module('pdCommon', [
     'angularFileUpload',
     'checklist-model',
     'ui.router',
-    'pasvaz.bindonce'
+    'pasvaz.bindonce',
+    'xeditable'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
   })
-  .run(function ($rootScope, promiseTracker) {
+  .run(function ($rootScope, promiseTracker, editableOptions) {
     $rootScope.commonLoadingTracker = promiseTracker('commonLoadingTracker');
+    editableOptions.theme = 'bs3';
   })
   .factory('httpErrorsInterceptor', function (pdConfig, $q, growl) {
     var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);

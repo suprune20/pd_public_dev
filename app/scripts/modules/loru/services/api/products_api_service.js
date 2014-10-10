@@ -10,9 +10,14 @@ angular.module('pdLoru')
       // Clear model before sending
       delete productModel.id;
       delete productModel.image;
-      // Default values for prices attributes
-      productModel.retailPrice = productModel.retailPrice || 0;
-      productModel.tradePrice = productModel.tradePrice || 0;
+      // Default values for prices attributes if has been set
+      if (_.has(productModel, 'retailPrice')) {
+        productModel.retailPrice = productModel.retailPrice || 0;
+      }
+      if (_.has(productModel, 'tradePrice')) {
+        productModel.tradePrice = productModel.tradePrice || 0;
+      }
+
       // Prepare upload data
       var uploadData = _.merge(config || {}, {
         url: url,
@@ -42,7 +47,14 @@ angular.module('pdLoru')
         });
 
         return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products', {params: params})
-          .then(function (response) { return response.data; });
+          .then(function (response) {
+            return _.map(response.data, function (product) {
+              product.retailPrice = parseFloat(product.retailPrice) || null;
+              product.tradePrice = parseFloat(product.tradePrice) || null;
+
+              return product;
+            });
+          });
       },
       getProduct: function (productId) {
         return $http.get(pdConfig.apiEndpoint + 'loru/products_management/products/' + productId)
@@ -51,7 +63,7 @@ angular.module('pdLoru')
             productModel.image = productModel.imageUrl;
             delete productModel.imageUrl;
             productModel.retailPrice = parseFloat(productModel.retailPrice) || '';
-            productModel.tradePrice = parseFloat(productModel.retailPrice) || '';
+            productModel.tradePrice = parseFloat(productModel.tradePrice) || '';
 
             return productModel;
           });

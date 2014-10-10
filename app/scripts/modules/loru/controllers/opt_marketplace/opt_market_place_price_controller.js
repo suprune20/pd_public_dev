@@ -2,7 +2,8 @@
 
 angular.module('pdLoru')
   .controller('OptMarketplacePriceCtrl', function ($scope, supplierStore, supplierDetails, cart, categories, $modal,
-                                                   growl, selectedCategoriesFilter, $location, auth, suppliers) {
+                                                   growl, selectedCategoriesFilter, $location, auth, suppliers,
+                                                   pdLoruSupplier) {
     $scope.loggedUserOrganisation = auth.getUserOrganisation();
     $scope.supplierStore = supplierStore;
     $scope.supplier = supplierDetails;
@@ -66,6 +67,22 @@ angular.module('pdLoru')
       return _.contains(product.name.toLowerCase(), searchQuery) ||
         _.contains(product.description.toLowerCase(), searchQuery) ||
         _.contains(product.sku.toLowerCase(), searchQuery);
+    };
+
+    // Favorites management
+    $scope.addToFavorite = function (supplierId) {
+      pdLoruSupplier.addSupplierToFavorite(supplierId)
+        .then(function () {
+          $scope.supplier.isFavorite = true;
+          $scope.updateLoruFavoritesMenu();
+        });
+    };
+    $scope.removeFromFavorites = function (supplierId) {
+      pdLoruSupplier.removeSupplierFromFavorites(supplierId)
+        .then(function () {
+          $scope.supplier.isFavorite = false;
+          $scope.updateLoruFavoritesMenu();
+        });
     };
   })
 ;

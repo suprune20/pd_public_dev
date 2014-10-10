@@ -28,12 +28,16 @@ angular.module('pdLoru', [
       'loru.products': {
         url: '/products',
         abstract: true,
-        template: '<ui-view/>'
+        template: '<ui-view/>',
+        controller: ['$scope', function ($scope) {
+          $scope.filters = {
+            selectedCategories: {}
+          };
+        }]
       },
       'loru.products.list': {
         url: '',
         resolve: {
-          products: ['loruProducts', function (loruProducts) { return loruProducts.getProducts(); }],
           categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
             return pdFrontendCatalogApi.getCategories();
           }]
@@ -169,11 +173,14 @@ angular.module('pdLoru', [
         setFluidContainer: true
       });
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl) {
+  .run(function ($rootScope, mainMenuManager, pdConfig, serverConfig, auth, growl, pdLoruSupplier) {
     var loruMenuConfig = mainMenuManager.addMenuConfig('loruMenu'),
-      setupMenu = function () {
-        var userOrgId = auth.getUserOrganisation().id;
+      setupMenu = function (favoriteSuppliers) {
+        if (!auth.isCurrentHasLoruRole()) {
+          return;
+        }
 
+        var userOrgId = auth.getUserOrganisation().id;
         loruMenuConfig.setRightMenuItems([
           {link: '#!/loru/advertisement', title: 'Реклама'},
           {link: '#!/', title: 'Каталог'},
@@ -192,7 +199,7 @@ angular.module('pdLoru', [
               {link: '/loru/products', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '#!/price/' + userOrgId, title: 'Оптовый заказ'},
+              {link: '/price/' + userOrgId, title: 'Оптовый заказ', items: favoriteSuppliers},
               {link: '#!/orders', title: 'Архив заказов'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
@@ -201,11 +208,35 @@ angular.module('pdLoru', [
         ]);
       };
 
+    $rootScope.updateLoruFavoritesMenu = function () {
+      pdLoruSupplier.getFavoritesSuppliers()
+        .then(function (suppliersCollection) {
+          var favoriteSuppliers = _.map(suppliersCollection, function (supplierData) {
+            return {
+              link: '/price/' + supplierData.id,
+              title: supplierData.name
+            };
+          });
+
+          if (favoriteSuppliers.length) {
+            setupMenu(favoriteSuppliers);
+          }
+        });
+    };
+    if (auth.isCurrentHasLoruRole()) {
+      $rootScope.updateLoruFavoritesMenu();
+    }
+
     loruMenuConfig.setMainMenuItems(pdConfig.menuConfigs.loruMenu.items);
     loruMenuConfig.setMenuClass(pdConfig.menuConfigs.loruMenu.navbarClasses);
 
-    $rootScope.$on('$stateChangeSuccess', setupMenu);
-    $rootScope.$on('auth.signin_success', setupMenu);
+    $rootScope.$on('$stateChangeSuccess', function () {
+      if (!auth.isCurrentHasLoruRole()) {
+        return;
+      }
+
+      $rootScope.updateLoruFavoritesMenu();
+    });
     // Show notification about learn "How add advert"
     $rootScope.$on('auth.signin_success', function () {
       if (!auth.isCurrentHasLoruRole()) {
@@ -218,6 +249,7 @@ angular.module('pdLoru', [
           tutorialLink + '">Как разместить рекламу"</a>',
         {enableHtml: true, ttl: 15000}
       );
+      $rootScope.updateLoruFavoritesMenu();
     });
   })
 ;
