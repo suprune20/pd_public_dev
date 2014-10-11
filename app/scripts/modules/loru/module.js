@@ -199,7 +199,7 @@ angular.module('pdLoru', [
               {link: '/loru/products', title: 'Товары и услуги'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '/price/' + userOrgId, title: 'Оптовый заказ', items: favoriteSuppliers},
+              {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers},
               {link: '#!/orders', title: 'Архив заказов'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
