@@ -47,7 +47,9 @@
           <a href="#" class="dropdown-toggle feedback-btn" data-toggle="dropdown"><b>?</b></a>
           <ul class="dropdown-menu">
             <li><a href="" ng-click="showFeedbackModal()">Задать вопрос</a></li>
-            <li><a ng-href="{{backendUrl}}tutorial">Курс видеообучения</a></li>
+            <li ng-show="auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()">
+              <a ng-href="{{backendUrl}}tutorial">Курс видеообучения</a>
+            </li>
           </ul>
         </li>
       </ul>
