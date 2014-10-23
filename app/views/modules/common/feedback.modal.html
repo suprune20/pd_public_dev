@@ -69,7 +69,7 @@
              name="phoneNumber"
              ng-required="feedbackData.requestBackCall"
              ng-pattern="/^\d{10,12}$/"
-             ng-disabled="security.isCurrentHasClientRole() || !feedbackData.requestBackCall" />
+             ng-disabled="!feedbackData.requestBackCall" />
       <span class="glyphicon glyphicon-remove form-control-feedback"
             ng-show="feedbackForm.phoneNumber.$dirty && feedbackForm.phoneNumber.$invalid"></span>
     </div>
