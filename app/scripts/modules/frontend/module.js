@@ -64,9 +64,9 @@ angular.module('pdFrontend', [
         menuConfig: 'cabinetMenu',
         pageClass: 'pd-frontend-settings-page',
         resolve: {
-          additionalSettingsData: function (settingsProvider) {
+          additionalSettingsData: ['settingsProvider', function (settingsProvider) {
             return settingsProvider;
-          }
+          }]
         }
       }, 'ROLE_CLIENT')
     ;
