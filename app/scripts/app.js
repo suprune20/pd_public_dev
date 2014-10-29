@@ -20,7 +20,7 @@ angular.module('pdApp', [
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
 
-    oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
+    oauthIOProvider.setPublicKey('B8Ej7nTrR93MzN5dSE7bz8k_iyE');
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 
     RavenProvider.development(ravenDevelopment);
