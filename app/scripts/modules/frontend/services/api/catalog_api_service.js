@@ -21,10 +21,11 @@ angular.module('pdFrontend')
             return resp.data.results;
           });
       },
-      getSuppliers: function (_categories) {
+      getSuppliers: function (_categories, isOpt) {
         return $http.get(pdConfig.apiEndpoint + 'catalog/suppliers', {
           params: {
-            categories: _categories
+            categories: _categories,
+            supplierType: isOpt ? 'opt' : 'retail'
           }
         }).then(function (resp) {
           return resp.data;
