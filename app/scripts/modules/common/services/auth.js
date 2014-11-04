@@ -3,7 +3,7 @@
 /* jshint -W069 */
 
 angular.module('pdCommon')
-  .service('auth', function ($http, pdConfig, authStorage, ipCookie, $q, $rootScope, oauthIO, $upload) {
+  .service('auth', function ($http, pdConfig, authStorage, ipCookie, $q, $rootScope, oauthIO, $upload, Raven) {
     var applySuccessSigninResponse = function (responseData) {
         if (_.has(responseData, 'token')) {
           authStorage.setApiAuthToken(responseData.token);
@@ -56,8 +56,10 @@ angular.module('pdCommon')
         }).then(function (response) {
           return applySuccessSigninResponse(response.data);
         }, function (response) {
-          var respData = response.data;
+          // ToDo: remove after catch weird error then signin in some clients
+          Raven.captureMessage('Signin server error', {extra: response});
 
+          var respData = response.data;
           if (respData.errorCode) {
             return $q.reject(respData);
           }
