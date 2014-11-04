@@ -76,8 +76,8 @@ angular.module('pdFrontend')
             });
         },
         productsDataProvider: productsDataProvider,
-        getYaMapPoints: function getYaMapPointsData(suppliersCategories) {
-          return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories)])
+        getYaMapPoints: function getYaMapPointsData(suppliersCategories, isOpt) {
+          return $q.all([pdFrontendCatalogApi.getSuppliers(suppliersCategories, isOpt)])
             .then(function (promiseData) {
               var points = [],
                 suppliersData = promiseData[0];

@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth) {
+  .controller('CatalogCtrl', function ($scope, $modal, $routeParams, $location, CatalogRefactored, auth, $timeout) {
     var suppliersInTheBounds = [],
       getSuppliersGeoobjects = function (yaMap) {
         return ymaps
@@ -82,6 +82,14 @@ angular.module('pdFrontend')
           .intersection(suppliersInTheBounds)
           .value()
         ;
+      },
+      getMapPoints = function (categories, isOpt) {
+        // Get yandex map markers data (user's places, suppliers locations, etc.)
+        return $scope.catalog.getYaMapPoints(categories || [], isOpt).then(function (mapPoints) {
+          $scope.isLoadedGeoObjects = true;
+          $scope.catalogGeoObjects = mapPoints.allPoints;
+          showHideOptProducts($scope.filters['components_only']);
+        });
       }
     ;
 
@@ -106,12 +114,6 @@ angular.module('pdFrontend')
       $scope.catalog.productsDataProvider.applyFilters($scope.filters);
     };
 
-    // Get yandex map markers data (user's places, suppliers locations, etc.)
-    $scope.catalog.getYaMapPoints().then(function (mapPoints) {
-      $scope.isLoadedGeoObjects = true;
-      $scope.catalogGeoObjects = mapPoints.allPoints;
-      showHideOptProducts($scope.filters['components_only']);
-    });
     // Filtered markers by yandex map
     $scope.yaMapBoundsChange = function (event) {
       var eventTarget = event.get('target'),
@@ -167,8 +169,10 @@ angular.module('pdFrontend')
     $scope.$watchCollection(function () {
       return $scope.filters['components_only'];
     }, function (showOpt) {
-      showHideOptProducts(showOpt);
-      $scope.applyFilters();
+      getMapPoints(null, showOpt)
+        .then(function () {
+          $timeout(suppliersFilterDependsCategories, 1000);
+        });
     });
 
     // Open product details modal window
