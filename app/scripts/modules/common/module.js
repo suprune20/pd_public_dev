@@ -12,7 +12,8 @@ angular.module('pdCommon', [
     'checklist-model',
     'ui.router',
     'pasvaz.bindonce',
-    'xeditable'
+    'xeditable',
+    'akoenig.deckgrid'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);

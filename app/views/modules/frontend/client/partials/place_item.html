@@ -1,0 +1,50 @@
+<div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}" ng-click="mother.selectPlace(card)">
+  <div class="panel-body">
+    <div pb-fancybox-gallery="{{ card.gallery }}">
+      <img ng-src="{{card.mainPhoto.photo}}"
+           pd-thumb
+           pd-thumb-size="350x150"
+           default-image="http://placehold.it/350x150"
+           class="img-thumbnail media-object" />
+      <p ng-if="card.mainPhoto" class="text-center">{{card.mainPhoto.addedAt|momentDate:'DD-MM-YYYY HH:mm'}}</p>
+    </div>
+
+    <div class="text-center">
+      <button type="button" class="btn btn-primary" ng-model="orderCurrentPhoto" btn-checkbox>
+        Заказать актуальную фотографию
+      </button>
+
+      <form name="orderPhotoForm" ng-show="orderCurrentPhoto">
+        <button>заказать</button>
+      </form>
+    </div>
+
+    <div class="list-group-item-text">
+      <ul class="list-inline graves-list" ng-if="card.graves.length">
+        <li ng-repeat="grave in card.graves" class="col-xs-12 grave-panel">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4 ng-if="!grave.burials.length">Зарезервировано</h4>
+
+              <ul class="media-list" ng-if="grave.burials.length">
+                <li class="media" ng-repeat="burial in grave.burials">
+                  <img class="media-object img-thumbnail pull-left"
+                       ng-src="{{burial.photo}}"
+                       pd-thumb
+                       pd-thumb-size="50x50"
+                       default-image="http://placehold.it/50x50" />
+                  <div class="media-body">
+                    <strong class="media-heading" ng-bind-html="burial.fio|space2br"></strong>
+                    <p>{{burial.birthDate|default:'?'}} - {{burial.deathDate|default:'?'}}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <h5>{{card.address}}</h5>
+    </div>
+  </div>
+</div>

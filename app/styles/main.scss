@@ -7,6 +7,7 @@ $grid-float-breakpoint: 1170px;
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
 @import "select2-bootstrap-css/lib/select2-bootstrap.scss";
 @import "partials/reset";
+@import "partials/panel";
 @import "partials/sticky_footer";
 @import "partials/animations";
 @import "partials/bootstrap-pd";
@@ -18,10 +19,12 @@ $grid-float-breakpoint: 1170px;
 @import "partials/form";
 @import "partials/images";
 @import "partials/stick_blocks";
+@import "partials/deckgrid";
 @import "layout";
 @import "catalog";
 @import "client-panel";
 @import "signin";
+
 
 // Directives styles
 @import "directives/ya_pd_autocomplete_search";

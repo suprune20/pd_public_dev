@@ -1,0 +1,49 @@
+[deckgrid] {
+  &::before {
+    font-size: 0;
+    visibility: hidden;
+  }
+
+  @media screen and (max-width: 480px) {
+    &::before {
+      content: '1 .column.size-1of1';
+    }
+  }
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    &::before {
+      content: '2 .column.size-1of2';
+    }
+  }
+  @media screen and (min-width: 769px) {
+    &::before {
+      content: '3 .column.size-1of3';
+    }
+  }
+
+  .column {
+    float: left;
+
+    &.size-1of1 {
+      width: 100%;
+    }
+    &.size-1of2 {
+      width: 49%;
+      margin-right: 2%;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &.size-1of3 {
+      width: 32%;
+      margin-right: 2%;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &.size-1of4 {
+      width: 25%;
+    }
+  }
+}
