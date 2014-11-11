@@ -18,6 +18,42 @@
     </label>
   </div>
   <div class="clearfix visible-xs visible-sm"></div>
+
+  <div class="col-xs-12 col-md-9 col-lg-10">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Активен</th>
+        <th>Стоимость</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="service in userServices" bindonce>
+        <td bo-text="service.title"></td>
+        <td bo-text="service.description"></td>
+        <td>
+          <input type="checkbox" ng-model="service.isActive" ng-disabled="serviceDisableTracker.active()"
+                 ng-change="service.isActive ? activateService(service) : deactivateService(service)">
+        </td>
+        <td>
+          <ul class="list-unstyled">
+            <li ng-repeat="measure in service.measures">
+              <span bo-text="measure.title"></span>
+              &nbsp;
+              <a href="#" editable-number="measure.price" e-min="0.01" e-step="0.01"
+                 onbeforesave="updateServiceMeasure(service.type, measure.name, $data)">
+                {{ measure.price || '-' }}
+              </a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
   <div class="col-xs-12 col-md-9 col-lg-10"
        ng-init="limitProducts = 40" infinite-scroll='limitProducts = limitProducts + 40' infinite-scroll-distance='2'>
     <table class="table table-striped">

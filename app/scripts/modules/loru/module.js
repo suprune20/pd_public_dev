@@ -40,6 +40,9 @@ angular.module('pdLoru', [
         resolve: {
           categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
             return pdFrontendCatalogApi.getCategories();
+          }],
+          userServices: ['loruServices', function (loruServices) {
+            return loruServices.getUserServices();
           }]
         },
         controller: 'LoruProductsListCtrl',
