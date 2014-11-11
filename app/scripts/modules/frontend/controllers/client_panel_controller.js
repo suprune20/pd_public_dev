@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, user) {
+  .controller('ClientPanelCtrl', function ($scope, user, pdFrontendOrders) {
     $scope.selectPlace = function (placeData) {
       if (placeData === $scope.selectedPlace) {
         return;
@@ -27,5 +27,19 @@ angular.module('pdFrontend')
         $scope.selectPlace(userData.places[0]);
       }
     });
+
+    $scope.availablePerformers = [];
+    $scope.availablePerformerLoading = [];
+    $scope.getPhotoPerformers = function (place) {
+      $scope.availablePerformerLoading[place.id] = true;
+      pdFrontendOrders.getAvailablePerformersForPhoto(place.id, place.location)
+        .then(function (performers) {
+          $scope.availablePerformers[place.id] = performers;
+        })
+        .finally(function () {
+          $scope.availablePerformerLoading[place.id] = false;
+        });
+    };
+    $scope.order = function () {alert('comming soon');};
   })
 ;

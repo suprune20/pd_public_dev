@@ -10,13 +10,19 @@
     </div>
 
     <div class="text-center">
-      <button type="button" class="btn btn-primary" ng-model="orderCurrentPhoto" btn-checkbox>
+      <button type="button" class="btn btn-primary" ng-model="orderCurrentPhoto" btn-checkbox
+              ng-change="mother.getPhotoPerformers(card)">
+        <span class="glyphicon glyphicon-refresh animated-rotate"
+              ng-if="mother.availablePerformerLoading[card.id]"></span>
         Заказать актуальную фотографию
       </button>
 
-      <form name="orderPhotoForm" ng-show="orderCurrentPhoto">
-        <button>заказать</button>
-      </form>
+      <ul class="list-unstyled text-left" ng-show="mother.availablePerformers[card.id].length">
+        <li ng-repeat="performer in mother.availablePerformers[card.id]|orderBy:'price'">
+          {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
+          <button class="btn btn-link" ng-click="mother.order()">заказать</button>
+        </li>
+      </ul>
     </div>
 
     <div class="list-group-item-text">
