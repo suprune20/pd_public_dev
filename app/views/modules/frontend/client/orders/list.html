@@ -1,0 +1,22 @@
+<h1>История заказов</h1>
+
+<div class="row">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Тип</th>
+      <th>Исполнитель</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="order in orders" bindonce>
+      <td bo-text="order.type"></td>
+      <td bo-text="order.performer.username"></td>
+      <td>
+        <a ui-sref="pdFrontendOrders.details({orderId: order.id})" class="btn btn-info btn-sm">Детали</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

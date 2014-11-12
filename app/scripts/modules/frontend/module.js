@@ -55,6 +55,32 @@ angular.module('pdFrontend', [
         secured: true,
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
+
+      .state('pdFrontendOrders', {
+        url: '/client/orders',
+        abstract: true,
+        template: '<ui-view/>',
+        secured: true,
+        menuConfig: 'cabinetMenu'
+      }, 'ROLE_CLIENT')
+        .state('pdFrontendOrders.list', {
+          url: '',
+          resolve: {
+            ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
+              return pdFrontendOrders.getOrdersList();
+            }]
+          },
+          controller: 'ClientOrdersListCtrl',
+          templateUrl: 'views/modules/frontend/client/orders/list.html',
+          title: 'История заказов'
+        }, 'ROLE_CLIENT')
+        .state('pdFrontendOrders.details', {
+          url: '/:orderId',
+          controller: 'ClientOrderDetailsCtrl',
+          templateUrl: 'views/modules/frontend/client/orders/details.html',
+          title: 'Информация о заказе'
+        }, 'ROLE_CLIENT')
+
       .state('settings', {
         url: '/settings',
         controller: 'PdFrontendSettingsCtrl',
@@ -80,6 +106,7 @@ angular.module('pdFrontend', [
             title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
+              {link: '#!/client/orders', title: 'История заказов'},
               {link: '#!/settings', title: 'Настройки'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
