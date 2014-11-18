@@ -12,21 +12,6 @@ angular.module('pdFrontend')
             'location[longitude]': location.longitude
           }
         }).then(function (response) {
-          return $timeout(function () {
-            return [
-              {
-                'id': 32,
-                'name': 'Бюро добрых услуг',
-                'price': 234.32
-              },
-              {
-                'id': 33,
-                'name': 'Бюро не добрых услуг',
-                'price': 255.66
-              }
-            ];
-          }, 1000);
-
           return response.data;
         });
       },
@@ -39,7 +24,7 @@ angular.module('pdFrontend')
       getOrders: function () {
         return $q.when([
           {
-            'id': 1,
+            'id': 12323,
             'type': 'place_photo',
             'location': {
               'latitude': 53.12312,
@@ -47,11 +32,11 @@ angular.module('pdFrontend')
             },
             'owner': {
               'id': 43,
-              'username': 'John Dow'
+              name: 'John Dow'
             },
             'performer': {
               'id': 45,
-              'username': 'Microsoft'
+              name: 'Microsoft'
             }
           }
         ]);
@@ -62,6 +47,18 @@ angular.module('pdFrontend')
           });
       },
       getOrder: function (orderId) {
+        return $q.when({
+          'id': 1,
+          'type': 'place_photo',
+          'placeId': 12,
+          'status': 'pending',
+          'data': [
+            {
+              'imageUrl': 'http://sample.com/image.jpg'
+            }
+          ]
+        });
+
         return $http.get(pdConfig.apiEndpoint + 'client/orders/' + orderId)
           .then(function (response) {
             return response.data;

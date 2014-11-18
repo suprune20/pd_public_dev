@@ -24,7 +24,9 @@
     <td>{{order.totalPrice}}</td>
     <td>{{order.status|orderStatusLabel}}</td>
     <td>{{order.comment}}</td>
-    <td><a ui-sref="order({orderId: order.id})" class="btn btn-info btn-sm">Редактировать</a></td>
+    <td>
+      <button ng-click="showOrderDetails(order)" class="btn btn-info btn-sm">Редактировать</button>
+    </td>
   </tr>
   </tbody>
 </table>

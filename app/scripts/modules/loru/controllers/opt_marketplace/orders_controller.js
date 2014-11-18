@@ -3,6 +3,9 @@
 angular.module('pdLoru')
   .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
+    $scope.showOrderDetails = function (order) {
+      $scope.$state.go(order.type === 'opt' ? 'order' : 'order_retail', {orderId: order.id});
+    };
   })
   .controller('OptMarketplaceOrderEditCtrl', function ($scope, pageData, cart, $modal, growl) {
     $scope.supplierStore = pageData.supplierStore;
@@ -50,5 +53,8 @@ angular.module('pdLoru')
       filters.category = _.filter(filters.category);
       pageData.supplierStore.loadStoreData(filters);
     };
+  })
+  .controller('OptMarketplaceOrderRetailDetailsCtrl', function ($scope, orderModel) {
+    $scope.order = orderModel;
   })
 ;

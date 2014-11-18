@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdLoru')
-  .service('optMarketplace', function (optMarketPlaceApi, auth) {
+  .service('optMarketplace', function (optMarketPlaceApi, pdFrontendOrders, auth, $q) {
     var statusesLabels = {
       posted: 'Размещен',
       confirmed: 'Подтвержден',
@@ -54,7 +54,20 @@ angular.module('pdLoru')
         return optMarketPlaceApi.getSuppliers();
       },
       getMyOrders: function () {
-        return optMarketPlaceApi.getMyOrders();
+        // get opt and retail orders
+        return $q.all([optMarketPlaceApi.getMyOrders(), pdFrontendOrders.getOrdersList()])
+          .then(function (results) {
+            return _.map(results[0], function (order) {
+              order.type = 'opt';
+              return order;
+            }).concat(_.map(results[1], function (order) {
+              order.type = 'client';
+              order.supplier = order.performer;
+              order.customer = order.owner;
+
+              return order;
+            }));
+          });
       },
       getOrder: function (id) {
         return optMarketPlaceApi.getOrder(id);

@@ -63,23 +63,28 @@ angular.module('pdFrontend', [
         secured: true,
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
-        .state('pdFrontendOrders.list', {
-          url: '',
-          resolve: {
-            ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
-              return pdFrontendOrders.getOrdersList();
-            }]
-          },
-          controller: 'ClientOrdersListCtrl',
-          templateUrl: 'views/modules/frontend/client/orders/list.html',
-          title: 'История заказов'
-        }, 'ROLE_CLIENT')
-        .state('pdFrontendOrders.details', {
-          url: '/:orderId',
-          controller: 'ClientOrderDetailsCtrl',
-          templateUrl: 'views/modules/frontend/client/orders/details.html',
-          title: 'Информация о заказе'
-        }, 'ROLE_CLIENT')
+      .state('pdFrontendOrders.list', {
+        url: '',
+        resolve: {
+          ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
+            return pdFrontendOrders.getOrdersList();
+          }]
+        },
+        controller: 'ClientOrdersListCtrl',
+        templateUrl: 'views/modules/frontend/client/orders/list.html',
+        title: 'История заказов'
+      }, 'ROLE_CLIENT')
+      .state('pdFrontendOrders.details', {
+        url: '/:orderId',
+        resolve: {
+          orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
+            return pdFrontendOrders.getOrderDetails($stateParams.orderId);
+          }]
+        },
+        controller: 'ClientOrderDetailsCtrl',
+        templateUrl: 'views/modules/frontend/client/orders/details.html',
+        title: 'Информация о заказе'
+      }, 'ROLE_CLIENT')
 
       .state('settings', {
         url: '/settings',
