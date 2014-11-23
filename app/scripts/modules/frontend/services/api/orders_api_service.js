@@ -44,17 +44,6 @@ angular.module('pdFrontend')
           .then(function (response) { return response.data; });
       },
       postOrderComment: function (orderId, commentText) {
-        return $q.when({
-            "id": 2,
-            "user": {
-              "id": 45,
-              "username": "ОАО ‘Добрые услуги’"
-            },
-            "createdAt": (new Date()).toISOString(),
-            "comment": commentText
-          }
-        );
-
         return $http.post(pdConfig.apiEndpoint + 'orders/' + orderId + '/comments', { comment: commentText })
           .then(function (response) { return response.data; });
       },

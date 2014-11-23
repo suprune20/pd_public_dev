@@ -54,7 +54,7 @@
     </div>
 
     <div class="col-xs-3">
-      <button class="btn btn-success" ng-click="closeOrder()">Закрыть заказ</button>
+      <button ng-show="'done' !== order.status" class="btn btn-success" ng-click="closeOrder()">Закрыть заказ</button>
     </div>
   </div>
 </div>

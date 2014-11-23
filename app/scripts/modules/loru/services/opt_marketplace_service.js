@@ -6,7 +6,8 @@ angular.module('pdLoru')
       posted: 'Размещен',
       confirmed: 'Подтвержден',
       shipped: 'Отправлен',
-      accepted: 'Принят'
+      accepted: 'Принят',
+      done: 'Выполнен'
     };
 
     var SupplierStore = function (supplierId, filters) {
