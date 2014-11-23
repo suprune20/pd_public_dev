@@ -44,6 +44,36 @@ angular.module('pdFrontend')
             return userProfileData;
           });
       },
+      getAllPlaces: function () {
+        return $q.all([this.getPlaces(), this.getCustomPlaces()])
+          .then(function (results) {
+            var registeredPlaces = _.map(results[0].places, function (placeData) {
+              placeData.type = 'registered';
+
+              return placeData;
+            });
+            var customPlaces = _.map(results[1], function (placeData) {
+              placeData.type = 'custom';
+              // create graves attribute as in regular places output
+              placeData.graves = [];
+              if (placeData.deadmens.length) {
+                placeData.graves.push({
+                  burials: _.map(placeData.deadmens, function (deadmanData) {
+                    // convert attributes as in regular places api output
+                    deadmanData.fio = [deadmanData.firstname, deadmanData.lastname, deadmanData.middlename].join(' ');
+
+                    return deadmanData;
+                  })
+                });
+              }
+              delete placeData.deadmens;
+
+              return placeData;
+            });
+
+            return registeredPlaces.concat(customPlaces);
+          });
+      },
       getPlaceCoordinates: function (placeData) {
         var deferred = $q.defer();
 

@@ -20,12 +20,16 @@ angular.module('pdFrontend')
       });
     };
     user.getPlaces().then(function (userData) {
+      delete userData.places;
       $scope.userData = userData;
 
-      // Select first place by default
-      if (userData.places.length) {
-        $scope.selectPlace(userData.places[0]);
-      }
+      user.getAllPlaces().then(function (placesCollection) {
+        $scope.userData.places = placesCollection;
+        // Select first place by default
+        if ($scope.userData.places.length) {
+          $scope.selectPlace($scope.userData.places[0]);
+        }
+      });
     });
 
     $scope.availablePerformers = [];
