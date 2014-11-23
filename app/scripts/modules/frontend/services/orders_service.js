@@ -35,8 +35,8 @@ angular.module('pdFrontend')
       postCommentForOrder: function (orderId, commentText) {
         return pdFrontendOrderApi.postOrderComment(orderId, commentText);
       },
-      postOrderAttachment: function (orderId, attachmentFile) {
-        return pdFrontendOrderApi.postOrderResults(orderId, attachmentFile);
+      postOrderImage: function (orderId, imageFile) {
+        return pdFrontendOrderApi.postOrderResults(orderId, imageFile, {type: 'image'});
       }
     };
   })

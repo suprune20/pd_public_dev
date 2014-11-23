@@ -59,31 +59,16 @@ angular.module('pdFrontend')
           .then(function (response) { return response.data; });
       },
       getOrderResults: function (orderId) {
-        return $q.when([{
-          type: 'image',
-          fileUrl: 'http://lorempixel.com/100/100',
-          createdAt: '2014-11-02T10:12:26+00:00'
-        }, {
-          type: 'image',
-          fileUrl: 'http://lorempixel.com/100/100',
-          createdAt: '2014-11-21T10:12:26+00:00'
-        }]);
-
         return $http.get(pdConfig.apiEndpoint + 'orders/' + orderId + '/results')
           .then(function (response) { return response.data; });
       },
-      postOrderResults: function (orderId, attachments) {
-        return $q.when({
-          type: 'image',
-          fileUrl: 'http://lorempixel.com/100/100',
-          createdAt: (new Date()).toISOString()
-        });
-
+      postOrderResults: function (orderId, attachments, data) {
         return $upload.upload({
           url: pdConfig.apiEndpoint + 'orders/' + orderId + '/results',
           tracker: 'commonLoadingTracker',
+          data: data,
           file: attachments
-        });
+        }).then(function (response) { return response.data; });
       }
     };
   })

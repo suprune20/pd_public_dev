@@ -19,7 +19,7 @@
       <ul class="media-list margin-top-15">
         <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">
           <div class="pull-left">
-            <img ng-src="{{result.fileUrl}}">
+            <img ng-src="{{result.fileUrl|pdThumbnail:'50x50'}}" class="img-thumbnail">
           </div>
           <div class="media-body">
             <p><small>{{result.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>

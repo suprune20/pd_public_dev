@@ -29,7 +29,7 @@ angular.module('pdLoru')
               return;
             }
 
-            pdFrontendOrders.postOrderAttachment(orderModel.id, attachment)
+            pdFrontendOrders.postOrderImage(orderModel.id, attachment)
               .then(function (postedAttachment) {
                 $scope.order.results.push(postedAttachment);
               });
