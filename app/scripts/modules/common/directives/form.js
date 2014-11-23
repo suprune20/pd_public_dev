@@ -82,6 +82,8 @@ angular.module('pdCommon')
         scope.clearSelection = function () {
           updateModelViewValue(null);
         };
+
+        scope.isSimpleView = _.has(attrs, 'simpleView');
       }
     };
   })

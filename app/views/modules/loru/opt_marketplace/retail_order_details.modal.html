@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Детали заказа</h4>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-9">
+      <dl>
+        <dt>Place id</dt>
+        <dd>{{ order.placeId }}</dd>
+        <dt>Status</dt>
+        <dd>{{ order.status }}</dd>
+      </dl>
+
+      <h4>Результаты</h4>
+      <pd-file-selector ng-model="orderForm.attachment" simple-view></pd-file-selector>
+
+      <ul class="media-list margin-top-15">
+        <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">
+          <div class="pull-left">
+            <img ng-src="{{result.fileUrl}}">
+          </div>
+          <div class="media-body">
+            <p><small>{{result.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
+          </div>
+        </li>
+      </ul>
+
+      <h4>Комментарии</h4>
+      <form role="form">
+        <div ng-class="{'form-group': orderForm.commentText}">
+          <textarea class="form-control" name="comment" ng-model="orderForm.commentText" msd-elastic
+                    placeholder="Напишите комментарий..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" ng-show="orderForm.commentText" ng-click="postComment()">
+          Сохранить
+        </button>
+      </form>
+
+      <ul class="media-list margin-top-15">
+        <li class="media" ng-repeat="comment in order.comments|orderBy:'createdAt':true">
+          <div class="pull-left">
+            <img src="https://placehold.it/64x64">
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">{{comment.user.username}}</h5>
+            {{comment.comment}}
+            <p><small>{{comment.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
+          </div>
+          <hr ng-show="!$last && order.comments.length > 1" class="reset-margin margin-top-8" />
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-xs-3">
+      <button class="btn btn-success" ng-click="closeOrder()">Закрыть заказ</button>
+    </div>
+  </div>
+</div>

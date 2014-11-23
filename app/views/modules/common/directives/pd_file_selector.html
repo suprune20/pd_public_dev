@@ -1,12 +1,12 @@
 <div class="pd-file-selector">
-  <div class="pd-file-selector-preview" ng-show="imageSourceData">
+  <div class="pd-file-selector-preview" ng-show="imageSourceData" ng-hide="isSimpleView">
     <img ng-src="{{imageSourceData}}" class="img-thumbnail"
          ng-style="{'max-width': pdMaxWidth, 'max-height': pdMaxHeight}" />
   </div>
   <div class="btn btn-default btn-file">
-    <span ng-show="isEmptyModel">Выбрать</span>
-    <span ng-hide="isEmptyModel">Изменить</span>
+    <span ng-show="isEmptyModel || isSimpleView">Выбрать</span>
+    <span ng-hide="isEmptyModel || isSimpleView">Изменить</span>
     <input type="file" />
   </div>
-  <div class="btn btn-default" ng-hide="isEmptyModel" ng-click="clearSelection()">Отмена</div>
+  <div class="btn btn-default" ng-hide="isEmptyModel || isSimpleView" ng-click="clearSelection()">Отмена</div>
 </div>

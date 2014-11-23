@@ -1,10 +1,45 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection) {
+  .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection, $modal) {
     $scope.orders = ordersCollection;
-    $scope.showOrderDetails = function (order) {
-      $scope.$state.go(order.type === 'opt' ? 'order' : 'order_retail', {orderId: order.id});
+    $scope.openRetailOrderModal = function (order) {
+      $modal.open({
+        templateUrl: 'views/modules/loru/opt_marketplace/retail_order_details.modal.html',
+        resolve: {
+          orderModel: ['pdFrontendOrders', function (pdFrontendOrders) {
+            return pdFrontendOrders.getOrderDetails(order.id);
+          }]
+        },
+        controller: function ($scope, $modalInstance, orderModel, pdFrontendOrders) {
+          $scope.order = orderModel;
+
+          $scope.orderForm = { commentText: '' };
+          $scope.postComment = function () {
+            pdFrontendOrders.postCommentForOrder(orderModel.id, $scope.orderForm.commentText)
+              .then(function (postedCommentModel) {
+                // reset comment text input
+                $scope.orderForm.commentText = '';
+                // add posted comment data into comments collections
+                $scope.order.comments.push(postedCommentModel);
+              });
+          };
+          $scope.$watch('orderForm.attachment', function (attachment) {
+            if (!attachment) {
+              return;
+            }
+
+            pdFrontendOrders.postOrderAttachment(orderModel.id, attachment)
+              .then(function (postedAttachment) {
+                $scope.order.results.push(postedAttachment);
+              });
+          });
+          $scope.closeOrder = function () {
+            pdFrontendOrders.approveOrder(orderModel.id)
+              .then(function () { $modalInstance.dismiss(); });
+          };
+        }
+      });
     };
   })
   .controller('OptMarketplaceOrderEditCtrl', function ($scope, pageData, cart, $modal, growl) {

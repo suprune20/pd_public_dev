@@ -13,7 +13,8 @@ angular.module('pdCommon', [
     'ui.router',
     'pasvaz.bindonce',
     'xeditable',
-    'akoenig.deckgrid'
+    'akoenig.deckgrid',
+    'monospaced.elastic'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
