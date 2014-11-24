@@ -28,12 +28,13 @@
       </ul>
 
       <h4>Комментарии</h4>
-      <form role="form">
-        <div ng-class="{'form-group': orderForm.commentText}">
+      <form role="form" ng-init="inFocus = false" outside-click="inFocus = false">
+        <div ng-class="{'form-group': inFocus}">
           <textarea class="form-control" name="comment" ng-model="orderForm.commentText" msd-elastic
-                    placeholder="Напишите комментарий..."></textarea>
+                    placeholder="Напишите комментарий..." ng-focus="inFocus = true"></textarea>
         </div>
-        <button class="btn btn-primary btn-sm" ng-show="orderForm.commentText" ng-click="postComment()">
+        <button class="btn btn-primary btn-sm" ng-show="inFocus" ng-click="postComment()"
+                ng-disabled="!orderForm.commentText">
           Сохранить
         </button>
       </form>
