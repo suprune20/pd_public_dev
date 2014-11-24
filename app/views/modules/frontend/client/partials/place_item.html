@@ -10,11 +10,11 @@
     </div>
 
     <div class="text-center">
-      <button type="button" class="btn btn-primary" ng-model="orderCurrentPhoto" btn-checkbox
-              ng-change="mother.getPhotoPerformers(card)">
-        <span class="glyphicon glyphicon-refresh animated-rotate"
-              ng-if="mother.availablePerformerLoading[card.id]"></span>
-        Заказать актуальную фотографию
+      <button type="button" class="btn btn-primary col-xs-12 margin-bottom-15" ng-model="orderCurrentPhoto"
+              btn-checkbox ng-change="mother.getPhotoPerformers(card)" title="Заказать актуальную фотографию">
+        <i class="glyphicon glyphicon-refresh animated-rotate"
+              ng-if="mother.availablePerformerLoading[card.id]"></i>
+        <i class="glyphicon glyphicon-camera"></i>
       </button>
 
       <ul class="list-unstyled text-left" ng-show="mother.availablePerformers[card.id].length">

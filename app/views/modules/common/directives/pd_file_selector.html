@@ -6,7 +6,7 @@
   <div class="btn btn-default btn-file">
     <span ng-show="isEmptyModel || isSimpleView">Выбрать</span>
     <span ng-hide="isEmptyModel || isSimpleView">Изменить</span>
-    <input type="file" />
+    <input type="file" ng-attr-accept="{{accept}}" />
   </div>
   <div class="btn btn-default" ng-hide="isEmptyModel || isSimpleView" ng-click="clearSelection()">Отмена</div>
 </div>

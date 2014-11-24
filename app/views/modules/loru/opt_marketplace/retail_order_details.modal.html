@@ -14,7 +14,7 @@
       </dl>
 
       <h4>Результаты</h4>
-      <pd-file-selector ng-model="orderForm.attachment" simple-view></pd-file-selector>
+      <pd-file-selector ng-model="orderForm.attachment" simple-view accept="image/*;capture=camera"></pd-file-selector>
 
       <ul class="media-list margin-top-15">
         <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">
