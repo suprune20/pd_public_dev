@@ -1,6 +1,6 @@
 <div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}" ng-click="mother.selectPlace(card)">
   <div class="panel-body">
-    <div ng-show="card.gallery.length" pb-fancybox-gallery="{{ card.gallery }}">
+    <div pb-fancybox-gallery="{{ card.gallery }}" class="margin-bottom-15">
       <img ng-src="{{card.mainPhoto.photo}}"
            pd-thumb
            pd-thumb-size="350x150"
