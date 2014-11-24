@@ -30,8 +30,9 @@ angular.module('pdConfig', [])
         emptyMenu: { items: [] },
         cabinetMenu: {
           items:[
-            {link: '#!/client-panel', title: 'Места захоронений'},
-            {link: '#!/', title: 'Каталог ритуальных товаров и услуг'}
+            {link: '/client-panel', title: 'Места захоронений'},
+            {link: '/', title: 'Каталог ритуальных товаров и услуг'},
+            {link: '/client/orders', title: 'История заказов'}
           ]
         },
         adminMenu: {
