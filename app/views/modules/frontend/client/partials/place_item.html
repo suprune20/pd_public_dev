@@ -9,7 +9,7 @@
       <p ng-if="card.mainPhoto" class="text-center">{{card.mainPhoto.addedAt|momentDate:'DD-MM-YYYY HH:mm'}}</p>
     </div>
 
-    <div class="text-center">
+    <div class="text-center order-place-photo-cont">
       <button type="button" class="btn btn-primary col-xs-12 margin-bottom-15" ng-model="orderCurrentPhoto"
               btn-checkbox ng-change="mother.getPhotoPerformers(card)" title="Заказать актуальную фотографию">
         <i class="glyphicon glyphicon-refresh animated-rotate"
@@ -17,7 +17,8 @@
         <i class="glyphicon glyphicon-camera"></i>
       </button>
 
-      <ul class="list-unstyled text-left" ng-show="mother.availablePerformers[card.id].length">
+      <ul class="list-unstyled text-left order-available-performers-cont"
+          ng-show="mother.availablePerformers[card.id].length">
         <li ng-repeat="performer in mother.availablePerformers[card.id]|orderBy:'price'">
           {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
           <button class="btn btn-link" ng-click="mother.order('photo', card, performer)">заказать</button>
