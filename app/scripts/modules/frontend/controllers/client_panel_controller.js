@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, user, pdFrontendOrders, growl) {
+  .controller('ClientPanelCtrl', function ($scope, user, pdFrontendOrders, growl, $modal) {
     $scope.selectPlace = function (placeData) {
       if (placeData === $scope.selectedPlace) {
         return;
@@ -50,20 +50,30 @@ angular.module('pdFrontend')
           $scope.availablePerformerLoading[place.id] = false;
         });
     };
-    // Place order
-    $scope.order = function (orderType, placeData, performer) {
-      pdFrontendOrders.createOrder({
-        type: orderType,
-        performerId: performer.id,
-        placeId: placeData.id,
-        location: placeData.location
-      })
-        .then(function () {
-          delete $scope.availablePerformers[placeData.id];
-          growl.addSuccessMessage('Заказ был успешно размещен');
-        }, function () {
-          growl.addErrorMessage('Произошла ошибка при размещении заказа');
-        });
+
+    $scope.confirmOrder = function (orderType, placeData, performer) {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/confirm_order.modal.html',
+        controller: function ($scope, pdFrontendOrders, $modalInstance) {
+          $scope.performer = performer;
+          // Place order
+          $scope.confirmOrder = function (comment) {
+            pdFrontendOrders.createOrder({
+              type: orderType,
+              performerId: performer.id,
+              placeId: placeData.id,
+              location: placeData.location,
+              comment: comment
+            })
+              .then(function () {
+                growl.addSuccessMessage('Заказ был успешно размещен');
+                $modalInstance.dismiss();
+              }, function () {
+                growl.addErrorMessage('Произошла ошибка при размещении заказа');
+              });
+          };
+        }
+      });
     };
   })
 ;

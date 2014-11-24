@@ -21,7 +21,7 @@
           ng-show="mother.availablePerformers[card.id].length">
         <li ng-repeat="performer in mother.availablePerformers[card.id]|orderBy:'price'">
           {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
-          <button class="btn btn-link" ng-click="mother.order('photo', card, performer)">заказать</button>
+          <button class="btn btn-link" ng-click="mother.confirmOrder('photo', card, performer)">заказать</button>
         </li>
       </ul>
     </div>

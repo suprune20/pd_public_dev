@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Заказ услуги</h4>
+</div>
+
+<div class="modal-body">
+  <dl>
+    <dt>Исполнитель:</dt>
+    <dd>{{performer.name}}</dd>
+    <dt>Стоимость:</dt>
+    <dd>{{performer.price}}</dd>
+  </dl>
+
+  <textarea ng-model="comment" class="form-control" placeholder="Напишите комментарий..."></textarea>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-success" ng-click="confirmOrder(comment)">Заказать</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Отмена</button>
+</div>
