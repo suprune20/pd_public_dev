@@ -162,17 +162,28 @@ angular.module('pdFrontend')
             storage.set(CUSTOM_PLACES_STORAGE_KEY, unsavedPlaces);
           });
       },
-      saveSettings: function (settingsData) {
+      saveSettings: function (settingsData, userAvatarFile) {
         var saveUrl = pdConfig.apiEndpoint + 'settings';
+        // convert lowercase notation into camelcase
+        if (settingsData.firstname) {
+          settingsData.firstName = settingsData.firstname;
+        }
+        if (settingsData.lastname) {
+          settingsData.lastName = settingsData.lastname;
+        }
+        if (settingsData.middlename) {
+          settingsData.middleName = settingsData.middlename;
+        }
 
-        if (settingsData.userPhoto) {
+        if (userAvatarFile && userAvatarFile instanceof File) {
           return $upload.upload({
             url: saveUrl,
+            method: 'PUT',
             tracker: 'commonLoadingTracker',
             data: settingsData,
-            file: settingsData.userPhoto,
-            fileFormDataName: 'userPhoto'
-          });
+            file: userAvatarFile,
+            fileFormDataName: 'avatar'
+          }).then(function (response) { return response.data; });
         }
 
         return $http.put(saveUrl, settingsData)
@@ -184,6 +195,9 @@ angular.module('pdFrontend')
             currentUserData.profile.email = _.has(settingsData, 'email') ?
               settingsData.email :
               currentUserData.profile.email;
+            currentUserData.profile.firstname = settingsData.firstname || currentUserData.profile.firstname;
+            currentUserData.profile.lastname = settingsData.lastname || currentUserData.profile.lastname;
+            currentUserData.profile.middlename = settingsData.middlename || currentUserData.profile.middlename;
             authStorage.setProfile(currentUserData);
           }, function (errorResp) {
             var respData = errorResp.data;
@@ -194,6 +208,14 @@ angular.module('pdFrontend')
 
             return $q.reject(respData);
           });
+      },
+      updateUserAvatar: function (userAvatarFile) {
+        if (!(userAvatarFile instanceof File)) {
+          return $q.reject();
+        }
+
+        return this.saveSettings({}, userAvatarFile)
+          .then(function (userData) { return userData.avatarUrl; });
       },
       getSettings: function () {
         return $http.get(pdConfig.apiEndpoint + 'settings')

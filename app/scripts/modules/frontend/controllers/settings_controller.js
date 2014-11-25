@@ -14,10 +14,12 @@ angular.module('pdFrontend')
     $scope.settingsData = getInitialData();
     $scope.save = function () {
       $scope.errorData = null;
-      user.saveSettings(objectsDiff(getInitialData(), $scope.settingsData))
+      user.saveSettings(objectsDiff(getInitialData(), $scope.settingsData), $scope.settingsData.userPhoto)
         .then(function () {
+          var userPhoto = $scope.settingsData.userPhoto;
           // Update form data after success update
           $scope.settingsData = getInitialData();
+          $scope.settingsData.userPhoto = userPhoto;
         }, function (errorData) {
           $scope.errorData = errorData;
         });
