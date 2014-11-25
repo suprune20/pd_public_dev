@@ -4,12 +4,14 @@ angular.module('pdFrontend')
   .controller('PdFrontendSettingsCtrl', function ($scope, user, objectsDiff, $modal, additionalSettingsData, growl,
                                                   $location) {
     var getInitialData = function () {
-        return _.defaults(user.getCurrentUserProfile(), {
-          mainPhone: null,
-          oldPassword: '',
-          newPassword: ''
-        });
-      };
+      var userProfile = user.getCurrentUserProfile();
+
+      return _.defaults(userProfile, {userPhoto: userProfile.photo}, {
+        mainPhone: null,
+        oldPassword: '',
+        newPassword: ''
+      });
+    };
 
     $scope.settingsData = getInitialData();
     $scope.save = function () {

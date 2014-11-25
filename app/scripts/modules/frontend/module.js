@@ -56,15 +56,9 @@ angular.module('pdFrontend', [
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
 
-      .state('pdFrontendOrders', {
+      .state('clientOrders', {
         url: '/client/orders',
-        abstract: true,
-        template: '<ui-view/>',
         secured: true,
-        menuConfig: 'cabinetMenu'
-      }, 'ROLE_CLIENT')
-      .state('pdFrontendOrders.list', {
-        url: '',
         resolve: {
           ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
             return pdFrontendOrders.getOrdersList();
@@ -72,9 +66,10 @@ angular.module('pdFrontend', [
         },
         controller: 'ClientOrdersListCtrl',
         templateUrl: 'views/modules/frontend/client/orders/list.html',
-        title: 'История заказов'
+        title: 'История заказов',
+        menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
-      .state('pdFrontendOrders.details', {
+      .state('clientOrders.details', {
         url: '/:orderId',
         resolve: {
           orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
@@ -82,7 +77,6 @@ angular.module('pdFrontend', [
           }]
         },
         controller: 'ClientOrderDetailsCtrl',
-        templateUrl: 'views/modules/frontend/client/orders/details.html',
         title: 'Информация о заказе'
       }, 'ROLE_CLIENT')
 

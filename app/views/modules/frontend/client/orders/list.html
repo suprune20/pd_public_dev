@@ -20,9 +20,11 @@
       <td>{{order.totalPrice}} ({{order.currency}})</td>
       <td bo-text="order.status|orderStatusLabel"></td>
       <td>
-        <a ui-sref="pdFrontendOrders.details({orderId: order.id})" class="btn btn-info btn-sm">Детали</a>
+        <a ui-sref="clientOrders.details({orderId: order.id})" class="btn btn-info btn-sm">Детали</a>
       </td>
     </tr>
     </tbody>
   </table>
 </div>
+
+<ui-view />
