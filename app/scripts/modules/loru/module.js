@@ -105,6 +105,18 @@ angular.module('pdLoru', [
         },
         setFluidContainer: true
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+      .state('orders.retail', {
+        url: '/:orderId',
+        secured: true,
+        title: 'Информация о заказе',
+        resolve: {
+          orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
+            return pdFrontendOrders.getOrderDetails($stateParams.orderId);
+          }]
+        },
+        controller: 'pdLoruRetailOrderDetails',
+        setFluidContainer: true
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
       .state('order', {
         url: '/order/:orderId',
         secured: true,

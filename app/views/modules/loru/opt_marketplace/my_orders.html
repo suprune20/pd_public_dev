@@ -27,11 +27,13 @@
         <i class="glyphicon glyphicon-pencil"></i>
         Редактировать
       </a>
-      <button class="btn btn-info btn-sm" ng-click="openRetailOrderModal(order)" ng-show="'client' === order.type">
+      <a class="btn btn-info btn-sm" ui-sref="orders.retail({orderId: order.id})" ng-show="'client' === order.type">
         <i class="glyphicon glyphicon-info-sign"></i>
         Просмотр
-      </button>
+      </a>
     </td>
   </tr>
   </tbody>
 </table>
+
+<ui-view/>

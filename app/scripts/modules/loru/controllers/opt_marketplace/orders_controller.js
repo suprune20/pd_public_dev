@@ -1,54 +1,8 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection, $modal) {
+  .controller('OptMarketplaceMyOrdersCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
-    $scope.openRetailOrderModal = function (order) {
-      $modal.open({
-        templateUrl: 'views/modules/loru/opt_marketplace/retail_order_details.modal.html',
-        resolve: {
-          orderModel: ['pdFrontendOrders', function (pdFrontendOrders) {
-            return pdFrontendOrders.getOrderDetails(order.id);
-          }]
-        },
-        controller: function ($scope, $modalInstance, orderModel, pdFrontendOrders) {
-          $scope.order = orderModel;
-
-          $scope.orderForm = { commentText: '' };
-          $scope.postComment = function () {
-            pdFrontendOrders.postCommentForOrder(orderModel.id, $scope.orderForm.commentText)
-              .then(function (postedCommentModel) {
-                // reset comment text input
-                $scope.orderForm.commentText = '';
-                // add posted comment data into comments collections
-                $scope.order.comments.push(postedCommentModel);
-              });
-          };
-          $scope.$watch('orderForm.attachment', function (attachment) {
-            if (!attachment) {
-              return;
-            }
-
-            pdFrontendOrders.postOrderImage(orderModel.id, attachment)
-              .then(function (postedAttachment) {
-                $scope.order.results.push(postedAttachment);
-              });
-          });
-          $scope.acceptOrder = function () {
-            pdFrontendOrders.acceptOrder(orderModel.id)
-              .then(function () { $scope.order.status = 'accepted'; });
-          };
-          $scope.doneOrder = function () {
-            pdFrontendOrders.doneOrder(orderModel.id)
-              .then(function () { $scope.order.status = 'done'; });
-          };
-          $scope.archiveOrder = function () {
-            pdFrontendOrders.archiveOrder(orderModel.id)
-              .then(function () { $modalInstance.dismiss(); });
-          };
-        }
-      });
-    };
   })
   .controller('OptMarketplaceOrderEditCtrl', function ($scope, pageData, cart, $modal, growl) {
     $scope.supplierStore = pageData.supplierStore;
@@ -99,5 +53,48 @@ angular.module('pdLoru')
   })
   .controller('OptMarketplaceOrderRetailDetailsCtrl', function ($scope, orderModel) {
     $scope.order = orderModel;
+  })
+  .controller('pdLoruRetailOrderDetails', function ($state, $modal, orderModel) {
+    $modal.open({
+      templateUrl: 'views/modules/loru/opt_marketplace/retail_order_details.modal.html',
+      controller: function ($scope, $modalInstance, pdFrontendOrders) {
+        $scope.order = orderModel;
+
+        $scope.orderForm = { commentText: '' };
+        $scope.postComment = function () {
+          pdFrontendOrders.postCommentForOrder(orderModel.id, $scope.orderForm.commentText)
+            .then(function (postedCommentModel) {
+              // reset comment text input
+              $scope.orderForm.commentText = '';
+              // add posted comment data into comments collections
+              $scope.order.comments.push(postedCommentModel);
+            });
+        };
+        $scope.$watch('orderForm.attachment', function (attachment) {
+          if (!attachment) {
+            return;
+          }
+
+          pdFrontendOrders.postOrderImage(orderModel.id, attachment)
+            .then(function (postedAttachment) {
+              $scope.order.results.push(postedAttachment);
+            });
+        });
+        $scope.acceptOrder = function () {
+          pdFrontendOrders.acceptOrder(orderModel.id)
+            .then(function () { $scope.order.status = 'accepted'; });
+        };
+        $scope.doneOrder = function () {
+          pdFrontendOrders.doneOrder(orderModel.id)
+            .then(function () { $scope.order.status = 'done'; });
+        };
+        $scope.archiveOrder = function () {
+          pdFrontendOrders.archiveOrder(orderModel.id)
+            .then(function () { $modalInstance.dismiss(); });
+        };
+      }
+    }).result
+      // return to orders list state after closing details modal
+      .catch(function () { $state.go('orders'); });
   })
 ;
