@@ -24,9 +24,24 @@ angular.module('pdFrontend')
               });
           });
       },
-      approveOrder: function (orderId) {
+      acceptOrder: function (orderId) {
+        return pdFrontendOrderApi.updateOrder(orderId, {
+          status: 'accepted'
+        });
+      },
+      doneOrder: function (orderId) {
         return pdFrontendOrderApi.updateOrder(orderId, {
           status: 'done'
+        });
+      },
+      archiveOrder: function (orderId) {
+        return pdFrontendOrderApi.updateOrder(orderId, {
+          isArchived: true
+        });
+      },
+      dearchiveOrder: function (orderId) {
+        return pdFrontendOrderApi.updateOrder(orderId, {
+          isArchived: false
         });
       },
       payOrderWithReceiptScan: function (orderId, receiptImageFile) {

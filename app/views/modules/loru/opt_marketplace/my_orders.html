@@ -7,7 +7,6 @@
     <th>№</th>
     <th>Поставщик</th>
     <th>Покупатель</th>
-    <th>Количество позиций</th>
     <th>Сумма</th>
     <th>Статус</th>
     <th>Комментарий</th>
@@ -20,7 +19,6 @@
     <td>{{order.number}}</td>
     <td>{{order.supplier.name}}</td>
     <td>{{order.customer.name|default:'-'}}</td>
-    <td>{{order.itemsCount}}</td>
     <td>{{order.totalPrice}}</td>
     <td>{{order.status|orderStatusLabel}}</td>
     <td>{{order.comment}}</td>

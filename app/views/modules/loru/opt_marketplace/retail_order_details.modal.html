@@ -9,8 +9,8 @@
       <dl>
         <dt>Place id</dt>
         <dd>{{ order.placeId }}</dd>
-        <dt>Status</dt>
-        <dd>{{ order.status }}</dd>
+        <dt>Статус</dt>
+        <dd>{{ order.status|orderStatusLabel }}</dd>
       </dl>
 
       <h4>Результаты</h4>
@@ -55,7 +55,12 @@
     </div>
 
     <div class="col-xs-3">
-      <button ng-show="'done' !== order.status" class="btn btn-success" ng-click="closeOrder()">Закрыть заказ</button>
+      <button ng-show="'posted' === order.status" class="btn btn-block btn-default"
+              ng-click="acceptOrder()">Принять</button>
+      <button ng-show="'paid' === order.status" class="btn btn-block btn-default"
+              ng-click="doneOrder()">Выполнить</button>
+      <button ng-show="'paid' !== order.status && !order.isArchived" class="btn btn-block btn-default"
+              ng-click="archiveOrder()">В Архив</button>
     </div>
   </div>
 </div>

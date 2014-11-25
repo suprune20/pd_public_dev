@@ -34,8 +34,16 @@ angular.module('pdLoru')
                 $scope.order.results.push(postedAttachment);
               });
           });
-          $scope.closeOrder = function () {
-            pdFrontendOrders.approveOrder(orderModel.id)
+          $scope.acceptOrder = function () {
+            pdFrontendOrders.acceptOrder(orderModel.id)
+              .then(function () { $scope.order.status = 'accepted'; });
+          };
+          $scope.doneOrder = function () {
+            pdFrontendOrders.doneOrder(orderModel.id)
+              .then(function () { $scope.order.status = 'done'; });
+          };
+          $scope.archiveOrder = function () {
+            pdFrontendOrders.archiveOrder(orderModel.id)
               .then(function () { $modalInstance.dismiss(); });
           };
         }
