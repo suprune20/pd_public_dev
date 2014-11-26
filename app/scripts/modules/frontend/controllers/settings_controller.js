@@ -18,12 +18,12 @@ angular.module('pdFrontend')
       $scope.errorData = null;
       user.saveSettings(objectsDiff(getInitialData(), $scope.settingsData), $scope.settingsData.userPhoto)
         .then(function () {
-          var userPhoto = $scope.settingsData.userPhoto;
           // Update form data after success update
           $scope.settingsData = getInitialData();
-          $scope.settingsData.userPhoto = userPhoto;
+          growl.addSuccessMessage('Настройки были успешно сохранены');
         }, function (errorData) {
           $scope.errorData = errorData;
+          growl.addErrorMessage('Произошла ошибка при сохранений настроек');
         });
     };
     $scope.removeAccount = function () {

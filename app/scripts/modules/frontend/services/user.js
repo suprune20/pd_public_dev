@@ -175,6 +175,33 @@ angular.module('pdFrontend')
           settingsData.middleName = settingsData.middlename;
         }
 
+        var successCallback = function (response) {
+          var savedSettingsData = response.data;
+          // Update user profile
+          var currentUserData = authStorage.getProfile();
+
+          currentUserData.profile.mainPhone = savedSettingsData.loginPhone;
+          currentUserData.profile.email = _.has(settingsData, 'email') ?
+            settingsData.email :
+            currentUserData.profile.email;
+          currentUserData.profile.firstname = savedSettingsData.firstName;
+          currentUserData.profile.lastname = savedSettingsData.lastName;
+          currentUserData.profile.middlename = savedSettingsData.middleName;
+          currentUserData.profile.photo = savedSettingsData.avatarUrl;
+          authStorage.setProfile(currentUserData);
+
+          return savedSettingsData;
+        };
+        var errorCallback = function (errorResponse) {
+          var respData = errorResponse.data;
+
+          if (_.has(respData, 'message')) {
+            respData.message = _.isArray(respData.message) ? respData.message : [respData.message];
+          }
+
+          return $q.reject(respData);
+        };
+
         if (userAvatarFile && userAvatarFile instanceof File) {
           return $upload.upload({
             url: saveUrl,
@@ -183,31 +210,10 @@ angular.module('pdFrontend')
             data: settingsData,
             file: userAvatarFile,
             fileFormDataName: 'avatar'
-          }).then(function (response) { return response.data; });
+          }).then(successCallback, errorCallback);
         }
 
-        return $http.put(saveUrl, settingsData)
-          .then(function () {
-            // Update user profile
-            var currentUserData = authStorage.getProfile();
-
-            currentUserData.profile.mainPhone = settingsData.mainPhone || currentUserData.profile.mainPhone;
-            currentUserData.profile.email = _.has(settingsData, 'email') ?
-              settingsData.email :
-              currentUserData.profile.email;
-            currentUserData.profile.firstname = settingsData.firstname || currentUserData.profile.firstname;
-            currentUserData.profile.lastname = settingsData.lastname || currentUserData.profile.lastname;
-            currentUserData.profile.middlename = settingsData.middlename || currentUserData.profile.middlename;
-            authStorage.setProfile(currentUserData);
-          }, function (errorResp) {
-            var respData = errorResp.data;
-
-            if (_.has(respData, 'message')) {
-              respData.message = _.isArray(respData.message) ? respData.message : [respData.message];
-            }
-
-            return $q.reject(respData);
-          });
+        return $http.put(saveUrl, settingsData).then(successCallback, errorCallback);
       },
       updateUserAvatar: function (userAvatarFile) {
         if (!(userAvatarFile instanceof File)) {
