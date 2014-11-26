@@ -7,6 +7,8 @@
   <div class="row">
     <div class="col-xs-9">
       <dl>
+        <dt>Номер заказа</dt>
+        <dd>{{ order.number }}</dd>
         <dt>Place id</dt>
         <dd>{{ order.placeId }}</dd>
         <dt>Статус</dt>
@@ -42,7 +44,8 @@
       <ul class="media-list margin-top-15">
         <li class="media" ng-repeat="comment in order.comments|orderBy:'createdAt':true">
           <div class="pull-left">
-            <img src="https://placehold.it/64x64">
+            <img ng-src="{{comment.user.avatarUrl|pdThumbnail:'64x64'|default:'https://placehold.it/64x64'}}"
+                 class="img-thumbnail-border">
           </div>
           <div class="media-body">
             <h5 class="media-heading">
