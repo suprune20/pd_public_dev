@@ -15,6 +15,7 @@ angular.module('pdFrontend')
       getOrderDetails: function (orderId) {
         return pdFrontendOrderApi.getOrder(orderId)
           .then(function (orderModel) {
+            orderModel.clientRating = null;
             return $q.all([pdFrontendOrderApi.getOrderComments(orderId), pdFrontendOrderApi.getOrderResults(orderId)])
               .then(function (results) {
                 orderModel.comments = results[0];
@@ -42,6 +43,11 @@ angular.module('pdFrontend')
       dearchiveOrder: function (orderId) {
         return pdFrontendOrderApi.updateOrder(orderId, {
           isArchived: false
+        });
+      },
+      ratingOrder: function (orderId, rating) {
+        return pdFrontendOrderApi.updateOrder(orderId, {
+          clientRating: rating
         });
       },
       payOrderWithReceiptScan: function (orderId, receiptImageFile) {

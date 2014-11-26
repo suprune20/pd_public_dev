@@ -4,7 +4,7 @@ angular.module('pdFrontend')
   .controller('ClientOrdersListCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
   })
-  .controller('ClientOrderDetailsCtrl', function ($state, $modal, pdFrontendOrders, orderModel) {
+  .controller('ClientOrderDetailsCtrl', function ($state, $modal, growl, pdFrontendOrders, orderModel) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope) {
@@ -19,8 +19,23 @@ angular.module('pdFrontend')
               $scope.order.comments.push(postedCommentModel);
             });
         };
+        $scope.changeRating = function () {
+          var ratingValues = [null, true, false];
+          $scope.order.clientRating = ratingValues[(ratingValues.indexOf($scope.order.clientRating) + 1) % 3];
+        };
         $scope.payOrder = function () {
           alert('Comming Soon!!');
+        };
+
+        var savedRating = $scope.order.clientRating;
+        $scope.saveRating = function () {
+          pdFrontendOrders.ratingOrder(orderModel.id, $scope.order.clientRating)
+            .then(function () {
+              savedRating = $scope.order.clientRating;
+            }, function () {
+              $scope.order.clientRating = savedRating;
+              growl.addErrorMessage('Произошла ошибка при установке рейтинга');
+            });
         };
       }
     }).result
