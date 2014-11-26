@@ -43,7 +43,9 @@
             <img src="https://placehold.it/64x64">
           </div>
           <div class="media-body">
-            <h5 class="media-heading">{{comment.user.username}}</h5>
+            <h5 class="media-heading">
+              {{comment.user.username}}<small ng-show="comment.user.organisation"> ({{comment.user.organisation}})</small>
+            </h5>
             {{comment.comment}}
             <p><small>{{comment.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
           </div>

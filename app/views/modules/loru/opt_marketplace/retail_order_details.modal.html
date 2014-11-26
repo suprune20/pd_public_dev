@@ -45,7 +45,9 @@
             <img src="https://placehold.it/64x64">
           </div>
           <div class="media-body">
-            <h5 class="media-heading">{{comment.user.username}}</h5>
+            <h5 class="media-heading">
+              {{comment.user.username}}<small ng-show="comment.user.organisation"> ({{comment.user.organisation}})</small>
+            </h5>
             {{comment.comment}}
             <p><small>{{comment.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
           </div>
@@ -61,6 +63,8 @@
               ng-click="doneOrder()">Выполнить</button>
       <button ng-show="'paid' !== order.status && !order.isArchived" class="btn btn-block btn-default"
               ng-click="archiveOrder()">В Архив</button>
+      <button ng-show="order.isArchived" class="btn btn-block btn-default"
+              ng-click="dearchiveOrder()">Из Архива</button>
     </div>
   </div>
 </div>

@@ -90,7 +90,11 @@ angular.module('pdLoru')
         };
         $scope.archiveOrder = function () {
           pdFrontendOrders.archiveOrder(orderModel.id)
-            .then(function () { $modalInstance.dismiss(); });
+            .then(function () { $scope.order.isArchived = true; });
+        };
+        $scope.dearchiveOrder = function () {
+          pdFrontendOrders.dearchiveOrder(orderModel.id)
+            .then(function () { $scope.order.isArchived = false; });
         };
       }
     }).result
