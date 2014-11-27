@@ -60,32 +60,16 @@
     <div class="col-xs-3">
       <button ng-show="'accepted' === order.status" class="btn btn-block btn-default"
               ng-click="payOrder()">Оплатить</button>
-      <button ng-show="'done' === order.status" class="btn btn-block" ng-click="changeRating()"
-              ng-class="{
-                'btn-default': null === order.clientRating,
-                'btn-success': true === order.clientRating,
-                'btn-danger': false === order.clientRating
-              }">
-        <i class="glyphicon" ng-class="{
-          '': null === order.clientRating,
-          'glyphicon-thumbs-up': true === order.clientRating,
-          'glyphicon-thumbs-down': false === order.clientRating
-        }"></i>
-        Рейтинг
-      </button>
 
-      <div class="btn-group btn-block" ng-click="saveRating()">
-        <label class="btn btn-default btn-sm" ng-model="order.clientRating" btn-radio="null">
-          <i class="glyphicon glyphicon-ban-circle"></i>
-        </label>
-        <label class="btn btn-default btn-sm" ng-model="order.clientRating" btn-radio="true"
-               ng-class="{'btn-success': true === order.clientRating}">
+      <div ng-show="'done' === order.status" class="btn-group" role="group" ng-click="saveRating()">
+        <button type="button" class="btn btn-default" ng-class="{'btn-success': true === order.clientRating}"
+                ng-click="order.clientRating = (true === order.clientRating) ? null : true">
           <i class="glyphicon glyphicon-thumbs-up"></i>
-        </label>
-        <label class="btn btn-default btn-sm" ng-model="order.clientRating" btn-radio="false"
-               ng-class="{'btn-danger': false === order.clientRating}">
+        </button>
+        <button type="button" class="btn btn-default" ng-class="{'btn-danger': false === order.clientRating}"
+                ng-click="order.clientRating = (false === order.clientRating) ? null : false">
           <i class="glyphicon glyphicon-thumbs-down"></i>
-        </label>
+        </button>
       </div>
     </div>
   </div>

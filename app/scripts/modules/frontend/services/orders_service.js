@@ -15,7 +15,6 @@ angular.module('pdFrontend')
       getOrderDetails: function (orderId) {
         return pdFrontendOrderApi.getOrder(orderId)
           .then(function (orderModel) {
-            orderModel.clientRating = null;
             return $q.all([pdFrontendOrderApi.getOrderComments(orderId), pdFrontendOrderApi.getOrderResults(orderId)])
               .then(function (results) {
                 orderModel.comments = results[0];
