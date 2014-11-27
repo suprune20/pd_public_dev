@@ -1,18 +1,22 @@
 <div class="modal-header">
   <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
-  <h4 class="modal-title">Детали заказа</h4>
+  <h4 class="modal-title">Детали заказа {{order.number}}</h4>
 </div>
 
 <div class="modal-body">
   <div class="row">
     <div class="col-xs-9">
       <dl>
-        <dt>Номер заказа</dt>
-        <dd>{{ order.number }}</dd>
-        <dt>Place id</dt>
-        <dd>{{ order.placeId }}</dd>
-        <dt>Статус</dt>
-        <dd>{{ order.status|orderStatusLabel }}</dd>
+        <dt ng-show="order.services.length">Позиции заказа</dt>
+        <dd ng-show="order.services.length">
+          <ul>
+            <li ng-repeat="service in order.services">
+              {{service.title}} <small>({{service.price}})</small>
+            </li>
+          </ul>
+        </dd>
+        <dt>Адрес доставки</dt>
+        <dd>{{order.place.address}}</dd>
       </dl>
 
       <h4>Результаты</h4>
@@ -60,6 +64,12 @@
     </div>
 
     <div class="col-xs-3">
+      <dl>
+        <dt>Статус</dt>
+        <dd>{{order.status|orderStatusLabel}}</dd>
+      </dl>
+      <hr/>
+
       <button ng-show="'posted' === order.status" class="btn btn-block btn-default"
               ng-click="acceptOrder()">Принять</button>
       <button ng-show="'paid' === order.status" class="btn btn-block btn-default"

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .service('pdFrontendOrders', function (pdFrontendOrderApi, $q) {
+  .service('pdFrontendOrders', function (pdFrontendOrderApi, pdFrontendPlacesApi, $q) {
     return {
       getAvailablePerformersForPhoto: function (placeId, location) {
         return pdFrontendOrderApi.getAvailablePerformers('photo', placeId, location);
@@ -15,10 +15,15 @@ angular.module('pdFrontend')
       getOrderDetails: function (orderId) {
         return pdFrontendOrderApi.getOrder(orderId)
           .then(function (orderModel) {
-            return $q.all([pdFrontendOrderApi.getOrderComments(orderId), pdFrontendOrderApi.getOrderResults(orderId)])
+            return $q.all([
+              pdFrontendOrderApi.getOrderComments(orderId),
+              pdFrontendOrderApi.getOrderResults(orderId),
+              pdFrontendPlacesApi.getPlaceDetails(orderModel.placeId)
+            ])
               .then(function (results) {
                 orderModel.comments = results[0];
                 orderModel.results = results[1];
+                orderModel.place = results[2];
 
                 return orderModel;
               });
