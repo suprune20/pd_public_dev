@@ -258,12 +258,6 @@ angular.module('pdLoru', [
         return;
       }
 
-      var tutorialLink = pdConfig.backendUrl + 'tutorial#chapter2';
-      growl.addInfoMessage(
-        'Уважаемый пользователь, посмотрите, пожалуйста, наше обучающее видео "<a href="' +
-          tutorialLink + '">Как разместить рекламу"</a>',
-        {enableHtml: true, ttl: 15000}
-      );
       $rootScope.updateLoruFavoritesMenu();
     });
   })
