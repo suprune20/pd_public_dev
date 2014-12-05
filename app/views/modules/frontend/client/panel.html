@@ -6,11 +6,13 @@
 
     <div class="panel-body">
       <ya-map class="client-panel-place-map"
-              ya-center="{{yaPlacePoint.geometry.coordinates}}"
+              ya-center="{{centerYaPoint}}"
               ya-zoom="10"
               ya-options="{maxZoom: 18}">
         <ya-toolbar ya-name="zoomControl"></ya-toolbar>
-        <ya-geo-object ya-source="yaPlacePoint"></ya-geo-object>
+        <ya-collection show-all="true">
+          <ya-geo-object ng-repeat="point in placesPoints" ya-source="point"></ya-geo-object>
+        </ya-collection>
       </ya-map>
     </div>
   </div>

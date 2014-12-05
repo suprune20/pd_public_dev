@@ -3,21 +3,14 @@
 angular.module('pdFrontend')
   .controller('ClientPanelCtrl', function ($scope, user, pdFrontendOrders, growl, $modal) {
     $scope.selectPlace = function (placeData) {
-      if (placeData === $scope.selectedPlace) {
-        return;
-      }
-
-      $scope.selectedPlace = placeData;
-      $scope.yaPlacePoint = null;
-
-      user.getPlaceCoordinates(placeData).then(function (coordinates) {
-        $scope.yaPlacePoint = {
-          geometry: {
-            type: 'Point',
-            coordinates: coordinates
-          }
-        };
+      // reset icons
+      _.map($scope.placesPoints, function (point) {
+        point.options.preset = 'twirl#brownIcon';
       });
+      // find selected place and centered and change icon for marker
+      var selectedPlace = _.find($scope.placesPoints, {properties: {placeModel: {id: placeData.id}}});
+      selectedPlace.options.preset = 'twirl#blueIcon';
+      $scope.centerYaPoint = selectedPlace.geometry.coordinates;
     };
     user.getPlaces().then(function (userData) {
       delete userData.places;
@@ -25,10 +18,20 @@ angular.module('pdFrontend')
 
       user.getAllPlaces().then(function (placesCollection) {
         $scope.userData.places = placesCollection;
-        // Select first place by default
-        if ($scope.userData.places.length) {
-          $scope.selectPlace($scope.userData.places[0]);
-        }
+        $scope.placesPoints = _.map($scope.userData.places, function (place) {
+          return {
+            geometry: {
+              type: 'Point',
+              coordinates: [place.location.longitude, place.location.latitude]
+            },
+            properties: {
+              placeModel: place
+            },
+            options: {
+              preset: 'twirl#brownIcon'
+            }
+          };
+        });
       });
     });
 
