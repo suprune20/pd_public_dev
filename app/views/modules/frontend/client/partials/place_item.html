@@ -1,4 +1,4 @@
-<div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}" ng-click="mother.selectPlace(card)">
+<div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}" ng-mouseover="mother.selectPlace(card)">
   <div class="panel-body">
     <div pb-fancybox-gallery="{{ card.gallery }}" class="margin-bottom-15">
       <img ng-src="{{card.mainPhoto.photo}}"
