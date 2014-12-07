@@ -7,6 +7,7 @@ angular.module('pdLoru')
       confirmed: 'Подтвержден',
       shipped: 'Отправлен',
       accepted: 'Принят',
+      paid: 'Оплачен',
       done: 'Выполнен'
     };
 

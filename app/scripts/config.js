@@ -67,6 +67,12 @@ angular.module('pdConfig', [])
         yandex: 'Yandex',
         vk: 'Vkontakte',
         odnoklassniki: 'Odnoklassniki'
+      },
+      paymentServers: {
+        webpay: {
+          test: 'https://secure.sandbox.webpay.by:8843/',
+          prod: 'https://secure.webpay.by/'
+        }
       }
     };
   })

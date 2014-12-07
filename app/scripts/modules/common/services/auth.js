@@ -143,7 +143,6 @@ angular.module('pdCommon')
         return authStorage.getProfile().organisation || {};
       },
       isOrgAbility: function (ability) {
-        console.log('isOrgAbility', ability);
         return _.contains(authStorage.getProfile().orgAbilities, ability);
       },
       signup: function (signupModel) {

@@ -1,10 +1,12 @@
+/* jshint -W069 */
+
 'use strict';
 
 angular.module('pdFrontend')
   .controller('ClientOrdersListCtrl', function ($scope, ordersCollection) {
     $scope.orders = ordersCollection;
   })
-  .controller('ClientOrderDetailsCtrl', function ($state, $modal, growl, pdFrontendOrders, orderModel) {
+  .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope) {
@@ -24,7 +26,7 @@ angular.module('pdFrontend')
           $scope.order.clientRating = ratingValues[(ratingValues.indexOf($scope.order.clientRating) + 1) % 3];
         };
         $scope.payOrder = function () {
-          alert('Comming Soon!!');
+
         };
 
         var savedRating = $scope.order.clientRating;
@@ -37,6 +39,20 @@ angular.module('pdFrontend')
               growl.addErrorMessage('Произошла ошибка при установке рейтинга');
             });
         };
+
+        if ('accepted' === orderModel.status && !$stateParams.successPayment) {
+          // get payment details from server
+          pdFrontendOrders.getOrderPaymentWebpayDetails(orderModel.id)
+            .then(function (webpayData) { $scope.paymentData = webpayData; });
+        }
+
+        // Postback url for success payment
+        if ($stateParams.successPayment && $stateParams['wsb_tid']) {
+          pdFrontendOrders.payOrderWithPaymentService(orderModel.id, 'webpay', $stateParams['wsb_tid'])
+            .then(function () {
+              $scope.paymentSuccess = true;
+            });
+        }
       }
     }).result
       // return to orders list state after closing details modal

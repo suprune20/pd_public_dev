@@ -70,7 +70,7 @@ angular.module('pdFrontend', [
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
       .state('clientOrders.details', {
-        url: '/:orderId',
+        url: '/:orderId?wsb_order_num&wsb_tid&successPayment&cancelPayment',
         resolve: {
           orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
             return pdFrontendOrders.getOrderDetails($stateParams.orderId);

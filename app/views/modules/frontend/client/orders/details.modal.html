@@ -68,8 +68,14 @@
       </dl>
       <hr/>
 
-      <button ng-show="'accepted' === order.status" class="btn btn-block btn-default"
-              ng-click="payOrder()">Оплатить</button>
+      <div ng-show="paymentData">
+        <form method="post" action="https://secure.sandbox.webpay.by:8843/" name="paymentForm">
+          <input type="hidden" ng-value="value" ng-attr-name="{{name}}"
+                 ng-repeat="(name, value) in paymentData.paymentProperties">
+          <button class="btn btn-block btn-default" type="submit">Оплатить</button>
+        </form>
+      </div>
+      <p ng-show="paymentSuccess">Оплата успешно завершена</p>
 
       <div ng-show="'done' === order.status" class="btn-group" role="group" ng-click="saveRating()">
         <button type="button" class="btn btn-default" ng-class="{'btn-success': true === order.clientRating}"

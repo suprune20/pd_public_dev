@@ -29,15 +29,26 @@ angular.module('pdFrontend')
         return $http.put(pdConfig.apiEndpoint + 'client/orders/' + orderId, updatedData)
           .then(function (response) { return response.data; });
       },
-      postOrderPayment: function (orderId, paymentType, receiptImageFile) {
-        return $upload.upload({
-          url: pdConfig.apiEndpoint + 'client/orders/' + orderId + '/payments',
-          tracker: 'commonLoadingTracker',
-          data: {
-            type: paymentType
-          },
-          file: receiptImageFile
-        });
+      postOrderPayment: function (orderId, paymentType, receiptImageFile, paymentToken) {
+        if (receiptImageFile) {
+          return $upload.upload({
+            url: pdConfig.apiEndpoint + 'client/orders/' + orderId + '/payments',
+            tracker: 'commonLoadingTracker',
+            data: {
+              type: paymentType
+            },
+            file: receiptImageFile
+          });
+        }
+
+        return $http.post(pdConfig.apiEndpoint + 'client/orders/' + orderId + '/payments', {
+          type: paymentType,
+          paymentToken: paymentToken
+        }).then(function (response) { return response.data; }, function (response) { return response.data; });
+      },
+      getOrderPaymentMethodDetails: function (orderId, paymentType) {
+        return $http.get(pdConfig.apiEndpoint + 'orders/' + orderId + '/payment_methods/' + paymentType)
+          .then(function (response) { return response.data; }, function (response) { return response.data; });
       },
       getOrderComments: function (orderId) {
         return $http.get(pdConfig.apiEndpoint + 'orders/' + orderId + '/comments')
