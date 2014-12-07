@@ -198,7 +198,7 @@ angular.module('pdLoru', [
         var userOrgId = auth.getUserOrganisation().id;
         loruMenuConfig.setRightMenuItems([
           {link: '#!/loru/advertisement', title: 'Реклама'},
-          {link: '#!/', title: 'Каталог'},
+          {link: '#!/', title: 'Каталог', orgAbility: 'trade'},
           {
             type: 'dropdown',
             title: auth.getUserProfile().shortFIO,
@@ -210,12 +210,12 @@ angular.module('pdLoru', [
                 hide: !userOrgId
               },
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-              {link: '#!/loru/orgplaces', title: 'Склады'},
-              {link: '/loru/products', title: 'Товары и услуги'},
+              {link: '#!/loru/orgplaces', title: 'Склады', orgAbility: 'trade'},
+              {link: '/loru/products', title: 'Товары и услуги', orgAbility: 'trade'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers},
-              {link: '#!/orders', title: 'Архив заказов'},
+              {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers, orgAbility: 'trade'},
+              {link: '#!/orders', title: 'Архив заказов', orgAbility: 'trade'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]

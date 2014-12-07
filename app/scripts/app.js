@@ -233,7 +233,8 @@ angular.module('pdApp', [
       isCurrentHasLoruRole: auth.isCurrentHasLoruRole,
       isCurrentHasOmsRole: auth.isCurrentHasOmsRole,
       isCurrentHasSupervisorRole: auth.isCurrentHasSupervisorRole,
-      isAuthenticated: auth.isAuthenticated
+      isAuthenticated: auth.isAuthenticated,
+      isOrgAbility: auth.isOrgAbility
     };
     // Save top-level domain
     $rootScope.topLevelDomain = _.last($window.location.hostname.split('.')).toLowerCase();
