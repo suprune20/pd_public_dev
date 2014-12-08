@@ -47,13 +47,33 @@ angular.module('pdFrontend', [
         setFluidContainer: true,
         pageClass: 'map-page'
       })
+
       .state('clientPanel', {
         url: '/client-panel',
+        resolve: {
+          placesData: ['pdFrontendClientPanel', function (pdFrontendClientPanel) {
+            return pdFrontendClientPanel.getPlacesCollection();
+          }]
+        },
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
         secured: true,
         menuConfig: 'cabinetMenu'
+      }, 'ROLE_CLIENT')
+      .state('clientPanel.places', {
+        url: '/places',
+        template: '<ui-view/>'
+      }, 'ROLE_CLIENT')
+      .state('clientPanel.places.details', {
+        url: '/:placeId',
+        resolve: {
+          placeData: ['pdFrontendClientPanel', '$stateParams', function (pdFrontendClientPanel, $stateParams) {
+            return pdFrontendClientPanel.getPlaceDetails($stateParams.placeId);
+          }]
+        },
+        controller: 'ClientPlaceDetail',
+        title: 'Детали места захоронения'
       }, 'ROLE_CLIENT')
 
       .state('clientOrders', {

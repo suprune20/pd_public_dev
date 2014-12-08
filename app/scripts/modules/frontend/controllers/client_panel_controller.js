@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, user, pdFrontendOrders, growl, $modal) {
+  .controller('ClientPanelCtrl', function ($scope, placesData, pdFrontendOrders, growl, $modal) {
+    $scope.placesCollection = placesData.places;
+    $scope.placesPoints = placesData.placesYandexPoints;
     $scope.selectPlace = function (placeData) {
       // reset icons
       _.map($scope.placesPoints, function (point) {
@@ -12,28 +14,6 @@ angular.module('pdFrontend')
       selectedPlace.options.preset = 'twirl#blueIcon';
       $scope.centerYaPoint = selectedPlace.geometry.coordinates;
     };
-    user.getPlaces().then(function (userData) {
-      delete userData.places;
-      $scope.userData = userData;
-
-      user.getAllPlaces().then(function (placesCollection) {
-        $scope.userData.places = placesCollection;
-        $scope.placesPoints = _.map($scope.userData.places, function (place) {
-          return {
-            geometry: {
-              type: 'Point',
-              coordinates: [place.location.longitude, place.location.latitude]
-            },
-            properties: {
-              placeModel: place
-            },
-            options: {
-              preset: 'twirl#brownIcon'
-            }
-          };
-        });
-      });
-    });
 
     $scope.availablePerformers = [];
     $scope.availablePerformerLoading = [];
@@ -78,5 +58,13 @@ angular.module('pdFrontend')
         }
       });
     };
+  })
+  .controller('ClientPlaceDetail', function ($state, $modal, placeData) {
+    $modal.open({
+      templateUrl: 'views/modules/frontend/client/places/details.modal.html',
+      controller: function ($scope) {
+        $scope.placeData = placeData;
+      }
+    }).result.catch(function () { $state.go('clientPanel.places'); });
   })
 ;
