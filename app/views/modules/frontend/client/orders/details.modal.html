@@ -69,7 +69,8 @@
       <hr/>
 
       <div ng-show="paymentData">
-        <form method="post" action="https://secure.sandbox.webpay.by:8843/" name="paymentForm">
+        <!-- dynamic action attribute not supported graceful, supported in angular 1.3+ -->
+        <form method="post" action="{{paymentData.paymentServerUrl ? paymentData.paymentServerUrl : '#'}}">
           <input type="hidden" ng-value="value" ng-attr-name="{{name}}"
                  ng-repeat="(name, value) in paymentData.paymentProperties">
           <button class="btn btn-block btn-default" type="submit">Оплатить</button>
