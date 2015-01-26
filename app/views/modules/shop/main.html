@@ -1,0 +1,222 @@
+<div class="row">
+  <div class="col-xs-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="glyphicon glyphicon-search"></i>
+        Поиск
+      </div>
+      <div class="panel-body">
+        <form>
+          <div class="form-group">
+            <label for="searchPredicate">Введите текст поиска:</label>
+            <input type="text" class="form-control" id="searchPredicate" placeholder="напр. город, услугу или товар">
+          </div>
+
+          <div class="row">
+            <div class="col-xs-9">
+              <button class="btn-link" ng-click="isShownOptions = !isShownOptions">
+                <i class="glyphicon"
+                   ng-class="{'glyphicon-chevron-right': !isShownOptions, 'glyphicon-chevron-down': isShownOptions}"></i>
+                Дополнительные настройки
+              </button>
+              <div ng-show="isShownOptions">
+                <hr/>
+                <ul class="list-unstyled categories-list">
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Автокатафалки
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Благоустройство (установка памятника и ограды...)
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Венки
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Гробы
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Грузчики
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Доставка принадлежностей
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Каркасы для венков
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Кресты
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Надмогильные таблички
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Ограды
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Памятники
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Погребение
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Прочие товары
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Прочие товары и услуги
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Прочие услуги
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Траурные ленты
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Урны
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Уход/уборка
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Фото для памятников
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Фурнитура для гробов
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Цветочницы
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Цветы живые
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Цветы искусственные
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox">
+                      Швейные ритуальные изделия
+                    </label>
+                  </li>
+                </ul>
+                <hr/>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <button type="submit" class="btn btn-success">Поиск</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Только что посещено/заказано
+      </div>
+      <div class="panel-body">
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="http://placehold.it/64x64" alt="...">
+          </a>
+          <div class="media-body">
+            <p>кто-то из Витебск</p>
+            <p>только что заказал у <a ui-sref="shop.details({shopId: 1})">Магазин 1</a> услугу посещения захоронения</p>
+          </div>
+        </div>
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="http://placehold.it/64x64" alt="...">
+          </a>
+          <div class="media-body">
+            <p>кто-то из Минск</p>
+            <p>только что заказал у <a ui-sref="shop.details({shopId: 1})">Магазин 1</a> услугу посещения захоронения</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-7">
+    <div class="list-group">
+      <a ui-sref="shop.details({shopId: shop.id})" class="list-group-item" style="overflow: auto" ng-repeat="shop in shops">
+        <div class="pull-left margin-right-15">
+          <img class="media-object" src="https://placehold.it/64x64">
+        </div>
+
+        <h4 class="list-group-item-heading">{{shop.title}}</h4>
+        <p class="list-group-item-text">
+          Стоимость: <strong>{{shop.price}}</strong>
+        </p>
+      </a>
+    </div>
+  </div>
+</div>

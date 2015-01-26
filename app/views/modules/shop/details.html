@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-xs-3">Left panel</div>
+  <div class="col-xs-9">
+    <tabset justified="true">
+      <tab heading="Описание">
+        <div class="margin-bottom-15">
+          <pd-carousel pd-carousel-responsive>
+            <li ng-repeat="item in shop.gallery" pd-fancybox="{{item}}">
+              <div class="thumbnail">
+                <img ng-src="{{item}}" />
+              </div>
+            </li>
+          </pd-carousel>
+        </div>
+
+        <div class="margin-bottom-15">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Название</th>
+              <th>Стоимость</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="service in shop.services">
+              <td>{{service.title}}</td>
+              <td>{{service.price}}</td>
+              <td><button class="btn btn-info">Заказать</button></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </tab>
+      <tab heading="Отзывы">
+        <div class="row" ng-repeat="review in shop.reviews">
+          <div class="col-xs-2">{{review.user.firstName}}</div>
+          <div class="col-xs-10">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                {{review.title}}
+                <span class="pull-right">{{review.createdAt|momentDate:"MMMM DDD, YYYY"}}</span>
+              </div>
+              <div class="panel-body">
+                <p>
+                  <small><i class="glyphicon glyphicon-plus text-success"></i></small>
+                  {{review.comment.positive}}
+                </p>
+                <p>
+                  <small><i class="glyphicon glyphicon-minus text-danger"></i></small>
+                  {{review.comment.negative}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

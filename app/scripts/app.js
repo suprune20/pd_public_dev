@@ -9,6 +9,7 @@ angular.module('pdApp', [
     'pdAdmin',
     'pdLoru',
     'pdOms',
+    'pdShop',
     'pdConfig',
     'vcRecaptcha',
     'ngRaven',
