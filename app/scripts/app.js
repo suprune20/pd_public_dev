@@ -142,12 +142,13 @@ angular.module('pdApp', [
       mainMenuManager.setCurrentMenuConfig(
         toState.menuConfig ? toState.menuConfig : mainMenuManager.getMenuByRole(auth.getRoles()[0])
       );
+
       // Set page class from route config
-      $rootScope.pageClass = toState.pageClass ?
-        _.isString(toState.pageClass) ?
-          [toState.pageClass] :
-          toState.pageClass :
-        [];
+      //$rootScope.pageClass = toState.pageClass ?
+      //  _.isString(toState.pageClass) ?
+      //    [toState.pageClass] :
+      //    toState.pageClass :
+      //  [];
       $rootScope.setFluidContainer = !!toState.setFluidContainer;
       // Hide/Show main menu by route param
       mainMenuManager.hide(toState.hideMainMenu);
@@ -160,6 +161,14 @@ angular.module('pdApp', [
     });
 
     $rootScope.$on('$stateChangeSuccess', function () {
+      $rootScope.pageClass = _($state.$current.path)
+        .map(function (pathItem) {
+          return pathItem.self.pageClass;
+        })
+        .filter()
+        .value()
+      ;
+
       // Hit analytics tracking events after change state
       if ($window.ga) {
         $window.ga('send', 'pageview', $location.path());

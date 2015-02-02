@@ -8,12 +8,30 @@ angular.module('pdShop', [
     authRouteProvider
       .state('shop', {
         url: '/shop',
-        template: '<ui-view/>',
+        templateUrl: 'views/modules/shop/layout.html',
+        controller: ['$scope', function ($scope) {
+          $scope.setPlaceMarker = function (event) {
+            $scope.selectedPlaceMarker = {
+              geometry: {
+                type: 'Point',
+                coordinates: event.get('coords')
+              },
+              properties: {
+                type: 'users_place'
+              },
+              options: {
+                preset: 'twirl#redIcon',
+                draggable: true
+              }
+            };
+          };
+        }],
+        pageClass: 'shop',
         abstract: true
       })
       .state('shop.main', {
         url: '',
-        templateUrl: 'views/modules/shop/main.html',
+        templateUrl: 'views/modules/shop/list.html',
         controller: ['$scope', function ($scope) {
           $scope.shops = [];
           for (var i = 1; i < 10; i++) {
@@ -70,6 +88,17 @@ angular.module('pdShop', [
         },
         controller: ['$scope', 'shopData', function ($scope, shopData) {
           $scope.shop = shopData;
+          console.log($scope.selectedPlaceMarker);
+
+          $scope.services = _.map(shopData.services, function (service) {
+            return {
+              service: service,
+              isSelected: false
+            };
+          });
+          $scope.$watch('services', function (services) {
+            $scope.isSelectedAnyServices = _.some(services, 'isSelected');
+          }, true);
         }]
       })
     ;

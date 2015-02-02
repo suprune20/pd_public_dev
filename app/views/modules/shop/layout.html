@@ -1,0 +1,23 @@
+<div class="row margin-bottom-15">
+  <div class="col-xs-12">
+    <ya-map ya-zoom="11" ya-options="{maxZoom: 18}" ya-event-click="setPlaceMarker($event)">
+      <ya-toolbar ya-name="zoomControl" ya-options="{left: 5, top: 80}"></ya-toolbar>
+      <ya-toolbar ya-name="typeSelector" ya-options="{left: 3, top: 45}"></ya-toolbar>
+
+      <pd-ya-search-toolbar ya-options="{left: 5}"></pd-ya-search-toolbar>
+
+      <!-- Suppliers and user's markers -->
+      <ya-collection ya-event-boundschange="yaMapBoundsChange($event)">
+        <ya-geo-object ng-repeat="point in catalogGeoObjects"
+                       ya-source="point"
+                       ya-event-propertieschange="geoObjectPropertiesChanged($event)"
+                       ya-event-click="markerClick($event)"></ya-geo-object>
+      </ya-collection>
+      <!-- End suppliers and user's markers -->
+
+      <ya-geo-object ya-source="selectedPlaceMarker"></ya-geo-object>
+    </ya-map>
+  </div>
+</div>
+
+<ui-view></ui-view>

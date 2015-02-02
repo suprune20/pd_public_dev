@@ -20,18 +20,28 @@
               <th>Название</th>
               <th>Стоимость</th>
               <th></th>
+              <th ng-show="isSelectedAnyServices"></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="service in shop.services">
-              <td>{{service.title}}</td>
-              <td>{{service.price}}</td>
-              <td><button class="btn btn-info">Заказать</button></td>
+            <tr ng-repeat="service in services">
+              <td>{{service.service.title}}</td>
+              <td>{{service.service.price}}</td>
+              <td><input type="checkbox" ng-model="service.isSelected"></td>
+              <td ng-attr-rowspan="{{services.length}}" ng-show="$first && isSelectedAnyServices">
+                <button class="btn btn-info" ng-disabled="!selectedPlaceMarker">Заказать</button>
+                <p class="help-block" ng-show="!selectedPlaceMarker">
+                  <small class="text-warning">
+                    <i class="glyphicon glyphicon-exclamation-sign"></i>&nbsp;Выберите место выполнения заказа (на карте)
+                  </small>
+                </p>
+              </td>
             </tr>
             </tbody>
           </table>
         </div>
       </tab>
+
       <tab heading="Отзывы">
         <div class="row" ng-repeat="review in shop.reviews">
           <div class="col-xs-2">{{review.user.firstName}}</div>
