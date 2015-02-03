@@ -8,6 +8,17 @@ angular.module('pdShop', [
     authRouteProvider
       .state('shop', {
         url: '/shop',
+        template: '<ui-view/>',
+        pageClass: 'shop',
+        abstract: true
+      })
+      .state('shop.history', {
+        url: '/history',
+        templateUrl: 'views/modules/shop/history.html',
+        controller: function () {}
+      })
+      .state('shop.main', {
+        url: '',
         templateUrl: 'views/modules/shop/layout.html',
         controller: ['$scope', function ($scope) {
           $scope.setPlaceMarker = function (event) {
@@ -26,10 +37,10 @@ angular.module('pdShop', [
             };
           };
         }],
-        pageClass: 'shop',
-        abstract: true
+        abstract: true,
+        menuConfig: 'shopMenu'
       })
-      .state('shop.main', {
+      .state('shop.main.list', {
         url: '',
         templateUrl: 'views/modules/shop/list.html',
         controller: ['$scope', function ($scope) {
@@ -41,9 +52,10 @@ angular.module('pdShop', [
               price: parseFloat(Math.random() * 1000).toFixed(2)
             });
           }
-        }]
+        }],
+        menuConfig: 'shopMenu'
       })
-      .state('shop.details', {
+      .state('shop.main.details', {
         url: '/:shopId',
         templateUrl: 'views/modules/shop/details.html',
         resolve: {
@@ -86,10 +98,8 @@ angular.module('pdShop', [
             };
           }
         },
-        controller: ['$scope', 'shopData', function ($scope, shopData) {
+        controller: ['$scope', 'shopData', '$modal', function ($scope, shopData, $modal) {
           $scope.shop = shopData;
-          console.log($scope.selectedPlaceMarker);
-
           $scope.services = _.map(shopData.services, function (service) {
             return {
               service: service,
@@ -99,9 +109,23 @@ angular.module('pdShop', [
           $scope.$watch('services', function (services) {
             $scope.isSelectedAnyServices = _.some(services, 'isSelected');
           }, true);
-        }]
+
+          $scope.placeOrder = function () {
+            $modal.open({
+              templateUrl: 'views/modules/shop/place_order.modal.html',
+              controller: function () {}
+            });
+          };
+        }],
+        menuConfig: 'shopMenu'
       })
     ;
   })
-  .run(function () {})
+  .run(function ($rootScope, mainMenuManager, pdConfig) {
+    var shopMenu = mainMenuManager.addMenuConfig('shopMenu');
+
+    $rootScope.$on('$stateChangeSuccess', function () {
+      shopMenu.setMainMenuItems(pdConfig.menuConfigs.shopMenu.items);
+    });
+  })
 ;

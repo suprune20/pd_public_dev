@@ -59,6 +59,12 @@ angular.module('pdConfig', [])
             {link: serverConfig.serverHost + 'burials/create/', title: 'Создать захоронение'},
             {link: serverConfig.serverHost + 'burials/create/?archive=1', title: 'Внести архивное'}
           ]
+        },
+        shopMenu: {
+          navbarClasses: 'navbar-inverse',
+          items: [
+            {link: '/shop/history', title: 'Посещения'}
+          ]
         }
       },
       oauthProviders: {

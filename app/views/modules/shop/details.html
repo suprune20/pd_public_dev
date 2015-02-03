@@ -29,7 +29,7 @@
               <td>{{service.service.price}}</td>
               <td><input type="checkbox" ng-model="service.isSelected"></td>
               <td ng-attr-rowspan="{{services.length}}" ng-show="$first && isSelectedAnyServices">
-                <button class="btn btn-info" ng-disabled="!selectedPlaceMarker">Заказать</button>
+                <button class="btn btn-info" ng-disabled="!selectedPlaceMarker" ng-click="placeOrder()">Заказать</button>
                 <p class="help-block" ng-show="!selectedPlaceMarker">
                   <small class="text-warning">
                     <i class="glyphicon glyphicon-exclamation-sign"></i>&nbsp;Выберите место выполнения заказа (на карте)
