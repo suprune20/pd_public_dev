@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, placesData, pdFrontendOrders, growl, $modal) {
+  .controller('ClientPanelCtrl', function ($scope, placesData, pdFrontendOrders, growl, $modal, placeDetailsState) {
+    $scope.placeDetailsState = placeDetailsState;
     $scope.placesCollection = placesData.places;
     $scope.placesPoints = placesData.placesYandexPoints;
     $scope.selectPlace = function (placeData) {
@@ -59,12 +60,12 @@ angular.module('pdFrontend')
       });
     };
   })
-  .controller('ClientPlaceDetail', function ($state, $modal, placeData) {
+  .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/places/details.modal.html',
       controller: function ($scope) {
         $scope.placeData = placeData;
       }
-    }).result.catch(function () { $state.go('clientPanel.places'); });
+    }).result.catch(function () { $state.go(placesListState); });
   })
 ;

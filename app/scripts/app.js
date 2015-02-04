@@ -10,6 +10,7 @@ angular.module('pdApp', [
     'pdLoru',
     'pdOms',
     'pdShop',
+    'pdHram',
     'pdConfig',
     'vcRecaptcha',
     'ngRaven',

@@ -53,7 +53,10 @@ angular.module('pdFrontend', [
         resolve: {
           placesData: ['pdFrontendClientPanel', function (pdFrontendClientPanel) {
             return pdFrontendClientPanel.getPlacesCollection();
-          }]
+          }],
+          placeDetailsState: function () {
+            return 'clientPanel.places.details';
+          }
         },
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
@@ -70,7 +73,10 @@ angular.module('pdFrontend', [
         resolve: {
           placeData: ['pdFrontendClientPanel', '$stateParams', function (pdFrontendClientPanel, $stateParams) {
             return pdFrontendClientPanel.getPlaceDetails($stateParams.placeId);
-          }]
+          }],
+          placesListState: function () {
+            return 'clientPanel.places';
+          }
         },
         controller: 'ClientPlaceDetail',
         title: 'Детали места захоронения'

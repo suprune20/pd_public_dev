@@ -1,6 +1,6 @@
 <div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}"
      ng-mouseover="mother.selectPlace(card)">
-  <div class="panel-body" ng-click="mother.$state.go('clientPanel.places.details', {placeId: card.id})">
+  <div class="panel-body" ng-click="mother.$state.go(mother.placeDetailsState, {placeId: card.id})">
     <div pb-fancybox-gallery="{{ card.gallery }}" class="margin-bottom-15">
       <img ng-src="{{card.titlePhoto}}"
            pd-thumb
