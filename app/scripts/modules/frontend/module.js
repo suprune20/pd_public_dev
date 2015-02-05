@@ -88,7 +88,10 @@ angular.module('pdFrontend', [
         resolve: {
           ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
             return pdFrontendOrders.getOrdersList();
-          }]
+          }],
+          orderDetailsState: function () {
+            return 'clientOrders.details';
+          }
         },
         controller: 'ClientOrdersListCtrl',
         templateUrl: 'views/modules/frontend/client/orders/list.html',
@@ -100,7 +103,10 @@ angular.module('pdFrontend', [
         resolve: {
           orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
             return pdFrontendOrders.getOrderDetails($stateParams.orderId);
-          }]
+          }],
+          ordersListState: function () {
+            return 'clientOrders';
+          }
         },
         controller: 'ClientOrderDetailsCtrl',
         title: 'Информация о заказе'

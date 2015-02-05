@@ -59,6 +59,13 @@ angular.module('pdFrontend')
         }
       });
     };
+
+    $scope.addPlace = function () {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/places/add_place.modal.html',
+        controller: function () {}
+      });
+    };
   })
   .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({

@@ -9,7 +9,7 @@ angular.module('pdHram', [
       .state('hram', {
         url: '/hram',
         template: '<ui-view>',
-        abstract: true
+        menuConfig: 'shopMenu'
       })
 
       .state('hram.shop', {
@@ -17,11 +17,6 @@ angular.module('pdHram', [
         template: '<ui-view/>',
         pageClass: 'shop',
         abstract: true
-      })
-      .state('hram.shop.history', {
-        url: '/visit',
-        templateUrl: 'views/modules/shop/history.html',
-        controller: function () {}
       })
       .state('hram.shop.main', {
         url: '',
@@ -43,7 +38,8 @@ angular.module('pdHram', [
             };
           };
         }],
-        abstract: true
+        abstract: true,
+        menuConfig: 'shopMenu'
       })
       .state('hram.shop.main.list', {
         url: '',
@@ -57,7 +53,8 @@ angular.module('pdHram', [
               price: parseFloat(Math.random() * 1000).toFixed(2)
             });
           }
-        }]
+        }],
+        menuConfig: 'shopMenu'
       })
       .state('hram.shop.main.details', {
         url: '/:shopId',
@@ -120,7 +117,8 @@ angular.module('pdHram', [
               controller: function () {}
             });
           };
-        }]
+        }],
+        menuConfig: 'shopMenu'
       })
 
       .state('hram.place', {
@@ -136,7 +134,8 @@ angular.module('pdHram', [
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Места',
-        secured: true
+        secured: true,
+        menuConfig: 'shopMenu'
       }, 'ROLE_CLIENT')
       .state('hram.place.details', {
         url: '/:placeId',
@@ -149,7 +148,40 @@ angular.module('pdHram', [
           }
         },
         controller: 'ClientPlaceDetail',
-        title: 'Детали места захоронения'
+        title: 'Детали места захоронения',
+        menuConfig: 'shopMenu'
+      }, 'ROLE_CLIENT')
+
+      .state('hram.history', {
+        url: '/visit',
+        resolve: {
+          ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
+            return pdFrontendOrders.getOrdersList();
+          }],
+          orderDetailsState: function () {
+            return 'hram.history.details';
+          }
+        },
+        controller: 'ClientOrdersListCtrl',
+        templateUrl: 'views/modules/frontend/client/orders/list.html',
+        title: 'История заказов',
+        secured: true,
+        menuConfig: 'shopMenu'
+      }, 'ROLE_CLIENT')
+      .state('hram.history.details', {
+        url: '/:orderId?wsb_order_num&wsb_tid&successPayment&cancelPayment',
+        resolve: {
+          orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
+            return pdFrontendOrders.getOrderDetails($stateParams.orderId);
+          }],
+          ordersListState: function () {
+            return 'hram.history';
+          }
+        },
+        controller: 'ClientOrderDetailsCtrl',
+        title: 'Информация о заказе',
+        secured: true,
+        menuConfig: 'shopMenu'
       }, 'ROLE_CLIENT')
 
       .state('hram.persons', {
@@ -168,9 +200,16 @@ angular.module('pdHram', [
               controller: function () {}
             });
           };
-        }]
+        }],
+        menuConfig: 'shopMenu'
       })
     ;
   })
-  .run(function () {})
+  .run(function ($rootScope, mainMenuManager, pdConfig) {
+    var shopMenu = mainMenuManager.addMenuConfig('shopMenu');
+
+    $rootScope.$on('$stateChangeSuccess', function () {
+      shopMenu.setMainMenuItems(pdConfig.menuConfigs.shopMenu.items);
+    });
+  })
 ;

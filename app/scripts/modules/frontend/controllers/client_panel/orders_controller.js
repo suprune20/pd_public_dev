@@ -3,10 +3,13 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientOrdersListCtrl', function ($scope, ordersCollection) {
+  .controller('ClientOrdersListCtrl', function ($scope, ordersCollection, orderDetailsState) {
+    $scope.orderDetailsState = orderDetailsState;
     $scope.orders = ordersCollection;
   })
-  .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel) {
+  .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel,
+                                                  ordersListState
+  ) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope) {
@@ -56,6 +59,6 @@ angular.module('pdFrontend')
       }
     }).result
       // return to orders list state after closing details modal
-      .catch(function () { $state.go('clientOrders'); });
+      .catch(function () { $state.go(ordersListState); });
   })
 ;

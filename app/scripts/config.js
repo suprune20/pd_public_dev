@@ -63,7 +63,10 @@ angular.module('pdConfig', [])
         shopMenu: {
           navbarClasses: 'navbar-inverse',
           items: [
-            {link: '/shop/history', title: 'Посещения'}
+            {link: '/hram/visit', title: 'Посещения'},
+            {link: '/hram/shop', title: 'Магазины'},
+            {link: '/hram/place', title: 'Места'},
+            {link: '/hram/person', title: 'Персоны'}
           ]
         }
       },

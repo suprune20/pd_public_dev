@@ -10,6 +10,22 @@
               ya-zoom="10"
               ya-options="{maxZoom: 18}">
         <ya-toolbar ya-name="zoomControl"></ya-toolbar>
+        <pd-ya-search-toolbar ya-options="{left: 5}"></pd-ya-search-toolbar>
+
+        <!-- Include button for add user's place -->
+        <!-- ToDo: temporary disabled -->
+        <ya-template-layout ya-key="addPlaceBtnTemplate">
+          <div class="btn btn-primary">
+            <span class="glyphicon glyphicon-map-marker"></span>
+            Добавить место
+          </div>
+        </ya-template-layout>
+        <ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">
+        <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
+                    ya-event-click="addPlace($event)"></ya-control>
+        </ya-toolbar>
+        <!-- End include button for add user's place -->
+
         <ya-collection show-all="true">
           <ya-geo-object ng-repeat="point in placesPoints" ya-source="point"></ya-geo-object>
         </ya-collection>
