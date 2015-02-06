@@ -3,10 +3,57 @@
   <h4 class="modal-title">Добавить место захоронения</h4>
 </div>
 
-<div class="modal-body row">
-  Comming Soon
+<div class="modal-body">
+  <div class="row margin-bottom-15">
+    <ya-map class="client-panel-place-map" ya-zoom="10" ya-options="{maxZoom: 18}"
+            ya-event-click="yaMapClickHandle($event)">
+      <ya-toolbar ya-name="zoomControl"></ya-toolbar>
+      <pd-ya-search-toolbar ya-options="{left: 5}"></pd-ya-search-toolbar>
+
+      <ya-geo-object ya-source="currentPlaceMarker"
+                     ya-event-dragend="currentPlaceMarkerDragendHandler($event)"></ya-geo-object>
+    </ya-map>
+  </div>
+  <div class="row margin-bottom-15">
+    <form name="addPlaceForm" class="col-xs-10 col-xs-offset-1">
+      <div class="form-group">
+        <label for="placeName">Название</label>
+        <input class="form-control" id="placeName" required ng-model="currentPlaceMarker.properties.placeModel.name">
+      </div>
+      <div class="form-group">
+        <label for="placeAddress">Адрес</label>
+        <textarea class="form-control" id="placeAddress"
+                  ng-model="currentPlaceMarker.properties.placeModel.address"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+      <h4>Персоны</h4>
+      <ul ng-show="currentPlaceMarker.properties.placeModel.deadmans.length">
+        <li ng-repeat="deadman in currentPlaceMarker.properties.placeModel.deadmans">{{deadman.fio}}</li>
+      </ul>
+
+      <form name="addDeadmanForm" ng-show="showAddDeadmanInput">
+        <div class="form-group">
+          <input class="form-control" required ng-model="deadmanName" placeholder="ФИО персоны">
+        </div>
+        <button type="button" class="btn btn-default" ng-disable="addDeadmanForm.$invalid"
+                ng-click="currentPlaceMarker.properties.placeModel.deadmans.push({fio: deadmanName});
+                  showAddDeadmanInput = false; deadmanName = null">
+          Сохранить
+        </button>
+        <button type="button" class="btn btn-default"
+                ng-click="showAddDeadmanInput = false; deadmanName = null">Отмена</button>
+      </form>
+      <button class="btn-link" ng-click="showAddDeadmanInput = true"
+              ng-hide="showAddDeadmanInput">Добавить персону</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-click="$dismiss()">Закрыть</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Отмена</button>
+  <button type="button" class="btn btn-default" ng-click="savePlace()"
+          ng-disabled="addPlaceForm.$invalid">Сохранить</button>
 </div>

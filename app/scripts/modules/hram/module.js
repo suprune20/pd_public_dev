@@ -134,9 +134,8 @@ angular.module('pdHram', [
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Места',
-        secured: true,
         menuConfig: 'shopMenu'
-      }, 'ROLE_CLIENT')
+      })
       .state('hram.place.details', {
         url: '/:placeId',
         resolve: {
@@ -150,7 +149,7 @@ angular.module('pdHram', [
         controller: 'ClientPlaceDetail',
         title: 'Детали места захоронения',
         menuConfig: 'shopMenu'
-      }, 'ROLE_CLIENT')
+      })
 
       .state('hram.history', {
         url: '/visit',

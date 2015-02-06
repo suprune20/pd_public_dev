@@ -3,6 +3,15 @@
 angular.module('pdCommon')
   .service('pdYandex', function (mapApiLoad, $q) {
     return {
+      currentPosition: function () {
+        var deferred = $q.defer();
+
+        mapApiLoad(function () {
+          deferred.resolve(ymaps.geolocation);
+        });
+
+        return deferred.promise;
+      },
       geocode: function (address) {
         var deferred = $q.defer();
 

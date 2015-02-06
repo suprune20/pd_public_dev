@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .service('pdFrontendPlacesApi', function ($http, pdConfig, $filter) {
+  .service('pdFrontendPlacesApi', function ($http, pdConfig, auth, $q) {
     return {
       getPlaces: function () {
+        if (!auth.isAuthenticated()) {
+          return $q.when([]);
+        }
+
         return $http.get(pdConfig.apiEndpoint + 'client/places')
           .then(function (response) {
             return _.map(response.data, function (place) {
@@ -37,6 +41,10 @@ angular.module('pdFrontend')
           .then(function (response) { return response.data; });
       },
       getDeadmans: function (params) {
+        if (!auth.isAuthenticated()) {
+          return $q.when([]);
+        }
+
         return $http.get(pdConfig.apiEndpoint + 'client/deadmans', {params: params})
           .then(function (response) {
             return _.map(response.data, function (deadman) {

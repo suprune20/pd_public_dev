@@ -61,9 +61,40 @@ angular.module('pdFrontend')
     };
 
     $scope.addPlace = function () {
+      var $controllerScope = $scope;
+
       $modal.open({
         templateUrl: 'views/modules/frontend/client/places/add_place.modal.html',
-        controller: function () {}
+        controller: function ($scope, pdYandex, $modalInstance) {
+          $scope.$watch('currentPlaceMarker.geometry', function (geometry) {
+            pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
+              $scope.currentPlaceMarker.properties.placeModel.address = res.text;
+            });
+          }, true);
+
+          $scope.savePlace = function () {
+            $controllerScope.placesPoints.push($scope.currentPlaceMarker);
+            $controllerScope.placesCollection.push($scope.currentPlaceMarker.properties.placeModel);
+            $modalInstance.close();
+          };
+          $scope.yaMapClickHandle = function (event) {
+            $scope.currentPlaceMarker.geometry.coordinates = event.get('coords');
+          };
+          pdYandex.currentPosition()
+            .then(function (geolocation) {
+              $scope.currentPlaceMarker = {
+                properties: {
+                  placeModel: {
+                    deadmans: []
+                  }
+                },
+                geometry: {
+                  type: 'Point',
+                  coordinates: [geolocation.longitude, geolocation.latitude]
+                }
+              };
+            });
+        }
       });
     };
   })
