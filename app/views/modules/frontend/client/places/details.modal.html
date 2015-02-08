@@ -18,7 +18,7 @@
           <dd>{{placeData.address}}</dd>
         </dl>
 
-        <ul class="media-list" ng-if="placeData.deadmans.length">
+        <ul class="media-list">
           <li class="media" ng-repeat="deadman in placeData.deadmans">
             <img class="media-object img-thumbnail pull-left"
                  ng-src="{{deadman.photo}}"
@@ -33,6 +33,28 @@
                 <li>{{deadman.birthDate|default:'?'}} - {{deadman.deathDate|default:'?'}}</li>
               </ul>
             </div>
+          </li>
+          <li>
+            <form name="addDeadmanForm" ng-show="showAddDeadmanInput">
+              <div class="form-group">
+                <input class="form-control" required ng-model="deadman.firstName" placeholder="Имя">
+              </div>
+              <div class="form-group">
+                <input class="form-control" required ng-model="deadman.lastName" placeholder="Фамилия">
+              </div>
+              <div class="form-group">
+                <input class="form-control" required ng-model="deadman.middleName" placeholder="Отчество">
+              </div>
+
+              <button type="button" class="btn btn-default" ng-disable="addDeadmanForm.$invalid"
+                      ng-click="placeData.deadmans.push(deadman); showAddDeadmanInput = false; deadman = null">
+                Сохранить
+              </button>
+              <button type="button" class="btn btn-default"
+                      ng-click="showAddDeadmanInput = false; deadman = null">Отмена</button>
+            </form>
+            <button class="btn-link" ng-click="showAddDeadmanInput = true"
+                    ng-hide="showAddDeadmanInput">Добавить персону</button>
           </li>
         </ul>
 

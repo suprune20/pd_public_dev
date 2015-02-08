@@ -2,7 +2,6 @@
 
 angular.module('pdFrontend')
   .controller('ClientPanelCtrl', function ($scope, placesData, pdFrontendOrders, growl, $modal, placeDetailsState) {
-    $scope.placeDetailsState = placeDetailsState;
     $scope.placesCollection = placesData.places;
     $scope.placesPoints = placesData.placesYandexPoints;
     $scope.selectPlace = function (placeData) {
@@ -12,6 +11,10 @@ angular.module('pdFrontend')
       });
       // find selected place and centered and change icon for marker
       var selectedPlace = _.find($scope.placesPoints, {properties: {placeModel: {id: placeData.id}}});
+      if (!selectedPlace) {
+        return;
+      }
+
       selectedPlace.options.preset = 'twirl#blueIcon';
       $scope.centerYaPoint = selectedPlace.geometry.coordinates;
     };
@@ -60,6 +63,29 @@ angular.module('pdFrontend')
       });
     };
 
+    // open place details
+    $scope.openPlaceDetails = function (placeModel) {
+      if (placeModel.id) {
+        $scope.$state.go(placeDetailsState, {placeId: placeModel.id});
+        return;
+      }
+
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/places/details.modal.html',
+        resolve: {
+          placeModel: function (pdFrontendClientPanel) {
+            placeModel.locationYandexPoint = pdFrontendClientPanel.getPlaceDetailsYandexPoint(
+              placeModel.location.longitude,
+              placeModel.location.latitude
+            );
+
+            return placeModel;
+          }
+        },
+        controller: 'ClientPlaceDetailsModalCtrl'
+      });
+    };
+
     $scope.addPlace = function () {
       var $controllerScope = $scope;
 
@@ -69,6 +95,10 @@ angular.module('pdFrontend')
           $scope.$watch('currentPlaceMarker.geometry', function (geometry) {
             pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
               $scope.currentPlaceMarker.properties.placeModel.address = res.text;
+              $scope.currentPlaceMarker.properties.placeModel.location = {
+                longitude: geometry.coordinates[0],
+                latitude: geometry.coordinates[1]
+              };
             });
           }, true);
 
@@ -91,7 +121,8 @@ angular.module('pdFrontend')
                 geometry: {
                   type: 'Point',
                   coordinates: [geolocation.longitude, geolocation.latitude]
-                }
+                },
+                options: {}
               };
             });
         }
@@ -101,9 +132,15 @@ angular.module('pdFrontend')
   .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/places/details.modal.html',
-      controller: function ($scope) {
-        $scope.placeData = placeData;
-      }
+      resolve: {
+        placeModel: function () {
+          return placeData;
+        }
+      },
+      controller: 'ClientPlaceDetailsModalCtrl'
     }).result.catch(function () { $state.go(placesListState); });
+  })
+  .controller('ClientPlaceDetailsModalCtrl', function ($scope, placeModel) {
+    $scope.placeData = placeModel;
   })
 ;

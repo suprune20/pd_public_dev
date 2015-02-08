@@ -42,6 +42,17 @@ angular.module('pdFrontend')
               });
           });
       },
+      getPlaceDetailsYandexPoint: function (longitude, latitude) {
+        return {
+          geometry: {
+            type: 'Point',
+            coordinates: [longitude, latitude]
+          },
+          options: {
+            preset: 'twirl#brownIcon'
+          }
+        };
+      },
       getPlaceDetails: function (placeId) {
         return $q.all([
           pdFrontendPlacesApi.getPlaceDetails(placeId),
@@ -50,15 +61,10 @@ angular.module('pdFrontend')
           pdFrontendPlacesApi.getPlaceAttachments(placeId)
         ]).then(function (results) {
           var placeModel = results[0];
-          placeModel.locationYandexPoint = {
-            geometry: {
-              type: 'Point',
-              coordinates: [placeModel.location.longitude, placeModel.location.latitude]
-            },
-            options: {
-              preset: 'twirl#brownIcon'
-            }
-          };
+          placeModel.locationYandexPoint = this.getPlaceDetailsYandexPoint(
+            placeModel.location.longitude,
+            placeModel.location.latitude
+          );
           placeModel.deadmans = results[1];
           placeModel.orders = results[2];
           placeModel.attachments = results[3];

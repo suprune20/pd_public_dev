@@ -30,24 +30,47 @@
   <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
       <h4>Персоны</h4>
-      <ul ng-show="currentPlaceMarker.properties.placeModel.deadmans.length">
-        <li ng-repeat="deadman in currentPlaceMarker.properties.placeModel.deadmans">{{deadman.fio}}</li>
-      </ul>
 
-      <form name="addDeadmanForm" ng-show="showAddDeadmanInput">
-        <div class="form-group">
-          <input class="form-control" required ng-model="deadmanName" placeholder="ФИО персоны">
-        </div>
-        <button type="button" class="btn btn-default" ng-disable="addDeadmanForm.$invalid"
-                ng-click="currentPlaceMarker.properties.placeModel.deadmans.push({fio: deadmanName});
-                  showAddDeadmanInput = false; deadmanName = null">
-          Сохранить
-        </button>
-        <button type="button" class="btn btn-default"
-                ng-click="showAddDeadmanInput = false; deadmanName = null">Отмена</button>
-      </form>
-      <button class="btn-link" ng-click="showAddDeadmanInput = true"
-              ng-hide="showAddDeadmanInput">Добавить персону</button>
+      <ul class="media-list">
+        <li class="media" ng-repeat="deadman in currentPlaceMarker.properties.placeModel.deadmans">
+          <img class="media-object img-thumbnail pull-left"
+               ng-src="{{deadman.photo}}"
+               pd-thumb
+               pd-thumb-size="50x50"
+               default-image="http://placehold.it/50x50" />
+          <div class="media-body">
+            <ul class="list-unstyled">
+              <li><strong>{{deadman.lastName}}</strong></li>
+              <li><strong>{{deadman.firstName}}</strong></li>
+              <li><strong>{{deadman.middleName}}</strong></li>
+              <li>{{deadman.birthDate|default:'?'}} - {{deadman.deathDate|default:'?'}}</li>
+            </ul>
+          </div>
+        </li>
+
+        <li>
+          <form name="addDeadmanForm" ng-show="showAddDeadmanInput">
+            <div class="form-group">
+              <input class="form-control" required ng-model="deadman.firstName" placeholder="Имя">
+            </div>
+            <div class="form-group">
+              <input class="form-control" required ng-model="deadman.lastName" placeholder="Фамилия">
+            </div>
+            <div class="form-group">
+              <input class="form-control" required ng-model="deadman.middleName" placeholder="Отчество">
+            </div>
+            <button type="button" class="btn btn-default" ng-disable="addDeadmanForm.$invalid"
+                    ng-click="currentPlaceMarker.properties.placeModel.deadmans.push(deadman);
+                  showAddDeadmanInput = false; deadman = null">
+              Сохранить
+            </button>
+            <button type="button" class="btn btn-default"
+                    ng-click="showAddDeadmanInput = false; deadman = null">Отмена</button>
+          </form>
+          <button class="btn-link" ng-click="showAddDeadmanInput = true"
+                  ng-hide="showAddDeadmanInput">Добавить персону</button>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
