@@ -54,6 +54,8 @@ angular.module('pdFrontend')
         };
       },
       getPlaceDetails: function (placeId) {
+        var that = this;
+
         return $q.all([
           pdFrontendPlacesApi.getPlaceDetails(placeId),
           pdFrontendPlacesApi.getPlaceDeadmans(placeId),
@@ -61,7 +63,7 @@ angular.module('pdFrontend')
           pdFrontendPlacesApi.getPlaceAttachments(placeId)
         ]).then(function (results) {
           var placeModel = results[0];
-          placeModel.locationYandexPoint = this.getPlaceDetailsYandexPoint(
+          placeModel.locationYandexPoint = that.getPlaceDetailsYandexPoint(
             placeModel.location.longitude,
             placeModel.location.latitude
           );

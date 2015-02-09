@@ -140,7 +140,59 @@ angular.module('pdFrontend')
       controller: 'ClientPlaceDetailsModalCtrl'
     }).result.catch(function () { $state.go(placesListState); });
   })
-  .controller('ClientPlaceDetailsModalCtrl', function ($scope, placeModel) {
+  .controller('ClientPlaceDetailsModalCtrl', function ($scope, placeModel, $modal, DeadmanMemoryProvider) {
     $scope.placeData = placeModel;
+    // Open modal window with burial details and memory page data
+    $scope.showMemoryPage = function (burialId) {
+      var deadmanMemory = new DeadmanMemoryProvider(burialId);
+
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/memory_page.modal.html',
+        windowClass: 'burial-memory-modal',
+        resolve: {
+          burial: function () {
+            return deadmanMemory;
+          },
+          memoryData: function () {
+            return deadmanMemory.getMemoryDetails();
+          }
+        },
+        controller: function ($scope, burial, memoryData, growl) {
+          // Initial values
+          $scope.postMemoryData = {};
+
+          $scope.burialData = memoryData;
+          $scope.memoriesDataProvider = new (burial.getMemoriesProvider())();
+          $scope.saveBurialData = function (burialData) {
+            console.log(burialData);
+          };
+          $scope.saveCommonText = function (commonText) {
+            return $scope.saveBurialData({commonText: commonText});
+          };
+          $scope.onGalleryFileSelect = function (files) {
+            burial.postGalleryPhoto(files[0])
+              .then(null, function () {
+                growl.addErrorMessage('Не удалось добавить изображение в галерею');
+              });
+          };
+          // Post memory message
+          $scope.onMemoryFileSelect = function (files, type) {
+            console.log(files, type);
+            $scope.postMemoryData.file = {
+              type: type,
+              file: files[0]
+            };
+          };
+          $scope.removeSelectedMessageFile = function () {
+            delete $scope.postMemoryData.file;
+          };
+          $scope.postMemoryMsg = function () {
+            console.log($scope.postMemoryData);
+            // Reset form data after success save
+            $scope.postMemoryData = {};
+          };
+        }
+      });
+    };
   })
 ;

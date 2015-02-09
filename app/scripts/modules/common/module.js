@@ -1,27 +1,29 @@
 'use strict';
 
 angular.module('pdCommon', [
-    'ngRoute',
-    'pdConfig',
-    'ui.bootstrap',
-    'angularLocalStorage',
-    'ajoslin.promise-tracker',
-    'ivpusic.cookie',
-    'angular-growl',
-    'angularFileUpload',
-    'checklist-model',
-    'ui.router',
-    'pasvaz.bindonce',
-    'xeditable',
-    'akoenig.deckgrid',
-    'monospaced.elastic'
-  ])
+  'ngRoute',
+  'pdConfig',
+  'ui.bootstrap',
+  'angularLocalStorage',
+  'ajoslin.promise-tracker',
+  'ivpusic.cookie',
+  'angular-growl',
+  'angularFileUpload',
+  'checklist-model',
+  'ui.router',
+  'pasvaz.bindonce',
+  'xeditable',
+  'akoenig.deckgrid',
+  'monospaced.elastic',
+  'angularMoment'
+])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);
   })
-  .run(function ($rootScope, promiseTracker, editableOptions) {
+  .run(function ($rootScope, promiseTracker, editableOptions, amMoment) {
     $rootScope.commonLoadingTracker = promiseTracker('commonLoadingTracker');
     editableOptions.theme = 'bs3';
+    amMoment.changeLanguage('ru');
   })
   .factory('httpErrorsInterceptor', function (pdConfig, $q, growl) {
     var apiUrlRegexp = new RegExp('^' + pdConfig.apiEndpoint);

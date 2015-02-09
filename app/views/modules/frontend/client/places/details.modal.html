@@ -19,7 +19,7 @@
         </dl>
 
         <ul class="media-list">
-          <li class="media" ng-repeat="deadman in placeData.deadmans">
+          <li class="media" ng-repeat="deadman in placeData.deadmans" ng-click="showMemoryPage(deadman.id)">
             <img class="media-object img-thumbnail pull-left"
                  ng-src="{{deadman.photo}}"
                  pd-thumb

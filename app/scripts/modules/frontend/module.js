@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('pdFrontend', [
-    'ngRoute',
-    'pdCommon',
-    'ui.select2',
-    'infinite-scroll',
-    'yaMap',
-    'mgcrea.ngStrap.datepicker'
-  ])
+  'ngRoute',
+  'pdCommon',
+  'ui.select2',
+  'infinite-scroll',
+  'yaMap',
+  'mgcrea.ngStrap.datepicker',
+  'com.2fdevs.videogular',
+  'com.2fdevs.videogular.plugins.controls'
+])
   .config(function (authRouteProvider) {
     authRouteProvider
       .state('catalog', {

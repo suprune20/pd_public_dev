@@ -20,6 +20,7 @@ $grid-float-breakpoint: 1170px;
 @import "partials/images";
 @import "partials/stick_blocks";
 @import "partials/deckgrid";
+@import "partials/flexslider";
 @import "layout";
 @import "catalog";
 @import "client-panel";
@@ -37,6 +38,7 @@ $grid-float-breakpoint: 1170px;
 @import "pages/pdLoru/orgplaces";
 @import "pages/pdLoru/opt_marketplace";
 @import "pages/pdFrontend/auth_modal";
+@import "pages/pdFrontend/burial_memory.modal";
 @import "pages/pdCommon/org_signup_form";
 
 @import "pages/pdShop/layout";
