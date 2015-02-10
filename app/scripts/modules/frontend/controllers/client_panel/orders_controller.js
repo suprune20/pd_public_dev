@@ -8,11 +8,21 @@ angular.module('pdFrontend')
     $scope.orders = ordersCollection;
   })
   .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel,
-                                                  ordersListState
+                                                  ordersListState, shopServices
   ) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope) {
+        $scope.shopServices = _.map(shopServices, function (service) {
+          return {
+            service: service,
+            isSelected: false
+          };
+        });
+        $scope.$watch('shopServices', function (services) {
+          $scope.isSelectedAnyServices = _.some(services, 'isSelected');
+        }, true);
+
         $scope.order = orderModel;
         $scope.orderForm = { commentText: '' };
         $scope.postComment = function () {
