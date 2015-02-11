@@ -18,6 +18,18 @@ angular.module('pdFrontend')
             });
           });
       },
+      postPlace: function (name, address, locationLongitude, locationLatitude) {
+        return $http.post(pdConfig.apiEndpoint + 'client/places', {
+          name: name,
+          address: address,
+          location: {
+            latitude: locationLatitude,
+            longitude: locationLongitude
+          }
+        }).then(function (response) {
+          return response.data;
+        });
+      },
       getPlaceDetails: function (placeId) {
         return $http.get(pdConfig.apiEndpoint + 'client/places/' + placeId)
           .then(function (response) {

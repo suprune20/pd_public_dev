@@ -4,6 +4,8 @@ angular.module('pdFrontend')
   .service('pdFrontendClientPanel', function ($q, pdFrontendPlacesApi) {
     return {
       getPlacesCollection: function () {
+        var that = this;
+
         return pdFrontendPlacesApi.getPlaces()
           .then(function (placesCollection) {
             var deadmansIds = _.reduce(placesCollection, function (ids, place) {
@@ -25,28 +27,20 @@ angular.module('pdFrontend')
                     return place;
                   }),
                   placesYandexPoints: _.map(placesCollection, function (place) {
-                    return {
-                      geometry: {
-                        type: 'Point',
-                        coordinates: [place.location.longitude, place.location.latitude]
-                      },
-                      properties: {
-                        placeModel: place
-                      },
-                      options: {
-                        preset: 'twirl#brownIcon'
-                      }
-                    };
+                    return that.getPlaceYandexPoint(place);
                   })
                 };
               });
           });
       },
-      getPlaceDetailsYandexPoint: function (longitude, latitude) {
+      getPlaceYandexPoint: function (placeModel) {
         return {
           geometry: {
             type: 'Point',
-            coordinates: [longitude, latitude]
+            coordinates: [placeModel.location.longitude, placeModel.location.latitude]
+          },
+          properties: {
+            placeModel: placeModel
           },
           options: {
             preset: 'twirl#brownIcon'
@@ -63,16 +57,21 @@ angular.module('pdFrontend')
           pdFrontendPlacesApi.getPlaceAttachments(placeId)
         ]).then(function (results) {
           var placeModel = results[0];
-          placeModel.locationYandexPoint = that.getPlaceDetailsYandexPoint(
-            placeModel.location.longitude,
-            placeModel.location.latitude
-          );
+          placeModel.locationYandexPoint = that.getPlaceYandexPoint(placeModel);
           placeModel.deadmans = results[1];
           placeModel.orders = results[2];
           placeModel.attachments = results[3];
 
           return placeModel;
         });
+      },
+      addPlace: function (placeModel) {
+        return pdFrontendPlacesApi.postPlace(
+          placeModel.name,
+          placeModel.address,
+          placeModel.location.longitude,
+          placeModel.location.latitude
+        );
       }
     };
   })

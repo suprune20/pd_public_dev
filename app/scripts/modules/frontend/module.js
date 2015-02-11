@@ -108,20 +108,6 @@ angular.module('pdFrontend', [
           }],
           ordersListState: function () {
             return 'clientOrders';
-          },
-          shopServices: function () {
-            return [
-              {
-                id: 1,
-                title: 'Заказ фотографии',
-                price: parseFloat(Math.random() * 1000).toFixed(2)
-              },
-              {
-                id: 2,
-                title: 'Венок',
-                price: parseFloat(Math.random() * 1000).toFixed(2)
-              }
-            ];
           }
         },
         controller: 'ClientOrderDetailsCtrl',

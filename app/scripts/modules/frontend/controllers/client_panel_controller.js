@@ -74,10 +74,7 @@ angular.module('pdFrontend')
         templateUrl: 'views/modules/frontend/client/places/details.modal.html',
         resolve: {
           placeModel: function (pdFrontendClientPanel) {
-            placeModel.locationYandexPoint = pdFrontendClientPanel.getPlaceDetailsYandexPoint(
-              placeModel.location.longitude,
-              placeModel.location.latitude
-            );
+            placeModel.locationYandexPoint = pdFrontendClientPanel.getPlaceYandexPoint(placeModel);
 
             return placeModel;
           }
@@ -91,7 +88,7 @@ angular.module('pdFrontend')
 
       $modal.open({
         templateUrl: 'views/modules/frontend/client/places/add_place.modal.html',
-        controller: function ($scope, pdYandex, $modalInstance) {
+        controller: function ($scope, pdYandex, pdFrontendClientPanel, $modalInstance) {
           $scope.$watch('currentPlaceMarker.geometry', function (geometry) {
             pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
               $scope.currentPlaceMarker.properties.placeModel.address = res.text;
@@ -103,9 +100,12 @@ angular.module('pdFrontend')
           }, true);
 
           $scope.savePlace = function () {
-            $controllerScope.placesPoints.push($scope.currentPlaceMarker);
-            $controllerScope.placesCollection.push($scope.currentPlaceMarker.properties.placeModel);
-            $modalInstance.close();
+            pdFrontendClientPanel.addPlace($scope.currentPlaceMarker.properties.placeModel)
+              .then(function (placeModel) {
+                $controllerScope.placesPoints.push(pdFrontendClientPanel.getPlaceYandexPoint(placeModel));
+                $controllerScope.placesCollection.push(placeModel);
+                $modalInstance.close();
+              });
           };
           $scope.yaMapClickHandle = function (event) {
             $scope.currentPlaceMarker.geometry.coordinates = event.get('coords');

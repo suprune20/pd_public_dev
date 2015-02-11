@@ -8,12 +8,44 @@ angular.module('pdFrontend')
     $scope.orders = ordersCollection;
   })
   .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel,
-                                                  ordersListState, shopServices
+                                                  ordersListState
   ) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
-      controller: function ($scope) {
-        $scope.shopServices = _.map(shopServices, function (service) {
+      controller: function ($scope, CatalogRefactored) {
+        // get products for supplier
+        //if ('posted' === orderModel.status) {
+        //  var productsProvider = (new CatalogRefactored(100)).productsDataProvider;
+        //  productsProvider.applyFilters({
+        //    supplier: [19]
+        //  });
+        //  productsProvider.getProducts();
+        //
+        //
+        //  $scope.shopServices = _.map(shopServices, function (service) {
+        //    return {
+        //      service: service,
+        //      isSelected: false
+        //    };
+        //  });
+        //  $scope.$watch('shopServices', function (services) {
+        //    $scope.isSelectedAnyServices = _.some(services, 'isSelected');
+        //  }, true);
+        //}
+
+
+        $scope.shopServices = _.map([
+          {
+            id: 1,
+            title: 'Заказ фотографии',
+            price: parseFloat(Math.random() * 1000).toFixed(2)
+          },
+          {
+            id: 2,
+            title: 'Венок',
+            price: parseFloat(Math.random() * 1000).toFixed(2)
+          }
+        ], function (service) {
           return {
             service: service,
             isSelected: false
