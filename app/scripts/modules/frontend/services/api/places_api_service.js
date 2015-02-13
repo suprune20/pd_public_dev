@@ -44,6 +44,10 @@ angular.module('pdFrontend')
         return $http.get(pdConfig.apiEndpoint + 'client/places/' + placeId + '/deadmans')
           .then(function (response) { return response.data; });
       },
+      postPlaceDeadman: function (placeId, deadmanModel) {
+        return $http.post(pdConfig.apiEndpoint + 'client/places/' + placeId + '/deadmans', deadmanModel)
+          .then(function (response) { return response.data; });
+      },
       getPlaceAttachments: function (placeId) {
         return $http.get(pdConfig.apiEndpoint + 'client/places/' + placeId + '/attachments')
           .then(function (response) { return response.data; });

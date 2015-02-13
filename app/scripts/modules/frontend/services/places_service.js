@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .service('pdFrontendClientPanel', function ($q, pdFrontendPlacesApi) {
+  .service('pdFrontendClientPanel', function ($q, pdFrontendPlacesApi, auth) {
     return {
       getPlacesCollection: function () {
         var that = this;
@@ -66,12 +66,36 @@ angular.module('pdFrontend')
         });
       },
       addPlace: function (placeModel) {
+        if (!auth.isAuthenticated()) {
+          return $q.when(placeModel);
+        }
+
+        var _this = this;
+
         return pdFrontendPlacesApi.postPlace(
           placeModel.name,
           placeModel.address,
           placeModel.location.longitude,
           placeModel.location.latitude
-        );
+        ).then(function (addedPlaceModel) {
+            var deadmanAddPromises = _.map(placeModel.deadmans, function (deadman) {
+              return _this.addDeadman(addedPlaceModel.id, deadman);
+            });
+
+            return $q.all(deadmanAddPromises)
+              .then(function (addedDeadmansModels) {
+                placeModel.deadmans = addedDeadmansModels;
+
+                return placeModel;
+              });
+          });
+      },
+      addDeadman: function (placeId, deadmanModel) {
+        if (!auth.isAuthenticated()) {
+          return $q.when(deadmanModel);
+        }
+
+        return pdFrontendPlacesApi.postPlaceDeadman(placeId, deadmanModel);
       }
     };
   })

@@ -204,11 +204,26 @@ angular.module('pdHram', [
       })
     ;
   })
-  .run(function ($rootScope, mainMenuManager, pdConfig) {
-    var shopMenu = mainMenuManager.addMenuConfig('shopMenu');
+  .run(function ($rootScope, mainMenuManager, pdConfig, auth) {
+    var shopMenuConfig = mainMenuManager.addMenuConfig('shopMenu');
+    var setupMenu = function () {
+      shopMenuConfig.setRightMenuItems([
+        {
+          type: 'dropdown',
+          title: auth.getUserProfile().shortFIO,
+          icon: 'glyphicon-user',
+          items: [
+            {link: '/settings', title: 'Настройки'},
+            {class: 'divider'},
+            {link: '/signout', title: 'Выйти'}
+          ]
+        }
+      ]);
+    };
 
-    $rootScope.$on('$stateChangeSuccess', function () {
-      shopMenu.setMainMenuItems(pdConfig.menuConfigs.shopMenu.items);
-    });
+    shopMenuConfig.setMainMenuItems(pdConfig.menuConfigs.shopMenu.items);
+
+    $rootScope.$on('$stateChangeSuccess', setupMenu);
+    $rootScope.$on('auth.signin_success', setupMenu);
   })
 ;

@@ -14,46 +14,22 @@ angular.module('pdFrontend')
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope, CatalogRefactored) {
         // get products for supplier
-        //if ('posted' === orderModel.status) {
-        //  var productsProvider = (new CatalogRefactored(100)).productsDataProvider;
-        //  productsProvider.applyFilters({
-        //    supplier: [19]
-        //  });
-        //  productsProvider.getProducts();
-        //
-        //
-        //  $scope.shopServices = _.map(shopServices, function (service) {
-        //    return {
-        //      service: service,
-        //      isSelected: false
-        //    };
-        //  });
-        //  $scope.$watch('shopServices', function (services) {
-        //    $scope.isSelectedAnyServices = _.some(services, 'isSelected');
-        //  }, true);
-        //}
+        if ('posted' === orderModel.status) {
+          var productsProvider = (new CatalogRefactored(100)).productsDataProvider;
 
-
-        $scope.shopServices = _.map([
-          {
-            id: 1,
-            title: 'Заказ фотографии',
-            price: parseFloat(Math.random() * 1000).toFixed(2)
-          },
-          {
-            id: 2,
-            title: 'Венок',
-            price: parseFloat(Math.random() * 1000).toFixed(2)
-          }
-        ], function (service) {
-          return {
-            service: service,
-            isSelected: false
-          };
-        });
-        $scope.$watch('shopServices', function (services) {
-          $scope.isSelectedAnyServices = _.some(services, 'isSelected');
-        }, true);
+          productsProvider.applyFilters({
+            supplier: [orderModel.supplierId]
+          });
+          $scope.shopServices = _.map(productsProvider.getProducts(), function (service) {
+            return {
+              service: service,
+              isSelected: false
+            };
+          });
+          $scope.$watch('shopServices', function (services) {
+            $scope.isSelectedAnyServices = _.some(services, 'isSelected');
+          }, true);
+        }
 
         $scope.order = orderModel;
         $scope.orderForm = { commentText: '' };

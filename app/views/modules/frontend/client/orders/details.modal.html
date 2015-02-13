@@ -62,7 +62,7 @@
         </ul>
       </tab>
 
-      <tab heading="Редактирование" disabled="{{ 'posted' !== order.status }}">
+      <tab heading="Редактирование" disabled="{{ 'posted' !== order.status || !shopServices.length }}">
         <table class="table table-bordered">
           <thead>
           <tr>
