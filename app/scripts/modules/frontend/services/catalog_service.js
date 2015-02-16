@@ -20,16 +20,16 @@ angular.module('pdFrontend')
           }
 
           isBusy = true;
-          pdFrontendCatalogApi.getProducts(_.merge(filtersData || {}, {
+
+          return pdFrontendCatalogApi.getProducts(_.merge(filtersData || {}, {
             limit: productsCountPerRequest,
             offset: products.length,
             'order[date]': 'asc'
-          }))
-            .then(function (productsData) {
-              isBusy = false;
-              isNoProducts = productsData.length < productsCountPerRequest;
-              products = products.concat(productsData);
-            }, function () { isBusy = false; });
+          })).then(function (productsData) {
+            isBusy = false;
+            isNoProducts = productsData.length < productsCountPerRequest;
+            products = products.concat(productsData);
+          }, function () { isBusy = false; });
         }
 
         return {
@@ -57,7 +57,8 @@ angular.module('pdFrontend')
               filtersData['order[' + orderAttr + ']'] = value;
             });
             products = [];
-            getNextProducts();
+
+            return getNextProducts();
           }
         };
       };

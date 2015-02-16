@@ -19,16 +19,10 @@ angular.module('pdFrontend')
 
           productsProvider.applyFilters({
             supplier: [orderModel.supplierId]
+          }).then(function () {
+            $scope.products = productsProvider.getProducts();
           });
-          $scope.shopServices = _.map(productsProvider.getProducts(), function (service) {
-            return {
-              service: service,
-              isSelected: false
-            };
-          });
-          $scope.$watch('shopServices', function (services) {
-            $scope.isSelectedAnyServices = _.some(services, 'isSelected');
-          }, true);
+          $scope.saveProductsChanges = function () {};
         }
 
         $scope.order = orderModel;
@@ -46,9 +40,7 @@ angular.module('pdFrontend')
           var ratingValues = [null, true, false];
           $scope.order.clientRating = ratingValues[(ratingValues.indexOf($scope.order.clientRating) + 1) % 3];
         };
-        $scope.payOrder = function () {
-
-        };
+        $scope.payOrder = function () {};
 
         var savedRating = $scope.order.clientRating;
         $scope.saveRating = function () {
@@ -74,6 +66,8 @@ angular.module('pdFrontend')
               $scope.paymentSuccess = true;
             });
         }
+
+        $scope.saveOrderChanges = function () {};
       }
     }).result
       // return to orders list state after closing details modal

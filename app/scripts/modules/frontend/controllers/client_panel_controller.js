@@ -128,6 +128,16 @@ angular.module('pdFrontend')
         }
       });
     };
+    // Handle addedDeadman event
+    $scope.$on('addedDeadman', function (event, eventData) {
+      var place = _.findWhere($scope.placesCollection, {id: eventData.placeId});
+
+      if (!place) {
+        return;
+      }
+
+      place.deadmans.push(eventData.deadman);
+    });
   })
   .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({
@@ -140,8 +150,19 @@ angular.module('pdFrontend')
       controller: 'ClientPlaceDetailsModalCtrl'
     }).result.catch(function () { $state.go(placesListState); });
   })
-  .controller('ClientPlaceDetailsModalCtrl', function ($scope, placeModel, $modal, DeadmanMemoryProvider) {
+  .controller('ClientPlaceDetailsModalCtrl', function ($rootScope, $scope, placeModel, $modal, DeadmanMemoryProvider,
+                                                       pdFrontendClientPanel
+  ) {
     $scope.placeData = placeModel;
+    $scope.addDeadman = function (deadman) {
+      pdFrontendClientPanel.addDeadman(placeModel.id, deadman)
+        .then(function (addedDeadman) {
+          $rootScope.$broadcast('addedDeadman', {
+            placeId: placeModel.id,
+            deadman: addedDeadman
+          });
+        });
+    };
     // Open modal window with burial details and memory page data
     $scope.showMemoryPage = function (burialId) {
       var deadmanMemory = new DeadmanMemoryProvider(burialId);

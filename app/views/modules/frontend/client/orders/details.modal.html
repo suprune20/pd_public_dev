@@ -62,23 +62,32 @@
         </ul>
       </tab>
 
-      <tab heading="Редактирование" disabled="{{ 'posted' !== order.status || !shopServices.length }}">
+      <tab heading="Редактирование" disabled="'posted' !== order.status || !products.length">
         <table class="table table-bordered">
           <thead>
           <tr>
+            <th width="77"></th>
             <th>Название</th>
             <th>Стоимость</th>
             <th></th>
-            <th ng-show="isSelectedAnyServices"></th>
+            <th ng-show="isSelectedAnyProducts"></th>
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="service in shopServices">
-            <td>{{service.service.title}}</td>
-            <td>{{service.service.price}}</td>
-            <td><input type="checkbox" ng-model="service.isSelected"></td>
-            <td ng-attr-rowspan="{{shopServices.length}}" ng-show="$first && isSelectedAnyServices">
-              <button class="btn btn-info" ng-click="showAvailablePlaces = !showAvailablePlaces">Сохранить</button>
+          <tr ng-repeat="product in products">
+            <td>
+              <img class="img-thumbnail"
+                   ng-src="{{product.photo}}"
+                   pd-thumb
+                   pd-thumb-size=50x50
+                   default-image="https://placehold.it/50x50"
+                   ng-attr-alt="{{product.name}}"/>
+            </td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}} ({{ product.currency }})</td>
+            <td><input type="checkbox" ng-model="selectedProducts"></td>
+            <td ng-attr-rowspan="{{products.length}}" ng-show="$first && hasChangesInProducts">
+              <button class="btn btn-info" ng-click="saveProductsChanges()">Сохранить</button>
             </td>
           </tr>
           </tbody>
