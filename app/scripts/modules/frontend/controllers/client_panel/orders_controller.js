@@ -13,16 +13,76 @@ angular.module('pdFrontend')
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
       controller: function ($scope, CatalogRefactored) {
+        var servicesCost = _.reduce(orderModel.services, function (sum, service) {
+          return sum + service.price;
+        }, 0);
+        var calculateProductsCost = function (productsCollection) {
+          return _.reduce(productsCollection, function (sum, product) {
+            return sum + (product.price * product.quantity);
+          }, 0);
+        };
+        $scope.totalCost = servicesCost + calculateProductsCost(orderModel.products);
+
         // get products for supplier
         if ('posted' === orderModel.status) {
           var productsProvider = (new CatalogRefactored(100)).productsDataProvider;
+          var initialProducts = _.sortBy(_.map(orderModel.products, function (product) {
+            return {
+              id: product.productId,
+              qty: product.quantity
+            };
+          }), 'id');
 
           productsProvider.applyFilters({
             supplier: [orderModel.supplierId]
           }).then(function () {
-            $scope.products = productsProvider.getProducts();
+            $scope.products = _.map(productsProvider.getProducts(), function (product) {
+              var previousSelectedProduct = _.findWhere(orderModel.products, {productId: product.id});
+
+              return {
+                product: product,
+                isSelected: !!previousSelectedProduct,
+                qty: !!previousSelectedProduct ? previousSelectedProduct.quantity : 0
+              };
+            });
           });
-          $scope.saveProductsChanges = function () {};
+
+          $scope.$watch('products', function () {
+            var selectedProducts = _.filter($scope.products, 'isSelected');
+
+            $scope.changedProductsState = _(selectedProducts)
+              .map(function (productMeta) {
+                return {
+                  id: productMeta.product.id,
+                  qty: productMeta.qty
+                };
+              })
+              .sortBy('id')
+              .value();
+            $scope.totalCost = servicesCost + calculateProductsCost(_.map(selectedProducts, function (productMeta) {
+              var product = productMeta.product;
+              product.quantity = productMeta.qty;
+
+              return product;
+            }));
+            $scope.hasChangedProducts = !_.isEqual(initialProducts, $scope.changedProductsState);
+          }, true);
+
+          $scope.onChangedTab = function (tabName) {
+            $scope.activeTab = tabName;
+          };
+
+          $scope.saveProductsChanges = function () {
+            pdFrontendOrders.saveOrderProducts(orderModel.id, _.map($scope.changedProductsState, function (product) {
+              return {
+                productId: product.id,
+                quantity: product.qty
+              };
+            })).then(function () {
+              initialProducts = $scope.changedProductsState;
+              $scope.hasChangedProducts = false;
+            });
+          };
         }
 
         $scope.order = orderModel;

@@ -92,6 +92,9 @@ angular.module('pdFrontend')
       },
       postOrderImage: function (orderId, imageFile) {
         return pdFrontendOrderApi.postOrderResults(orderId, imageFile, {type: 'image'});
+      },
+      saveOrderProducts: function (orderId, productsCollection) {
+        return pdFrontendOrderApi.updateOrder(orderId, {products: productsCollection});
       }
     };
   })
