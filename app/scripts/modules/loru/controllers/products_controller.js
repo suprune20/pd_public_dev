@@ -21,8 +21,17 @@ angular.module('pdLoru')
       }
 
       var updateModel = _.transform(product, function (result, value, key) {
-        if (_.contains(['id', 'isShownInRetailCatalog', 'isShownInTradeCatalog', 'tradePrice', 'retailPrice'], key)) {
+        var allowedAttrs = [
+          'id',
+          'isShownInRetailCatalog',
+          'isShownInTradeCatalog',
+          'tradePrice',
+          'retailPrice',
+          'isAvailableForVisitOrder'
+        ];
+        if (_.contains(allowedAttrs, key)) {
           result[key] = value;
+
           return result;
         }
       }, {});

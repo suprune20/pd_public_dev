@@ -95,6 +95,9 @@ angular.module('pdFrontend')
       },
       saveOrderProducts: function (orderId, productsCollection) {
         return pdFrontendOrderApi.updateOrder(orderId, {products: productsCollection});
+      },
+      deleteOrder: function (orderId) {
+        return pdFrontendOrderApi.deleteOrder(orderId);
       }
     };
   })

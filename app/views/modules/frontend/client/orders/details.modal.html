@@ -67,8 +67,7 @@
         </ul>
       </tab>
 
-      <tab heading="Редактирование" disabled="'posted' !== order.status || !products.length"
-           select="onChangedTab('products')">
+      <tab heading="Редактирование" select="onChangedTab('products')" disabled="!isAllowEdit || !products.length">
         <form>
           <table class="table table-bordered">
             <thead>
@@ -134,9 +133,13 @@
         </button>
       </div>
 
-      <div ng-show="'products' === activeTab && hasChangedProducts">
+      <div ng-show="isAllowEdit" class="margin-top-15">
+        <button class="btn btn-danger btn-block" ng-click="removeOrder()">Удалить</button>
+      </div>
+
+      <div ng-show="hasChangedProducts">
         <hr>
-        <button class="btn btn-info" ng-click="saveProductsChanges()">Сохранить</button>
+        <button class="btn btn-info btn-block" ng-click="saveProductsChanges()">Сохранить</button>
       </div>
     </div>
   </div>

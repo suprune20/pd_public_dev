@@ -59,6 +59,7 @@
     <table class="table table-striped">
       <thead>
       <tr>
+        <th>Доступно для посещения</th>
         <th>Артикул</th>
         <th>Название</th>
         <th>Тип</th>
@@ -74,6 +75,11 @@
       </thead>
       <tbody>
       <tr ng-repeat="product in products|limitTo:limitProducts" bindonce>
+        <td>
+          <input type="checkbox" ng-model="product.isAvailableForVisitOrder"
+                 ng-disabled="disabledVisibilityControls"
+                 ng-change="updateProduct(product)">
+        </td>
         <td bo-text="product.sku"></td>
         <td bo-text="product.name"></td>
         <td bo-text="product.type.name"></td>

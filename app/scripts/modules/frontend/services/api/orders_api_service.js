@@ -29,6 +29,9 @@ angular.module('pdFrontend')
         return $http.put(pdConfig.apiEndpoint + 'client/orders/' + orderId, updatedData)
           .then(function (response) { return response.data; });
       },
+      deleteOrder: function (orderId) {
+        return $http.delete(pdConfig.apiEndpoint + 'client/orders/' + orderId);
+      },
       postOrderPayment: function (orderId, paymentType, receiptImageFile, paymentToken) {
         if (receiptImageFile) {
           return $upload.upload({

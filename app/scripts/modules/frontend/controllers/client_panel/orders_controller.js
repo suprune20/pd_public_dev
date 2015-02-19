@@ -6,13 +6,28 @@ angular.module('pdFrontend')
   .controller('ClientOrdersListCtrl', function ($scope, ordersCollection, orderDetailsState) {
     $scope.orderDetailsState = orderDetailsState;
     $scope.orders = ordersCollection;
+    $scope.$on('orders:changed', function (event, eventData) {
+      _.map($scope.orders, function (order) {
+        if (eventData.orderId !== order.id) {
+          return;
+        }
+
+        order.totalPrice = eventData.totalCost;
+      });
+    });
+    $scope.$on('orders:deleted', function (event, eventData) {
+      _.remove($scope.orders, function (order) {
+        return order.id === eventData.orderId;
+      });
+    });
   })
+
   .controller('ClientOrderDetailsCtrl', function ($state, $stateParams, $modal, growl, pdFrontendOrders, orderModel,
                                                   ordersListState
   ) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
-      controller: function ($scope, CatalogRefactored) {
+      controller: function ($rootScope, $scope, CatalogRefactored, modalNotifications, $modalInstance) {
         var servicesCost = _.reduce(orderModel.services, function (sum, service) {
           return sum + service.price;
         }, 0);
@@ -23,8 +38,9 @@ angular.module('pdFrontend')
         };
         $scope.totalCost = servicesCost + calculateProductsCost(orderModel.products);
 
+        $scope.isAllowEdit = _.includes(['posted', 'accepted'], orderModel.status);
         // get products for supplier
-        if ('posted' === orderModel.status) {
+        if ($scope.isAllowEdit) {
           var productsProvider = (new CatalogRefactored(100)).productsDataProvider;
           var initialProducts = _.sortBy(_.map(orderModel.products, function (product) {
             return {
@@ -34,7 +50,8 @@ angular.module('pdFrontend')
           }), 'id');
 
           productsProvider.applyFilters({
-            supplier: [orderModel.supplierId]
+            supplier: [orderModel.supplierId],
+            isAvailableForVisitOrder: true
           }).then(function () {
             $scope.products = _.map(productsProvider.getProducts(), function (product) {
               var previousSelectedProduct = _.findWhere(orderModel.products, {productId: product.id});
@@ -79,6 +96,10 @@ angular.module('pdFrontend')
                 quantity: product.qty
               };
             })).then(function () {
+              $rootScope.$broadcast('orders:changed', {
+                orderId: orderModel.id,
+                totalCost: $scope.totalCost
+              });
               initialProducts = $scope.changedProductsState;
               $scope.hasChangedProducts = false;
             });
@@ -127,7 +148,16 @@ angular.module('pdFrontend')
             });
         }
 
-        $scope.saveOrderChanges = function () {};
+        $scope.removeOrder = function () {
+          modalNotifications.confirm('Вы уверены что хотите удалить этот заказ?')
+            .then(function () {
+              return pdFrontendOrders.deleteOrder(orderModel.id);
+            })
+            .then(function () {
+              $rootScope.$broadcast('orders:deleted', {orderId: orderModel.id});
+              $modalInstance.dismiss();
+            });
+        };
       }
     }).result
       // return to orders list state after closing details modal
