@@ -10,9 +10,17 @@ angular.module('pdCommon')
         var min = parseInt(attrs.min || 0, 10),
           max = parseInt(attrs.max || 999),
           step = parseInt(attrs.step || 1),
+          $input = element.find('input'),
           touchspinInput;
 
-        touchspinInput = element.find('input').TouchSpin({
+        scope.$watch(function () {
+          return ngModelCtrl.$modelValue;
+        }, function (value) {
+          $input.val(value);
+          touchspinInput.trigger('touchspin.updatesettings');
+        });
+
+        touchspinInput = $input.TouchSpin({
           min: min,
           max: max,
           stepinterval: step,
