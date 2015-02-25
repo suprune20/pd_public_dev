@@ -14,7 +14,16 @@
                pd-thumb
                pd-thumb-size="75x75"
                default-image="http://placehold.it/75x75" />
+
+          <div class="pull-left pointer-cursor custom-file-input">
+            <label for="photoFile">
+              Изменить <i class="glyphicon glyphicon-pencil"></i>
+            </label>
+            <input type="file" id="photoFile" ng-file-select="onMainPhotoFileSelect($files)">
+          </div>
         </div>
+
+
         <div class="media-body">
           <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)">
             <h4 class="media-heading">
@@ -69,7 +78,7 @@
         editable-textarea="burialData.commonText"
         e-form="burialCommonTextForm"
         onbeforesave="saveCommonText($data)"
-        e-rows="7" e-cols="65">
+        e-rows="7" e-cols="55">
         {{burialData.commonText}}
       </span>
     </div>

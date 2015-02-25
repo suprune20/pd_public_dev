@@ -163,57 +163,83 @@ angular.module('pdFrontend')
           });
         });
     };
+
     // Open modal window with burial details and memory page data
-    $scope.showMemoryPage = function (burialId) {
-      var deadmanMemory = new DeadmanMemoryProvider(burialId);
+    $scope.showMemoryPage = function (deadmanId) {
+      var deadmanMemory = new DeadmanMemoryProvider(deadmanId);
 
       $modal.open({
         templateUrl: 'views/modules/frontend/client/memory_page.modal.html',
         windowClass: 'burial-memory-modal',
         resolve: {
-          burial: function () {
+          deadmanProvider: function () {
             return deadmanMemory;
           },
           memoryData: function () {
-            return deadmanMemory.getMemoryDetails();
+            return deadmanMemory.getPersonDetails();
           }
         },
-        controller: function ($scope, burial, memoryData, growl) {
-          // Initial values
-          $scope.postMemoryData = {};
-
-          $scope.burialData = memoryData;
-          $scope.memoriesDataProvider = new (burial.getMemoriesProvider())();
-          $scope.saveBurialData = function (burialData) {
-            console.log(burialData);
-          };
-          $scope.saveCommonText = function (commonText) {
-            return $scope.saveBurialData({commonText: commonText});
-          };
-          $scope.onGalleryFileSelect = function (files) {
-            burial.postGalleryPhoto(files[0])
-              .then(null, function () {
-                growl.addErrorMessage('Не удалось добавить изображение в галерею');
-              });
-          };
-          // Post memory message
-          $scope.onMemoryFileSelect = function (files, type) {
-            console.log(files, type);
-            $scope.postMemoryData.file = {
-              type: type,
-              file: files[0]
-            };
-          };
-          $scope.removeSelectedMessageFile = function () {
-            delete $scope.postMemoryData.file;
-          };
-          $scope.postMemoryMsg = function () {
-            console.log($scope.postMemoryData);
-            // Reset form data after success save
-            $scope.postMemoryData = {};
-          };
-        }
+        controller: 'MemoryPageCtrl'
       });
+    };
+  })
+
+  .controller('MemoryPageCtrl', function ($scope, deadmanProvider, memoryData, growl, $q) {
+    // Initial values
+    $scope.postMemoryData = {};
+
+    $scope.burialData = memoryData;
+    $scope.memoriesDataProvider = new (deadmanProvider.getMemoriesProvider())();
+
+    $scope.saveBurialData = function (burialData) {
+      console.log(burialData);
+      return deadmanProvider.updatePersonDetails(burialData)
+        .catch(function () {
+          growl.addErrorMessage('Произошла ошибка при сохранении данных');
+
+          return $q.reject();
+        });
+    };
+
+    $scope.saveCommonText = function (commonText) {
+      return $scope.saveBurialData({commonText: commonText});
+    };
+
+    $scope.onMainPhotoFileSelect = function (files) {
+      console.log(files);
+      if (!files.length) {
+        return;
+      }
+
+      $scope.saveBurialData({
+        photo: files[0]
+      });
+    };
+
+    $scope.onGalleryFileSelect = function (files) {
+      deadmanProvider.postGalleryPhoto(files[0])
+        .then(null, function () {
+          growl.addErrorMessage('Не удалось добавить изображение в галерею');
+        });
+    };
+
+    // Post memory message
+    $scope.onMemoryFileSelect = function (files, type) {
+      console.log(files, type);
+      $scope.postMemoryData.file = {
+        type: type,
+        file: files[0]
+      };
+    };
+
+    $scope.removeSelectedMessageFile = function () {
+      delete $scope.postMemoryData.file;
+    };
+
+    $scope.postMemoryMsg = function () {
+      console.log($scope.postMemoryData);
+      // Reset form data after success save
+      $scope.postMemoryData = {};
     };
   })
 ;

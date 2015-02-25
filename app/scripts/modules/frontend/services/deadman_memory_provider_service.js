@@ -1,69 +1,78 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .factory('DeadmanMemoryProvider', function ($http, pdConfig, $timeout, $rootScope, $upload, $sce) {
+  .service('personMemoryApi', function ($http, pdConfig, $upload) {
+    return {
+      getPersonDetails: function (personId) {
+        return $http.get(pdConfig.apiEndpoint + 'custompersons/' + personId)
+          .then(function (response) {
+            return response.data;
+          });
+      },
+      putPersonDetails: function (personId, personModel) {
+        var putUrl = pdConfig.apiEndpoint + 'custompersons/' + personId;
+
+        if (_.has(personModel, 'photo')) {
+          var photoFile = personModel.photo;
+
+          delete personModel.photo;
+
+          return $upload.upload({
+            url: putUrl,
+            tracker: 'commonLoadingTracker',
+            data: personModel,
+            file: photoFile,
+            fileFormDataName: 'photo'
+          }).then(function (response) {
+            return response.data;
+          });
+        }
+
+        return $http.put(putUrl, personModel)
+          .then(function (response) {
+            return response.data;
+          });
+      },
+      getMemories: function (personId, offset, limit) {
+        return $http.get(pdConfig.apiEndpoint + 'custompersons/' + personId + '/memories', {
+          params: {
+            offset: offset,
+            limit: limit
+          }
+        }).then(function (response) {
+          return response.data;
+        });
+      }
+    };
+  })
+  .factory('DeadmanMemoryProvider', function (pdConfig, $upload, $sce, personMemoryApi) {
     return function (id) {
       return {
-        getMemoryDetails: function () {
-//          return $http.get(pdConfig.apiEndpoint + 'burial/' + id + '/memory', {
-//            tracker: 'commonLoadingTracker'
-//          }).then(function (response) {
-//            return response.data;
-//          });
-          var tempMemoryPromise = $timeout(function () {
-            var a = {
-              photo: null,
-              firstname: 'John',
-              lastname: 'Smith',
-              middlename: null,
-              dob: '12-05-1964',
-              dod: '1-11-2001',
-              commonText: 'RIP John',
-              gallery: [
-                {
-                  photoUrl: 'http://placehold.it/100x100',
-                  addedAt: '24-12-2014 12:12:23'
-                },
-                {
-                  photoUrl: 'http://placehold.it/120x120',
-                  addedAt: '26-12-2014 12:12:23'
-                },
-                {
-                  photoUrl: 'http://placehold.it/150x150',
-                  addedAt: '25-12-2014 12:12:23'
-                }
-              ]
-            };
-            a.gallery = _(a.gallery)
-              .sortBy('addedAt')
-              .reverse()
-              .value()
-            ;
-
-            return a;
-          }, 2000);
-          $rootScope.commonLoadingTracker.addPromise(tempMemoryPromise);
-
-          return tempMemoryPromise;
+        getPersonDetails: function () {
+          return personMemoryApi.getPersonDetails(id);
+        },
+        updatePersonDetails: function (personData) {
+          return personMemoryApi.putPersonDetails(id, personData);
         },
         getMemoriesProvider: function () {
           return function (memoriesCountsPerRequest) {
             var isBusy = false,
-              isNoMemories = false,
+              isNoMoreMemories = false,
               memories = [];
             memoriesCountsPerRequest = memoriesCountsPerRequest || 15;
 
             return {
               getNextMemories: function () {
-//                return $http.get(pdConfig.apiEndpoint + 'burial/' + id + '/memories', {
-//                  tracker: 'commonLoadingTracker'
-//                }).then(function (resp) {
-//                  isBusy = false;
-//                  isNoMemories = resp.data.results.length < memoriesCountsPerRequest;
-//                  memories = products.concat(resp.data.results);
-//                }, function () { isBusy = false; });
-                var tempMemoriesPromise = $timeout(function () {
-                  memories = [
+                return personMemoryApi.getMemories(id, memories.length, memoriesCountsPerRequest)
+                  .then(function (memoriesCollection) {
+                    isBusy = false;
+                    isNoMoreMemories = memoriesCollection.length < memoriesCountsPerRequest;
+                    memories = memories.concat(memoriesCollection);
+                  }, function () {
+                    isBusy = false;
+                  });
+
+                var memories = [
                     {
                       type: 'video',
                       mediaContent: $sce.trustAsResourceUrl('http://techslides.com/demos/sample-videos/small.mp4'),
@@ -101,16 +110,12 @@ angular.module('pdFrontend')
                       }
                     }
                   ];
-                }, 2000);
-                $rootScope.commonLoadingTracker.addPromise(tempMemoriesPromise);
-
-                return tempMemoriesPromise;
               },
               isBusy: function () {
                 return isBusy;
               },
               isNoMoreProducts: function () {
-                return isNoMemories && (memories.length >= memoriesCountsPerRequest || !memories.length);
+                return isNoMoreMemories && (memories.length >= memoriesCountsPerRequest || !memories.length);
               },
               getMemories: function () {
                 return memories;
