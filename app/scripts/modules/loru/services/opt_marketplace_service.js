@@ -3,12 +3,12 @@
 angular.module('pdLoru')
   .service('optMarketplace', function (optMarketPlaceApi, pdFrontendOrders, auth, $q) {
     var statusesLabels = {
-      posted: 'Размещен',
+      posted: 'ожидает подтверждения',
       confirmed: 'Подтвержден',
       shipped: 'Отправлен',
-      accepted: 'Принят',
-      paid: 'Оплачен',
-      done: 'Выполнен'
+      accepted: 'ожидает оплаты',
+      paid: 'выполняется',
+      done: 'исполнен'
     };
 
     var SupplierStore = function (supplierId, filters) {
