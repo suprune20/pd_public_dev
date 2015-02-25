@@ -158,6 +158,15 @@ angular.module('pdFrontend')
               $modalInstance.dismiss();
             });
         };
+
+        $scope.reviewModel = {};
+        $scope.postReview = function () {
+          pdFrontendOrders.postOrderReview(orderModel.supplierId, $scope.reviewModel)
+            .then(function () {
+              $scope.reviewModel = {};
+              growl.addSuccessMessage('Ваш отзыв сохранен');
+            });
+        };
       }
     }).result
       // return to orders list state after closing details modal

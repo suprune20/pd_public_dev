@@ -72,6 +72,12 @@ angular.module('pdFrontend')
           data: data,
           file: attachments
         }).then(function (response) { return response.data; });
+      },
+      postOrderReview: function (supplierId, reviewModel) {
+        return $http.post(pdConfig.apiEndpoint + 'shop/' + supplierId + '/reviews', reviewModel)
+          .then(function (response) {
+            return response.data;
+          });
       }
     };
   })

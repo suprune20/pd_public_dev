@@ -98,6 +98,9 @@ angular.module('pdFrontend')
       },
       deleteOrder: function (orderId) {
         return pdFrontendOrderApi.deleteOrder(orderId);
+      },
+      postOrderReview: function (supplierId, reviewModel) {
+        return pdFrontendOrderApi.postOrderReview(supplierId, reviewModel);
       }
     };
   })

@@ -11,7 +11,7 @@
   </div>
   <div class="row">
     <tabset justified="true" class="col-xs-9">
-      <tab heading="Основная информация" select="onChangedTab('details')">
+      <tab heading="Детали" select="onChangedTab('details')">
         <dl>
           <dt ng-show="order.services.length">Позиции заказа</dt>
           <dd ng-show="order.services.length">
@@ -101,6 +101,44 @@
             </tr>
             </tbody>
           </table>
+        </form>
+      </tab>
+
+      <tab heading="Отзыв" select="onChangedTab('review')">
+        <form role="form" name="reviewForm">
+          <div class="btn-group">
+            <label class="btn btn-default" ng-class="{'btn-success': reviewModel.isPositive}"
+                   ng-model="reviewModel.isPositive" btn-radio="true">
+              <i class="glyphicon glyphicon-thumbs-up"></i>
+            </label>
+            <label class="btn btn-default" ng-class="{'btn-danger': false === reviewModel.isPositive}"
+                   ng-model="reviewModel.isPositive" btn-radio="false">
+              <i class="glyphicon glyphicon-thumbs-down"></i>
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="title">Заголовок</label>
+            <input class="form-control" id="title" name="title" ng-model="reviewModel.title">
+          </div>
+          <div class="form-group">
+            <label for="commonText">Общее впечатление</label>
+            <textarea class="form-control" id="commonText" name="commonText" ng-model="reviewModel.commentText"
+                      msd-elastic></textarea>
+          </div>
+          <div class="form-group">
+            <label for="positiveText">Положительные моменты</label>
+            <textarea class="form-control" id="positiveText" name="positiveText" ng-model="reviewModel.positiveText"
+                      msd-elastic></textarea>
+          </div>
+          <div class="form-group">
+            <label for="negativeText">Отрицательные моменты</label>
+            <textarea class="form-control" id="negativeText" name="negativeText" ng-model="reviewModel.negativeText"
+                      msd-elastic></textarea>
+          </div>
+
+          <button class="btn btn-primary btn-sm" ng-click="postReview(reviewModel)" ng-disabled="reviewForm.$invalid">
+            Сохранить
+          </button>
         </form>
       </tab>
     </tabset>
