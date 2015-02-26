@@ -25,6 +25,22 @@
           <dd>{{order.place.address}}</dd>
         </dl>
 
+        <h4>Исполнитель</h4>
+        <dl>
+          <dt>Наименование</dt>
+          <dd>{{ order.performer.fullname }}</dd>
+          <dt>Адрес</dt>
+          <dd>{{ order.performer.address }}</dd>
+          <dt>Телефоны</dt>
+          <dd>{{ order.performer.phones.join(', ') }}</dd>
+          <dt ng-show="order.performer.fax">Факс</dt>
+          <dd ng-show="order.performer.fax">{{ order.performer.fax }}</dd>
+          <dt ng-show="order.performer.email">E-mail</dt>
+          <dd ng-show="order.performer.email">
+            <a ng-href="mailto:{{ order.performer.email }}" target="_self">{{ order.performer.email }}</a>
+          </dd>
+        </dl>
+
         <h4>Результаты</h4>
         <ul class="media-list margin-top-15">
           <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">

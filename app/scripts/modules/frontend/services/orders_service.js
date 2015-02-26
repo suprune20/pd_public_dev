@@ -2,7 +2,9 @@
 /* jshint -W069 */
 
 angular.module('pdFrontend')
-  .service('pdFrontendOrders', function (pdFrontendOrderApi, pdFrontendPlacesApi, $q, $sce, $state, pdConfig, appEnv) {
+  .service('pdFrontendOrders', function (pdFrontendOrderApi, pdFrontendPlacesApi, pdFrontendCatalogApi, $q, $sce,
+                                         $state, pdConfig, appEnv
+  ) {
     return {
       getAvailablePerformersForPhoto: function (placeId, location) {
         return pdFrontendOrderApi.getAvailablePerformers('photo', placeId, location);
@@ -19,15 +21,16 @@ angular.module('pdFrontend')
             return $q.all([
               pdFrontendOrderApi.getOrderComments(orderId),
               pdFrontendOrderApi.getOrderResults(orderId),
-              pdFrontendPlacesApi.getPlaceDetails(orderModel.placeId)
-            ])
-              .then(function (results) {
-                orderModel.comments = results[0];
-                orderModel.results = results[1];
-                orderModel.place = results[2];
+              pdFrontendPlacesApi.getPlaceDetails(orderModel.placeId),
+              pdFrontendCatalogApi.getSupplier(orderModel.supplierId)
+            ]).then(function (results) {
+              orderModel.comments = results[0];
+              orderModel.results = results[1];
+              orderModel.place = results[2];
+              orderModel.performer = results[3];
 
-                return orderModel;
-              });
+              return orderModel;
+            });
           });
       },
       acceptOrder: function (orderId) {
