@@ -95,7 +95,8 @@
       <flex-slider slides="photo in burialData.gallery"
                    class="carousel memory-carousel"
                    slideshow="false" animation="slide" control-nav="false"
-                   item-width="100" item-margin="5">
+                   item-width="100" item-margin="5"
+                   ng-show="burialData.gallery.length">
         <li>
           <img ng-src="{{photo.photoUrl}}"
                pd-thumb

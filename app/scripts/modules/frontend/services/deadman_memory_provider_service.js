@@ -19,6 +19,7 @@ angular.module('pdFrontend')
 
           return $upload.upload({
             url: putUrl,
+            method: 'PUT',
             tracker: 'commonLoadingTracker',
             data: personModel,
             file: photoFile,
@@ -42,6 +43,12 @@ angular.module('pdFrontend')
         }).then(function (response) {
           return response.data;
         });
+      },
+      postMemoryRecord: function (personId, memoryModel) {
+        return $http.post(pdConfig.apiEndpoint + 'custompersons/' + personId + '/memories', memoryModel)
+          .then(function (response) {
+            return response.data;
+          });
       }
     };
   })
@@ -129,6 +136,9 @@ angular.module('pdFrontend')
             tracker: 'commonLoadingTracker',
             file: file
           });
+        },
+        postMemoryRecord: function (memoryModel) {
+          return personMemoryApi.postMemoryRecord(id, memoryModel);
         }
       };
     };

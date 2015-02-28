@@ -192,9 +192,10 @@ angular.module('pdFrontend')
     $scope.memoriesDataProvider = new (deadmanProvider.getMemoriesProvider())();
 
     $scope.saveBurialData = function (burialData) {
-      console.log(burialData);
       return deadmanProvider.updatePersonDetails(burialData)
-        .catch(function () {
+        .then(function (updatedPersonData) {
+          $scope.burialData = updatedPersonData;
+        }, function () {
           growl.addErrorMessage('Произошла ошибка при сохранении данных');
 
           return $q.reject();
@@ -238,8 +239,20 @@ angular.module('pdFrontend')
 
     $scope.postMemoryMsg = function () {
       console.log($scope.postMemoryData);
-      // Reset form data after success save
-      $scope.postMemoryData = {};
+      var newMemoryRecordModel = {
+        type: $scope.postMemoryData.file ? $scope.postMemoryData.file.type : 'text',
+        text: $scope.postMemoryData.text
+      };
+
+      if ($scope.postMemoryData.file) {
+        newMemoryRecordModel.mediaContent = $scope.postMemoryData.file.file;
+      }
+
+      deadmanProvider.postMemoryRecord(newMemoryRecordModel)
+        .then(function () {
+          // Reset form data after success save
+          $scope.postMemoryData = {};
+        });
     };
   })
 ;
