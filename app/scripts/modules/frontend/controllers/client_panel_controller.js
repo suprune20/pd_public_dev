@@ -177,6 +177,9 @@ angular.module('pdFrontend')
           },
           memoryData: function () {
             return deadmanMemory.getPersonDetails();
+          },
+          MemoriesProvider: function () {
+            return deadmanMemory.getMemoriesProvider();
           }
         },
         controller: 'MemoryPageCtrl'
@@ -184,12 +187,12 @@ angular.module('pdFrontend')
     };
   })
 
-  .controller('MemoryPageCtrl', function ($scope, deadmanProvider, memoryData, growl, $q) {
+  .controller('MemoryPageCtrl', function ($scope, deadmanProvider, MemoriesProvider, memoryData, growl, $q) {
     // Initial values
     $scope.postMemoryData = {};
 
     $scope.burialData = memoryData;
-    $scope.memoriesDataProvider = new (deadmanProvider.getMemoriesProvider())();
+    $scope.memoriesDataProvider = new MemoriesProvider();
 
     $scope.saveBurialData = function (burialData) {
       return deadmanProvider.updatePersonDetails(burialData)
@@ -248,7 +251,7 @@ angular.module('pdFrontend')
         newMemoryRecordModel.mediaContent = $scope.postMemoryData.file.file;
       }
 
-      deadmanProvider.postMemoryRecord(newMemoryRecordModel)
+      $scope.memoriesDataProvider.postMemoryRecord(newMemoryRecordModel)
         .then(function () {
           // Reset form data after success save
           $scope.postMemoryData = {};

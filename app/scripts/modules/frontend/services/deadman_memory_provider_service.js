@@ -45,10 +45,36 @@ angular.module('pdFrontend')
         });
       },
       postMemoryRecord: function (personId, memoryModel) {
+        var postMemoryUrl = pdConfig.apiEndpoint + 'custompersons/' + personId + '/memories';
+
+        if (memoryModel.mediaContent) {
+          var uploadedFile = memoryModel.mediaContent;
+
+          delete memoryModel.mediaContent;
+
+          return $upload.upload({
+            url: postMemoryUrl,
+            tracker: 'commonLoadingTracker',
+            data: memoryModel,
+            file: uploadedFile,
+            fileFormDataName: 'mediaContent'
+          }).then(function (response) {
+            return response.data;
+          });
+        }
+
         return $http.post(pdConfig.apiEndpoint + 'custompersons/' + personId + '/memories', memoryModel)
           .then(function (response) {
             return response.data;
           });
+      },
+      postGalleryItem: function (personId, photoFile) {
+        return $upload.upload({
+          url: pdConfig.apiEndpoint + 'custompersons/' + personId + '/gallery',
+          tracker: 'commonLoadingTracker',
+          file: photoFile,
+          fileFormDataName: 'photo'
+        });
       }
     };
   })
@@ -66,6 +92,7 @@ angular.module('pdFrontend')
             var isBusy = false,
               isNoMoreMemories = false,
               memories = [];
+
             memoriesCountsPerRequest = memoriesCountsPerRequest || 15;
 
             return {
@@ -75,48 +102,10 @@ angular.module('pdFrontend')
                     isBusy = false;
                     isNoMoreMemories = memoriesCollection.length < memoriesCountsPerRequest;
                     memories = memories.concat(memoriesCollection);
+                    console.log(memories);
                   }, function () {
                     isBusy = false;
                   });
-
-                var memories = [
-                    {
-                      type: 'video',
-                      mediaContent: $sce.trustAsResourceUrl('http://techslides.com/demos/sample-videos/small.mp4'),
-                      text: 'test video memory record',
-                      createdAt: '2014-04-10T16:58:30+00:00',
-                      createdBy: {
-                        id: 12,
-                        firstname: 'John',
-                        lastname: 'Resig',
-                        middlename: null
-                      }
-                    },
-                    {
-                      type: 'image',
-                      mediaContent: 'http://placehold.it/530x300',
-                      text: 'test image memory record',
-                      createdAt: '2014-02-03T16:58:30+00:00',
-                      createdBy: {
-                        id: 12,
-                        firstname: 'John',
-                        lastname: 'Resig',
-                        middlename: null
-                      }
-                    },
-                    {
-                      type: 'text',
-                      mediaContent: null,
-                      text: 'test text memory record. Adasd as as ashjkdhfjsdh рыв sdhfshkjdhfks kdf shdkf ksdfkh s',
-                      createdAt: '2014-02-08T16:58:30+00:00',
-                      createdBy: {
-                        id: 12,
-                        firstname: 'John',
-                        lastname: 'Resig',
-                        middlename: null
-                      }
-                    }
-                  ];
               },
               isBusy: function () {
                 return isBusy;
@@ -126,19 +115,20 @@ angular.module('pdFrontend')
               },
               getMemories: function () {
                 return memories;
+              },
+              postMemoryRecord: function (memoryModel) {
+                return personMemoryApi.postMemoryRecord(id, memoryModel)
+                  .then(function (addedMemoryModel) {
+                    memories.unshift(addedMemoryModel);
+
+                    return addedMemoryModel;
+                  });
               }
             };
           };
         },
         postGalleryPhoto: function (file) {
-          return $upload.upload({
-            url: pdConfig.apiEndpoint + 'burial/' + id + '/memory/gallery',
-            tracker: 'commonLoadingTracker',
-            file: file
-          });
-        },
-        postMemoryRecord: function (memoryModel) {
-          return personMemoryApi.postMemoryRecord(id, memoryModel);
+          return personMemoryApi.postGalleryItem(id, file);
         }
       };
     };
