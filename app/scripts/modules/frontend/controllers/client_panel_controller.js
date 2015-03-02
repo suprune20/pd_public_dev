@@ -210,7 +210,6 @@ angular.module('pdFrontend')
     };
 
     $scope.onMainPhotoFileSelect = function (files) {
-      console.log(files);
       if (!files.length) {
         return;
       }
@@ -218,13 +217,6 @@ angular.module('pdFrontend')
       $scope.saveBurialData({
         photo: files[0]
       });
-    };
-
-    $scope.onGalleryFileSelect = function (files) {
-      deadmanProvider.postGalleryPhoto(files[0])
-        .then(null, function () {
-          growl.addErrorMessage('Не удалось добавить изображение в галерею');
-        });
     };
 
     // Post memory message
