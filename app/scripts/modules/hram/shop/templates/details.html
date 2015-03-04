@@ -5,9 +5,9 @@
       <tab heading="Товары и услуги">
         <div class="margin-bottom-15">
           <pd-carousel pd-carousel-responsive>
-            <li ng-repeat="item in shop.gallery" pd-fancybox="{{item}}">
+            <li ng-repeat="item in shop.gallery" pd-fancybox="{{item.imageUrl}}">
               <div class="thumbnail">
-                <img ng-src="{{item}}" />
+                <img ng-src="{{item.imageUrl}}" />
               </div>
             </li>
           </pd-carousel>
@@ -24,11 +24,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="service in services">
-              <td>{{service.service.title}}</td>
-              <td>{{service.service.price}}</td>
-              <td><input type="checkbox" ng-model="service.isSelected"></td>
-              <td ng-attr-rowspan="{{services.length}}" ng-show="$first && isSelectedAnyServices">
+            <tr ng-repeat="service in shop.services">
+              <td>{{service.name}}</td>
+              <td>{{service.price}} {{service.currency}} ({{service.measure}})</td>
+              <td><input type="checkbox" checklist-model="selectedServices" checklist-value="service.id"></td>
+              <td ng-attr-rowspan="{{shop.services.length}}" ng-show="$first && selectedServices.length">
                 <button class="btn btn-info" ng-click="showAvailablePlaces = !showAvailablePlaces">Заказать</button>
                 <ul class="list-unstyled text-left order-available-performers-cont" ng-show="showAvailablePlaces">
                   <li>
@@ -55,7 +55,7 @@
 
       <tab heading="Отзывы">
         <div class="row" ng-repeat="review in shop.reviews">
-          <div class="col-xs-2">{{review.user.firstName}}</div>
+          <div class="col-xs-2">{{review.author.firstName}}</div>
           <div class="col-xs-10">
             <div class="panel panel-info">
               <div class="panel-heading">
@@ -63,13 +63,14 @@
                 <span class="pull-right">{{review.createdAt|momentDate:"MMMM DDD, YYYY"}}</span>
               </div>
               <div class="panel-body">
+                <p>{{review.commonText}}</p>
                 <p>
                   <small><i class="glyphicon glyphicon-plus text-success"></i></small>
-                  {{review.comment.positive}}
+                  {{review.positiveText}}
                 </p>
                 <p>
                   <small><i class="glyphicon glyphicon-minus text-danger"></i></small>
-                  {{review.comment.negative}}
+                  {{review.negativeText}}
                 </p>
               </div>
             </div>
@@ -78,7 +79,30 @@
       </tab>
 
       <tab heading="Правила">Comming soon</tab>
-      <tab heading="Контакты">Comming soon</tab>
+      <tab heading="Контакты">
+        <p>
+          <address>
+            <dl>
+              <dt>Адрес</dt>
+              <dd>{{shop.contacts.address}}</dd>
+              <dt ng-show="shop.contacts.email">E-mail</dt>
+              <dd ng-show="shop.contacts.email">
+                <a ng-href="mailto:{{ shop.contacts.email }}" target="_self">{{ shop.contacts.email }}</a>
+              </dd>
+              <dt ng-show="shop.contacts.fax">Факс</dt>
+              <dd ng-show="shop.contacts.fax">{{shop.contacts.fax}}</dd>
+              <dt ng-show="shop.contacts.phones.length">Телефоны</dt>
+              <dd ng-show="shop.contacts.phones.length">
+                <ul class="list-unstyled">
+                  <li ng-repeat="phone in shop.contacts.phones">{{phone}}</li>
+                </ul>
+              </dd>
+              <dt ng-show="shop.contacts.site">Сайт</dt>
+              <dd ng-show="shop.contacts.site"><a ng-href="{{shop.contacts.site}}">{{shop.contacts.site}}</a></dd>
+            </dl>
+          </address>
+        </p>
+      </tab>
     </tabset>
   </div>
 </div>
