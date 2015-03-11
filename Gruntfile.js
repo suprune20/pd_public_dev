@@ -382,7 +382,10 @@ module.exports = function (grunt) {
     ngtemplates: {
       app: {
         cwd: '<%= yeoman.app %>',
-        src: 'views/**/*.html',
+        src: [
+          'views/**/*.html',
+          'scripts/modules/**/*.html'
+        ],
         dest: '.tmp/templates.js',
         options: {
           htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },

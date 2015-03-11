@@ -11,7 +11,7 @@ angular.module('pdHram')
             return shopProvider.getShopCategories();
           }]
         },
-        controller: function ($scope, shopCategories, shopProvider) {
+        controller: ['$scope', 'shopCategories', 'shopProvider', function ($scope, shopCategories, shopProvider) {
           $scope.filterCategories = shopCategories;
           $scope.searchFilters = {};
 
@@ -24,7 +24,7 @@ angular.module('pdHram')
 
           // Initial fetch shops data
           $scope.fetchShopsCollection();
-        },
+        }],
         menuConfig: 'shopMenu'
       });
   })

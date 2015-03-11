@@ -157,6 +157,7 @@ angular.module('pdFrontend')
     $scope.addDeadman = function (deadman) {
       pdFrontendClientPanel.addDeadman(placeModel.id, deadman)
         .then(function (addedDeadman) {
+          $scope.placeData.deadmans.push(addedDeadman);
           $rootScope.$broadcast('addedDeadman', {
             placeId: placeModel.id,
             deadman: addedDeadman
