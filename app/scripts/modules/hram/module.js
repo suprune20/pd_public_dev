@@ -80,26 +80,6 @@ angular.module('pdHram', [
         secured: true,
         menuConfig: 'shopMenu'
       }, 'ROLE_CLIENT')
-
-      .state('hram.persons', {
-        url: '/person',
-        templateUrl: 'views/modules/hram/persons/list.html',
-        controller: ['$scope', '$modal', function ($scope, $modal) {
-          $scope.persons = [];
-          for (var i = 0; i < 15; i++) {
-            $scope.persons.push({
-              imageUrl: 'http://placehold.it/500x500'
-            });
-          }
-          $scope.addPerson = function () {
-            $modal.open({
-              templateUrl: 'views/modules/hram/persons/add_person.modal.html',
-              controller: function () {}
-            });
-          };
-        }],
-        menuConfig: 'shopMenu'
-      })
     ;
   })
   .run(function ($rootScope, mainMenuManager, pdConfig, auth) {

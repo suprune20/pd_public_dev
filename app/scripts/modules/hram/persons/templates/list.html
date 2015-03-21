@@ -1,0 +1,28 @@
+<div class="row margin-bottom-15">
+  <button class="btn btn-success" ng-click="showAddPersonInput = true"
+          ng-hide="showAddPersonInput">Добавить Персону</button>
+
+  <form name="addPersonForm" ng-show="showAddPersonInput" class="col-md-4">
+    <div class="form-group">
+      <input class="form-control" required ng-model="newPerson.lastName" placeholder="Фамилия">
+    </div>
+    <div class="form-group">
+      <input class="form-control" required ng-model="newPerson.firstName" placeholder="Имя">
+    </div>
+    <div class="form-group">
+      <input class="form-control" required ng-model="newPerson.middleName" placeholder="Отчество">
+    </div>
+
+    <button type="button" class="btn btn-default" ng-disable="addPersonForm.$invalid"
+            ng-click="addPerson(newPerson)">
+      Сохранить
+    </button>
+    <button type="button" class="btn btn-default"
+            ng-click="showAddPersonInput = false; newPerson = null">Отмена</button>
+  </form>
+</div>
+
+<div deckgrid source="persons"
+     cardTemplate="scripts/modules/hram/persons/templates/persons_grid_item.html" class="deckgrid row"></div>
+
+<ui-view/>
