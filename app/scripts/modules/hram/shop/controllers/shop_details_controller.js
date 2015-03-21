@@ -7,9 +7,9 @@ angular.module('pdHram')
         url: '/:shopId',
         templateUrl: 'scripts/modules/hram/shop/templates/details.html',
         resolve: {
-          shopData: function ($stateParams, shopProvider) {
+          shopData: ['$stateParams', 'shopProvider', function ($stateParams, shopProvider) {
             return shopProvider.getShopDetails($stateParams.shopId);
-          }
+          }]
         },
         controller: ['$scope', 'shopData', '$modal', function ($scope, shopData, $modal) {
           $scope.shop = shopData;
