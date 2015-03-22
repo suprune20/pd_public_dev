@@ -78,7 +78,7 @@ angular.module('pdFrontend')
       }
     };
   })
-  .factory('DeadmanMemoryProvider', function (pdConfig, $upload, $sce, personMemoryApi) {
+  .factory('DeadmanMemoryProvider', function (pdConfig, $upload, $sce, personMemoryApi, pdFrontendClientPanel) {
     return function (id) {
       return {
         getPersonDetails: function () {
@@ -129,6 +129,12 @@ angular.module('pdFrontend')
         },
         postGalleryPhoto: function (file) {
           return personMemoryApi.postGalleryItem(id, file);
+        },
+        getPlacesCollection: function () {
+          return pdFrontendClientPanel.getPlacesCollection()
+            .then(function (placesCollection) {
+              return placesCollection.places;
+            });
         }
       };
     };

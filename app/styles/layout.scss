@@ -48,3 +48,15 @@ form {
     }
   }
 }
+
+.hoverable-icon {
+  .edit-icon {
+    display: none;
+  }
+
+  &:hover {
+    .edit-icon {
+      display: inline-block;
+    }
+  }
+}

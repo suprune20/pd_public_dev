@@ -43,4 +43,22 @@
       }
     }
   }
+
+  select {
+    &.editable-input {
+      width: 100%;
+    }
+  }
+
+  .editable-empty {
+    font-style: inherit;
+    color: inherit;
+  }
+
+  [name=burialDataForm] {
+    label {
+      font-size: 16px;
+      font-weight: normal;
+    }
+  }
 }

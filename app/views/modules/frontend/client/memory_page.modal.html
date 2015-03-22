@@ -23,7 +23,6 @@
           </div>
         </div>
 
-
         <div class="media-body">
           <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)">
             <h4 class="media-heading">
@@ -33,6 +32,8 @@
                     e-name="firstname">{{burialData.firstname}}</span>
               <span editable-text="burialData.middlename"
                     e-name="middlename" e-placeholder="Отчество">{{burialData.middlename}}</span>
+
+              <span editable-checkbox="burialData.isDead" e-title="Умерший?"></span>
 
               <span class="glyphicon glyphicon-pencil pointer-cursor"
                     ng-click="burialDataForm.$show()"
@@ -58,6 +59,15 @@
 
           <p>
             {{burialData.dob|default:'?'}} / {{burialData.dod|default:'?'}}
+          </p>
+
+          <p class="hoverable-icon">
+            <span editable-select="place.id" onshow="loadPlacesCollection()" e-form="burialPlaceForm"
+               e-ng-options="p.id as p.address for p in places">
+              Указать место захоронения
+            </span>
+            <span class="glyphicon glyphicon-pencil pointer-cursor edit-icon" ng-click="burialPlaceForm.$show()"
+                  ng-hide="burialPlaceForm.$visible"></span>
           </p>
         </div>
       </div>

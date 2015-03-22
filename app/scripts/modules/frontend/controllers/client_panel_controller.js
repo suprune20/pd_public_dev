@@ -250,5 +250,12 @@ angular.module('pdFrontend')
           $scope.postMemoryData = {};
         });
     };
+
+    $scope.loadPlacesCollection = function () {
+      deadmanProvider.getPlacesCollection()
+        .then(function (placesCollection) {
+          $scope.places = placesCollection;
+        });
+    };
   })
 ;
