@@ -188,7 +188,9 @@ angular.module('pdFrontend')
     };
   })
 
-  .controller('MemoryPageCtrl', function ($scope, deadmanProvider, MemoriesProvider, memoryData, growl, $q) {
+  .controller('MemoryPageCtrl', function ($scope, deadmanProvider, MemoriesProvider, memoryData, pdFrontendClientPanel,
+                                          growl, $q, $modal
+  ) {
     // Initial values
     $scope.postMemoryData = {};
 
@@ -256,6 +258,18 @@ angular.module('pdFrontend')
         .then(function (placesCollection) {
           $scope.places = placesCollection;
         });
+    };
+
+    $scope.openPlaceDetailModal = function () {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/places/details.modal.html',
+        resolve: {
+          placeModel: function () {
+            return pdFrontendClientPanel.getPlaceDetails($scope.burialData.placeId);
+          }
+        },
+        controller: 'ClientPlaceDetailsModalCtrl'
+      });
     };
   })
 ;
