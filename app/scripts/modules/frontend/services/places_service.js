@@ -78,16 +78,22 @@ angular.module('pdFrontend')
           placeModel.location.longitude,
           placeModel.location.latitude
         ).then(function (addedPlaceModel) {
-            var deadmanAddPromises = _.map(placeModel.deadmans, function (deadman) {
-              return _this.addDeadman(addedPlaceModel.id, deadman);
-            });
-
-            return $q.all(deadmanAddPromises)
-              .then(function (addedDeadmansModels) {
-                placeModel.deadmans = addedDeadmansModels;
-
-                return placeModel;
+            var deadmanAddPromises = _(placeModel.deadmans)
+              .filter(function (deadman) {
+                return !!deadman.id;
+              })
+              .map(function (deadman) {
+                return _this.addDeadman(addedPlaceModel.id, deadman);
               });
+
+            return !deadmanAddPromises.length ?
+              addedPlaceModel :
+              $q.all(deadmanAddPromises)
+                .then(function (addedDeadmansModels) {
+                  placeModel.deadmans = addedDeadmansModels;
+
+                  return placeModel;
+                });
           });
       },
       addDeadman: function (placeId, deadmanModel) {

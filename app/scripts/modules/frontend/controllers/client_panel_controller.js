@@ -84,50 +84,20 @@ angular.module('pdFrontend')
     };
 
     $scope.addPlace = function () {
-      var $controllerScope = $scope;
-
       $modal.open({
         templateUrl: 'views/modules/frontend/client/places/add_place.modal.html',
-        controller: function ($scope, pdYandex, pdFrontendClientPanel, $modalInstance) {
-          $scope.$watch('currentPlaceMarker.geometry', function (geometry) {
-            pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
-              $scope.currentPlaceMarker.properties.placeModel.address = res.text;
-              $scope.currentPlaceMarker.properties.placeModel.location = {
-                longitude: geometry.coordinates[0],
-                latitude: geometry.coordinates[1]
-              };
-            });
-          }, true);
-
-          $scope.savePlace = function () {
-            pdFrontendClientPanel.addPlace($scope.currentPlaceMarker.properties.placeModel)
-              .then(function (placeModel) {
-                $controllerScope.placesPoints.push(pdFrontendClientPanel.getPlaceYandexPoint(placeModel));
-                $controllerScope.placesCollection.push(placeModel);
-                $modalInstance.close();
-              });
-          };
-          $scope.yaMapClickHandle = function (event) {
-            $scope.currentPlaceMarker.geometry.coordinates = event.get('coords');
-          };
-          pdYandex.currentPosition()
-            .then(function (geolocation) {
-              $scope.currentPlaceMarker = {
-                properties: {
-                  placeModel: {
-                    deadmans: []
-                  }
-                },
-                geometry: {
-                  type: 'Point',
-                  coordinates: [geolocation.longitude, geolocation.latitude]
-                },
-                options: {}
-              };
-            });
-        }
+        resolve: {
+          onAddedPlace: ['pdFrontendClientPanel', function (pdFrontendClientPanel) {
+            return function (placeModel) {
+              $scope.placesPoints.push(pdFrontendClientPanel.getPlaceYandexPoint(placeModel));
+              $scope.placesCollection.push(placeModel);
+            };
+          }]
+        },
+        controller: 'AddPlaceModalCtrl'
       });
     };
+
     // Handle addedDeadman event
     $scope.$on('addedDeadman', function (event, eventData) {
       var place = _.findWhere($scope.placesCollection, {id: eventData.placeId});
@@ -139,6 +109,49 @@ angular.module('pdFrontend')
       place.deadmans.push(eventData.deadman);
     });
   })
+
+  .controller('AddPlaceModalCtrl', function ($scope, pdYandex, pdFrontendClientPanel, $modalInstance, onAddedPlace) {
+    $scope.$watch('currentPlaceMarker.geometry', function (geometry) {
+      if (!geometry) {
+        return;
+      }
+
+      pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
+        $scope.currentPlaceMarker.properties.placeModel.address = res.text;
+        $scope.currentPlaceMarker.properties.placeModel.location = {
+          longitude: geometry.coordinates[0],
+          latitude: geometry.coordinates[1]
+        };
+      });
+    }, true);
+
+    $scope.savePlace = function () {
+      pdFrontendClientPanel.addPlace($scope.currentPlaceMarker.properties.placeModel)
+        .then(function (placeModel) {
+          onAddedPlace(placeModel);
+          $modalInstance.close();
+        });
+    };
+    $scope.yaMapClickHandle = function (event) {
+      $scope.currentPlaceMarker.geometry.coordinates = event.get('coords');
+    };
+    pdYandex.currentPosition()
+      .then(function (geolocation) {
+        $scope.currentPlaceMarker = {
+          properties: {
+            placeModel: {
+              deadmans: $scope.predefinedDeadmans ? $scope.predefinedDeadmans : []
+            }
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [geolocation.longitude, geolocation.latitude]
+          },
+          options: {}
+        };
+      });
+  })
+
   .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({
       templateUrl: 'views/modules/frontend/client/places/details.modal.html',
@@ -198,6 +211,7 @@ angular.module('pdFrontend')
     $scope.memoriesDataProvider = new MemoriesProvider();
 
     $scope.saveBurialData = function (burialData) {
+      console.log(burialData);
       return deadmanProvider.updatePersonDetails(burialData)
         .then(function (updatedPersonData) {
           $scope.burialData = updatedPersonData;
@@ -269,6 +283,34 @@ angular.module('pdFrontend')
           }
         },
         controller: 'ClientPlaceDetailsModalCtrl'
+      });
+    };
+
+    $scope.addNewPlace = function () {
+      // define scope for modal with predefined deadman
+      var $modalScope = $scope.$new(),
+        modalBurialData = angular.copy($scope.burialData);
+
+      modalBurialData.firstName = modalBurialData.firstname;
+      modalBurialData.lastName = modalBurialData.lastname;
+      modalBurialData.middleName = modalBurialData.middlename;
+      modalBurialData.birthData = modalBurialData.dob;
+      modalBurialData.deathData = modalBurialData.dod;
+      $modalScope.predefinedDeadmans = [modalBurialData];
+
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/places/add_place.modal.html',
+        resolve: {
+          onAddedPlace: function () {
+            return function (placeModel) {
+              console.log(placeModel);
+              $scope.burialData.placeId = placeModel.id;
+              $scope.saveBurialData({placeId: placeModel.id});
+            };
+          }
+        },
+        scope: $modalScope,
+        controller: 'AddPlaceModalCtrl'
       });
     };
   })
