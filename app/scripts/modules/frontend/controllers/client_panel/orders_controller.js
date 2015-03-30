@@ -13,6 +13,7 @@ angular.module('pdFrontend')
         }
 
         order.totalPrice = eventData.totalCost;
+        order.modifiedAt = eventData.modifiedAt;
       });
     });
     $scope.$on('orders:deleted', function (event, eventData) {
@@ -58,14 +59,13 @@ angular.module('pdFrontend')
 
               return {
                 product: product,
-                isSelected: !!previousSelectedProduct,
                 qty: !!previousSelectedProduct ? previousSelectedProduct.quantity : 0
               };
             });
           });
 
           $scope.$watch('products', function () {
-            var selectedProducts = _.filter($scope.products, 'isSelected');
+            var selectedProducts = _.filter($scope.products, 'qty');
 
             $scope.changedProductsState = _(selectedProducts)
               .map(function (productMeta) {
@@ -98,7 +98,8 @@ angular.module('pdFrontend')
             })).then(function () {
               $rootScope.$broadcast('orders:changed', {
                 orderId: orderModel.id,
-                totalCost: $scope.totalCost
+                totalCost: $scope.totalCost,
+                modifiedAt: new Date()
               });
               initialProducts = $scope.changedProductsState;
               $scope.hasChangedProducts = false;

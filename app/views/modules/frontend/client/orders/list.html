@@ -15,7 +15,7 @@
     <tbody>
     <tr ng-repeat="order in orders" bindonce>
       <td bo-text="order.createdAt|date:'yyyy-MM-dd HH:mm'"></td>
-      <td bo-text="order.modifiedAt|date:'yyyy-MM-dd HH:mm'"></td>
+      <td>{{ order.modifiedAt|date:'yyyy-MM-dd HH:mm' }}</td>
       <td bo-text="order.performer.name"></td>
       <td>{{order.totalPrice|toFixed:2}} ({{order.currency}})</td>
       <td bo-text="order.status|orderStatusLabel"></td>

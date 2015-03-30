@@ -44,7 +44,7 @@
         <h4>Результаты</h4>
         <ul class="media-list margin-top-15">
           <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">
-            <div class="pull-left">
+            <div class="pull-left" pd-fancybox="{{result.fileUrl}}">
               <img ng-src="{{result.fileUrl|pdThumbnail:'50x50'}}" class="img-thumbnail">
             </div>
             <div class="media-body">
@@ -91,7 +91,7 @@
               <th width="77"></th>
               <th>Название</th>
               <th>Стоимость</th>
-              <th></th>
+              <th>Количество</th>
             </tr>
             </thead>
             <tbody>
@@ -107,11 +107,8 @@
               <td>{{productMeta.product.name}}</td>
               <td>{{productMeta.product.price}} ({{ productMeta.product.currency }})</td>
               <td>
-                <input type="checkbox" ng-model="productMeta.isSelected" ng-change="productMeta.qty = 1">
-
-                <div class="form-group" ng-show="productMeta.isSelected">
-                  <label>Количество</label>
-                  <touchspin ng-model="productMeta.qty" min="1" max="100" step="1"></touchspin>
+                <div class="form-group">
+                  <touchspin ng-model="productMeta.qty" min="0" max="100" step="1"></touchspin>
                 </div>
               </td>
             </tr>
@@ -122,16 +119,6 @@
 
       <tab heading="Отзыв" select="onChangedTab('review')">
         <form role="form" name="reviewForm">
-          <div class="btn-group">
-            <label class="btn btn-default" ng-class="{'btn-success': reviewModel.isPositive}"
-                   ng-model="reviewModel.isPositive" btn-radio="true">
-              <i class="glyphicon glyphicon-thumbs-up"></i>
-            </label>
-            <label class="btn btn-default" ng-class="{'btn-danger': false === reviewModel.isPositive}"
-                   ng-model="reviewModel.isPositive" btn-radio="false">
-              <i class="glyphicon glyphicon-thumbs-down"></i>
-            </label>
-          </div>
           <div class="form-group">
             <label for="title">Заголовок</label>
             <input class="form-control" id="title" name="title" ng-model="reviewModel.title">
