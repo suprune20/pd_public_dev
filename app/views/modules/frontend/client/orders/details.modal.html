@@ -118,6 +118,17 @@
       </tab>
 
       <tab heading="Отзыв" select="onChangedTab('review')">
+        <div ng-show="'done' === order.status" class="btn-group" role="group" ng-click="saveRating()">
+          <button type="button" class="btn btn-default" ng-class="{'btn-success': true === order.clientRating}"
+                  ng-click="order.clientRating = (true === order.clientRating) ? null : true">
+            <i class="glyphicon glyphicon-thumbs-up"></i>
+          </button>
+          <button type="button" class="btn btn-default" ng-class="{'btn-danger': false === order.clientRating}"
+                  ng-click="order.clientRating = (false === order.clientRating) ? null : false">
+            <i class="glyphicon glyphicon-thumbs-down"></i>
+          </button>
+        </div>
+
         <form role="form" name="reviewForm">
           <div class="form-group">
             <label for="title">Заголовок</label>
@@ -162,17 +173,6 @@
         </form>
       </div>
       <p ng-show="paymentSuccess">Оплата успешно завершена</p>
-
-      <div ng-show="'done' === order.status" class="btn-group" role="group" ng-click="saveRating()">
-        <button type="button" class="btn btn-default" ng-class="{'btn-success': true === order.clientRating}"
-                ng-click="order.clientRating = (true === order.clientRating) ? null : true">
-          <i class="glyphicon glyphicon-thumbs-up"></i>
-        </button>
-        <button type="button" class="btn btn-default" ng-class="{'btn-danger': false === order.clientRating}"
-                ng-click="order.clientRating = (false === order.clientRating) ? null : false">
-          <i class="glyphicon glyphicon-thumbs-down"></i>
-        </button>
-      </div>
 
       <div ng-show="isAllowEdit" class="margin-top-15">
         <button class="btn btn-danger btn-block" ng-click="removeOrder()">Удалить</button>
