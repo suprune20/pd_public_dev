@@ -163,8 +163,12 @@ angular.module('pdFrontend')
       controller: 'ClientPlaceDetailsModalCtrl'
     }).result.catch(function () { $state.go(placesListState); });
   })
+
+
+
+
   .controller('ClientPlaceDetailsModalCtrl', function ($rootScope, $scope, placeModel, $modal, DeadmanMemoryProvider,
-                                                       pdFrontendClientPanel
+                                                       pdFrontendClientPanel, pdFrontendOrders
   ) {
     $scope.placeData = placeModel;
     $scope.addDeadman = function (deadman) {
@@ -197,6 +201,53 @@ angular.module('pdFrontend')
           }
         },
         controller: 'MemoryPageCtrl'
+      });
+    };
+
+
+
+    $scope.availablePerformers = [];
+    $scope.availablePerformerLoading = [];
+    $scope.getPhotoPerformers = function (place) {
+
+      // Hide performers list if already showed
+      if ($scope.availablePerformers[place.id]) {
+        delete $scope.availablePerformers[place.id];
+        return;
+      }
+
+      $scope.availablePerformerLoading[place.id] = true;
+      pdFrontendOrders.getAvailablePerformersForPhoto(place.id, place.location)
+        .then(function (performers) {
+          $scope.availablePerformers[place.id] = performers;
+        })
+        .finally(function () {
+          $scope.availablePerformerLoading[place.id] = false;
+        });
+    };
+    $scope.confirmOrder = function (orderType, placeData, performer) {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/confirm_order.modal.html',
+        controller: function ($scope, pdFrontendOrders, growl, $modalInstance) {
+          $scope.performer = performer;
+          // Place order
+          $scope.confirmOrder = function (comment) {
+            pdFrontendOrders.createOrder({
+              type: orderType,
+              performerId: performer.id,
+              placeId: placeData.id,
+              location: placeData.location,
+              comment: comment
+            })
+              .then(function () {
+                growl.addSuccessMessage('Заказ был успешно размещен');
+                placeModel.updateOrders();
+                $modalInstance.dismiss();
+              }, function () {
+                growl.addErrorMessage('Произошла ошибка при размещении заказа');
+              });
+          };
+        }
       });
     };
   })

@@ -13,6 +13,23 @@
           <ya-geo-object ya-source="placeData.locationYandexPoint"></ya-geo-object>
         </ya-map>
 
+        <div class="text-center order-place-photo-cont" ng-click="$event.stopPropagation()">
+          <button type="button" class="btn btn-primary col-xs-12 margin-bottom-15" ng-model="orderCurrentPhoto"
+                  btn-checkbox ng-change="getPhotoPerformers(placeData)" title="Заказать актуальную фотографию">
+            <i class="glyphicon glyphicon-refresh animated-rotate"
+               ng-if="availablePerformerLoading[placeData.id]"></i>
+            <i class="glyphicon glyphicon-camera"></i>
+          </button>
+
+          <ul class="list-unstyled text-left order-available-performers-cont"
+              ng-show="availablePerformers[placeData.id].length">
+            <li ng-repeat="performer in availablePerformers[placeData.id]|orderBy:'price'">
+              {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
+              <button class="btn btn-link" ng-click="confirmOrder('photo', placeData, performer)">заказать</button>
+            </li>
+          </ul>
+        </div>
+
         <dl>
           <dt>Адрес</dt>
           <dd>{{placeData.address}}</dd>

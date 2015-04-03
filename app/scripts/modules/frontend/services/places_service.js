@@ -62,6 +62,13 @@ angular.module('pdFrontend')
           placeModel.orders = results[2];
           placeModel.attachments = results[3];
 
+          placeModel.updateOrders = function () {
+            pdFrontendPlacesApi.getPlaceOrders(placeId)
+              .then(function (ordersCollection) {
+                placeModel.orders = ordersCollection;
+              });
+          };
+
           return placeModel;
         });
       },
