@@ -1,6 +1,7 @@
 <div class="panel panel-default" ng-click="mother.$state.go('hram.persons.details', { personId: card.id })">
   <div class="panel-body">
-    <img ng-src="{{ card.imageUrl }}" default-image="http://placehold.it/500x500"
+    <img ng-src="{{ card.titlePhoto }}" default-image="http://placehold.it/500x500"
+         pd-thumb pd-thumb-size="500x500"
          class="img-rounded" style="width: 100%;">
     <ul class="list-unstyled">
       <li>{{ card.lastName }}</li>

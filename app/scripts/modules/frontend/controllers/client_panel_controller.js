@@ -253,7 +253,7 @@ angular.module('pdFrontend')
   })
 
   .controller('MemoryPageCtrl', function ($scope, deadmanProvider, MemoriesProvider, memoryData, pdFrontendClientPanel,
-                                          growl, $q, $modal
+                                          growl, $q, $modal, $rootScope
   ) {
     // Initial values
     $scope.postMemoryData = {};
@@ -262,10 +262,10 @@ angular.module('pdFrontend')
     $scope.memoriesDataProvider = new MemoriesProvider();
 
     $scope.saveBurialData = function (burialData) {
-      console.log(burialData);
       return deadmanProvider.updatePersonDetails(burialData)
         .then(function (updatedPersonData) {
           $scope.burialData = updatedPersonData;
+          $rootScope.$broadcast('updated_person_data', updatedPersonData);
         }, function () {
           growl.addErrorMessage('Произошла ошибка при сохранении данных');
 
@@ -289,7 +289,6 @@ angular.module('pdFrontend')
 
     // Post memory message
     $scope.onMemoryFileSelect = function (files, type) {
-      console.log(files, type);
       $scope.postMemoryData.file = {
         type: type,
         file: files[0]
@@ -301,7 +300,6 @@ angular.module('pdFrontend')
     };
 
     $scope.postMemoryMsg = function () {
-      console.log($scope.postMemoryData);
       var newMemoryRecordModel = {
         type: $scope.postMemoryData.file ? $scope.postMemoryData.file.type : 'text',
         text: $scope.postMemoryData.text
@@ -354,7 +352,6 @@ angular.module('pdFrontend')
         resolve: {
           onAddedPlace: function () {
             return function (placeModel) {
-              console.log(placeModel);
               $scope.burialData.placeId = placeModel.id;
               $scope.saveBurialData({placeId: placeModel.id});
             };
