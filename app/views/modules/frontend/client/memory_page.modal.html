@@ -24,7 +24,10 @@
         </div>
 
         <div class="media-body">
-          <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)">
+          <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)"
+                onhide="onHideBurialDataForm()">
+            <p class="alert alert-danger" ng-bind="editBurialFormError" ng-show="editBurialFormError"></p>
+
             <h4 class="media-heading">
               <span editable-text="burialData.lastname"
                     e-name="lastname">{{burialData.lastname}}</span>
@@ -34,6 +37,9 @@
                     e-name="middlename" e-placeholder="Отчество">{{burialData.middlename}}</span>
 
               <span editable-checkbox="burialData.isDead" e-name="isDead" e-title="Умерший?"></span>
+
+              <span editable-text="burialData.dob" e-name="dob" e-placeholder="Дата рождения"></span>
+              <span editable-text="burialData.dod" e-name="dod" e-placeholder="Дата смерти"></span>
 
               <span class="glyphicon glyphicon-pencil pointer-cursor"
                     ng-click="burialDataForm.$show()"
@@ -57,7 +63,7 @@
             </div>
           </form>
 
-          <p>
+          <p ng-show="!burialDataForm.$visible">
             {{burialData.dob|default:'?'}} / {{burialData.dod|default:'?'}}
           </p>
 

@@ -78,14 +78,26 @@ angular.module('pdFrontend')
       }
     };
   })
-  .factory('DeadmanMemoryProvider', function (pdConfig, $upload, $sce, personMemoryApi, pdFrontendClientPanel) {
+  .factory('DeadmanMemoryProvider', function (pdConfig, $upload, $sce, personMemoryApi, pdFrontendClientPanel, $q) {
     return function (id) {
       return {
         getPersonDetails: function () {
           return personMemoryApi.getPersonDetails(id);
         },
         updatePersonDetails: function (personData) {
-          return personMemoryApi.putPersonDetails(id, personData);
+          return personMemoryApi.putPersonDetails(id, personData)
+            .catch(function (errorResponse) {
+              var errorData = {
+                status: 'server_error'
+              };
+
+              if (400 === errorResponse.status) {
+                errorData.status = 'validation_error';
+                errorData.message = errorResponse.data.message;
+              }
+
+              return $q.reject(errorData);
+            });
         },
         getMemoriesProvider: function () {
           return function (memoriesCountsPerRequest) {

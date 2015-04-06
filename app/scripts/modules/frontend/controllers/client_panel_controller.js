@@ -262,15 +262,26 @@ angular.module('pdFrontend')
     $scope.memoriesDataProvider = new MemoriesProvider();
 
     $scope.saveBurialData = function (burialData) {
+      delete $scope.editBurialFormError;
+
       return deadmanProvider.updatePersonDetails(burialData)
         .then(function (updatedPersonData) {
           $scope.burialData = updatedPersonData;
           $rootScope.$broadcast('updated_person_data', updatedPersonData);
-        }, function () {
+        }, function (errorData) {
+          if ('validation_error' === errorData.status) {
+            $scope.editBurialFormError = errorData.message;
+            return $q.reject();
+          }
+
           growl.addErrorMessage('Произошла ошибка при сохранении данных');
 
           return $q.reject();
         });
+    };
+
+    $scope.onHideBurialDataForm = function () {
+      delete $scope.editBurialFormError;
     };
 
     $scope.saveCommonText = function (commonText) {
