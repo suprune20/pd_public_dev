@@ -103,6 +103,9 @@ angular.module('pdFrontend')
                 });
           });
       },
+      savePlace: function (placeModel) {
+        return pdFrontendPlacesApi.updatePlace(placeModel.id, placeModel);
+      },
       addDeadman: function (placeId, deadmanModel) {
         if (!auth.isAuthenticated()) {
           return $q.when(deadmanModel);

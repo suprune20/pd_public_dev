@@ -101,12 +101,21 @@ angular.module('pdFrontend')
     // Handle addedDeadman event
     $scope.$on('addedDeadman', function (event, eventData) {
       var place = _.findWhere($scope.placesCollection, {id: eventData.placeId});
-
       if (!place) {
         return;
       }
 
       place.deadmans.push(eventData.deadman);
+    });
+
+    // Handle modify place data event
+    $scope.$on('place:updated_data', function (event, eventData) {
+      var place = _.findWhere($scope.placesCollection, {id: eventData.id});
+      if (!place) {
+        return;
+      }
+
+      place.address = eventData.address;
     });
   })
 
@@ -168,7 +177,7 @@ angular.module('pdFrontend')
 
 
   .controller('ClientPlaceDetailsModalCtrl', function ($rootScope, $scope, placeModel, $modal, DeadmanMemoryProvider,
-                                                       pdFrontendClientPanel, pdFrontendOrders
+                                                       pdFrontendClientPanel, pdFrontendOrders, pdYandex, growl
   ) {
     $scope.placeData = placeModel;
     $scope.addDeadman = function (deadman) {
@@ -249,6 +258,32 @@ angular.module('pdFrontend')
           };
         }
       });
+    };
+
+
+    $scope.$watch('placeData.locationYandexPoint.geometry', function (geometry) {
+      if (!geometry) {
+        return;
+      }
+
+      pdYandex.reverseGeocode(geometry.coordinates).then(function (res) {
+        $scope.placeData.address = res.text;
+        $scope.placeData.location = {
+          longitude: geometry.coordinates[0],
+          latitude: geometry.coordinates[1]
+        };
+      });
+    }, true);
+
+    $scope.savePlace = function () {
+      pdFrontendClientPanel.savePlace($scope.placeData)
+        .then(function (updatedPlaceData) {
+          $rootScope.$broadcast('place:updated_data', updatedPlaceData);
+          growl.addSuccessMessage('Данные места были успешно сохранены');
+        });
+    };
+    $scope.yaMapClickHandle = function (event) {
+      $scope.placeData.locationYandexPoint.geometry.coordinates = event.get('coords');
     };
   })
 

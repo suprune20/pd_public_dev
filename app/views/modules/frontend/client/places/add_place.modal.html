@@ -14,6 +14,7 @@
                      ya-event-dragend="currentPlaceMarkerDragendHandler($event)"></ya-geo-object>
     </ya-map>
   </div>
+
   <div class="row margin-bottom-15">
     <form name="addPlaceForm" class="col-xs-10 col-xs-offset-1">
       <div class="form-group">
@@ -27,6 +28,7 @@
       </div>
     </form>
   </div>
+
   <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
       <h4>Персоны</h4>
@@ -47,29 +49,6 @@
             </ul>
           </div>
         </li>
-
-        <!--<li>-->
-          <!--<form name="addDeadmanForm" ng-show="showAddDeadmanInput">-->
-            <!--<div class="form-group">-->
-              <!--<input class="form-control" required ng-model="deadman.lastName" placeholder="Фамилия">-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-              <!--<input class="form-control" required ng-model="deadman.firstName" placeholder="Имя">-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-              <!--<input class="form-control" required ng-model="deadman.middleName" placeholder="Отчество">-->
-            <!--</div>-->
-            <!--<button type="button" class="btn btn-default" ng-disable="addDeadmanForm.$invalid"-->
-                    <!--ng-click="currentPlaceMarker.properties.placeModel.deadmans.push(deadman);-->
-                  <!--showAddDeadmanInput = false; deadman = null">-->
-              <!--Сохранить-->
-            <!--</button>-->
-            <!--<button type="button" class="btn btn-default"-->
-                    <!--ng-click="showAddDeadmanInput = false; deadman = null">Отмена</button>-->
-          <!--</form>-->
-          <!--<button class="btn-link" ng-click="showAddDeadmanInput = true"-->
-                  <!--ng-hide="showAddDeadmanInput">Добавить персону</button>-->
-        <!--</li>-->
       </ul>
     </div>
   </div>
