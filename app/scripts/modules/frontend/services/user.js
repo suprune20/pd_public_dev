@@ -15,10 +15,8 @@ angular.module('pdFrontend')
           return $q.when({});
         }
 
-        return $http.get(pdConfig.apiEndpoint + 'profile')
-          .then(function (resp) {
-            var userProfileData = resp.data;
-
+        return auth.getUserProfileApiData()
+          .then(function (userProfileData) {
             userProfileData.places.map(function (placeData) {
               if (placeData.location && (!placeData.location.longitude || !placeData.location.latitude)) {
                 placeData.location = null;

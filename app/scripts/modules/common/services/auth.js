@@ -47,6 +47,12 @@ angular.module('pdCommon')
       }
     ;
 
+    var getSessionByCookie = function () {
+      return $http.get(pdConfig.apiEndpoint + 'auth/sessions', {
+        withCredentials: true
+      }).then(function (response) { return response.data; });
+    };
+
     return {
       signin: function (username, password, confirmTC, oauthData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signin', {
@@ -139,6 +145,12 @@ angular.module('pdCommon')
       getUserProfile: function () {
         return authStorage.getProfile().profile || {};
       },
+      getUserProfileApiData: function () {
+        return $http.get(pdConfig.apiEndpoint + 'profile')
+          .then(function (response) {
+            return response.data;
+          });
+      },
       getUserOrganisation: function () {
         return authStorage.getProfile().organisation || {};
       },
@@ -170,6 +182,18 @@ angular.module('pdCommon')
           });
 
         return deferred.promise;
+      },
+
+      // Check authorization by cookie (for subdomains)
+      initialSubdomainAuthorization: function () {
+        if (this.isAuthenticated()) {
+          return true;
+        }
+
+        getSessionByCookie()
+          .then(function (sessionData) {
+            applySuccessSigninResponse(sessionData);
+          });
       }
     };
   })

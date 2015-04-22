@@ -258,5 +258,8 @@ angular.module('pdApp', [
 
     // share $state object for templates and child scopes
     $rootScope.$state = $state;
+
+    // Check authorization by cookie (restore session for subdomains)
+    auth.initialSubdomainAuthorization();
   })
 ;
