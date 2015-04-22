@@ -91,6 +91,7 @@
           <th>Дата изменения</th>
           <th>Тип</th>
           <th>Статус</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -99,6 +100,9 @@
           <td bo-text="order.modifiedAt|date:'yyyy-MM-dd HH:mm'"></td>
           <td bo-text="order.type"></td>
           <td bo-text="order.status|orderStatusLabel"></td>
+          <td>
+            <button class="btn btn-link" ng-click="showOrderDetailsModal(order.id)">детали</button>
+          </td>
         </tr>
         </tbody>
       </table>

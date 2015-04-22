@@ -214,6 +214,18 @@ angular.module('pdFrontend')
     };
 
 
+    $scope.showOrderDetailsModal = function (orderId) {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/orders/details.modal.html',
+        resolve: {
+          orderModel: function () {
+            return pdFrontendOrders.getOrderDetails(orderId);
+          }
+        },
+        controller: 'ClientOrderDetailsModalCtrl'
+      });
+    };
+
 
     $scope.availablePerformers = [];
     $scope.availablePerformerLoading = [];
