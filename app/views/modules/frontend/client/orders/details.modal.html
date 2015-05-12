@@ -25,7 +25,17 @@
           <dd>{{order.place.address}}</dd>
         </dl>
 
-        <h4>Исполнитель</h4>
+        <h4>
+          Исполнитель
+          <label class="pull-right small">
+            <input type="checkbox"
+                   ng-change="onChangePlacePerformer(order.place.performerId)"
+                   ng-model="order.place.performerId"
+                   ng-true-value="{{ order.performer.id }}"
+                   ng-checked="order.performer.id == order.place.performerId" />
+            Закрепить за местом
+          </label>
+        </h4>
         <dl>
           <dt>Наименование</dt>
           <dd>{{ order.performer.fullname }}</dd>

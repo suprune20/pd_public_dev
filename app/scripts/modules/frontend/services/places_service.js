@@ -115,6 +115,7 @@ angular.module('pdFrontend')
       }
     };
   })
+
   .factory('CatalogMyPlaces', function (pdYandex, user, growl, $rootScope, $q) {
     return function () {
       var MARKER_CURRENT_PRESET = 'twirl#redIcon',

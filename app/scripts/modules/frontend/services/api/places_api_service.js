@@ -31,14 +31,8 @@ angular.module('pdFrontend')
         });
       },
       updatePlace: function (placeId, placeModel) {
-        return $http.put(pdConfig.apiEndpoint + 'client/places/' + placeId, {
-          name: placeModel.name,
-          address: placeModel.address,
-          location: {
-            latitude: placeModel.location.latitude,
-            longitude: placeModel.location.longitude
-          }
-        }).then(function (response) { return response.data; });
+        return $http.put(pdConfig.apiEndpoint + 'client/places/' + placeId, placeModel)
+          .then(function (response) { return response.data; });
       },
       getPlaceDetails: function (placeId) {
         return $http.get(pdConfig.apiEndpoint + 'client/places/' + placeId)

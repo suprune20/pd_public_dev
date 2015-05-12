@@ -4,7 +4,8 @@
 
 angular.module('pdFrontend')
   .controller('ClientOrderDetailsModalCtrl', function ($rootScope, $scope, CatalogRefactored, modalNotifications,
-                                                       $modalInstance, orderModel, pdFrontendOrders, growl, $stateParams
+                                                       $modalInstance, orderModel, pdFrontendOrders, growl, $stateParams,
+                                                       pdFrontendClientPanel
   ) {
     var servicesCost = _.reduce(orderModel.services, function (sum, service) {
       return sum + service.price;
@@ -144,6 +145,15 @@ angular.module('pdFrontend')
           $scope.reviewModel = {};
           growl.addSuccessMessage('Ваш отзыв сохранен');
         });
+    };
+
+    $scope.onChangePlacePerformer = function (performerId) {
+      var savedPlaceModel = {
+        id: $scope.order.place.id,
+        performerId: performerId ? parseInt(performerId, 10) : null
+      };
+
+      pdFrontendClientPanel.savePlace(savedPlaceModel);
     };
   })
 ;
