@@ -21,6 +21,11 @@ angular.module('pdHram', [
 
       .state('hram.place', {
         url: '/place',
+        abstract: true,
+        template: '<ui-view/>'
+      })
+      .state('hram.place.list', {
+        url: '',
         resolve: {
           placesData: ['pdFrontendClientPanel', function (pdFrontendClientPanel) {
             return pdFrontendClientPanel.getPlacesCollection();
@@ -36,17 +41,24 @@ angular.module('pdHram', [
       })
       .state('hram.place.details', {
         url: '/:placeId',
+        templateUrl: 'views/modules/frontend/client/places/details.html',
         resolve: {
-          placeData: ['pdFrontendClientPanel', '$stateParams', function (pdFrontendClientPanel, $stateParams) {
+          placeModel: ['pdFrontendClientPanel', '$stateParams', function (pdFrontendClientPanel, $stateParams) {
             return pdFrontendClientPanel.getPlaceDetails($stateParams.placeId);
           }],
           placesListState: function () {
             return 'hram.place';
           }
         },
-        controller: 'ClientPlaceDetail',
+        controller: 'ClientPlaceDetailsModalCtrl',
         title: 'Детали места захоронения',
         menuConfig: 'shopMenu'
+      })
+
+      .state('hram.persons', {
+        url: '/person',
+        abstract: true,
+        template: '<ui-view/>'
       })
 
       .state('hram.history', {

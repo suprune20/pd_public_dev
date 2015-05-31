@@ -1,0 +1,209 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="media burial-data-media">
+      <div class="pull-left">
+        <img class="img-thumbnail media-object"
+             ng-src="{{burialData.photo}}"
+             pd-thumb
+             pd-thumb-size="75x75"
+             default-image="http://placehold.it/75x75" />
+
+        <div class="pull-left pointer-cursor custom-file-input">
+          <label for="photoFile">
+            Изменить <i class="glyphicon glyphicon-pencil"></i>
+          </label>
+          <input type="file" id="photoFile" ng-file-select="onMainPhotoFileSelect($files)">
+        </div>
+      </div>
+
+      <div class="media-body">
+        <form editable-form name="burialDataForm" onbeforesave="saveBurialData($data)"
+              onhide="onHideBurialDataForm()">
+          <p class="alert alert-danger" ng-bind="editBurialFormError" ng-show="editBurialFormError"></p>
+
+          <h4 class="media-heading">
+              <span editable-text="burialData.lastname"
+                    e-name="lastname">{{burialData.lastname}}</span>
+              <span editable-text="burialData.firstname"
+                    e-name="firstname">{{burialData.firstname}}</span>
+              <span editable-text="burialData.middlename"
+                    e-name="middlename" e-placeholder="Отчество">{{burialData.middlename}}</span>
+
+            <span editable-checkbox="burialData.isDead" e-name="isDead" e-title="Умерший?"></span>
+
+            <span editable-text="burialData.dob" e-name="dob" e-placeholder="Дата рождения"></span>
+            <span editable-text="burialData.dod" e-name="dod" e-placeholder="Дата смерти"></span>
+
+              <span class="glyphicon glyphicon-pencil pointer-cursor"
+                    ng-click="burialDataForm.$show()"
+                    ng-show="!burialDataForm.$visible"></span>
+          </h4>
+
+          <div class="buttons">
+            <div ng-show="burialDataForm.$visible">
+              <button type="submit"
+                      class="btn btn-primary"
+                      ng-disabled="burialDataForm.$waiting">
+                Save
+              </button>
+              <button type="button"
+                      class="btn btn-default"
+                      ng-disabled="burialDataForm.$waiting"
+                      ng-click="burialDataForm.$cancel()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <p ng-show="!burialDataForm.$visible">
+          {{burialData.dob|default:'?'}} / {{burialData.dod|default:'?'}}
+        </p>
+
+        <p class="hoverable-icon" ng-show="burialData.isDead">
+          <button class="btn btn-link" ng-click="openPlaceDetailModal(burialData.placeId)"
+                  ng-hide="!burialData.placeId || burialPlaceForm.$visible">
+            Место захоронения
+          </button>
+
+            <span editable-select="burialData.placeId" onshow="loadPlacesCollection()" e-form="burialPlaceForm"
+                  e-ng-options="p.id as p.address for p in places" onbeforesave="saveBurialData({placeId: $data})"
+                  ng-show="!burialData.placeId || burialPlaceForm.$visible">
+              Указать место захоронения
+            </span>
+          <button class="btn btn-default btn-sm" ng-click="addNewPlace()" ng-show="burialPlaceForm.$visible">
+            Добавить место
+          </button>
+
+            <span class="glyphicon glyphicon-pencil pointer-cursor edit-icon" ng-click="burialPlaceForm.$show()"
+                  ng-hide="burialPlaceForm.$visible"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Памятный текст
+    <div class="pull-right">
+        <span class="glyphicon glyphicon-pencil pointer-cursor"
+              ng-click="burialCommonTextForm.$show()"
+              ng-show="!burialCommonTextForm.$visible"></span>
+    </div>
+  </div>
+  <div class="panel-body">
+      <span
+        editable-textarea="burialData.commonText"
+        e-form="burialCommonTextForm"
+        onbeforesave="saveCommonText($data)"
+        e-rows="7" e-cols="55">
+        {{burialData.commonText}}
+      </span>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Галерея
+  </div>
+  <div class="panel-body">
+    <flex-slider slides="photo in burialData.gallery"
+                 class="carousel memory-carousel"
+                 slideshow="false" animation="slide" control-nav="false"
+                 item-width="100" item-margin="5"
+                 ng-show="burialData.gallery.length">
+      <li>
+        <img ng-src="{{photo.photoUrl}}"
+             pd-thumb
+             pd-thumb-size="100x100"/>
+      </li>
+    </flex-slider>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Воспоминания</div>
+  <div class="panel-body">
+    <form name="postMemoryForm" class="row" ng-submit="postMemoryMsg()">
+      <div class="col-xs-12">
+        <div class="input-group">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="javascript: void(0);" class="custom-file-input">
+                  Изображение
+                  <input type="file" ng-file-select="onMemoryFileSelect($files, 'image')">
+                </a>
+              </li>
+              <li>
+                <a href="javascript: void(0);" class="custom-file-input">
+                  Видео
+                  <input type="file" ng-file-select="onMemoryFileSelect($files, 'video')">
+                </a>
+              </li>
+            </ul>
+          </div>
+          <input type="text" class="form-control" name="text" ng-model="postMemoryData.text" />
+            <span class="input-group-btn">
+              <button class="btn btn-success" type="submit">
+                <i class="glyphicon glyphicon-ok"></i>
+              </button>
+            </span>
+        </div>
+        <!-- Selected message file -->
+        <div ng-show="postMemoryData.file">
+          <i class="glyphicon glyphicon-trash" ng-click="removeSelectedMessageFile()"></i>
+          {{postMemoryData.file.file.name}}
+        </div>
+      </div>
+    </form>
+
+    <ul class="memories-list list-unstyled"
+        infinite-scroll="memoriesDataProvider.getNextMemories()"
+        infinite-scroll-disabled="memoriesDataProvider.isBusy()">
+      <!-- Memory item element -->
+      <li ng-repeat="memory in memoriesDataProvider.getMemories()" class="memory-item">
+        <ng-switch on="memory.type">
+          <div ng-switch-when="video" class="memory-item-video">
+            <videogular vg-width="'100%'" vg-responsive="true">
+              <video class="videoPlayer" preload="metadata">
+                <source ng-src="{{memory.mediaContent}}" type="video/mp4">
+              </video>
+              <vg-controls style="height: 50px;">
+                <vg-play-pause-button vg-play-icon="'&#xe000;'" vg-pause-icon="'&#xe001;'"></vg-play-pause-button>
+                <vg-scrubBar>
+                  <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
+                </vg-scrubBar>
+                <vg-timeDisplay>{{ currentTime }} / {{ totalTime }}</vg-timeDisplay>
+                <vg-volume>
+                  <vg-mutebutton
+                    vg-mute-icon="'&#xe006;'"
+                    vg-volume-level-0-icon="'&#xe005;'"
+                    vg-volume-level-1-icon="'&#xe004;'"
+                    vg-volume-level-2-icon="'&#xe003;'"
+                    vg-volume-level-3-icon="'&#xe002;'"></vg-mutebutton>
+                  <vg-volumebar></vg-volumebar>
+                </vg-volume>
+                <vg-fullscreenButton
+                  vg-enter-full-screen-icon="'&#xe007;'"
+                  vg-exit-full-screen-icon="'&#xe008;'"></vg-fullscreenButton>
+              </vg-controls>
+            </videogular>
+          </div>
+          <div ng-switch-when="image" class="memory-item-image">
+            <img ng-src="{{memory.mediaContent}}" />
+          </div>
+        </ng-switch>
+        <p class="memory-item-text">{{memory.text}}</p>
+        <p class="text-right memory-item-footer">
+          <strong>{{memory.createdBy.firstname}} {{memory.createdBy.lastname}}</strong>
+          <span am-time-ago="memory.addedAt"></span>
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>

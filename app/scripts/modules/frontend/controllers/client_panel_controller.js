@@ -163,6 +163,7 @@ angular.module('pdFrontend')
 
   .controller('ClientPlaceDetail', function ($state, $modal, placeData, placesListState) {
     $modal.open({
+      backdrop: 'static',
       templateUrl: 'views/modules/frontend/client/places/details.modal.html',
       resolve: {
         placeModel: function () {
@@ -170,13 +171,15 @@ angular.module('pdFrontend')
         }
       },
       controller: 'ClientPlaceDetailsModalCtrl'
-    }).result.catch(function () { $state.go(placesListState); });
+    }).result.catch(function () {
+        //$state.go(placesListState);
+      });
   })
 
 
 
 
-  .controller('ClientPlaceDetailsModalCtrl', function ($rootScope, $scope, placeModel, $modal, DeadmanMemoryProvider,
+  .controller('ClientPlaceDetailsModalCtrl', function ($rootScope, $scope, placeModel, $modal,
                                                        pdFrontendClientPanel, pdFrontendOrders, pdYandex, growl
   ) {
     $scope.placeData = placeModel;

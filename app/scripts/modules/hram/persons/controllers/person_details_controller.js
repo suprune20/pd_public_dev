@@ -5,30 +5,22 @@ angular.module('pdHram')
     authRouteProvider
       .state('hram.persons.details', {
         url: '/:personId',
-        controller: ['$scope', '$state', '$modal', 'DeadmanMemoryProvider',
-          function ($scope, $state, $modal, DeadmanMemoryProvider) {
-            var deadmanMemory = new DeadmanMemoryProvider($state.params.personId);
+        templateUrl: 'views/modules/frontend/client/person_memory.html',
+        resolve: {
+          deadmanProvider: ['DeadmanMemoryProvider', '$stateParams', function (DeadmanMemoryProvider, $stateParams) {
+            return new DeadmanMemoryProvider($stateParams.personId);
+          }],
+          memoryData: ['DeadmanMemoryProvider', '$stateParams', function (DeadmanMemoryProvider, $stateParams) {
+            var deadmanMemory = new DeadmanMemoryProvider($stateParams.personId);
 
-            $modal.open({
-              templateUrl: 'views/modules/frontend/client/memory_page.modal.html',
-              windowClass: 'burial-memory-modal',
-              resolve: {
-                deadmanProvider: function () {
-                  return deadmanMemory;
-                },
-                memoryData: function () {
-                  return deadmanMemory.getPersonDetails();
-                },
-                MemoriesProvider: function () {
-                  return deadmanMemory.getMemoriesProvider();
-                }
-              },
-              controller: 'MemoryPageCtrl'
-            }).result.catch(function () {
-              $state.go('hram.persons');
-            });
-          }
-        ],
+            return deadmanMemory.getPersonDetails();
+          }],
+          MemoriesProvider: ['DeadmanMemoryProvider', '$stateParams', function (DeadmanMemoryProvider, $stateParams) {
+            var deadmanMemory = new DeadmanMemoryProvider($stateParams.personId);
+            return deadmanMemory.getMemoriesProvider();
+          }]
+        },
+        controller: 'MemoryPageCtrl',
         menuConfig: 'shopMenu'
       });
   })

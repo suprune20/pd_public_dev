@@ -1,0 +1,105 @@
+<tabset justified="true">
+  <tab heading="Основная информация" class="row">
+    <div class="col-xs-9">
+      <ya-map class="client-panel-place-map margin-bottom-15"
+              ya-zoom="10" ya-options="{maxZoom: 18}"
+              ya-center="{{placeData.locationYandexPoint.geometry.coordinates}}"
+              ya-event-click="yaMapClickHandle($event)">
+
+        <ya-geo-object ya-source="placeData.locationYandexPoint"
+                       ya-event-dragend="currentPlaceMarkerDragendHandler($event)"></ya-geo-object>
+
+      </ya-map>
+
+      <div class="text-center order-place-photo-cont" ng-click="$event.stopPropagation()">
+        <button type="button" class="btn btn-primary col-xs-12 margin-bottom-15" ng-model="orderCurrentPhoto"
+                btn-checkbox ng-change="getPhotoPerformers(placeData)" title="Заказать актуальную фотографию">
+          <i class="glyphicon glyphicon-refresh animated-rotate"
+             ng-if="availablePerformerLoading[placeData.id]"></i>
+          <i class="glyphicon glyphicon-camera"></i>
+        </button>
+
+        <ul class="list-unstyled text-left order-available-performers-cont"
+            ng-show="availablePerformers[placeData.id].length">
+          <li ng-repeat="performer in availablePerformers[placeData.id]|orderBy:'price'">
+            {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
+            <button class="btn btn-link" ng-click="confirmOrder('photo', placeData, performer)">заказать</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="row margin-bottom-15">
+        <form name="placeForm" class="col-xs-12">
+          <div class="form-group">
+            <label for="placeName">Название</label>
+            <input class="form-control" id="placeName" required ng-model="placeData.name">
+          </div>
+          <div class="form-group">
+            <label for="placeAddress">Адрес</label>
+            <textarea class="form-control" id="placeAddress" ng-model="placeData.address"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <ul class="media-list" ng-show="placeData.deadmans.length">
+        <li class="media" ng-repeat="deadman in placeData.deadmans"
+            ng-click="$state.go('hram.persons.details', {personId: deadman.id})">
+          <img class="media-object img-thumbnail pull-left"
+               ng-src="{{deadman.titlePhoto}}"
+               pd-thumb
+               pd-thumb-size="50x50"
+               default-image="http://placehold.it/50x50" />
+          <div class="media-body">
+            <ul class="list-unstyled">
+              <li><strong>{{deadman.lastName}}</strong></li>
+              <li><strong>{{deadman.firstName}}</strong></li>
+              <li><strong>{{deadman.middleName}}</strong></li>
+              <li>{{deadman.birthDate|default:'?'}} - {{deadman.deathDate|default:'?'}}</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+      <div ng-show="placeData.attachments.length">
+        <h4>Результаты</h4>
+        <ul class="media-list margin-top-15">
+          <li class="media" ng-repeat="attachment in placeData.attachments|orderBy:'createdAt':true">
+            <div class="pull-left">
+              <img ng-src="{{attachment.url|pdThumbnail:'50x50'}}" class="img-thumbnail"
+                   ng-show="'image' === attachment.type">
+            </div>
+            <div class="media-body">
+              <p><small>{{attachment.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-xs-3"></div>
+  </tab>
+
+  <tab heading="Заказы" disabled="{{!placeData.orders.length}}">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Дата создания</th>
+        <th>Дата изменения</th>
+        <th>Тип</th>
+        <th>Статус</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="order in placeData.orders" bindonce>
+        <td bo-text="order.createdAt|date:'yyyy-MM-dd HH:mm'"></td>
+        <td bo-text="order.modifiedAt|date:'yyyy-MM-dd HH:mm'"></td>
+        <td bo-text="order.type"></td>
+        <td bo-text="order.status|orderStatusLabel"></td>
+        <td>
+          <button class="btn btn-link" ng-click="showOrderDetailsModal(order.id)">детали</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </tab>
+</tabset>

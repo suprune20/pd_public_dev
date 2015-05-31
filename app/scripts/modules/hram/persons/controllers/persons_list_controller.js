@@ -3,8 +3,8 @@
 angular.module('pdHram')
   .config(function (authRouteProvider) {
     authRouteProvider
-      .state('hram.persons', {
-        url: '/person',
+      .state('hram.persons.list', {
+        url: '',
         templateUrl: 'scripts/modules/hram/persons/templates/list.html',
         controller: ['$scope', '$modal', 'personsProvider', '$state',
           function ($scope, $modal, personsProvider, $state) {
