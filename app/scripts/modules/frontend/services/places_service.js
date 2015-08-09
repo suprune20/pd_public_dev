@@ -1,6 +1,73 @@
 'use strict';
 
 angular.module('pdFrontend')
+  .service('pdFrontendClientPanel', function ($q, pdFrontendPlacesApi) {
+    return {
+      getPlacesCollection: function () {
+        return pdFrontendPlacesApi.getPlaces()
+          .then(function (placesCollection) {
+            var deadmansIds = _.reduce(placesCollection, function (ids, place) {
+              return ids.concat(place.deadmans);
+            }, []);
+
+            // Get deadmans collection by places deadmans ids
+            return pdFrontendPlacesApi.getDeadmans({ids: deadmansIds.join(',')})
+              .then(function (deadmansCollection) {
+                deadmansCollection = _.indexBy(deadmansCollection, 'id');
+
+                return {
+                  // Insert deadmans objects into depends places
+                  places: _.map(placesCollection, function (place) {
+                    place.deadmans = _.map(place.deadmans, function (deadmanId) {
+                      return deadmansCollection[deadmanId];
+                    });
+
+                    return place;
+                  }),
+                  placesYandexPoints: _.map(placesCollection, function (place) {
+                    return {
+                      geometry: {
+                        type: 'Point',
+                        coordinates: [place.location.longitude, place.location.latitude]
+                      },
+                      properties: {
+                        placeModel: place
+                      },
+                      options: {
+                        preset: 'twirl#brownIcon'
+                      }
+                    };
+                  })
+                };
+              });
+          });
+      },
+      getPlaceDetails: function (placeId) {
+        return $q.all([
+          pdFrontendPlacesApi.getPlaceDetails(placeId),
+          pdFrontendPlacesApi.getPlaceDeadmans(placeId),
+          pdFrontendPlacesApi.getPlaceOrders(placeId),
+          pdFrontendPlacesApi.getPlaceAttachments(placeId)
+        ]).then(function (results) {
+          var placeModel = results[0];
+          placeModel.locationYandexPoint = {
+            geometry: {
+              type: 'Point',
+              coordinates: [placeModel.location.longitude, placeModel.location.latitude]
+            },
+            options: {
+              preset: 'twirl#brownIcon'
+            }
+          };
+          placeModel.deadmans = results[1];
+          placeModel.orders = results[2];
+          placeModel.attachments = results[3];
+
+          return placeModel;
+        });
+      }
+    };
+  })
   .factory('CatalogMyPlaces', function (pdYandex, user, growl, $rootScope, $q) {
     return function () {
       var MARKER_CURRENT_PRESET = 'twirl#redIcon',

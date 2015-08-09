@@ -44,6 +44,36 @@ angular.module('pdFrontend')
             return userProfileData;
           });
       },
+      getAllPlaces: function () {
+        return $q.all([this.getPlaces(), this.getCustomPlaces()])
+          .then(function (results) {
+            var registeredPlaces = _.map(results[0].places, function (placeData) {
+              placeData.type = 'registered';
+
+              return placeData;
+            });
+            var customPlaces = _.map(results[1], function (placeData) {
+              placeData.type = 'custom';
+              // create graves attribute as in regular places output
+              placeData.graves = [];
+              if (placeData.deadmens.length) {
+                placeData.graves.push({
+                  burials: _.map(placeData.deadmens, function (deadmanData) {
+                    // convert attributes as in regular places api output
+                    deadmanData.fio = [deadmanData.firstname, deadmanData.lastname, deadmanData.middlename].join(' ');
+
+                    return deadmanData;
+                  })
+                });
+              }
+              delete placeData.deadmens;
+
+              return placeData;
+            });
+
+            return registeredPlaces.concat(customPlaces);
+          });
+      },
       getPlaceCoordinates: function (placeData) {
         var deferred = $q.defer();
 
@@ -132,38 +162,66 @@ angular.module('pdFrontend')
             storage.set(CUSTOM_PLACES_STORAGE_KEY, unsavedPlaces);
           });
       },
-      saveSettings: function (settingsData) {
+      saveSettings: function (settingsData, userAvatarFile) {
         var saveUrl = pdConfig.apiEndpoint + 'settings';
-
-        if (settingsData.userPhoto) {
-          return $upload.upload({
-            url: saveUrl,
-            tracker: 'commonLoadingTracker',
-            data: settingsData,
-            file: settingsData.userPhoto,
-            fileFormDataName: 'userPhoto'
-          });
+        // convert lowercase notation into camelcase
+        if (settingsData.firstname) {
+          settingsData.firstName = settingsData.firstname;
+        }
+        if (settingsData.lastname) {
+          settingsData.lastName = settingsData.lastname;
+        }
+        if (settingsData.middlename) {
+          settingsData.middleName = settingsData.middlename;
         }
 
-        return $http.put(saveUrl, settingsData)
-          .then(function () {
-            // Update user profile
-            var currentUserData = authStorage.getProfile();
+        var successCallback = function (response) {
+          var savedSettingsData = response.data;
+          // Update user profile
+          var currentUserData = authStorage.getProfile();
 
-            currentUserData.profile.mainPhone = settingsData.mainPhone || currentUserData.profile.mainPhone;
-            currentUserData.profile.email = _.has(settingsData, 'email') ?
-              settingsData.email :
-              currentUserData.profile.email;
-            authStorage.setProfile(currentUserData);
-          }, function (errorResp) {
-            var respData = errorResp.data;
+          currentUserData.profile.mainPhone = savedSettingsData.loginPhone;
+          currentUserData.profile.email = _.has(settingsData, 'email') ?
+            settingsData.email :
+            currentUserData.profile.email;
+          currentUserData.profile.firstname = savedSettingsData.firstName;
+          currentUserData.profile.lastname = savedSettingsData.lastName;
+          currentUserData.profile.middlename = savedSettingsData.middleName;
+          currentUserData.profile.photo = savedSettingsData.avatarUrl;
+          authStorage.setProfile(currentUserData);
 
-            if (_.has(respData, 'message')) {
-              respData.message = _.isArray(respData.message) ? respData.message : [respData.message];
-            }
+          return savedSettingsData;
+        };
+        var errorCallback = function (errorResponse) {
+          var respData = errorResponse.data;
 
-            return $q.reject(respData);
-          });
+          if (_.has(respData, 'message')) {
+            respData.message = _.isArray(respData.message) ? respData.message : [respData.message];
+          }
+
+          return $q.reject(respData);
+        };
+
+        if (userAvatarFile && userAvatarFile instanceof File) {
+          return $upload.upload({
+            url: saveUrl,
+            method: 'PUT',
+            tracker: 'commonLoadingTracker',
+            data: settingsData,
+            file: userAvatarFile,
+            fileFormDataName: 'avatar'
+          }).then(successCallback, errorCallback);
+        }
+
+        return $http.put(saveUrl, settingsData).then(successCallback, errorCallback);
+      },
+      updateUserAvatar: function (userAvatarFile) {
+        if (!(userAvatarFile instanceof File)) {
+          return $q.reject();
+        }
+
+        return this.saveSettings({}, userAvatarFile)
+          .then(function (userData) { return userData.avatarUrl; });
       },
       getSettings: function () {
         return $http.get(pdConfig.apiEndpoint + 'settings')

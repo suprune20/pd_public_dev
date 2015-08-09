@@ -40,6 +40,9 @@ angular.module('pdLoru', [
         resolve: {
           categories: ['pdFrontendCatalogApi', function (pdFrontendCatalogApi) {
             return pdFrontendCatalogApi.getCategories();
+          }],
+          userServices: ['loruServices', function (loruServices) {
+            return loruServices.getUserServices();
           }]
         },
         controller: 'LoruProductsListCtrl',
@@ -100,6 +103,18 @@ angular.module('pdLoru', [
             return optMarketplace.getMyOrders();
           }]
         },
+        setFluidContainer: true
+      }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
+      .state('orders.retail', {
+        url: '/:orderId',
+        secured: true,
+        title: 'Информация о заказе',
+        resolve: {
+          orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
+            return pdFrontendOrders.getOrderDetails($stateParams.orderId);
+          }]
+        },
+        controller: 'pdLoruRetailOrderDetails',
         setFluidContainer: true
       }, ['ROLE_LORU', 'ROLE_SUPERVISOR'])
       .state('order', {
@@ -183,7 +198,7 @@ angular.module('pdLoru', [
         var userOrgId = auth.getUserOrganisation().id;
         loruMenuConfig.setRightMenuItems([
           {link: '#!/loru/advertisement', title: 'Реклама'},
-          {link: '#!/', title: 'Каталог'},
+          {link: '#!/', title: 'Каталог', orgAbility: 'trade'},
           {
             type: 'dropdown',
             title: auth.getUserProfile().shortFIO,
@@ -195,12 +210,12 @@ angular.module('pdLoru', [
                 hide: !userOrgId
               },
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-              {link: '#!/loru/orgplaces', title: 'Склады'},
-              {link: '/loru/products', title: 'Товары и услуги'},
+              {link: '#!/loru/orgplaces', title: 'Склады', orgAbility: 'trade'},
+              {link: '/loru/products', title: 'Товары и услуги', orgAbility: 'trade'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
-              {link: '/price/' + userOrgId, title: 'Оптовый заказ', items: favoriteSuppliers},
-              {link: '#!/orders', title: 'Архив заказов'},
+              {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers, orgAbility: 'trade'},
+              {link: '#!/orders', title: 'Архив заказов', orgAbility: 'trade'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]
@@ -243,12 +258,6 @@ angular.module('pdLoru', [
         return;
       }
 
-      var tutorialLink = pdConfig.backendUrl + 'tutorial#chapter2';
-      growl.addInfoMessage(
-        'Уважаемый пользователь, посмотрите, пожалуйста, наше обучающее видео "<a href="' +
-          tutorialLink + '">Как разместить рекламу"</a>',
-        {enableHtml: true, ttl: 15000}
-      );
       $rootScope.updateLoruFavoritesMenu();
     });
   })

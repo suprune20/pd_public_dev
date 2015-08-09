@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('pdLoru')
-  .controller('LoruProductsListCtrl', function ($scope, categories, loruProducts, $q, growl) {
+  .controller('LoruProductsListCtrl', function ($scope, categories, loruProducts, $q, growl, userServices,
+                                                loruServices, promiseTracker) {
     $scope.categories = categories;
     $scope.applyFilter = function () {
       var filters = _.cloneDeep($scope.filters);
@@ -33,6 +34,39 @@ angular.module('pdLoru')
           return $q.reject();
         })
         .finally(function () { $scope.disabledVisibilityControls = false; });
+    };
+
+    // User services functions
+    $scope.userServices = userServices;
+    $scope.serviceDisableTracker = promiseTracker('serviceDisableTracker');
+    $scope.activateService = function (service) {
+      var promise = loruServices.activateService(service.type)
+        .then(function () {
+          growl.addSuccessMessage('Сервис был успешно активирован');
+        }, function (errorMessage) {
+          service.isActive = false;
+          growl.addErrorMessage(errorMessage);
+        });
+      $scope.serviceDisableTracker.addPromise(promise);
+    };
+    $scope.deactivateService = function (service) {
+      var promise = loruServices.deactivateService(service.type)
+        .then(function () {
+          growl.addSuccessMessage('Сервис был успешно деактивирован');
+        }, function (errorMessage) {
+          service.isActive = true;
+          growl.addErrorMessage(errorMessage);
+        });
+      $scope.serviceDisableTracker.addPromise(promise);
+    };
+    $scope.updateServiceMeasure = function (serviceType, measureName, price) {
+      var promise = loruServices.updateServiceMeasure(serviceType, measureName, price)
+        .then(function () {
+          growl.addSuccessMessage('Сервис был успешно обновлен');
+        });
+      $scope.serviceDisableTracker.addPromise(promise);
+
+      return promise;
     };
   })
   .controller('LoruProductEditCtrl', function ($scope, productsTypes, categories, product, loruProductsApi, growl) {

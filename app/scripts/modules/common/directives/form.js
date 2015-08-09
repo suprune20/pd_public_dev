@@ -30,7 +30,8 @@ angular.module('pdCommon')
       templateUrl: 'views/modules/common/directives/pd_file_selector.html',
       scope: {
         pdMaxWidth: '@',
-        pdMaxHeight: '@'
+        pdMaxHeight: '@',
+        accept: '@'
       },
       link: function (scope, element, attrs, ngModel) {
         if (!ngModel) {
@@ -82,6 +83,8 @@ angular.module('pdCommon')
         scope.clearSelection = function () {
           updateModelViewValue(null);
         };
+
+        scope.isSimpleView = _.has(attrs, 'simpleView');
       }
     };
   })

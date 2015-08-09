@@ -30,8 +30,9 @@ angular.module('pdConfig', [])
         emptyMenu: { items: [] },
         cabinetMenu: {
           items:[
-            {link: '#!/client-panel', title: 'Кабинет ответственного'},
-            {link: '#!/map', title: 'Карта мест захоронений'}
+            {link: '/client-panel', title: 'Места захоронений'},
+            {link: '/', title: 'Каталог ритуальных товаров и услуг'},
+            {link: '/client/orders', title: 'История заказов'}
           ]
         },
         adminMenu: {
@@ -66,6 +67,12 @@ angular.module('pdConfig', [])
         yandex: 'Yandex',
         vk: 'Vkontakte',
         odnoklassniki: 'Odnoklassniki'
+      },
+      paymentServers: {
+        webpay: {
+          test: 'https://secure.sandbox.webpay.by:8843/',
+          prod: 'https://secure.webpay.by/'
+        }
       }
     };
   })

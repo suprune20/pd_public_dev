@@ -28,6 +28,7 @@ angular.module('pdCommon')
         var profileData = {};
         profileData.profile = responseData.profile || {};
         profileData.organisation = responseData.org || {};
+        profileData.orgAbilities = responseData.orgAbilities || [];
         authStorage.setProfile(profileData);
 
         // Broadcast success signin event
@@ -140,6 +141,9 @@ angular.module('pdCommon')
       },
       getUserOrganisation: function () {
         return authStorage.getProfile().organisation || {};
+      },
+      isOrgAbility: function (ability) {
+        return _.contains(authStorage.getProfile().orgAbilities, ability);
       },
       signup: function (signupModel) {
         return $http.post(pdConfig.apiEndpoint + 'auth/signup', signupModel)

@@ -1,31 +1,70 @@
 'use strict';
 
 angular.module('pdFrontend')
-  .controller('ClientPanelCtrl', function ($scope, user) {
+  .controller('ClientPanelCtrl', function ($scope, placesData, pdFrontendOrders, growl, $modal) {
+    $scope.placesCollection = placesData.places;
+    $scope.placesPoints = placesData.placesYandexPoints;
     $scope.selectPlace = function (placeData) {
-      if (placeData === $scope.selectedPlace) {
+      // reset icons
+      _.map($scope.placesPoints, function (point) {
+        point.options.preset = 'twirl#brownIcon';
+      });
+      // find selected place and centered and change icon for marker
+      var selectedPlace = _.find($scope.placesPoints, {properties: {placeModel: {id: placeData.id}}});
+      selectedPlace.options.preset = 'twirl#blueIcon';
+      $scope.centerYaPoint = selectedPlace.geometry.coordinates;
+    };
+
+    $scope.availablePerformers = [];
+    $scope.availablePerformerLoading = [];
+    $scope.getPhotoPerformers = function (place) {
+      // Hide performers list if already showed
+      if ($scope.availablePerformers[place.id]) {
+        delete $scope.availablePerformers[place.id];
         return;
       }
 
-      $scope.selectedPlace = placeData;
-      $scope.yaPlacePoint = null;
+      $scope.availablePerformerLoading[place.id] = true;
+      pdFrontendOrders.getAvailablePerformersForPhoto(place.id, place.location)
+        .then(function (performers) {
+          $scope.availablePerformers[place.id] = performers;
+        })
+        .finally(function () {
+          $scope.availablePerformerLoading[place.id] = false;
+        });
+    };
 
-      user.getPlaceCoordinates(placeData).then(function (coordinates) {
-        $scope.yaPlacePoint = {
-          geometry: {
-            type: 'Point',
-            coordinates: coordinates
-          }
-        };
+    $scope.confirmOrder = function (orderType, placeData, performer) {
+      $modal.open({
+        templateUrl: 'views/modules/frontend/client/confirm_order.modal.html',
+        controller: function ($scope, pdFrontendOrders, $modalInstance) {
+          $scope.performer = performer;
+          // Place order
+          $scope.confirmOrder = function (comment) {
+            pdFrontendOrders.createOrder({
+              type: orderType,
+              performerId: performer.id,
+              placeId: placeData.id,
+              location: placeData.location,
+              comment: comment
+            })
+              .then(function () {
+                growl.addSuccessMessage('Заказ был успешно размещен');
+                $modalInstance.dismiss();
+              }, function () {
+                growl.addErrorMessage('Произошла ошибка при размещении заказа');
+              });
+          };
+        }
       });
     };
-    user.getPlaces().then(function (userData) {
-      $scope.userData = userData;
-
-      // Select first place by default
-      if (userData.places.length) {
-        $scope.selectPlace(userData.places[0]);
+  })
+  .controller('ClientPlaceDetail', function ($state, $modal, placeData) {
+    $modal.open({
+      templateUrl: 'views/modules/frontend/client/places/details.modal.html',
+      controller: function ($scope) {
+        $scope.placeData = placeData;
       }
-    });
+    }).result.catch(function () { $state.go('clientPanel.places'); });
   })
 ;

@@ -4,22 +4,26 @@ angular.module('pdFrontend')
   .controller('PdFrontendSettingsCtrl', function ($scope, user, objectsDiff, $modal, additionalSettingsData, growl,
                                                   $location) {
     var getInitialData = function () {
-        return _.defaults(user.getCurrentUserProfile(), {
-          mainPhone: null,
-          oldPassword: '',
-          newPassword: ''
-        });
-      };
+      var userProfile = user.getCurrentUserProfile();
+
+      return _.defaults(userProfile, {userPhoto: userProfile.photo}, {
+        mainPhone: null,
+        oldPassword: '',
+        newPassword: ''
+      });
+    };
 
     $scope.settingsData = getInitialData();
     $scope.save = function () {
       $scope.errorData = null;
-      user.saveSettings(objectsDiff(getInitialData(), $scope.settingsData))
+      user.saveSettings(objectsDiff(getInitialData(), $scope.settingsData), $scope.settingsData.userPhoto)
         .then(function () {
           // Update form data after success update
           $scope.settingsData = getInitialData();
+          growl.addSuccessMessage('Настройки были успешно сохранены');
         }, function (errorData) {
           $scope.errorData = errorData;
+          growl.addErrorMessage('Произошла ошибка при сохранений настроек');
         });
     };
     $scope.removeAccount = function () {

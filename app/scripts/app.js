@@ -20,7 +20,7 @@ angular.module('pdApp', [
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
 
-    oauthIOProvider.setPublicKey('RveHxs1jud-NEZz9KtCX38GK9AM');
+    oauthIOProvider.setPublicKey('B8Ej7nTrR93MzN5dSE7bz8k_iyE');
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 
     RavenProvider.development(ravenDevelopment);
@@ -233,7 +233,8 @@ angular.module('pdApp', [
       isCurrentHasLoruRole: auth.isCurrentHasLoruRole,
       isCurrentHasOmsRole: auth.isCurrentHasOmsRole,
       isCurrentHasSupervisorRole: auth.isCurrentHasSupervisorRole,
-      isAuthenticated: auth.isAuthenticated
+      isAuthenticated: auth.isAuthenticated,
+      isOrgAbility: auth.isOrgAbility
     };
     // Save top-level domain
     $rootScope.topLevelDomain = _.last($window.location.hostname.split('.')).toLowerCase();

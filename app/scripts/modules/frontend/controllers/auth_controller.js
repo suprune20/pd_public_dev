@@ -9,7 +9,7 @@ angular.module('pdFrontend')
         .then(function () {
           $modalInstance.close();
         }, function (errorData) {
-          if ('wrong_credentials' === errorData.errorCode) {
+          if (_.includes(['wrong_credentials', 'wrong_username', 'wrong_password'], errorData.errorCode)) {
             $scope.formErrorMessage = 'Неверный логин/номер телефона или пароль';
             return;
           }
@@ -25,7 +25,8 @@ angular.module('pdFrontend')
             return;
           }
 
-          $scope.formErrorMessage = 'Произошла неизвестная ошибка. Попробуйте еще раз или обратитесь к администрации сайта';
+          $scope.formErrorMessage = errorData.message ||
+            'Произошла неизвестная ошибка. Попробуйте еще раз или обратитесь к администрации сайта';
         });
     };
 

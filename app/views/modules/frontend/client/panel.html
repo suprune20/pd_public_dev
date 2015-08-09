@@ -1,73 +1,24 @@
-<div class="panel panel-default" ng-if="userData.places.length">
-  <div class="panel-heading">
-    <h4 class="panel-title">Карта захоронений</h4>
-  </div>
+<div class="row">
+  <div class="panel panel-default" ng-if="placesCollection.length">
+    <div class="panel-heading">
+      <h4 class="panel-title">Места захоронений</h4>
+    </div>
 
-  <div class="panel-body">
-    <ya-map class="client-panel-place-map"
-            ya-center="{{yaPlacePoint.geometry.coordinates}}"
-            ya-zoom="10"
-            ya-options="{maxZoom: 18}">
-      <ya-toolbar ya-name="zoomControl"></ya-toolbar>
-      <ya-geo-object ya-source="yaPlacePoint"></ya-geo-object>
-    </ya-map>
-  </div>
-</div>
-
-<div class="panel panel-default client-panel-places-block" ng-if="userData.places.length">
-  <div class="panel-heading">
-    <h4 class="panel-title">Места захоронений</h4>
-  </div>
-  <div class="panel-body">
-    <ul class="list-group media-list no-bottom-margin">
-      <li class="list-group-item media place-item-container"
-         ng-class="{active: selectedPlace === place}"
-         ng-repeat="place in userData.places"
-         ng-click="selectPlace(place)">
-        <div class="pull-left" pb-fancybox-gallery="{{ place.gallery }}">
-          <img ng-src="{{place.mainPhoto.photo}}"
-               pd-thumb
-               pd-thumb-size="150x150"
-               default-image="http://placehold.it/150x150"
-               class="img-thumbnail media-object" />
-          <p ng-if="place.mainPhoto" class="text-center">{{place.mainPhoto.addedAt|momentDate:'DD-MM-YYYY HH:mm'}}</p>
-        </div>
-        <div class="media-body list-group-item-text">
-          <h5 class="media-heading">{{place.address}}</h5>
-
-          <ul class="list-inline graves-list" ng-if="place.graves.length">
-            <li ng-repeat="grave in place.graves" class="col-xs-12 col-sm-6 col-md-4 grave-panel">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <h4 ng-if="!grave.burials.length">Зарезервировано</h4>
-
-                  <ul class="media-list" ng-if="grave.burials.length">
-                    <li class="media" ng-repeat="burial in grave.burials">
-                      <img class="media-object img-thumbnail pull-left"
-                           ng-src="{{burial.photo}}"
-                           pd-thumb
-                           pd-thumb-size="50x50"
-                           default-image="http://placehold.it/50x50" />
-                      <div class="media-body">
-                        <strong class="media-heading" ng-bind-html="burial.fio|space2br"></strong>
-                        <p>{{burial.birthDate|default:'?'}} - {{burial.deathDate|default:'?'}}</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
-    </ul>
+    <div class="panel-body">
+      <ya-map class="client-panel-place-map"
+              ya-center="{{centerYaPoint}}"
+              ya-zoom="10"
+              ya-options="{maxZoom: 18}">
+        <ya-toolbar ya-name="zoomControl"></ya-toolbar>
+        <ya-collection show-all="true">
+          <ya-geo-object ng-repeat="point in placesPoints" ya-source="point"></ya-geo-object>
+        </ya-collection>
+      </ya-map>
+    </div>
   </div>
 </div>
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    <a href="#!/map" class="btn btn-default">
-      <span class="glyphicon glyphicon-shopping-cart"></span> Каталог предложений
-    </a>
-  </div>
-</div>
+<div deckgrid source="placesCollection"
+     cardTemplate="views/modules/frontend/client/partials/place_item.html" class="deckgrid row"></div>
+
+<ui-view/>

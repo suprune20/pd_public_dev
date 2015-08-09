@@ -20,7 +20,7 @@
 
       <ul class="nav navbar-nav navbar-right" ng-show="auth.isAuthenticated()">
         <li active-link ng-repeat="item in rightMenuItems" ng-class="{'dropdown': 'dropdown' === item.type}"
-            ng-switch="item.type">
+            ng-switch="item.type" ng-show="item.orgAbility ? security.isOrgAbility(item.orgAbility) : true">
           <a ng-href="{{item.link}}" ng-switch-default>{{item.title}}</a>
 
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-switch-when="dropdown">
@@ -30,7 +30,8 @@
           </a>
           <ul class="dropdown-menu" ng-switch-when="dropdown">
             <li active-link ng-repeat="subitem in item.items"
-                ng-class="{'{{ subitem.class }}': true, 'dropdown-submenu': subitem.items.length}">
+                ng-class="{'{{ subitem.class }}': true, 'dropdown-submenu': subitem.items.length}"
+                ng-show="subitem.orgAbility ? security.isOrgAbility(subitem.orgAbility) : true">
               <a ng-href="{{subitem.link}}" ng-if="!('divider' === subitem.class || subitem.hide)">
                 {{subitem.title}}
               </a>
@@ -47,7 +48,9 @@
           <a href="#" class="dropdown-toggle feedback-btn" data-toggle="dropdown"><b>?</b></a>
           <ul class="dropdown-menu">
             <li><a href="" ng-click="showFeedbackModal()">Задать вопрос</a></li>
-            <li><a ng-href="{{backendUrl}}tutorial">Курс видеообучения</a></li>
+            <li ng-show="auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()">
+              <a ng-href="{{backendUrl}}tutorial">Курс видеообучения</a>
+            </li>
           </ul>
         </li>
       </ul>

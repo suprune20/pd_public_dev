@@ -47,14 +47,59 @@ angular.module('pdFrontend', [
         setFluidContainer: true,
         pageClass: 'map-page'
       })
+
       .state('clientPanel', {
         url: '/client-panel',
+        resolve: {
+          placesData: ['pdFrontendClientPanel', function (pdFrontendClientPanel) {
+            return pdFrontendClientPanel.getPlacesCollection();
+          }]
+        },
         controller: 'ClientPanelCtrl',
         templateUrl: 'views/modules/frontend/client/panel.html',
         title: 'Панель клиента',
         secured: true,
         menuConfig: 'cabinetMenu'
       }, 'ROLE_CLIENT')
+      .state('clientPanel.places', {
+        url: '/places',
+        template: '<ui-view/>'
+      }, 'ROLE_CLIENT')
+      .state('clientPanel.places.details', {
+        url: '/:placeId',
+        resolve: {
+          placeData: ['pdFrontendClientPanel', '$stateParams', function (pdFrontendClientPanel, $stateParams) {
+            return pdFrontendClientPanel.getPlaceDetails($stateParams.placeId);
+          }]
+        },
+        controller: 'ClientPlaceDetail',
+        title: 'Детали места захоронения'
+      }, 'ROLE_CLIENT')
+
+      .state('clientOrders', {
+        url: '/client/orders',
+        secured: true,
+        resolve: {
+          ordersCollection: ['pdFrontendOrders', function (pdFrontendOrders) {
+            return pdFrontendOrders.getOrdersList();
+          }]
+        },
+        controller: 'ClientOrdersListCtrl',
+        templateUrl: 'views/modules/frontend/client/orders/list.html',
+        title: 'История заказов',
+        menuConfig: 'cabinetMenu'
+      }, 'ROLE_CLIENT')
+      .state('clientOrders.details', {
+        url: '/:orderId?wsb_order_num&wsb_tid&successPayment&cancelPayment',
+        resolve: {
+          orderModel: ['pdFrontendOrders', '$stateParams', function (pdFrontendOrders, $stateParams) {
+            return pdFrontendOrders.getOrderDetails($stateParams.orderId);
+          }]
+        },
+        controller: 'ClientOrderDetailsCtrl',
+        title: 'Информация о заказе'
+      }, 'ROLE_CLIENT')
+
       .state('settings', {
         url: '/settings',
         controller: 'PdFrontendSettingsCtrl',
@@ -64,9 +109,9 @@ angular.module('pdFrontend', [
         menuConfig: 'cabinetMenu',
         pageClass: 'pd-frontend-settings-page',
         resolve: {
-          additionalSettingsData: function (settingsProvider) {
+          additionalSettingsData: ['settingsProvider', function (settingsProvider) {
             return settingsProvider;
-          }
+          }]
         }
       }, 'ROLE_CLIENT')
     ;
@@ -80,9 +125,9 @@ angular.module('pdFrontend', [
             title: auth.getUserProfile().shortFIO,
             icon: 'glyphicon-user',
             items: [
-              {link: '#!/settings', title: 'Настройки'},
+              {link: '/settings', title: 'Настройки'},
               {class: 'divider'},
-              {link: '#!/signout', title: 'Выйти'}
+              {link: '/signout', title: 'Выйти'}
             ]
           }
         ]);

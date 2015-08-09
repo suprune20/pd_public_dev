@@ -1,0 +1,83 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Детали заказа {{order.number}}</h4>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-9">
+      <dl>
+        <dt ng-show="order.services.length">Позиции заказа</dt>
+        <dd ng-show="order.services.length">
+          <ul>
+            <li ng-repeat="service in order.services">
+              {{service.title}} <small>({{service.price}})</small>
+            </li>
+          </ul>
+        </dd>
+        <dt>Адрес доставки</dt>
+        <dd>{{order.place.address}}</dd>
+      </dl>
+
+      <h4>Результаты</h4>
+      <pd-file-selector ng-model="orderForm.attachment" simple-view accept="image/*;capture=camera"></pd-file-selector>
+
+      <ul class="media-list margin-top-15">
+        <li class="media" ng-repeat="result in order.results|orderBy:'createdAt':true">
+          <div class="pull-left">
+            <img ng-src="{{result.fileUrl|pdThumbnail:'50x50'}}" class="img-thumbnail">
+          </div>
+          <div class="media-body">
+            <p><small>{{result.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
+          </div>
+        </li>
+      </ul>
+
+      <h4>Комментарии</h4>
+      <form role="form" ng-init="inFocus = false" outside-click="inFocus = false">
+        <div ng-class="{'form-group': inFocus}">
+          <textarea class="form-control" name="comment" ng-model="orderForm.commentText" msd-elastic
+                    placeholder="Напишите комментарий..." ng-focus="inFocus = true"></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" ng-show="inFocus" ng-click="postComment()"
+                ng-disabled="!orderForm.commentText">
+          Сохранить
+        </button>
+      </form>
+
+      <ul class="media-list margin-top-15">
+        <li class="media" ng-repeat="comment in order.comments|orderBy:'createdAt':true">
+          <div class="pull-left">
+            <img ng-src="{{comment.user.avatarUrl|pdThumbnail:'64x64'|default:'https://placehold.it/64x64'}}"
+                 class="img-thumbnail-border">
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">
+              {{comment.user.username}}<small ng-show="comment.user.organisation"> ({{comment.user.organisation}})</small>
+            </h5>
+            {{comment.comment}}
+            <p><small>{{comment.createdAt|date:'yyyy-MM-dd HH:mm'}}</small></p>
+          </div>
+          <hr ng-show="!$last && order.comments.length > 1" class="reset-margin margin-top-8" />
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-xs-3">
+      <dl>
+        <dt>Статус</dt>
+        <dd>{{order.status|orderStatusLabel}}</dd>
+      </dl>
+      <hr/>
+
+      <button ng-show="'posted' === order.status" class="btn btn-block btn-default"
+              ng-click="acceptOrder()">Принять</button>
+      <button ng-show="'paid' === order.status" class="btn btn-block btn-default"
+              ng-click="doneOrder()">Выполнить</button>
+      <button ng-show="'paid' !== order.status && !order.isArchived" class="btn btn-block btn-default"
+              ng-click="archiveOrder()">В Архив</button>
+      <button ng-show="order.isArchived" class="btn btn-block btn-default"
+              ng-click="dearchiveOrder()">Из Архива</button>
+    </div>
+  </div>
+</div>

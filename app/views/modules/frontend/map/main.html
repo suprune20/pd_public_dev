@@ -13,17 +13,18 @@
   <pd-ya-search-toolbar ya-options="{left: 220}"></pd-ya-search-toolbar>
 
   <!-- Include button for add user's place -->
-  <ya-template-layout ya-key="addPlaceBtnTemplate">
-    <div class="btn btn-primary">
-      <span class="glyphicon glyphicon-map-marker"></span>
-      Добавить место
-    </div>
-  </ya-template-layout>
-  <ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">
-    <ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"
-                ya-visible="{{!security.isAuthenticated() || security.isCurrentHasClientRole()}}"
-                ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>
-  </ya-toolbar>
+  <!-- ToDo: temporary disabled -->
+  <!--<ya-template-layout ya-key="addPlaceBtnTemplate">-->
+    <!--<div class="btn btn-primary">-->
+      <!--<span class="glyphicon glyphicon-map-marker"></span>-->
+      <!--Добавить место-->
+    <!--</div>-->
+  <!--</ya-template-layout>-->
+  <!--<ya-toolbar ya-name="toolBar" ya-options="{right:200,top:5}">-->
+    <!--<ya-control ya-type="button" ya-options="{layout:'addPlaceBtnTemplate'}"-->
+                <!--ya-visible="{{!security.isAuthenticated() || security.isCurrentHasClientRole()}}"-->
+                <!--ya-event-click="userPlacesProvider.addBtnYaMapHandle($event)"></ya-control>-->
+  <!--</ya-toolbar>-->
   <!-- End include button for add user's place -->
 
   <!-- Suppliers and user's markers -->

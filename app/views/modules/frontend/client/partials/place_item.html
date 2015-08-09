@@ -1,0 +1,54 @@
+<div class="panel panel-default" ng-class="{active: mother.selectedPlace === card}"
+     ng-mouseover="mother.selectPlace(card)">
+  <div class="panel-body" ng-click="mother.$state.go('clientPanel.places.details', {placeId: card.id})">
+    <div pb-fancybox-gallery="{{ card.gallery }}" class="margin-bottom-15">
+      <img ng-src="{{card.titlePhoto}}"
+           pd-thumb
+           pd-thumb-size="350x150"
+           default-image="http://placehold.it/350x150"
+           class="img-thumbnail media-object" />
+      <p ng-if="card.mainPhoto" class="text-center">{{card.mainPhoto.addedAt|momentDate:'DD-MM-YYYY HH:mm'}}</p>
+    </div>
+
+    <div class="text-center order-place-photo-cont" ng-click="$event.stopPropagation()">
+      <button type="button" class="btn btn-primary col-xs-12 margin-bottom-15" ng-model="orderCurrentPhoto"
+              btn-checkbox ng-change="mother.getPhotoPerformers(card)" title="Заказать актуальную фотографию">
+        <i class="glyphicon glyphicon-refresh animated-rotate"
+              ng-if="mother.availablePerformerLoading[card.id]"></i>
+        <i class="glyphicon glyphicon-camera"></i>
+      </button>
+
+      <ul class="list-unstyled text-left order-available-performers-cont"
+          ng-show="mother.availablePerformers[card.id].length">
+        <li ng-repeat="performer in mother.availablePerformers[card.id]|orderBy:'price'">
+          {{performer.name}}&nbsp;<strong>{{performer.price}}</strong>
+          <button class="btn btn-link" ng-click="mother.confirmOrder('photo', card, performer)">заказать</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="list-group">
+      <div class="list-group-item-text">
+        <div class="panel panel-default" ng-if="card.deadmans.length">
+          <div class="panel-body">
+            <ul class="media-list reset-margin">
+              <li class="media" ng-repeat="deadman in card.deadmans">
+                <img class="media-object img-thumbnail pull-left"
+                     ng-src="{{deadman.photo}}"
+                     pd-thumb
+                     pd-thumb-size="50x50"
+                     default-image="http://placehold.it/50x50" />
+                <div class="media-body">
+                  <strong class="media-heading" ng-bind-html="deadman.fio|space2br"></strong>
+                  <p class="reset-margin">{{deadman.birthDate|default:'?'}} - {{deadman.deathDate|default:'?'}}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h5 class="reset-margin">{{card.address}}</h5>
+  </div>
+</div>
