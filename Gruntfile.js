@@ -191,7 +191,8 @@ module.exports = function (grunt) {
           // Use custom modules instead of full lib
           'bower_components/angular-strap/dist/angular-strap.min.js',
           'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
-          'bower_components/bootstrap/dist/css/bootstrap.css'
+          'bower_components/bootstrap/dist/css/bootstrap.css',
+          'bower_components/AnythingZoomer/css/jquery.anythingzoomer.css'
         ]
       }
     },

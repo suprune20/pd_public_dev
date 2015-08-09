@@ -1,0 +1,93 @@
+<h1>Ввод архива по фото</h1>
+
+<div class="row" ng-show="place">
+  <div class="col-xs-6">
+    <div class="gallery-title-image" ng-show="titleImage">
+      <div id="zoom" pd-anything-zoomer>
+        <div class="small">
+          <img ng-src="{{titleImage}}" pd-thumb pd-thumb-size="500x500" />
+        </div>
+
+        <div class="large">
+          <img ng-src="{{titleImage}}" pd-thumb pd-thumb-size="1200x1200" />
+        </div>
+      </div>
+    </div>
+
+    <pd-carousel pd-carousel-responsive>
+      <li ng-repeat="photo in place.gallery">
+
+        <div class="thumbnail" ng-click="showImage(photo)">
+          <img ng-src="{{photo}}" pd-thumb pd-thumb-size="280x280" />
+        </div>
+
+      </li>
+    </pd-carousel>
+
+    <div class="margin-bottom-15 margin-top-15">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="remakePhoto"> Перефотографировать
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-6">
+    <table class="table" ng-show="place.burials.length">
+      <tr ng-repeat="burial in place.burials">
+        <td>{{burial.lastName}}</td>
+        <td>{{burial.firstName}}</td>
+        <td>{{burial.middleName}}</td>
+        <td>{{burial.birthDate}}</td>
+        <td>{{burial.deathDate}}</td>
+      </tr>
+    </table>
+
+    <button class="btn btn-success" ng-click="showAddBurialForm = true" ng-hide="showAddBurialForm">Добавить</button>
+    <form role="form" name="burialForm" ng-submit="addBurial()" ng-show="showAddBurialForm">
+
+      <div class="alert alert-danger" ng-show="formError">{{formError}}</div>
+
+      <div class="form-group">
+        <label for="lastName">Фамилия</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию"
+               ng-model="burialData.lastName" name="lastName" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">Имя</label>
+        <input type="text" class="form-control" id="firstName" placeholder="Введите имя"
+               ng-model="burialData.firstName" name="firstName" required />
+      </div>
+
+      <div class="form-group">
+        <label for="middleName">Отчество</label>
+        <input type="text" class="form-control" id="middleName" placeholder="Введите отчество"
+               ng-model="burialData.middleName" name="middleName" />
+      </div>
+
+      <div class="form-group">
+        <label for="birthDate">Дата рождения</label>
+        <input type="text" class="form-control" id="birthDate" placeholder="Введите дату рождения"
+               ng-model="burialData.birthDate" name="birthDate" />
+      </div>
+
+      <div class="form-group">
+        <label for="deathDate">Дата смерти</label>
+        <input type="text" class="form-control" id="deathDate" placeholder="Введите дату смерти"
+               ng-model="burialData.deathDate" name="deathDate" />
+      </div>
+
+      <button type="submit" class="btn btn-success" ng-disabled="burialForm.$invalid">Добавить</button>
+      <button type="button" class="btn btn-default" ng-click="showAddBurialForm = false">Отменить</button>
+
+    </form>
+  </div>
+
+  <div class="row margin-top-15 margin-bottom-15">
+    <div class="col-xs-12">
+      <button class="btn btn-primary pull-right" ng-click="getNextPlace()">Следующее</button>
+    </div>
+  </div>
+</div>

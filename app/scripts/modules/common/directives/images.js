@@ -13,4 +13,13 @@ angular.module('pdCommon')
       }
     };
   })
+
+  .directive('pdAnythingZoomer', function () {
+    return {
+      restrict: 'A',
+      link: function (scope, iElement) {
+        iElement.anythingZoomer();
+      }
+    };
+  })
 ;

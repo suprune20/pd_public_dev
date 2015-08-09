@@ -23,23 +23,26 @@ angular.module('pdCommon')
           if (_.has(iAttrs, 'pdCarouselResponsive')) {
             iElement
               .on('jcarousel:reload jcarousel:create', function () {
-                var width = iElement.innerWidth();
+                setTimeout(function () {
+                  var width = iElement.innerWidth(),
+                    itemsCount = iElement.jcarousel('items').length;
 
-                if (width >= 600) {
-                  width = width / 3;
-                  if (iElement.jcarousel('items').length > 3) {
+                  if (width >= 600) {
+                    width = width / 3;
+                    if (itemsCount > 3) {
+                      showAllControls();
+                    }
+                  } else if (width >= 350) {
+                    width = width / 2;
+                    if (itemsCount > 2) {
+                      showAllControls();
+                    }
+                  } else if (itemsCount > 1) {
                     showAllControls();
                   }
-                } else if (width >= 350) {
-                  width = width / 2;
-                  if (iElement.jcarousel('items').length > 2) {
-                    showAllControls();
-                  }
-                } else if (iElement.jcarousel('items').length > 1) {
-                  showAllControls();
-                }
 
-                iElement.jcarousel('items').css('width', width + 'px');
+                  iElement.jcarousel('items').css('width', width + 'px');
+                }, 50);
               });
           }
           // Create carousel instance
