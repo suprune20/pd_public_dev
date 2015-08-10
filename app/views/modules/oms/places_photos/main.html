@@ -1,6 +1,8 @@
 <h1>Ввод архива по фото</h1>
 
-<div class="row" ng-show="place">
+<h3 ng-show="initialLoaded && !place.id">Нет мест для обработки</h3>
+
+<div class="row" ng-show="place.id">
   <div class="col-xs-6">
     <div class="gallery-title-image" ng-show="titleImage">
       <div id="zoom" pd-anything-zoomer>
@@ -80,14 +82,17 @@
       </div>
 
       <button type="submit" class="btn btn-success" ng-disabled="burialForm.$invalid">Добавить</button>
-      <button type="button" class="btn btn-default" ng-click="showAddBurialForm = false">Отменить</button>
+      <button type="button" class="btn btn-default"
+              ng-click="showAddBurialForm = false; formError = null;">
+        Отменить
+      </button>
 
     </form>
   </div>
+</div>
 
-  <div class="row margin-top-15 margin-bottom-15">
-    <div class="col-xs-12">
-      <button class="btn btn-primary pull-right" ng-click="getNextPlace()">Следующее</button>
-    </div>
+<div class="row margin-top-15 margin-bottom-15" ng-show="place.id">
+  <div class="col-xs-12">
+    <button class="btn btn-primary pull-right" ng-click="getNextPlace()">Следующее</button>
   </div>
 </div>
