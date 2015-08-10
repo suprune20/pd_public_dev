@@ -17,6 +17,8 @@ angular.module('pdOms')
           .put(pdConfig.apiEndpoint + 'oms/burials/' + burialId, burialData || {}, { tracker: 'commonLoadingTracker' })
           .then(function (response) {
             return response.data;
+          }, function (response) {
+            return $q.reject(response.data);
           });
       }
     };

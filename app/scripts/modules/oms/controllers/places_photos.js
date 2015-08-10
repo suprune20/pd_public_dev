@@ -5,6 +5,7 @@ angular.module('pdOms')
     var getPlaceData = function () {
       return omsPlacesPhotos.getPlace()
         .then(function (placeData) {
+          $scope.initialLoaded = true;
           $scope.place = placeData;
         });
     };
@@ -24,8 +25,14 @@ angular.module('pdOms')
           $scope.showAddBurialForm = false;
           delete $scope.burialData;
           delete $scope.formError;
-        }, function (error) {
-          $scope.formError = error;
+        }, function (errorData) {
+          if (!errorData.message) {
+            growl.addErrorMessage('Произошла ошибка при добавлении захоронения');
+
+            return;
+          }
+
+          $scope.formError = errorData.message;
         });
     };
 
@@ -47,6 +54,8 @@ angular.module('pdOms')
         omsPlacesPhotos
           .remakePlacePhoto($scope.place.id)
           .then(function () {
+            $scope.remakePhoto = false;
+
             return getNextPlace();
           }, function () {
             growl.addErrorMessage('Произошла ошибка при установке флага Перефотографировать');
