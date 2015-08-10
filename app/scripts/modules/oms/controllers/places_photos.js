@@ -6,6 +6,7 @@ angular.module('pdOms')
       return omsPlacesPhotos.getPlace()
         .then(function (placeData) {
           $scope.initialLoaded = true;
+          $scope.showAddBurialForm = true;
           $scope.place = placeData;
         });
     };
