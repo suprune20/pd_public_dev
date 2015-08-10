@@ -16,6 +16,13 @@ angular.module('pdOms', [
         templateUrl: 'views/modules/oms/placesmap/main.html',
         title: 'Инвентаризация',
         pageClass: 'oms-placesmap'
+      },
+      'oms.placesPhotos': {
+        url: '/places-photos',
+        controller: 'OmsPlacesPhotosCtrl',
+        templateUrl: 'views/modules/oms/places_photos/main.html',
+        title: 'Ввод архива по фото',
+        pageClass: 'oms-places-photos'
       }
     };
 
@@ -41,6 +48,7 @@ angular.module('pdOms', [
             icon: 'glyphicon-user',
             items: [
               {link: '#!/oms/placesmap', title: 'Карта захоронений'},
+              {link: '#!/oms/places-photos', title: 'Ввод архива по фото'},
               {link: serverConfig.serverHost + 'loruregistry', title: 'Реестр ЛОРУ'},
               {
                 link: serverConfig.serverHost + 'org/' + userOrgId + '/edit',
