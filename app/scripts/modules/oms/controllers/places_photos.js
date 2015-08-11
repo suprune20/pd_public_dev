@@ -8,6 +8,10 @@ angular.module('pdOms')
           $scope.initialLoaded = true;
           $scope.showAddBurialForm = true;
           $scope.place = placeData;
+
+          if (placeData.gallery.length) {
+            $scope.showImage(placeData.gallery[0]);
+          }
         });
     };
 

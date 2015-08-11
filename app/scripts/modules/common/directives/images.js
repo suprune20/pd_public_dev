@@ -14,11 +14,16 @@ angular.module('pdCommon')
     };
   })
 
-  .directive('pdAnythingZoomer', function () {
+  .directive('pdElevateZoom', function () {
     return {
       restrict: 'A',
+      scope: {
+        options: '&pdElevateZoom'
+      },
       link: function (scope, iElement) {
-        iElement.anythingZoomer();
+        setTimeout(function () {
+          iElement.ezPlus(scope.options() || {});
+        }, 1000);
       }
     };
   })
