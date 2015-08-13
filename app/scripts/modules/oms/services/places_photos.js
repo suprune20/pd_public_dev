@@ -3,9 +3,9 @@
 angular.module('pdOms')
   .service('omsPlacesPhotosApi', function ($http, pdConfig) {
     return {
-      getPlaces: function () {
+      getPlaces: function (id) {
         return $http
-          .get(pdConfig.apiEndpoint + 'oms/photo-places', { tracker: 'commonLoadingTracker' })
+          .get(pdConfig.apiEndpoint + 'oms/photo-places' + (id ? '/' + id : ''), { tracker: 'commonLoadingTracker' })
           .then(function (response) {
             return response.data;
           });
@@ -22,14 +22,17 @@ angular.module('pdOms')
 
   .service('omsPlacesPhotos', function (omsPlacesPhotosApi) {
     return {
-      getPlace: function () {
-        return omsPlacesPhotosApi.getPlaces();
+      getPlace: function (id) {
+        return omsPlacesPhotosApi.getPlaces(id);
       },
       unlockPlace: function (placeId) {
         return omsPlacesPhotosApi.putPlace(placeId, { unlocked: true });
       },
-      remakePlacePhoto: function (placeId) {
-        return omsPlacesPhotosApi.putPlace(placeId, { remakePhoto: true });
+      remakePlacePhoto: function (placeId, comment) {
+        return omsPlacesPhotosApi.putPlace(placeId, {
+          remakePhoto: true,
+          remakePhotoComment: comment
+        });
       }
     };
   })

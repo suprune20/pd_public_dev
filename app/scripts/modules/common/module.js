@@ -14,7 +14,8 @@ angular.module('pdCommon', [
     'pasvaz.bindonce',
     'xeditable',
     'akoenig.deckgrid',
-    'monospaced.elastic'
+    'monospaced.elastic',
+    'ezplus'
   ])
   .config(function (growlProvider) {
     growlProvider.globalTimeToLive(5000);

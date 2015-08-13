@@ -24,24 +24,33 @@ angular.module('pdCommon')
             iElement
               .on('jcarousel:reload jcarousel:create', function () {
                 setTimeout(function () {
-                  var width = iElement.innerWidth(),
+                  var contWidth = iElement.innerWidth(),
+                    itemWidth = contWidth,
                     itemsCount = iElement.jcarousel('items').length;
 
-                  if (width >= 600) {
-                    width = width / 3;
-                    if (itemsCount > 3) {
+                  if (_.has(iAttrs, 'itemWidth')) {
+                    itemWidth = iAttrs.itemWidth;
+
+                    if ((itemsCount * itemWidth) > contWidth) {
                       showAllControls();
                     }
-                  } else if (width >= 350) {
-                    width = width / 2;
-                    if (itemsCount > 2) {
+                  } else {
+                    if (contWidth >= 600) {
+                      itemWidth = contWidth / 3;
+                      if (itemsCount > 3) {
+                        showAllControls();
+                      }
+                    } else if (contWidth >= 350) {
+                      itemWidth = contWidth / 2;
+                      if (itemsCount > 2) {
+                        showAllControls();
+                      }
+                    } else if (itemsCount > 1) {
                       showAllControls();
                     }
-                  } else if (itemsCount > 1) {
-                    showAllControls();
                   }
 
-                  iElement.jcarousel('items').css('width', width + 'px');
+                  iElement.jcarousel('items').css('width', itemWidth + 'px');
                 }, 50);
               });
           }

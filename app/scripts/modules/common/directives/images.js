@@ -13,18 +13,4 @@ angular.module('pdCommon')
       }
     };
   })
-
-  .directive('pdElevateZoom', function () {
-    return {
-      restrict: 'A',
-      scope: {
-        options: '&pdElevateZoom'
-      },
-      link: function (scope, iElement) {
-        setTimeout(function () {
-          iElement.ezPlus(scope.options() || {});
-        }, 1000);
-      }
-    };
-  })
 ;
