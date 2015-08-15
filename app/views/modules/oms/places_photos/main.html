@@ -1,23 +1,32 @@
-<h1>Ввод архива по фото</h1>
+<h1>
+  Ввод архива по фото
+  <small ng-show="place">
+    Кладбище: {{place.cemeteryName}},
+    участок: {{place.areaName}},
+    ряд: {{place.row|default:'-'}},
+    место: {{place.placeName}}
+  </small>
+</h1>
 
 <h3 ng-show="initialLoaded && !place.id">Нет мест для обработки</h3>
 
 <div class="row" ng-show="place.id">
-  <div class="col-xs-6">
-    <div class="gallery-title-image" ng-show="titleImage">
-      <div id="zoom" pd-anything-zoomer>
-        <div class="small">
-          <img ng-src="{{titleImage}}" pd-thumb pd-thumb-size="500x500" style="width: 500px; height: 500px;" />
-        </div>
-
-        <div class="large">
-          <img ng-src="{{titleImage}}" pd-thumb pd-thumb-size="1200x1200" style="width: 1200px; height: 1200px;" />
-        </div>
-      </div>
+  <div class="col-xs-6" ng-show="place.gallery.length">
+    <div class="margin-bottom-15">
+      <img ng-show="imageData"
+           ng-src="{{imageData.small}}"
+           ez-plus
+           ezp-model="imageData"
+           ezp-options="{
+            responsive: true,
+            zoomType: 'lens',
+            containLensZoom: true,
+            cursor: 'pointer'
+          }" />
     </div>
 
-    <pd-carousel pd-carousel-responsive>
-      <li ng-repeat="photo in place.gallery">
+    <pd-carousel pd-carousel-responsive item-width="130">
+      <li ng-repeat="photo in place.gallery track by $index">
 
         <div class="thumbnail" ng-click="showImage(photo)">
           <img ng-src="{{photo}}" pd-thumb pd-thumb-size="280x280" />
@@ -27,12 +36,22 @@
     </pd-carousel>
 
     <div class="margin-bottom-15 margin-top-15">
+      <div class="form-group">
+        <label for="comment">Описание</label>
+        <textarea class="form-control" id="comment" ng-model="remakePhotoComment" name="comment"
+                  ng-readonly="!remakePhoto"></textarea>
+      </div>
+
       <div class="checkbox">
         <label>
           <input type="checkbox" ng-model="remakePhoto"> Перефотографировать
         </label>
       </div>
     </div>
+  </div>
+
+  <div class="col-xs-6" ng-hide="place.gallery.length">
+    <h4>Нет фотографии</h4>
   </div>
 
   <div class="col-xs-6">
@@ -43,6 +62,11 @@
         <td>{{burial.middleName}}</td>
         <td>{{burial.birthDate}}</td>
         <td>{{burial.deathDate}}</td>
+        <td>
+          <button class="btn btn-xs" ng-click="onEditBurialBtnClick(burial)">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+        </td>
       </tr>
     </table>
 
@@ -54,36 +78,38 @@
       <div class="form-group">
         <label for="lastName">Фамилия</label>
         <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию"
-               ng-model="burialData.lastName" name="lastName" required/>
+               ng-model="burialFormData.lastName" name="lastName" required pd-focus-me="showAddBurialForm"/>
       </div>
 
       <div class="form-group">
         <label for="firstName">Имя</label>
         <input type="text" class="form-control" id="firstName" placeholder="Введите имя"
-               ng-model="burialData.firstName" name="firstName" required />
+               ng-model="burialFormData.firstName" name="firstName" required />
       </div>
 
       <div class="form-group">
         <label for="middleName">Отчество</label>
         <input type="text" class="form-control" id="middleName" placeholder="Введите отчество"
-               ng-model="burialData.middleName" name="middleName" />
+               ng-model="burialFormData.middleName" name="middleName" />
       </div>
 
       <div class="form-group">
         <label for="birthDate">Дата рождения</label>
-        <input type="text" class="form-control" id="birthDate" placeholder="Введите дату рождения"
-               ng-model="burialData.birthDate" name="birthDate" />
+        <input type="text" class="form-control" id="birthDate" placeholder="дд.мм.гггг или мм.гггг или гггг"
+               ng-model="burialFormData.birthDate" name="birthDate" />
       </div>
 
       <div class="form-group">
         <label for="deathDate">Дата смерти</label>
-        <input type="text" class="form-control" id="deathDate" placeholder="Введите дату смерти"
-               ng-model="burialData.deathDate" name="deathDate" />
+        <input type="text" class="form-control" id="deathDate" placeholder="дд.мм.гггг или мм.гггг или гггг"
+               ng-model="burialFormData.deathDate" name="deathDate" />
       </div>
 
-      <button type="submit" class="btn btn-success" ng-disabled="burialForm.$invalid">Добавить</button>
+      <button type="submit" class="btn btn-success" ng-disabled="burialForm.$invalid">
+        {{ burialFormData.id ? 'Сохранить' : 'Добавить' }}
+      </button>
       <button type="button" class="btn btn-default"
-              ng-click="showAddBurialForm = false; formError = null;">
+              ng-click="burialFormData = {}; showAddBurialForm = false; formError = null;">
         Отменить
       </button>
 
@@ -93,6 +119,8 @@
 
 <div class="row margin-top-15 margin-bottom-15" ng-show="place.id">
   <div class="col-xs-12">
+    <button class="btn btn-primary pull-left" ng-click="getPrevPlace()"
+            ng-show="sessionPlaces.length > 1">Предыдущее</button>
     <button class="btn btn-primary pull-right" ng-click="getNextPlace()">Следующее</button>
   </div>
 </div>
