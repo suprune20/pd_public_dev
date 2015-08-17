@@ -1,6 +1,6 @@
 <h1>
   Ввод архива по фото
-  <small ng-show="place">
+  <small ng-show="initialLoaded && place.id">
     Кладбище: {{place.cemeteryName}},
     участок: {{place.areaName}},
     ряд: {{place.row|default:'-'}},
@@ -8,7 +8,7 @@
   </small>
 </h1>
 
-<h3 ng-show="initialLoaded && !place.id">Нет мест для обработки</h3>
+<h3 ng-show="initialLoaded && !place">Нет мест для обработки</h3>
 
 <div class="row" ng-show="place.id">
   <div class="col-xs-6" ng-show="place.gallery.length">
@@ -118,9 +118,14 @@
 </div>
 
 <div class="row margin-top-15 margin-bottom-15" ng-show="place.id">
-  <div class="col-xs-12">
-    <button class="btn btn-primary pull-left" ng-click="getPrevPlace()"
-            ng-show="sessionPlaces.length > 1">Предыдущее</button>
-    <button class="btn btn-primary pull-right" ng-click="getNextPlace()">Следующее</button>
+  <div class="col-xs-6">
+    <button class="btn btn-primary" ng-click="getPrevPlace()"
+            ng-hide="isCurrentFirstPlace()">< Предыдущее</button>
+    <button class="btn btn-primary" ng-click="getNextPlace()"
+            ng-hide="isCurrentLastPlace()">Следующее ></button>
+  </div>
+
+  <div class="col-xs-6">
+    <button class="btn btn-primary pull-right" ng-click="getNextUnprocessedPlace()">Следующее необработанное</button>
   </div>
 </div>

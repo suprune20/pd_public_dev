@@ -13,14 +13,17 @@ angular.module('pdOms')
           if (!id) {
             $scope.sessionPlaces.push(placeData.id);
           }
+          $scope.currentPlaceId = placeData.id;
 
-          $scope.initialLoaded = true;
           $scope.showAddBurialForm = true;
           $scope.place = placeData;
 
           if (placeData.gallery.length) {
             $scope.showImage(placeData.gallery[0]);
           }
+        })
+        .finally(function () {
+          $scope.initialLoaded = true;
         });
     };
 
@@ -69,10 +72,10 @@ angular.module('pdOms')
       $scope.showAddBurialForm = true;
     };
 
-    $scope.getNextPlace = function () {
+    $scope.getNextUnprocessedPlace = function () {
       var getNextPlace = function () {
         return omsPlacesPhotos
-          .unlockPlace($scope.place.id)
+          .processPlace($scope.place.id)
           .then(function () {
             $scope.showAddBurialForm = false;
 
@@ -103,14 +106,34 @@ angular.module('pdOms')
     };
 
     $scope.getPrevPlace = function () {
-      if ($scope.sessionPlaces.length < 2) {
+      if ($scope.isCurrentFirstPlace()) {
         return;
       }
 
-      getPlaceData($scope.sessionPlaces[$scope.sessionPlaces.length - 2])
+      var prevPlaceId = $scope.sessionPlaces[$scope.sessionPlaces.indexOf($scope.currentPlaceId) - 1];
+      getPlaceData(prevPlaceId)
         .then(function () {
-          $scope.sessionPlaces.splice(-1, 1);
+          $scope.currentPlaceId = prevPlaceId;
         });
+    };
+
+    $scope.getNextPlace = function () {
+      if ($scope.isCurrentLastPlace()) {
+        return;
+      }
+
+      var nextPlaceId = $scope.sessionPlaces[$scope.sessionPlaces.indexOf($scope.currentPlaceId) + 1];
+      getPlaceData(nextPlaceId)
+        .then(function () {
+          $scope.currentPlaceId = nextPlaceId;
+        });
+    };
+
+    $scope.isCurrentLastPlace = function () {
+      return $scope.currentPlaceId === $scope.sessionPlaces[$scope.sessionPlaces.length - 1];
+    };
+    $scope.isCurrentFirstPlace = function () {
+      return $scope.currentPlaceId === $scope.sessionPlaces[0];
     };
   })
 ;
