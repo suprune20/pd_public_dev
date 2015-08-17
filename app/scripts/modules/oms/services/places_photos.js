@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('pdOms')
-  .service('omsPlacesPhotosApi', function ($http, pdConfig) {
+  .service('omsPlacesPhotosApi', function ($http, $q, pdConfig) {
     return {
       getPlaces: function (id) {
         return $http
           .get(pdConfig.apiEndpoint + 'oms/photo-places' + (id ? '/' + id : ''), { tracker: 'commonLoadingTracker' })
           .then(function (response) {
+            if (_.isEmpty(response.data)) {
+              return $q.reject();
+            }
+
             return response.data;
           });
       },
@@ -25,8 +29,8 @@ angular.module('pdOms')
       getPlace: function (id) {
         return omsPlacesPhotosApi.getPlaces(id);
       },
-      unlockPlace: function (placeId) {
-        return omsPlacesPhotosApi.putPlace(placeId, { unlocked: true });
+      processPlace: function (placeId) {
+        return omsPlacesPhotosApi.putPlace(placeId, { processed: true });
       },
       remakePlacePhoto: function (placeId, comment) {
         return omsPlacesPhotosApi.putPlace(placeId, {
