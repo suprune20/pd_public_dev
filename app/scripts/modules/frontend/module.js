@@ -10,43 +10,43 @@ angular.module('pdFrontend', [
   ])
   .config(function (authRouteProvider) {
     authRouteProvider
-      .state('catalog', {
-        url: '/?redirectUrl',
-        controller: 'CatalogCtrl',
-        templateUrl: 'views/modules/frontend/catalog/main.html',
-        reloadOnSearch: false,
-        title: 'Каталог ритуальных товаров и услуг',
-        pageClass: 'catalog-page',
-        setFluidContainer: true,
-        seo: {
-          description: 'Каталог ритуальных товаров и услуг. Похоронное Дело - это непрерывно развивающаяся ' +
-            'информационная система нового поколения. Целевая аудитория нашей системы - люди, нуждающиеся в оказании ' +
-            'профессиональной помощи в установке или ремонте надгробных сооружений, подготовке и организации ' +
-            'похорон, в приобретении ритуальных товаров и услуг.'
-        }
-      })
-      .state('catalog.product', {
-        url: 'product/:productId?showOptPrice',
-        controller: 'CatalogProductCtrl',
-        pageClass: 'catalog-page',
-        setFluidContainer: true
-      })
-      .state('catalog.supplier', {
-        url: 'suppliers/:supplierId',
-        controller: 'CatalogSupplierCtrl',
-        pageClass: 'catalog-page',
-        setFluidContainer: true
-      })
-      .state('map', {
-        url: '/map',
-        controller: 'MapCtrl',
-        templateUrl: 'views/modules/frontend/map/main.html',
-        reloadOnSearch: false,
-        title: 'Карта мест захоронений',
-        secured: false,
-        setFluidContainer: true,
-        pageClass: 'map-page'
-      })
+      //.state('catalog', {
+      //  url: '/?redirectUrl',
+      //  controller: 'CatalogCtrl',
+      //  templateUrl: 'views/modules/frontend/catalog/main.html',
+      //  reloadOnSearch: false,
+      //  title: 'Каталог ритуальных товаров и услуг',
+      //  pageClass: 'catalog-page',
+      //  setFluidContainer: true,
+      //  seo: {
+      //    description: 'Каталог ритуальных товаров и услуг. Похоронное Дело - это непрерывно развивающаяся ' +
+      //      'информационная система нового поколения. Целевая аудитория нашей системы - люди, нуждающиеся в оказании ' +
+      //      'профессиональной помощи в установке или ремонте надгробных сооружений, подготовке и организации ' +
+      //      'похорон, в приобретении ритуальных товаров и услуг.'
+      //  }
+      //})
+      //.state('catalog.product', {
+      //  url: 'product/:productId?showOptPrice',
+      //  controller: 'CatalogProductCtrl',
+      //  pageClass: 'catalog-page',
+      //  setFluidContainer: true
+      //})
+      //.state('catalog.supplier', {
+      //  url: 'suppliers/:supplierId',
+      //  controller: 'CatalogSupplierCtrl',
+      //  pageClass: 'catalog-page',
+      //  setFluidContainer: true
+      //})
+      //.state('map', {
+      //  url: '/map',
+      //  controller: 'MapCtrl',
+      //  templateUrl: 'views/modules/frontend/map/main.html',
+      //  reloadOnSearch: false,
+      //  title: 'Карта мест захоронений',
+      //  secured: false,
+      //  setFluidContainer: true,
+      //  pageClass: 'map-page'
+      //})
 
       .state('clientPanel', {
         url: '/client-panel',
