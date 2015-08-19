@@ -11,7 +11,7 @@ angular.module('pdOms')
         'dt_military': true,
         'dt_wrong_fio': true
       },
-      showActive: true
+      showActive: false
     };
     omsPlaces.getPlaces().then(function (places) {
       $scope.placesGeoObjects = omsPlaces
