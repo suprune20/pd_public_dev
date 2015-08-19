@@ -44,6 +44,24 @@ angular.module('pdApp', [
 
     $urlRouterProvider.otherwise('/404');
     $stateProvider
+      .state('main', {
+        url: '/',
+        controller: function ($scope, $modal) {
+          if ($scope.security.isAuthenticated()) {
+            $scope.redirectToBasePage();
+
+            return;
+          }
+
+          $modal.open({
+            templateUrl: 'views/modules/frontend/client_auth.modal.html',
+            controller: 'pdFrontendAuth',
+            backdrop: 'static',
+            windowClass: 'frontend-auth-modal'
+          });
+        }
+      })
+
       .state('register', {
         url: '/register',
         controller: 'CommonOrgSignupCtrl',
