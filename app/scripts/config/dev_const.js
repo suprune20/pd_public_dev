@@ -5,6 +5,6 @@ angular.module('pdConfig')
   .constant('ravenDevelopment', true)
   .value('serverConfig', {
     serverHost: 'https://org.dev.pohoronnoedelo.ru/',
-    cookieDomain: '.pohoronnoedelo.ru'
+    cookieDomain: '.dev.pohoronnoedelo.ru'
   })
 ;
