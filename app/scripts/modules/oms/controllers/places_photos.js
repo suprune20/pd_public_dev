@@ -26,10 +26,12 @@ angular.module('pdOms')
 
           return $q.all([
             omsCemeteries.getCemeteries(),
-            omsCemeteries.getCemeteryAreas(placeData.cemetery.id)
+            omsCemeteries.getCemeteryAreas(placeData.cemetery.id),
+            omsCemeteries.getCemeteryAreaPlaces(placeData.cemetery.id, placeData.area.id)
           ]).then(function (promisesData) {
             $scope.cemeteries = promisesData[0];
             $scope.areas = promisesData[1];
+            $scope.places = promisesData[2];
           });
         })
         .finally(function () {

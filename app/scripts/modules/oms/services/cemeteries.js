@@ -42,7 +42,7 @@ angular.module('pdOms')
         return omsCemeteriesApi.getCemeteryAreas(cemeteryId);
       },
       getCemeteryAreaPlaces: function (cemeteryId, areaId) {
-        return omsCemeteriesApi.getCemeteryAreas(cemeteryId, areaId);
+        return omsCemeteriesApi.getCemeteryAreaPlaces(cemeteryId, areaId);
       }
     };
   })

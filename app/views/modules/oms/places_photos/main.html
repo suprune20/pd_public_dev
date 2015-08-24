@@ -5,9 +5,15 @@
     <a href="#" editable-select="place.cemetery.id" buttons="no" e-ng-options="c.id as c.title for c in cemeteries">
       {{place.cemetery.title}}
     </a>,
-    участок: {{place.area.title}},
+    участок:
+    <a href="#" editable-select="place.area.id" buttons="no" e-ng-options="c.id as c.title for c in areas">
+      {{place.area.title}}
+    </a>,
     ряд: {{place.row|default:'-'}},
-    место: {{place.place.title}}
+    место:
+    <a href="#" editable-select="place.place.id" buttons="no" e-ng-options="c.id as c.title for c in places">
+      {{place.place.title}}
+    </a>
   </small>
 </h1>
 
