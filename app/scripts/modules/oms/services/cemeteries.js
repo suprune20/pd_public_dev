@@ -23,8 +23,9 @@ angular.module('pdOms')
       },
       getCemeteryAreaPlaces: function (cemeteryId, areaId) {
         return $http
-          .get(pdConfig.apiEndpoint + 'oms/cemeteries/' + cemeteryId + '/areas/' + areaId, { tracker: 'commonLoadingTracker' })
-          .then(function (response) {
+          .get(pdConfig.apiEndpoint + 'oms/cemeteries/' + cemeteryId + '/areas/' + areaId + '/places', {
+            tracker: 'commonLoadingTracker'
+          }).then(function (response) {
             return response.data;
           }, function (response) {
             return $q.reject(response.data);

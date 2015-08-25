@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('pdOms')
-  .controller('OmsPlacesPhotosCtrl', function ($scope, $q, $filter, growl, omsPlacesPhotos, omsBurials, omsCemeteries,
-                                               pdTypeahead
-  ) {
+  .controller('OmsPlacesPhotosCtrl', function ($scope, $q, $filter, growl, omsPlacesPhotos, omsBurials, pdTypeahead) {
     // Initial variables initialize
     $scope.burialFormData = {};
     $scope.showAddBurialForm = true;
@@ -23,16 +21,6 @@ angular.module('pdOms')
           if (placeData.gallery.length) {
             $scope.showImage(placeData.gallery[0]);
           }
-
-          return $q.all([
-            omsCemeteries.getCemeteries(),
-            omsCemeteries.getCemeteryAreas(placeData.cemetery.id),
-            omsCemeteries.getCemeteryAreaPlaces(placeData.cemetery.id, placeData.area.id)
-          ]).then(function (promisesData) {
-            $scope.cemeteries = promisesData[0];
-            $scope.areas = promisesData[1];
-            $scope.places = promisesData[2];
-          });
         })
         .finally(function () {
           $scope.initialLoaded = true;

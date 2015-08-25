@@ -1,19 +1,10 @@
 <h1>
   Ввод архива по фото
   <small ng-show="initialLoaded && place.id">
-    Кладбище:
-    <a href="#" editable-select="place.cemetery.id" buttons="no" e-ng-options="c.id as c.title for c in cemeteries">
-      {{place.cemetery.title}}
-    </a>,
-    участок:
-    <a href="#" editable-select="place.area.id" buttons="no" e-ng-options="c.id as c.title for c in areas">
-      {{place.area.title}}
-    </a>,
+    Кладбище: {{place.cemetery.title}},
+    участок: {{place.area.title}},
     ряд: {{place.row|default:'-'}},
-    место:
-    <a href="#" editable-select="place.place.id" buttons="no" e-ng-options="c.id as c.title for c in places">
-      {{place.place.title}}
-    </a>
+    место: {{place.place.title}}
   </small>
 </h1>
 
@@ -139,6 +130,9 @@
   </div>
 
   <div class="col-xs-6">
-    <button class="btn btn-primary pull-right" ng-click="getNextUnprocessedPlace()">Следующее необработанное</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!remakePhoto && !place.burials.length"
+            ng-click="getNextUnprocessedPlace()">
+      Следующее необработанное
+    </button>
   </div>
 </div>
