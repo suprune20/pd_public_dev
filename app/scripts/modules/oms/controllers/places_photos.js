@@ -73,36 +73,31 @@ angular.module('pdOms')
     };
 
     $scope.getNextUnprocessedPlace = function () {
-      var getNextPlace = function () {
-        return omsPlacesPhotos
-          .processPlace($scope.place.id)
-          .then(function () {
-            $scope.showAddBurialForm = false;
-
-            return getPlaceData();
-          }, function () {
-            growl.addErrorMessage('Произошла ошибка при разблокировке места');
-          });
-      };
-
       if ($scope.remakePhoto) {
-        omsPlacesPhotos
+        return omsPlacesPhotos
           .remakePlacePhoto($scope.place.id, $scope.remakePhotoComment)
           .then(function () {
             $scope.remakePhoto = false;
             $scope.remakePhotoComment = '';
+            $scope.showAddBurialForm = false;
 
-            return getNextPlace();
+            return getPlaceData();
           }, function () {
             growl.addErrorMessage('Произошла ошибка при установке флага Перефотографировать');
 
             return $q.reject();
           });
-
-        return;
       }
 
-      getNextPlace();
+      return omsPlacesPhotos
+        .processPlace($scope.place.id)
+        .then(function () {
+          $scope.showAddBurialForm = false;
+
+          return getPlaceData();
+        }, function () {
+          growl.addErrorMessage('Произошла ошибка при разблокировке места');
+        });
     };
 
     $scope.getPrevPlace = function () {
