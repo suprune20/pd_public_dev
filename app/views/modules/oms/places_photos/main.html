@@ -1,10 +1,10 @@
 <h1>
   Ввод архива по фото
   <small ng-show="initialLoaded && place.id">
-    Кладбище: {{place.cemeteryName}},
-    участок: {{place.areaName}},
+    Кладбище: {{place.cemetery.title}},
+    участок: {{place.area.title}},
     ряд: {{place.row|default:'-'}},
-    место: {{place.placeName}}
+    место: {{place.place.title}}
   </small>
 </h1>
 
@@ -36,16 +36,16 @@
     </pd-carousel>
 
     <div class="margin-bottom-15 margin-top-15">
-      <div class="form-group">
-        <label for="comment">Описание</label>
-        <textarea class="form-control" id="comment" ng-model="remakePhotoComment" name="comment"
-                  ng-readonly="!remakePhoto"></textarea>
-      </div>
-
       <div class="checkbox">
         <label>
           <input type="checkbox" ng-model="remakePhoto"> Перефотографировать
         </label>
+      </div>
+
+      <div class="form-group">
+        <label for="comment">Комментарий</label>
+        <textarea class="form-control" id="comment" ng-model="remakePhotoComment" name="comment"
+                  ng-readonly="!remakePhoto"></textarea>
       </div>
     </div>
   </div>
@@ -84,13 +84,17 @@
       <div class="form-group">
         <label for="firstName">Имя</label>
         <input type="text" class="form-control" id="firstName" placeholder="Введите имя"
-               ng-model="burialFormData.firstName" name="firstName" required />
+               ng-model="burialFormData.firstName" name="firstName" required
+               typeahead="firstname for firstname in getTypeaheadData($viewValue, 'firstname')"
+               typeahead-min-length="2" />
       </div>
 
       <div class="form-group">
         <label for="middleName">Отчество</label>
         <input type="text" class="form-control" id="middleName" placeholder="Введите отчество"
-               ng-model="burialFormData.middleName" name="middleName" />
+               ng-model="burialFormData.middleName" name="middleName"
+               typeahead="middlename for middlename in getTypeaheadData($viewValue, 'middlename')"
+               typeahead-min-length="2" />
       </div>
 
       <div class="form-group">
@@ -126,6 +130,9 @@
   </div>
 
   <div class="col-xs-6">
-    <button class="btn btn-primary pull-right" ng-click="getNextUnprocessedPlace()">Следующее необработанное</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!remakePhoto && !place.burials.length"
+            ng-click="getNextUnprocessedPlace()">
+      Следующее необработанное
+    </button>
   </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pdOms')
-  .controller('OmsPlacesPhotosCtrl', function ($scope, $q, $filter, growl, omsPlacesPhotos, omsBurials) {
+  .controller('OmsPlacesPhotosCtrl', function ($scope, $q, $filter, growl, omsPlacesPhotos, omsBurials, pdTypeahead) {
     // Initial variables initialize
     $scope.burialFormData = {};
     $scope.showAddBurialForm = true;
@@ -134,6 +134,10 @@ angular.module('pdOms')
     };
     $scope.isCurrentFirstPlace = function () {
       return $scope.currentPlaceId === $scope.sessionPlaces[0];
+    };
+
+    $scope.getTypeaheadData = function (query, type) {
+      return pdTypeahead.getPersonTypeahead(query, type);
     };
   })
 ;

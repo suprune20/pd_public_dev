@@ -8,7 +8,9 @@ angular.module('pdConfig', [])
       serverConfig.serverHost = $window.location.protocol + '//org.' + $window.location.host + '/';
 
       var hostParts = $window.location.host.split('.');
-      serverConfig.cookieDomain = '.' + hostParts[hostParts.length - 2] + '.' + hostParts[hostParts.length - 1];
+      var cookieDomainChunks = serverConfig.cookieDomain.split('.');
+      cookieDomainChunks[cookieDomainChunks.length - 1] = hostParts[hostParts.length - 1];
+      serverConfig.cookieDomain = cookieDomainChunks.join('.');
     }
 
     return {
