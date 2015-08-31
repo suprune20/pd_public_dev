@@ -51,6 +51,9 @@
             <li ng-show="auth.isCurrentHasLoruRole() || auth.isCurrentHasOmsRole()">
               <a ng-href="{{backendUrl}}tutorial">Курс видеообучения</a>
             </li>
+            <li ng-show="auth.isCurrentHasOmsRole()">
+              <a ng-href="{{backendUrl}}media/support/download/mobilekeeper.apk">Скачать мобильный клиент</a>
+            </li>
           </ul>
         </li>
       </ul>
