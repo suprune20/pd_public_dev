@@ -20,6 +20,7 @@
            ezp-options="{
             responsive: true,
             zoomType: 'lens',
+            lensSize: '300',
             containLensZoom: true,
             cursor: 'pointer'
           }" />
@@ -78,7 +79,7 @@
       <div class="form-group">
         <label for="lastName">Фамилия</label>
         <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию"
-               ng-model="burialFormData.lastName" name="lastName" required pd-focus-me="showAddBurialForm"/>
+               ng-model="burialFormData.lastName" name="lastName" required pd-focus-me="place.id && showAddBurialForm"/>
       </div>
 
       <div class="form-group">
