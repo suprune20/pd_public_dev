@@ -15,8 +15,8 @@ angular.module('pdOms')
           }
           $scope.currentPlaceId = placeData.id;
 
-          $scope.showAddBurialForm = true;
           $scope.place = placeData;
+          $scope.showAddBurialForm = true;
 
           if (placeData.gallery.length) {
             $scope.showImage(placeData.gallery[0]);
