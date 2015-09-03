@@ -79,13 +79,14 @@
       <div class="form-group">
         <label for="lastName">Фамилия</label>
         <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию"
-               ng-model="burialFormData.lastName" name="lastName" required pd-focus-me="place.id && showAddBurialForm"/>
+               ng-model="burialFormData.lastName" name="lastName" ng-required="!burialFormData.firstName"
+               pd-focus-me="place.id && showAddBurialForm"/>
       </div>
 
       <div class="form-group">
         <label for="firstName">Имя</label>
         <input type="text" class="form-control" id="firstName" placeholder="Введите имя"
-               ng-model="burialFormData.firstName" name="firstName" required
+               ng-model="burialFormData.firstName" name="firstName" ng-required="!burialFormData.lastName"
                typeahead="firstname for firstname in getTypeaheadData($viewValue, 'firstname')"
                typeahead-min-length="2" />
       </div>
