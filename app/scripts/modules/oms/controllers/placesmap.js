@@ -9,7 +9,8 @@ angular.module('pdOms')
         'dt_unowned': true,
         'dt_unindentified': true,
         'dt_military': true,
-        'dt_wrong_fio': true
+        'dt_wrong_fio': true,
+        'dt_free': true
       },
       showActive: false
     };
