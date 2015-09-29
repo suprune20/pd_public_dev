@@ -22,7 +22,7 @@ angular.module('pdOms')
               balloonContentBody: '<a href="' + placeDetailsPageUrl + '" target="_blank">Перейти на карточку места</a>'
             },
             options: {
-              iconImageHref: _.intersection(place.status, ['dt_unowned', 'dt_unindentified']).length ?
+              iconImageHref: _.intersection(place.status, ['dt_free']).length ?
                 'images/redCircleDotIcon.png' :
                 'images/blueCircleDotIcon.png',
               iconImageSize: [5, 5],
