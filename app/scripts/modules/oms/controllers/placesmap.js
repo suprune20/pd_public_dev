@@ -5,14 +5,14 @@ angular.module('pdOms')
     // Set initial filters values
     $scope.filters = {
       statusFilter: {
-        'dt_size_violated': true,
-        'dt_unowned': true,
-        'dt_unindentified': true,
-        'dt_military': true,
-        'dt_wrong_fio': true,
+        'dt_size_violated': false,
+        'dt_unowned': false,
+        'dt_unindentified': false,
+        'dt_military': false,
+        'dt_wrong_fio': false,
         'dt_free': true
       },
-      showActive: false
+      showActive: true
     };
     omsPlaces.getPlaces().then(function (places) {
       $scope.placesGeoObjects = omsPlaces
