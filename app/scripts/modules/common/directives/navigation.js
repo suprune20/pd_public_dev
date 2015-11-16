@@ -22,6 +22,15 @@ angular.module('pdCommon')
             windowClass: 'frontend-auth-modal'
           });
         };
+
+        var checkOrganisationData = function () {
+          var organisationData = auth.getUserOrganisation();
+          $scope.organisationName = _.isEmpty(organisationData) ? 'Похоронное дело' : organisationData.name;
+        };
+
+        $scope.$on('auth.signin_success', checkOrganisationData);
+        $scope.$on('auth.signout', checkOrganisationData);
+        checkOrganisationData();
       },
       link: function (scope) {
         scope.menuManager = mainMenuManager;
