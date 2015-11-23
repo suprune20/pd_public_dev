@@ -132,6 +132,12 @@
   </div>
 
   <div class="col-xs-6">
+    <button class="btn btn-info" type="button" ng-click="getUnprocessedPhotosCount()">
+      Количество необработанных мест
+      <span class="badge" ng-show="unprocessedPhotosCount">{{ unprocessedPhotosCount }}</span>
+      <i class="glyphicon glyphicon-refresh" ng-hide="unprocessedPhotosCount"></i>
+    </button>
+
     <button class="btn btn-primary pull-right" ng-disabled="!remakePhoto && !place.burials.length"
             ng-click="getNextUnprocessedPlace()">
       Следующее необработанное
