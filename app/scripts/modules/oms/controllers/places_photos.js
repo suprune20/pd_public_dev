@@ -24,6 +24,7 @@ angular.module('pdOms')
         })
         .finally(function () {
           $scope.initialLoaded = true;
+          $scope.unprocessedPhotosCount = null;
         });
     };
 
@@ -133,6 +134,11 @@ angular.module('pdOms')
 
     $scope.getTypeaheadData = function (query, type) {
       return pdTypeahead.getPersonTypeahead(query, type);
+    };
+
+    $scope.getUnprocessedPhotosCount = function () {
+      omsPlacesPhotos.getUnprocessedPhotosCount()
+        .then(function (count) { $scope.unprocessedPhotosCount = count; });
     };
   })
 ;

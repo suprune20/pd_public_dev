@@ -20,6 +20,13 @@ angular.module('pdOms')
           .then(function (response) {
             return response.data;
           });
+      },
+      getCounts: function () {
+        return $http
+          .get(pdConfig.apiEndpoint + 'oms/photo-places/counts', { tracker: 'commonLoadingTracker' })
+          .then(function (response) {
+            return response.data;
+          });
       }
     };
   })
@@ -37,6 +44,12 @@ angular.module('pdOms')
           remakePhoto: true,
           remakePhotoComment: comment
         });
+      },
+      getUnprocessedPhotosCount: function () {
+        return omsPlacesPhotosApi.getCounts()
+          .then(function (countsModel) {
+            return countsModel.unprocessed;
+          });
       }
     };
   })
