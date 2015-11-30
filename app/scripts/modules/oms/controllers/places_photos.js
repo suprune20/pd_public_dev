@@ -21,6 +21,17 @@ angular.module('pdOms')
           if (placeData.gallery.length) {
             $scope.showImage(placeData.gallery[0]);
           }
+        }, function (errorResponse) {
+          var errorData = errorResponse.data;
+          var errorMessage = 'Произошла ошибка при получении данных';
+
+          if (400 === errorResponse.status) {
+            errorMessage = errorData.message;
+          }
+
+          growl.addErrorMessage(errorMessage, { ttl: -1 });
+
+          return $q.reject(errorResponse);
         })
         .finally(function () {
           $scope.initialLoaded = true;
@@ -81,12 +92,13 @@ angular.module('pdOms')
             $scope.remakePhoto = false;
             $scope.remakePhotoComment = '';
             $scope.showAddBurialForm = false;
-
-            return getPlaceData();
           }, function () {
             growl.addErrorMessage('Произошла ошибка при установке флага Перефотографировать');
 
             return $q.reject();
+          })
+          .finally(function () {
+            return getPlaceData();
           });
       }
 
@@ -94,10 +106,11 @@ angular.module('pdOms')
         .processPlace($scope.place.id)
         .then(function () {
           $scope.showAddBurialForm = false;
-
-          return getPlaceData();
         }, function () {
           growl.addErrorMessage('Произошла ошибка при разблокировке места');
+        })
+        .finally(function () {
+          return getPlaceData();
         });
     };
 
