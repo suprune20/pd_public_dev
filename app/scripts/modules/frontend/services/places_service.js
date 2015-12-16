@@ -39,10 +39,10 @@ angular.module('pdFrontend')
                         },
                         options: {
                           preset: 'twirl#brownIcon'
-                        };
+                        }
+                      };
                     })
                     .value()
-                  })
                 };
               });
           });
