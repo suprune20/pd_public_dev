@@ -7,8 +7,13 @@ angular.module('pdFrontend')
         return $http.get(pdConfig.apiEndpoint + 'client/places')
           .then(function (response) {
             return _.map(response.data, function (place) {
-              place.location = place.location || place.omsData.location;
-              place.address = place.address || place.omsData.address;
+              if (place.omsData) {
+                var omsLocation = place.omsData.location;
+                var omsAddress = place.omsData.address;
+              }
+
+              place.location = place.location || omsLocation || null;
+              place.address = place.address || omsAddress || '';
 
               return place;
             });
