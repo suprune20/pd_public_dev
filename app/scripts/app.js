@@ -24,9 +24,13 @@ angular.module('pdApp', [
     oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
 
     RavenProvider.development(ravenDevelopment);
+
+    // Setup http provider configs
+    $httpProvider.defaults.withCredentials = true;
     $httpProvider.interceptors.push('authApiInterceptor');
     $httpProvider.interceptors.push('httpErrorsInterceptor');
     $httpProvider.interceptors.push('seoSnapshotReadyInterceptor');
+
     // Set interceptor into first position in interceptors
     $httpProvider.interceptors.unshift(function () {
       return {

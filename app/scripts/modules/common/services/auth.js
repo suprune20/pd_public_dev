@@ -9,11 +9,6 @@ angular.module('pdCommon')
           authStorage.setApiAuthToken(responseData.token);
         }
 
-        // Set session cookie for "old" django backend
-        if (_.has(responseData, 'sessionId')) {
-          ipCookie('pdsession', responseData.sessionId, {domain: pdConfig.AUTH_COOKIE_DOMAIN});
-        }
-
         if (_.has(responseData, 'role')) {
           responseData.role = _.isString(responseData.role) ? [responseData.role] : responseData.role;
           // Add role supervisor
@@ -98,7 +93,6 @@ angular.module('pdCommon')
       signout: function () {
         return $http.post(pdConfig.apiEndpoint + 'auth/signout')
           .finally(function () {
-            ipCookie('pdsession', 'wrong_session', {domain: pdConfig.AUTH_COOKIE_DOMAIN});
             authStorage.clearAll();
             $rootScope.$broadcast('auth.signout');
           });
