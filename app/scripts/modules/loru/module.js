@@ -18,10 +18,10 @@ angular.module('pdLoru', [
       },
       'loru.orgplaces': {
         url: '/orgplaces',
-        controller: 'LoruOrgPlacesCtrl',
-        templateUrl: 'views/modules/loru/orgplaces/main.html',
-        title: 'Места',
-        pageClass: 'loru-orgplaces'
+        controller: 'pdCommonOrgPlacesCtrl',
+        templateUrl: 'views/modules/common/orgplaces/main.html',
+        title: 'Подразделения',
+        pageClass: 'org-orgplaces'
       },
 
       // PRODUCTS MANAGEMENT
@@ -210,7 +210,7 @@ angular.module('pdLoru', [
                 hide: !userOrgId
               },
               {link: serverConfig.serverHost + 'userprofile', title: 'Пользователь'},
-              {link: '#!/loru/orgplaces', title: 'Склады', orgAbility: 'trade'},
+              {link: '#!/loru/orgplaces', title: 'Подразделения', orgAbility: 'trade'},
               {link: '/loru/products', title: 'Товары и услуги', orgAbility: 'trade'},
               {link: serverConfig.serverHost + 'org/log', title: 'Журнал'},
               {class: 'divider'},
