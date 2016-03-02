@@ -1,19 +1,19 @@
 'use strict';
 
-angular.module('pdLoru')
-  .controller('LoruOrgPlacesCtrl', function ($scope, PdLoruOrgPlaces, modalNotifications, growl) {
+angular.module('pdCommon')
+  .controller('pdCommonOrgPlacesCtrl', function ($scope, PdCommonOrgPlaces, modalNotifications, growl) {
     // Show informer when open page
     growl.addInfoMessage('Для добавления новой записи нажмите в нужном месте на карте', {ttl: 10000});
 
-    $scope.pdLoruPlaces = new PdLoruOrgPlaces();
+    $scope.pdOrgPlaces = new PdCommonOrgPlaces();
     $scope.addStore = function () {
-      $scope.pdLoruPlaces.addNewStoreFromSelected()
+      $scope.pdOrgPlaces.addNewStoreFromSelected()
         .then(function () {
           growl.addSuccessMessage('Запись была успешно добавлена');
         });
     };
     $scope.saveStore = function () {
-      $scope.pdLoruPlaces.saveSelectedStore()
+      $scope.pdOrgPlaces.saveSelectedStore()
         .then(function () {
           growl.addSuccessMessage('Запись была успешно изменена');
         });
@@ -22,7 +22,7 @@ angular.module('pdLoru')
       modalNotifications.confirm('Вы уверены, что хотите удалить эту запись?', 'Удаление записи')
         .then(function () {
           // Confirmed remove store
-          $scope.pdLoruPlaces.removeSelectedStore()
+          $scope.pdOrgPlaces.removeSelectedStore()
             .then(function () {
               growl.addSuccessMessage('Запись была успешно удалена');
             });

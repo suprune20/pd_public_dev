@@ -24,20 +24,25 @@ angular.module('pdFrontend')
 
                     return place;
                   }),
-                  placesYandexPoints: _.map(placesCollection, function (place) {
-                    return {
-                      geometry: {
-                        type: 'Point',
-                        coordinates: [place.location.longitude, place.location.latitude]
-                      },
-                      properties: {
-                        placeModel: place
-                      },
-                      options: {
-                        preset: 'twirl#brownIcon'
-                      }
-                    };
-                  })
+                  placesYandexPoints: _.chain(placesCollection)
+                    .filter(function (place) {
+                      return place.location;
+                    })
+                    .map(function (place) {
+                      return {
+                        geometry: {
+                          type: 'Point',
+                          coordinates: [place.location.longitude, place.location.latitude]
+                        },
+                        properties: {
+                          placeModel: place
+                        },
+                        options: {
+                          preset: 'twirl#brownIcon'
+                        }
+                      };
+                    })
+                    .value()
                 };
               });
           });

@@ -1,35 +1,37 @@
 'use strict';
 
-angular.module('pdLoru')
-  .service('pdLoruStoresApi', function ($http, pdConfig) {
+angular.module('pdCommon')
+  .service('pdOrgStoresApi', function ($http, pdConfig) {
+    var url = pdConfig.apiEndpoint + 'org/stores';
+
     return {
       getStores: function () {
-        return $http.get(pdConfig.apiEndpoint + 'loru/stores', {
+        return $http.get(url, {
           tracker: 'commonLoadingTracker'
         }).then(function (resp) { return resp.data; });
       },
       addStore: function (storeData) {
-        return $http.post(pdConfig.apiEndpoint + 'loru/stores', storeData, {
+        return $http.post(url, storeData, {
           tracker: 'commonLoadingTracker'
         }).then(function (response) { return response.data; });
       },
       saveStore: function (storeData) {
-        return $http.put(pdConfig.apiEndpoint + 'loru/stores/' + storeData.id, storeData, {
+        return $http.put(url + '/' + storeData.id, storeData, {
           tracker: 'commonLoadingTracker'
         }).then(function (response) { return response.data; });
       },
       removeStore: function (storeId) {
-        return $http.delete(pdConfig.apiEndpoint + 'loru/stores/' + storeId, {
+        return $http.delete(url + '/' + storeId, {
           tracker: 'commonLoadingTracker'
         });
       }
     };
   })
-  // Factory for Loru orgplaces page with yandex map
-  .factory('PdLoruOrgPlaces', function (pdLoruStoresApi, pdYandex, storage) {
+  // Factory for orgplaces page with yandex map
+  .factory('PdCommonOrgPlaces', function (pdOrgStoresApi, pdYandex, storage) {
     return function () {
       // Constants
-      var PD_LORU_PLACESMAP_MAP_TYPE = 'pd.loru.places_map_type';
+      var PD_ORG_PLACESMAP_MAP_TYPE = 'pd.org.places_map_type';
 
       // Initial data
       var storesGeoObjects = [],
@@ -99,7 +101,7 @@ angular.module('pdLoru')
       ;
 
       // Get stores from api when created
-      pdLoruStoresApi.getStores()
+      pdOrgStoresApi.getStores()
         .then(function (storesData) {
           storesData = _.map(storesData, function (storeData) {
             return prepareStoreData(storeData);
@@ -152,7 +154,7 @@ angular.module('pdLoru')
           selectedPlaceGeoObject.geometry.coordinates = event.get('target').geometry.getCoordinates();
         },
         addNewStoreFromSelected: function () {
-          return pdLoruStoresApi.addStore(convertYaGeoObject2Store(selectedPlaceGeoObject))
+          return pdOrgStoresApi.addStore(convertYaGeoObject2Store(selectedPlaceGeoObject))
             .then(function (addedGeoObject) {
               selectedPlaceGeoObject = null;
               storesGeoObjects.push(getYaGeoObjectFromStore(prepareStoreData(addedGeoObject)));
@@ -161,7 +163,7 @@ angular.module('pdLoru')
             });
         },
         saveSelectedStore: function () {
-          return pdLoruStoresApi.saveStore(convertYaGeoObject2Store(selectedPlaceGeoObject))
+          return pdOrgStoresApi.saveStore(convertYaGeoObject2Store(selectedPlaceGeoObject))
             .then(function (savedStoreData) {
               // Change data in places geo objects
               storesGeoObjects.forEach(function (geoObject) {
@@ -180,7 +182,7 @@ angular.module('pdLoru')
             });
         },
         removeSelectedStore: function () {
-          return pdLoruStoresApi.removeStore(selectedPlaceGeoObject.properties.placeData.id)
+          return pdOrgStoresApi.removeStore(selectedPlaceGeoObject.properties.placeData.id)
             .then(function () {
               // Also remove from geo objects markers array
               _.remove(storesGeoObjects, function (geoObject) {
@@ -200,10 +202,10 @@ angular.module('pdLoru')
           _.remove(selectedPlaceGeoObject.properties.placeData.phones, phoneObj);
         },
         changedYaMapTypeHandler: function (event) {
-          storage.set(PD_LORU_PLACESMAP_MAP_TYPE, event.get('newType'));
+          storage.set(PD_ORG_PLACESMAP_MAP_TYPE, event.get('newType'));
         },
         getYaMapType: function () {
-          return storage.get(PD_LORU_PLACESMAP_MAP_TYPE);
+          return storage.get(PD_ORG_PLACESMAP_MAP_TYPE);
         }
       };
     };
