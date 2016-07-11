@@ -66,7 +66,9 @@ angular.module('pdLoru')
               order.type = 'client';
               order.supplier = order.performer;
               order.customer = order.owner;
-              order.customer.name = order.owner.lastName + ' ' + order.owner.firstName + ' ' + order.owner.middleName;
+              if (order.owner) {
+                order.customer.name = order.owner.lastName + ' ' + order.owner.firstName + ' ' + order.owner.middleName;
+              }
 
               return order;
             }));
