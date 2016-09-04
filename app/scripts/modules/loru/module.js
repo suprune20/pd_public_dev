@@ -81,9 +81,10 @@ angular.module('pdLoru', [
         templateUrl: 'views/modules/loru/products/edit.html',
         title: 'Редактирование товара/услуги'
       },
+
       'loru.own_orders_add': {
         url: '/own-orders/add',
-        //controller: 'LoruOwnOrdersAddCtrl',
+        controller: 'LoruOwnOrdersAddCtrl',
         templateUrl: 'views/modules/loru/orders/add.html',
         title: 'Добавление заказа'
       }
