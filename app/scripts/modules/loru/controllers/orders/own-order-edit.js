@@ -2,11 +2,9 @@
 
 angular.module('pdLoru')
 
-    .controller('LoruOwnOrdersAddCtrl', function ($scope, loruOrders, growl, $location, pdConfig) {
+    .controller('LoruOwnOrdersEditCtrl', function ($scope, loruOrders, growl, order) {
         $scope.productsTotal = 0;
-        $scope.order = {
-            products: []
-        };
+        $scope.order = order;
 
         loruOrders.getCategoriesWithProducts()
             .then(function (categories) {
@@ -43,7 +41,7 @@ angular.module('pdLoru')
         };
 
         $scope.onSubmit = function () {
-            loruOrders.addOrder($scope.order)
+            loruOrders.saveOrder($scope.order)
                 .then(function () {
                     window.location = pdConfig.backendUrl + 'order/?per_page=25&page=1&sort=-order_num';
                 }, function (errorData) {

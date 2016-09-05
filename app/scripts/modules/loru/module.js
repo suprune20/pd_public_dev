@@ -87,6 +87,25 @@ angular.module('pdLoru', [
         controller: 'LoruOwnOrdersAddCtrl',
         templateUrl: 'views/modules/loru/orders/add.html',
         title: 'Добавление заказа'
+      },
+
+      'loru.own_orders_edit': {
+        url: '/own-orders/:orderId',
+        resolve: {
+          order: ['$stateParams', 'loruOrders', function ($stateParams, loruOrders) {
+            return loruOrders.getOrder($stateParams.orderId);
+          }]
+        },
+        controller: 'LoruOwnOrdersEditCtrl',
+        templateUrl: 'views/modules/loru/orders/edit.html',
+        title: 'Редактирование заказа'
+      },
+
+      'loru.own_orders_add': {
+        url: '/own-orders/add',
+        controller: 'LoruOwnOrdersAddCtrl',
+        templateUrl: 'views/modules/loru/orders/add.html',
+        title: 'Добавление заказа'
       }
     };
 

@@ -16,6 +16,19 @@ angular.module('pdLoru')
                             return $q.reject(response.data);
                         }
                     );
+            },
+            putOrder: function (orderData) {
+                return $http.put(pdConfig.apiEndpoint + 'loru/orders' + orderData.id, orderData)
+                    .then(
+                        function (response) { return response.data; },
+                        function (response) {
+                            return $q.reject(response.data);
+                        }
+                    );
+            },
+            getOrder: function (orderId) {
+                return $http.get(pdConfig.apiEndpoint + 'loru/orders/' + orderId)
+                    .then(function (response) { return response.data; });
             }
         };
     })
@@ -27,6 +40,12 @@ angular.module('pdLoru')
             },
             addOrder: function (orderModel) {
                 return loruOrdersApi.postOrder(orderModel);
+            },
+            getOrder: function (orderId) {
+                return loruOrdersApi.getOrder(orderId);
+            },
+            saveOrder: function (orderModel) {
+                return loruOrdersApi.putOrder(orderModel);
             }
         };
     })

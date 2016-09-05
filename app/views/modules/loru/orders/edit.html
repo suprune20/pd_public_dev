@@ -1,4 +1,4 @@
-<h1>Добавление заказа</h1>
+<h1>Редактирование заказа <small>{{ order.number }}</small></h1>
 
 <div class="row">
     <form role="form" name="orderForm" novalidate>
@@ -140,11 +140,7 @@
 
         <div class="row">
             <div class="col-xs-5" style="height: 400px; overflow-y: scroll;">
-                <div>
-                    <input type="search" ng-model="q" placeholder="фильтр" aria-label="filter products" />
-                </div>
-
-                <div ng-repeat="category in categories | filter:q" ng-show="category.products">
+                <div ng-repeat="category in categories" ng-show="category.products">
                     <p>{{ category.title }}</p>
 
                     <p ng-repeat="product in category.products" ng-hide="isSelectedProduct(product)">
