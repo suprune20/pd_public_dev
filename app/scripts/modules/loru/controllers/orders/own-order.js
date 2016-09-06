@@ -2,14 +2,11 @@
 
 angular.module('pdLoru')
 
-    .controller('LoruOwnOrdersEditCtrl', function ($scope, loruOrders, growl, order) {
-        $scope.productsTotal = 0;
+    .controller('LoruOwnOrderCtrl', function ($scope, loruOrders, growl,
+            $location, pdConfig, order, categories
+    ) {
         $scope.order = order;
-
-        loruOrders.getCategoriesWithProducts()
-            .then(function (categories) {
-                $scope.categories = categories;
-            });
+        $scope.categories = categories;
 
         $scope.addProduct = function (product) {
             var addedProduct = {
@@ -21,18 +18,19 @@ angular.module('pdLoru')
             };
 
             $scope.order.products.push(addedProduct);
-            $scope.onProductChanged(addedProduct)
         };
         $scope.removeProduct = function (product) {
             $scope.order.products.splice($scope.order.products.indexOf(product.id), 1);
         };
 
-        $scope.onProductChanged = function (product) {
+        $scope.getProductTotal = function (product) {
             var productTotal = product.amount * product.price;
 
-            product.total = productTotal - productTotal * product.discount / 100;
-            $scope.productsTotal = _.reduce($scope.order.products, function (sum, product) {
-                return sum + product.total;
+            return productTotal - productTotal * product.discount / 100;
+        };
+        $scope.getProductsTotal = function () {
+            return _.reduce($scope.order.products, function (sum, product) {
+                return sum + $scope.getProductTotal(product);
             }, 0);
         };
 
@@ -41,7 +39,9 @@ angular.module('pdLoru')
         };
 
         $scope.onSubmit = function () {
-            loruOrders.saveOrder($scope.order)
+            var submitFn = $scope.order.id ? loruOrders.saveOrder : loruOrders.addOrder;
+
+            submitFn($scope.order)
                 .then(function () {
                     window.location = pdConfig.backendUrl + 'order/?per_page=25&page=1&sort=-order_num';
                 }, function (errorData) {

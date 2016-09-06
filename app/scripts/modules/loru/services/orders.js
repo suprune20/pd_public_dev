@@ -18,7 +18,7 @@ angular.module('pdLoru')
                     );
             },
             putOrder: function (orderData) {
-                return $http.put(pdConfig.apiEndpoint + 'loru/orders' + orderData.id, orderData)
+                return $http.put(pdConfig.apiEndpoint + 'loru/orders/' + orderData.id, orderData)
                     .then(
                         function (response) { return response.data; },
                         function (response) {
