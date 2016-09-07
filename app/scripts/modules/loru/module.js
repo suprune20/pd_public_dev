@@ -261,7 +261,7 @@ angular.module('pdLoru', [
               {class: 'divider'},
               {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers, orgAbility: 'trade'},
               {link: '#!/orders', title: 'Архив заказов', orgAbility: 'trade'},
-              {link: '#!/loru/own-orders/add', title: 'Заказ похорон'},
+              {link: '/loru/own-orders/add', title: 'Заказ похорон'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]
