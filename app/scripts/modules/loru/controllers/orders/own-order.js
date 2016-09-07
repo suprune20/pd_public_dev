@@ -38,6 +38,18 @@ angular.module('pdLoru')
             return _.includes(_.pluck($scope.order.products, 'id'), product.id);
         };
 
+        $scope.q =  {title: ''};
+        $scope.categorySearchValue = function (category) {
+            var searchTitle = $scope.q.title;
+            if (!searchTitle) {
+                return true;
+            }
+
+            return _.some(category.products, function (product) {
+                return product.title.toLowerCase().includes(searchTitle);
+            });
+        };
+
         $scope.onSubmit = function () {
             var submitFn = $scope.order.id ? loruOrders.saveOrder : loruOrders.addOrder;
 

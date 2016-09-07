@@ -148,17 +148,20 @@
                     </div>
                 </div>
 
-                <div ng-repeat="category in categories | filter:q"
+                <div ng-repeat="category in categories | filter:categorySearchValue"
                     ng-class-odd="'products-odd-group'">
 
                     <p>{{ category.title }}</p>
 
-                    <p ng-repeat="product in category.products" ng-hide="isSelectedProduct(product)">
+                    <p ng-repeat="product in category.products | filter:q"
+                        ng-hide="isSelectedProduct(product)">
+
                         <button class="btn btn-xs btn-link" ng-click="addProduct(product)">
                             <i class="glyphicon glyphicon-plus"></i>
                         </button>
 
                         {{ product.title }} ({{ product.price }} р.)
+                        
                     </p>
 
                 </div>
