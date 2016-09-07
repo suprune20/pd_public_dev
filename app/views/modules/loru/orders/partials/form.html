@@ -1,0 +1,224 @@
+<div class="row">
+    <form role="form" name="orderForm" novalidate>
+        <div class="row">
+            <div class="row">
+                <div class="form-group col-xs-3">
+                    <label for="createdDate">Дата заказа</label>
+                    <input type="text" class="form-control" id="createdDate"
+                        name="createdDate" ng-model="order.createdDate"
+                        mask="39.19.9999">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="dueDate">Дата похорон</label>
+                    <input type="text" class="form-control" id="dueDate"
+                        name="dueDate" ng-model="order.dueDate"
+                        mask="39.19.9999">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h4>Заказчик</h4>
+
+            <div class="row">
+                <div class="form-group col-xs-3">
+                    <label for="lastName">Фамилия</label>
+                    <input type="text" class="form-control" id="lastName"
+                        name="lastName" ng-model="order.customer.lastName">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="firstName">Имя</label>
+                    <input type="text" class="form-control" id="firstName"
+                        name="firstName" ng-model="order.customer.firstName">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="middleName">Отчество</label>
+                    <input type="text" class="form-control" id="middleName"
+                        name="middleName" ng-model="order.customer.middleName">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="phoneNumber">Номер телефона</label>
+                    <input type="text" class="form-control" id="phoneNumber"
+                        name="phoneNumber" ng-model="order.customer.phoneNumber">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-4">
+                    <label for="address">Адрес</label>
+                    <input type="text" class="form-control" id="address"
+                        name="address" ng-model="order.customer.address">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h4>Умерший</h4>
+
+            <div class="row">
+                <div class="form-group col-xs-4">
+                    <label for="deadmanLastName">Фамилия</label>
+                    <input type="text" class="form-control" id="deadmanLastName"
+                        name="deadmanLastName" ng-model="order.deadman.lastName">
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <label for="deadmanFirstName">Имя</label>
+                    <input type="text" class="form-control" id="deadmanFirstName"
+                        name="deadmanFirstName" ng-model="order.deadman.firstName">
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <label for="deadmanMiddleName">Отчество</label>
+                    <input type="text" class="form-control" id="deadmanMiddleName"
+                        name="deadmanMiddleName" ng-model="order.deadman.middleName">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-4">
+                    <label for="deadmanDOB">Дата рождения</label>
+                    <input type="text" class="form-control" id="deadmanDOB"
+                        name="deadmanDOB" ng-model="order.deadman.dob"
+                        mask="39.19.9999">
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <label for="deadmanDOD">Дата смерти</label>
+                    <input type="text" class="form-control" id="deadmanDOD"
+                        name="deadmanDOD" ng-model="order.deadman.dod"
+                        mask="39.19.9999">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h4>Место</h4>
+
+            <!--<div class="row">-->
+                <!--<div class="form-group col-xs-4">-->
+                    <!--<label for="cemetery">Кладбище</label>-->
+                    <!--<select class="form-control" id="cemetery" name="cemetery" required></select>-->
+                <!--</div>-->
+
+                <!--<div class="form-group col-xs-4">-->
+                    <!--<label for="area">Участок</label>-->
+                    <!--<select class="form-control" id="area" name="area" required></select>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <div class="row">
+                <div class="form-group col-xs-4">
+                    <label for="cemeteryName">Название кладбища</label>
+                    <input type="text" class="form-control" id="cemeteryName"
+                        name="cemeteryName" ng-model="order.place.cemeteryText">
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <label for="size">Размеры гроба</label>
+                    <input type="text" class="form-control" id="size"
+                        name="size" ng-model="order.place.size">
+                </div>
+
+                <!-- <div class="form-group col-xs-4">
+                    <label for="row">Ряд</label>
+                    <input type="text" class="form-control" id="row" name="row"
+                         ng-model="order.place.row">
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <label for="placeNumber">Номер места</label>
+                    <input type="text" class="form-control" id="placeNumber"
+                        name="placeNumber" ng-model="order.place.placeNumber">
+                </div> -->
+            </div>
+
+            <!-- <div class="row">
+                <div class="form-group col-xs-4">
+                    <label for="size">Размеры гроба</label>
+                    <input type="text" class="form-control" id="size"
+                        name="size" ng-model="order.place.size">
+                </div>
+            </div> -->
+        </div>
+
+        <div class="row">
+            <div class="col-xs-5" style="height: 400px; overflow-y: scroll;">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input lass="form-control" ng-model="q.title" id="filter" placeholder="Фильтр" />
+                    </div>
+                </div>
+
+                <div ng-repeat="category in categories | filter:categorySearchValue"
+                    ng-class-odd="'products-odd-group'">
+
+                    <p>{{ category.title }}</p>
+
+                    <p ng-repeat="product in category.products | filter:q"
+                        ng-hide="isSelectedProduct(product)">
+
+                        <button class="btn btn-xs btn-link" ng-click="addProduct(product)">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </button>
+
+                        {{ product.title }} ({{ product.price }} р.)
+
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="table-responsive col-xs-6 col-xs-offset-1" style="height: 400px; overflow-y: scroll;">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th>Скидка</th>
+                        <th>Сумма</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr ng-repeat="product in order.products">
+                        <td>{{ product.title }}</td>
+                        <td>
+                            <input class="form-control input-sm"
+                                ng-model="product.amount">
+                        </td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            <input class="form-control input-sm"
+                                ng-model="product.discount">
+                        </td>
+                        <td>{{ getProductTotal(product) }}</td>
+                        <td>
+                            <button class="btn btn-xs btn-link" ng-click="removeProduct(product)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                    <tfoot ng-show="order.products.length">
+                    <tr>
+                        <td colspan="4">Итого:</td>
+                        <td colspan="2">{{ getProductsTotal() }}</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default btn-primary" ng-click="onSubmit()">
+            Сохранить
+        </button>
+    </form>
+</div>

@@ -12,7 +12,8 @@ angular.module('pdApp', [
     'pdConfig',
     'vcRecaptcha',
     'ngRaven',
-    'seo'
+    'seo',
+    'ngMask'
   ])
   .config(function ($routeProvider, $httpProvider, RavenProvider, ravenDevelopment, oauthIOProvider, $locationProvider,
                     $stateProvider, $urlRouterProvider) {

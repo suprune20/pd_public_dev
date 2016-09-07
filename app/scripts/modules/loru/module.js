@@ -80,6 +80,51 @@ angular.module('pdLoru', [
         controller: 'LoruProductEditCtrl',
         templateUrl: 'views/modules/loru/products/edit.html',
         title: 'Редактирование товара/услуги'
+      },
+
+      'loru.own_orders_add': {
+        url: '/own-orders/add',
+        resolve: {
+            categories: ['loruOrders', function (loruOrders) {
+                return loruOrders.getCategoriesWithProducts()
+                    .then(function (categories) {
+                        return _.filter(categories, function (category) {
+                            return !!category.products.length;
+                        });
+                    });
+            }],
+            order: function () {
+                return {
+                    createdDate: moment().format('DD.MM.YYYY'),
+                    products: []
+                };
+            }
+        },
+        controller: 'LoruOwnOrderCtrl',
+        templateUrl: 'views/modules/loru/orders/add.html',
+        title: 'Добавление заказа',
+        pageClass: 'loru-own-orders'
+      },
+
+      'loru.own_orders_edit': {
+        url: '/own-orders/:orderId',
+        resolve: {
+            categories: ['loruOrders', function (loruOrders) {
+                return loruOrders.getCategoriesWithProducts()
+                    .then(function (categories) {
+                        return _.filter(categories, function (category) {
+                            return category.products.length;
+                        });
+                    });
+            }],
+            order: ['$stateParams', 'loruOrders', function ($stateParams, loruOrders) {
+                return loruOrders.getOrder($stateParams.orderId);
+            }]
+        },
+        controller: 'LoruOwnOrderCtrl',
+        templateUrl: 'views/modules/loru/orders/edit.html',
+        title: 'Редактирование заказа',
+        pageClass: 'loru-own-orders'
       }
     };
 
@@ -216,6 +261,7 @@ angular.module('pdLoru', [
               {class: 'divider'},
               {link: '/price/' + userOrgId, title: 'Интернет-магазин', items: favoriteSuppliers, orgAbility: 'trade'},
               {link: '#!/orders', title: 'Архив заказов', orgAbility: 'trade'},
+              {link: '/loru/own-orders/add', title: 'Заказ похорон'},
               {class: 'divider'},
               {link: '#!/signout', title: 'Выйти'}
             ]
