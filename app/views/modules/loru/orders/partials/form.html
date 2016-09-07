@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="form-group col-xs-3">
-                    <label for="dueDate">Дата исполнения</label>
+                    <label for="dueDate">Дата похорон</label>
                     <input type="text" class="form-control" id="dueDate"
                         name="dueDate" ng-model="order.dueDate"
                         mask="39.19.9999">
@@ -119,6 +119,12 @@
                 </div>
 
                 <div class="form-group col-xs-4">
+                    <label for="size">Размеры гроба</label>
+                    <input type="text" class="form-control" id="size"
+                        name="size" ng-model="order.place.size">
+                </div>
+
+                <!-- <div class="form-group col-xs-4">
                     <label for="row">Ряд</label>
                     <input type="text" class="form-control" id="row" name="row"
                          ng-model="order.place.row">
@@ -128,16 +134,16 @@
                     <label for="placeNumber">Номер места</label>
                     <input type="text" class="form-control" id="placeNumber"
                         name="placeNumber" ng-model="order.place.placeNumber">
-                </div>
+                </div> -->
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
                 <div class="form-group col-xs-4">
-                    <label for="size">Размеры </label>
+                    <label for="size">Размеры гроба</label>
                     <input type="text" class="form-control" id="size"
                         name="size" ng-model="order.place.size">
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="row">
@@ -161,7 +167,7 @@
                         </button>
 
                         {{ product.title }} ({{ product.price }} р.)
-                        
+
                     </p>
 
                 </div>
