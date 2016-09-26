@@ -97,53 +97,72 @@
         </div>
 
         <div class="row">
-            <h4>Место</h4>
-
-            <!--<div class="row">-->
-                <!--<div class="form-group col-xs-4">-->
-                    <!--<label for="cemetery">Кладбище</label>-->
-                    <!--<select class="form-control" id="cemetery" name="cemetery" required></select>-->
-                <!--</div>-->
-
-                <!--<div class="form-group col-xs-4">-->
-                    <!--<label for="area">Участок</label>-->
-                    <!--<select class="form-control" id="area" name="area" required></select>-->
-                <!--</div>-->
-            <!--</div>-->
+            <h4>Транспорт</h4>
 
             <div class="row">
-                <div class="form-group col-xs-4">
-                    <label for="cemeteryName">Название кладбища</label>
+                <div class="form-group col-xs-3">
+                    <label for="initialPlace">Место подачи</label>
+                    <input type="text" class="form-control" id="initialPlace"
+                        name="initialPlace" ng-model="order.initialPlace">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="initialTime">Время подачи</label>
+                    <input type="text" class="form-control" id="initialTime"
+                        name="initialTime" ng-model="order.initialTime"
+                        mask="24:59">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="servicePlace">Место отпевания</label>
+                    <input type="text" class="form-control" id="servicePlace"
+                        name="servicePlace" ng-model="order.servicePlace">
+                </div>
+
+                <div class="form-group col-xs-3">
+                    <label for="serviceTime">Время отпевания</label>
+                    <input type="text" class="form-control" id="serviceTime"
+                        name="serviceTime" ng-model="order.serviceTime"
+                        mask="24:59">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-3">
+                    <label for="cemeteryName">Кладбище</label>
                     <input type="text" class="form-control" id="cemeteryName"
                         name="cemeteryName" ng-model="order.place.cemeteryText">
                 </div>
 
-                <div class="form-group col-xs-4">
-                    <label for="size">Размеры гроба</label>
-                    <input type="text" class="form-control" id="size"
-                        name="size" ng-model="order.place.size">
+                <div class="form-group col-xs-3">
+                    <label for="burialPlanTime">Время похорон</label>
+                    <input type="text" class="form-control" id="burialPlanTime"
+                        name="burialPlanTime" ng-model="order.burialPlanTime"
+                        mask="24:59">
                 </div>
 
-                <!-- <div class="form-group col-xs-4">
-                    <label for="row">Ряд</label>
-                    <input type="text" class="form-control" id="row" name="row"
-                         ng-model="order.place.row">
+                <div class="form-group col-xs-3">
+                    <label for="repastPlace">Место поминок</label>
+                    <input type="text" class="form-control" id="repastPlace"
+                        name="repastPlace" ng-model="order.repastPlace">
                 </div>
 
-                <div class="form-group col-xs-4">
-                    <label for="placeNumber">Номер места</label>
-                    <input type="text" class="form-control" id="placeNumber"
-                        name="placeNumber" ng-model="order.place.placeNumber">
-                </div> -->
+                <div class="form-group col-xs-3">
+                    <label for="repastTime">Время поминок</label>
+                    <input type="text" class="form-control" id="repastTime"
+                        name="repastTime" ng-model="order.repastTime"
+                        mask="24:59">
+                </div>
             </div>
 
-            <!-- <div class="row">
-                <div class="form-group col-xs-4">
+            <div class="row">
+                <div class="form-group col-xs-3">
                     <label for="size">Размеры гроба</label>
                     <input type="text" class="form-control" id="size"
                         name="size" ng-model="order.place.size">
                 </div>
-            </div> -->
+            </div>
+
         </div>
 
         <div class="row">
