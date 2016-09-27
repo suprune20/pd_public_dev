@@ -212,12 +212,12 @@
                             <input class="form-control input-sm"
                                 ng-model="product.amount">
                         </td>
-                        <td>{{ product.price }}</td>
+                        <td>{{ product.price|currency:'' }}</td>
                         <td>
                             <input class="form-control input-sm"
                                 ng-model="product.discount">
                         </td>
-                        <td>{{ getProductTotal(product) }}</td>
+                        <td>{{ getProductTotal(product)|currency:'' }}</td>
                         <td>
                             <button class="btn btn-xs btn-link" ng-click="removeProduct(product)">
                                 <i class="glyphicon glyphicon-trash"></i>
@@ -229,7 +229,7 @@
                     <tfoot ng-show="order.products.length">
                     <tr>
                         <td colspan="4">Итого:</td>
-                        <td colspan="2">{{ getProductsTotal() }}</td>
+                        <td colspan="2">{{ getProductsTotal()|currency:'' }}</td>
                     </tr>
                     </tfoot>
                 </table>
