@@ -103,7 +103,8 @@ angular.module('pdLoru', [
         controller: 'LoruOwnOrderCtrl',
         templateUrl: 'views/modules/loru/orders/add.html',
         title: 'Добавление заказа',
-        pageClass: 'loru-own-orders'
+        pageClass: 'loru-own-orders',
+        setFluidContainer: true
       },
 
       'loru.own_orders_edit': {
@@ -124,7 +125,8 @@ angular.module('pdLoru', [
         controller: 'LoruOwnOrderCtrl',
         templateUrl: 'views/modules/loru/orders/edit.html',
         title: 'Редактирование заказа',
-        pageClass: 'loru-own-orders'
+        pageClass: 'loru-own-orders',
+        setFluidContainer: true
       }
     };
 
