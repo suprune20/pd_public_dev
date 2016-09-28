@@ -19,8 +19,9 @@ angular.module('pdLoru')
 
             $scope.order.products.push(addedProduct);
         };
+        
         $scope.removeProduct = function (product) {
-            $scope.order.products.splice($scope.order.products.indexOf(product.id), 1);
+            $scope.order.products.splice($scope.order.products.indexOf(product), 1);
         };
 
         $scope.getProductTotal = function (product) {
