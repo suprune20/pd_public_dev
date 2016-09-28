@@ -173,7 +173,7 @@
                     </div>
                 </div>
 
-                <div style="height: 600px; overflow-y: scroll;">
+                <div style="max-height: 600px; overflow-y: scroll;">
                     <div ng-repeat="category in categories | filter:categorySearchValue"
                         ng-class-odd="'products-odd-group'">
 
@@ -194,9 +194,8 @@
                 </div>
             </div>
 
-            <div class="table-responsive col-xs-7"
-                    style="height: 600px; overflow-y: scroll;">
-                <table class="table">
+            <div class="table-responsive col-xs-7">
+                <table class="table" style="display: block; max-height: 600px; overflow-y: scroll;">
                     <thead>
                     <tr>
                         <th>Наименование</th>
@@ -228,14 +227,12 @@
                         </td>
                     </tr>
                     </tbody>
-
-                    <tfoot ng-show="order.products.length">
-                    <tr>
-                        <td colspan="4">Итого:</td>
-                        <td colspan="2">{{ getProductsTotal()|currency:'' }}</td>
-                    </tr>
-                    </tfoot>
                 </table>
+
+                <dl class="dl-horizontal" ng-show="order.products.length">
+                    <dt>Итого:</dt>
+                    <dd>{{ getProductsTotal()|currency:'' }}</dd>
+                </dl>
             </div>
         </div>
 
