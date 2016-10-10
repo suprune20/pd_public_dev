@@ -21,8 +21,8 @@ angular.module('pdApp', [
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
 
-    oauthIOProvider.setPublicKey('B8Ej7nTrR93MzN5dSE7bz8k_iyE');
-    oauthIOProvider.setOAuthdURL('https://oauth.pohoronnoedelo.ru:6284');
+    oauthIOProvider.setPublicKey('U5vhE-IS4G7DhIj79rJDEhakx5E');
+    oauthIOProvider.setOAuthdURL('https://oauth.nasledievnukov.ru:6284');
 
     RavenProvider.development(ravenDevelopment);
 
@@ -50,7 +50,7 @@ angular.module('pdApp', [
     $urlRouterProvider.otherwise('/404');
     $stateProvider
       .state('main', {
-        url: '/',
+        url: '/?redirectUrl',
         controller: function ($scope, $modal) {
           if ($scope.security.isAuthenticated()) {
             $scope.redirectToBasePage();
@@ -203,7 +203,9 @@ angular.module('pdApp', [
           // Show access denied predefined page
           $state.go('403');
         } else {
-          $rootScope.redirectUrl = window.location.pathname;
+          $rootScope.redirectUrl = $rootScope.redirectUrl ?
+            $rootScope.redirectUrl :
+            window.location.pathname;
           $state.go('catalog');
         }
       }

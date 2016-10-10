@@ -68,7 +68,9 @@
   <div class="form-group" title="Тип используется для печати дополнительных нарядов">
     <label for="type">Тип</label>
     <select class="form-control" id="type" ng-model="product.typeId" name="type"
-            ng-options="type.id as type.name for type in types"></select>
+            ng-options="type.id as type.name for type in types">
+        <option value="">---</option>
+    </select>
   </div>
 
   <div class="checkbox">
@@ -81,7 +83,8 @@
   <div class="form-group">
     <label for="category">Категория</label>
     <select class="form-control" id="category" ng-model="product.categoryId" name="category"
-            ng-options="category.id as category.name for category in categories"></select>
+            ng-options="category.id as category.name for category in categories">
+    </select>
   </div>
 
   <div class="form-group">
