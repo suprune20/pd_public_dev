@@ -203,7 +203,9 @@ angular.module('pdApp', [
           // Show access denied predefined page
           $state.go('403');
         } else {
-          $rootScope.redirectUrl = window.location.pathname;
+          $rootScope.redirectUrl = $rootScope.redirectUrl ?
+            $rootScope.redirectUrl :
+            window.location.pathname;
           $state.go('catalog');
         }
       }
