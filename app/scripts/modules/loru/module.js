@@ -7,7 +7,7 @@ angular.module('pdLoru', [
   .config(function (authRouteProvider) {
     var routeConfig = {
       'loru': {
-        url: '/loru',
+        url: '/loru?redirectUrl',
         template: '<ui-view><h1>Рабочее место пользователя</h1></ui-view>'
       },
       'loru.advertisement': {
