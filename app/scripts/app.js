@@ -50,7 +50,7 @@ angular.module('pdApp', [
     $urlRouterProvider.otherwise('/404');
     $stateProvider
       .state('main', {
-        url: '/',
+        url: '/?redirectUrl',
         controller: function ($scope, $modal) {
           if ($scope.security.isAuthenticated()) {
             $scope.redirectToBasePage();
