@@ -51,10 +51,15 @@ angular.module('pdOms')
     };
 
     $scope.addBurial = function () {
+      if ($scope.isRequestSent) {
+        return;
+      }
+
       var burialPromise = $scope.burialFormData.id ?
         omsBurials.saveBurial($scope.burialFormData.id, $scope.burialFormData) :
         omsBurials.createBurial($scope.burialFormData);
 
+      $scope.isRequestSent = true;
       $scope.burialFormData.placeId = $scope.place.id;
       burialPromise
         .then(function (savedBurial) {
@@ -76,6 +81,9 @@ angular.module('pdOms')
           }
 
           $scope.formError = errorData.message;
+        })
+        .finally(function () {
+            $scope.isRequestSent = false
         });
     };
 

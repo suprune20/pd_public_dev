@@ -111,7 +111,8 @@
                ng-model="burialFormData.deathDate" name="deathDate" />
       </div>
 
-      <button type="submit" class="btn btn-success" ng-disabled="burialForm.$invalid">
+      <button type="submit" class="btn btn-success"
+            ng-disabled="burialForm.$invalid || isRequestSent">
         {{ burialFormData.id ? 'Сохранить' : 'Добавить' }}
       </button>
       <button type="button" class="btn btn-default"
