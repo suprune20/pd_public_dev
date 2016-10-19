@@ -17,6 +17,13 @@ angular.module('pdOms', [
         title: 'Инвентаризация',
         pageClass: 'oms-placesmap'
       },
+      'oms.placesPhotosByPlace': {
+        url: '/places-photos/:placeId',
+        controller: 'OmsPlacesPhotosCtrl',
+        templateUrl: 'views/modules/oms/places_photos/main.html',
+        title: 'Ввод архива по фото',
+        pageClass: 'oms-places-photos'
+      },
       'oms.placesPhotos': {
         url: '/places-photos',
         controller: 'OmsPlacesPhotosCtrl',
