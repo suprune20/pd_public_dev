@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('pdOms')
-  .controller('OmsPlacesPhotosCtrl', function ($scope, $q, $filter, growl, omsPlacesPhotos, omsBurials, pdTypeahead) {
+  .controller('OmsPlacesPhotosCtrl', function ($stateParams, $scope, $q,
+      $filter, growl, omsPlacesPhotos, omsBurials, pdTypeahead
+  ) {
     // Initial variables initialize
     $scope.burialFormData = {};
     $scope.showAddBurialForm = true;
@@ -40,7 +42,7 @@ angular.module('pdOms')
     };
 
     // Initial load place photo data
-    getPlaceData();
+    getPlaceData($stateParams.placeId);
 
     $scope.showImage = function (imageUrl) {
       $scope.imageData = {
