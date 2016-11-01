@@ -217,13 +217,9 @@ angular.module('pdApp', [
         $rootScope.redirectUrl = null;
         $location.search('redirectUrl', null);
 
-        if (/^https?:\/\//.test(redirectUrl)) {
-          $window.location.href = redirectUrl;
-          return;
-        }
-
-        $location.path(redirectUrl);
-        return;
+        /^https?:\/\//.test(redirectUrl) ?
+          $location.url(redirectUrl) :
+          $location.path(redirectUrl);
       }
 
       // Update main menu config after signin
