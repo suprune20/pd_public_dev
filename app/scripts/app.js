@@ -218,7 +218,7 @@ angular.module('pdApp', [
         $location.search('redirectUrl', null);
 
         /^https?:\/\//.test(redirectUrl) ?
-          $location.url(redirectUrl) :
+          window.location.href = redirectUrl :
           $location.path(redirectUrl);
       }
 
