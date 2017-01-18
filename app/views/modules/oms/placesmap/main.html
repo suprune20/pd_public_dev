@@ -1,13 +1,15 @@
 <ya-map class="inventory-map fullview-header-footer"
+        ya-after-init="afterMapInit($target)"
         ya-zoom="10"
         ya-options="{maxZoom: 18}"
         ya-behaviors="scrollZoom drag dblClickZoom">
   <ya-toolbar ya-name="zoomControl"></ya-toolbar>
   <ya-toolbar ya-name="typeSelector"></ya-toolbar>
   <pd-ya-search-toolbar ya-options="{left: 350, top: 15}"></pd-ya-search-toolbar>
-  <ya-collection show-all="true">
+  <ya-remote-object ya-source="remoteObjectManager"></ya-remote-object>
+  <!-- <ya-collection show-all="true">
     <ya-geo-object ng-repeat="point in placesGeoObjects" ya-source="point"></ya-geo-object>
-  </ya-collection>
+  </ya-collection> -->
 
   <div class="btn-group filters-btn-group">
     <label class="btn btn-info" ng-model="filters.statusFilter.dt_size_violated" btn-checkbox title="Нарушение размеров">
