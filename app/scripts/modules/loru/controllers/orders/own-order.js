@@ -19,7 +19,7 @@ angular.module('pdLoru')
 
             $scope.order.products.push(addedProduct);
         };
-        
+
         $scope.removeProduct = function (product) {
             $scope.order.products.splice($scope.order.products.indexOf(product), 1);
         };
@@ -55,8 +55,19 @@ angular.module('pdLoru')
             var submitFn = $scope.order.id ? loruOrders.saveOrder : loruOrders.addOrder;
 
             submitFn($scope.order)
-                .then(function () {
-                    window.location = pdConfig.backendUrl + 'order/?per_page=25&page=1&sort=-order_num';
+                .then(function (responseOrderData) {
+                    var redirectUrl = pdConfig.backendUrl + 'order/?per_page=25&page=1&sort=-order_num';
+
+                    if (responseOrderData.debugMessage) {
+                        growl.addSuccessMessage(responseOrderData.debugMessage, { ttl: -1 });
+                        setTimeout(function () {
+                            window.location = redirectUrl;
+                        }, 7000);
+
+                        return;
+                    }
+
+                    window.location = redirectUrl;
                 }, function (errorData) {
                     growl.addErrorMessage(errorData.message || 'Произошла неизвестная ошибка');
                 });

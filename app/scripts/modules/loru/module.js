@@ -96,7 +96,10 @@ angular.module('pdLoru', [
             order: function () {
                 return {
                     createdDate: moment().format('DD.MM.YYYY'),
-                    products: []
+                    products: [],
+                    customer: {
+                        createCabinet: true
+                    }
                 };
             }
         },
