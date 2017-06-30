@@ -8,7 +8,16 @@ angular.module('pdLoru')
       var filters = _.cloneDeep($scope.filters);
       // clean categories filter
       filters.category = _.filter(filters.selectedCategories);
-      loruProducts.getProducts(filters).then(function (products) { $scope.products = products; });
+
+      if (filters.is_archived) {
+          filters.is_archived = 1;
+      } else {
+          delete filters.is_archived;
+      }
+
+      loruProducts
+        .getProducts(filters)
+        .then(function (products) { $scope.products = products; });
     };
     $scope.applyFilter();
     $scope.updateProduct = function (product) {
@@ -21,8 +30,16 @@ angular.module('pdLoru')
       }
 
       var updateModel = _.transform(product, function (result, value, key) {
-        if (_.contains(['id', 'isShownInRetailCatalog', 'isShownInTradeCatalog', 'tradePrice', 'retailPrice'], key)) {
+        if (_.contains([
+            'id',
+            'isShownInRetailCatalog',
+            'isShownInTradeCatalog',
+            'tradePrice',
+            'retailPrice',
+            'isArchived'
+        ], key)) {
           result[key] = value;
+
           return result;
         }
       }, {});
