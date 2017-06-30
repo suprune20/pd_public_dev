@@ -11,6 +11,13 @@
 
 <div class="row">
   <div class="col-xs-12 col-md-3 col-lg-2">
+      <label class="show">
+        <input type="checkbox" ng-model="filters.is_archived" ng-change="applyFilter()">
+        Архивные товары
+      </label>
+
+      <hr/>
+
     <label ng-repeat="category in categories" class="show">
       <input type="checkbox" ng-model="filters.selectedCategories[$index]" ng-true-value="{{category.id}}"
              ng-change="applyFilter()">
@@ -68,6 +75,7 @@
         <th>Цена оптовая</th>
         <th>Показ в публичном каталоге</th>
         <th>Показ в оптовом каталоге</th>
+        <th>Архивное</th>
         <th>Изображение</th>
         <th></th>
       </tr>
@@ -102,6 +110,10 @@
                  ng-disabled="disabledVisibilityControls || !product.tradePrice"
                  ng-change="updateProduct(product)"
                  ng-attr-title="{{ !product.tradePrice ? 'Для публикации необходимо указать цену' : '' }}" />
+        </td>
+        <td>
+          <input type="checkbox" name="isArchived" ng-model="product.isArchived"
+                 ng-change="updateProduct(product)" />
         </td>
         <td>
           <img bo-src="product.imageUrl|pdThumbnail:'200x200'" bo-show="product.imageUrl"
