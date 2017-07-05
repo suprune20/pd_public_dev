@@ -63,8 +63,8 @@
 
   <div class="col-xs-12 col-md-9 col-lg-10"
        ng-init="limitProducts = 40" infinite-scroll='limitProducts = limitProducts + 40' infinite-scroll-distance='2'>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-striped products-list">
+      <thead class="products-list-header" pb-sticky-block top-position="105">
       <tr>
         <th>Артикул</th>
         <th>Название</th>
