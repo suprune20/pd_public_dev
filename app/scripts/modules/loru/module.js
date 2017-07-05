@@ -48,7 +48,8 @@ angular.module('pdLoru', [
         controller: 'LoruProductsListCtrl',
         templateUrl: 'views/modules/loru/products/list.html',
         title: 'Список товаров и услуг',
-        setFluidContainer: true
+        setFluidContainer: true,
+        pageClass: 'page-loru-products-list'
       },
       'loru.products.add': {
         url: '/create',

@@ -1,0 +1,12 @@
+.page-loru-products-list {
+    .products-list {
+        .products-list-header {
+            &.pb-sticky-block {
+                position: fixed;
+                top: 105px;
+                background: #fff;
+                z-index: 9998;
+            }
+        }
+    }
+}
