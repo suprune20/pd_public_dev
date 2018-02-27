@@ -16,7 +16,7 @@
     "lodash": "3.9.3",
     "angular-yandex-map": "https://github.com/tulov/angular-yandex-map.git#e33e26b2655aa1dcf50da9b6cbfc739e2e35109e",
     "angularLocalStorage": "0.1.7",
-    "angular-recaptcha": "0.0.7",
+    "angular-recaptcha": "4.1.2",
     "angular-cookie": "92292c9815e4ec7230a705b5f1d0212a2badd557",
     "angular-promise-tracker": "1.5.1",
     "angular-animate": "1.2.21",

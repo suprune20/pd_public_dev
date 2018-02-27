@@ -64,8 +64,8 @@ angular.module('pdFrontend')
             $scope.restoreModel = {
               username: signinScope.signinModel.username || ''
             };
-            $scope.getPasswordBySms = function (username, captchaData) {
-              auth.getPasswordBySMS(username, captchaData)
+            $scope.getPasswordBySms = function (username, captchaResponse) {
+              auth.getPasswordBySMS(username, captchaResponse)
                 .then(function (responseData) {
                   if ('success' === responseData.status && _.has(responseData, 'message')) {
                     signinScope.formSuccessMessage = responseData.message;
