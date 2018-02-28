@@ -105,7 +105,7 @@ angular.module('pdCommon')
       getPasswordBySMS: function (username, captchaData) {
         return $http.post(pdConfig.apiEndpoint + 'auth/get_password_by_sms', {
           phoneNumber: username,
-          recaptchaData: captchaData
+          captchaData: captchaData
         }).then(function (successResponse) {
           return successResponse.data;
         }, function (response) {
